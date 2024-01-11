@@ -17,10 +17,10 @@ const UpdateShipping = () => {
   const [location, setLocation] = useState("");
   const [price, setPrice] = useState("");
 
-  const handleSubmit = (e: FormEvent<HTMLFormElement>) => {
+  const handleSubmit = (e) => {
     e.preventDefault();
     dispatch(
-      updateLocation({ id: slug as string, locationData: { location, price } })
+      updateLocation({ id: slug, locationData: { location, price } })
     );
   };
 

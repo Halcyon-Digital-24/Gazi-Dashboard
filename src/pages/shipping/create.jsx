@@ -15,7 +15,7 @@ const CreateShipping = () => {
   const [location, setLocation] = useState('');
   const [price, setPrice] = useState('');
 
-  const handleLocationCreate = (e: FormEvent<HTMLFormElement>) => {
+  const handleLocationCreate = (e) => {
     e.preventDefault();
     dispatch(createLocation({ location, price }));
   };
