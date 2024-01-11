@@ -18,11 +18,14 @@ import BannerPage from "./marketing/banner";
 import CouponPage from "./marketing/coupon";
 import CreateBanner from "./marketing/create-banner";
 import CreateCoupon from "./marketing/create-coupon";
-import CreateShipping from "./marketing/create-shipping";
+
 import Shipping from "./shipping";
+import CreateShipping from "./shipping/create";
+import UpdateShipping from "./shipping/update";
+
 import UpdateBanner from "./marketing/update-banner";
 import UpdateCoupon from "./marketing/update-coupon";
-import UpdateShipping from "./marketing/update-shipping";
+
 import Notification from "./notification";
 import CreateNotification from "./notification/create";
 import AllOrders from "./orders";
