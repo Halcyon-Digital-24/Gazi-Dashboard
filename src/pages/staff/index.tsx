@@ -12,15 +12,17 @@ const Staff = () => {
 
       <Display>
         <Row className="row">
-          <Column className="col-md-4">Name</Column>
-          <Column className="col-md-4">Email</Column>
-          <Column className="col-md-4">Actions</Column>
+          <Column className="col-md-3">Name</Column>
+          <Column className="col-md-3">Email</Column>
+          <Column className="col-md-3">Role</Column>
+          <Column className="col-md-3">Actions</Column>
         </Row>
         {[...Array(6).keys()].map(() => (
           <Row className="row">
-            <Column className="col-md-4">Admin</Column>
-            <Column className="col-md-4">admin@admin.com</Column>
-            <Column className="col-md-4">
+            <Column className="col-md-3">Admin</Column>
+            <Column className="col-md-3">admin@admin.com</Column>
+            <Column className="col-md-3">admin@admin.com</Column>
+            <Column className="col-md-3">
               <CustomIconArea>
                 <DeleteButton
                   onClick={() => {

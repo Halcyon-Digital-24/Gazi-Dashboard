@@ -128,6 +128,8 @@ function PageRoutes() {
       <Route path="/banner" element={<BannerPage />} />
       <Route path="/banner/edit/:slug" element={<UpdateBanner />} />
       <Route path="/banner/create" element={<CreateBanner />} />
+      
+         {/* shipping */}
       <Route path="/shipping" element={<Shipping />} />
       <Route path="/shipping/create" element={<CreateShipping />} />
       <Route path="/shipping/edit/:slug" element={<UpdateShipping />} />
