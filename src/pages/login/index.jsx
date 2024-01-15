@@ -13,7 +13,6 @@ function Login() {
     try {
       const response = await axios.post(`${import.meta.env.VITE_API_URL}/auths/login`, data);
       localStorage.setItem('user', JSON.stringify(response.data));
-      navigate("/");
     } catch (error) {
       toast.error(error.response.data.message);
     }
@@ -36,7 +35,8 @@ function Login() {
               message: "Invalid email address",
             }, })}
           />
-                {errors.user_name && <p className="validation__error">{errors.user_name.message}</p>}
+          
+            {errors.user_name && <p className="validation__error">{errors.user_name.message}</p>}
 
           <label>Password</label>
           <input

@@ -70,7 +70,7 @@ import Subscriber from "./support/subscriber";
 import VideosPage from "./videos";
 import CreateVideo from "./videos/create-video";
 import UpdateVideo from "./videos/update-video";
-
+import Login from "../pages/login";
 export {
   AllOrders,
   AllProducts,
@@ -141,4 +141,5 @@ export {
   VideosPage,
   Warranty,
   WarrantyDetails,
+  Login
 };

@@ -2,8 +2,6 @@ import React, { useEffect, useRef } from "react";
 import { CgProfile } from "react-icons/cg";
 import { IoIosLogOut } from "react-icons/io";
 import { useNavigate } from "react-router-dom";
-import { logout } from "../../redux/auth/authSlice";
-import { useAppDispatch } from "../../redux/hooks";
 import "./profile.scss";
 
 interface PopupProps {
@@ -12,12 +10,13 @@ interface PopupProps {
 
 const ProfilePopup: React.FC<PopupProps> = ({ closePopup }) => {
   const navigate = useNavigate();
-  const dispatch = useAppDispatch();
   const popupRef = useRef<HTMLDivElement>(null);
 
   const handleLogOut = () => {
-    dispatch(logout());
+    localStorage.removeItem('user');
+    
   };
+
   const handleProfile = () => {
     navigate("/admin/profile");
   };

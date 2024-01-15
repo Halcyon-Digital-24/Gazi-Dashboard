@@ -7,7 +7,7 @@ import "./index.scss";
 function BaseTemplate() {
   const [isOpen, setIsOpen] = useState(true);
 
-  const user=1; 
+  const user=localStorage.getItem('user'); 
 
   return (
     <div className="container-fluid">
@@ -20,12 +20,13 @@ function BaseTemplate() {
           <div className={isOpen ? "col-md-10" : "col-md-12"}>
             <Header isOpen={isOpen} handleOpen={()=>{setIsOpen(!isOpen)}}/>
             <main className="main-area">
+              
               <PageRoutes />
             </main>
           </div>
         </div>
        : (
-        <Login />
+            <Login onLogout={handleLogOut} />
       )}
     </div>
   );

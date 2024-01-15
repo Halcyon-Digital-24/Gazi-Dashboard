@@ -15,6 +15,7 @@ const login = async (userData: IUser): Promise<IToken> => {
 // Logout user
 const logout = () => {
   localStorage.removeItem('user');
+  
 };
 
 const authService = {
