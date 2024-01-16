@@ -1,15 +1,16 @@
-import React, { FormEvent, useState } from 'react';
-import CardBody from '../../components/card-body';
-import Display from '../../components/display';
-import Input from '../../components/forms/text-input';
-import { Button } from '../../components/button';
-import axios from '../../lib';
-import { API_URL } from '../../constants';
-import { useNavigate } from 'react-router-dom';
+import React, { FormEvent, useState } from "react";
+import CardBody from "../../components/card-body";
+import Display from "../../components/display";
+import Input from "../../components/forms/text-input";
+import { Button } from "../../components/button";
+import axios from "../../lib";
+import { API_URL } from "../../constants";
+import { useNavigate } from "react-router-dom";
+import { toast } from "react-toastify";
 
 const attributeData = {
-  name: '',
-  value: '',
+  name: "",
+  value: "",
 };
 const CreateAttributes = () => {
   const navigate = useNavigate();
@@ -19,12 +20,11 @@ const CreateAttributes = () => {
     e.preventDefault();
     try {
       const response = await axios.post(`${API_URL}/attributes`, attributes);
-
-      console.log('Attributes posted successfully', response.data);
-      navigate('/attributes');
+      toast.success(response.data.message);
+      navigate("/attributes");
     } catch (error) {
       // Handle error
-      console.error('Failed to post attributes', error);
+      console.error("Failed to post attributes", error);
     }
   };
 

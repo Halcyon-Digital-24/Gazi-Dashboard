@@ -1,5 +1,5 @@
-import './index.scss';
-import { ChangeEvent } from 'react';
+import "./index.scss";
+import { ChangeEvent } from "react";
 
 interface IProps {
   placeholder?: string;
@@ -11,6 +11,7 @@ interface IProps {
   value?: string | number;
   onChange?: (e: ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => void;
   onBlur?: (e: ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => void;
+  errorMessage?: string;
 }
 
 const TextArea = ({
@@ -23,6 +24,7 @@ const TextArea = ({
   name,
   onChange,
   onBlur,
+  errorMessage,
 }: IProps) => {
   return (
     <div className="textarea">
@@ -38,6 +40,7 @@ const TextArea = ({
         readOnly={readonly}
         required={required}
       />
+      {errorMessage && <p className="validation__error">{errorMessage}</p>}
     </div>
   );
 };

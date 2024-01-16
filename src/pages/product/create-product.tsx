@@ -21,7 +21,7 @@ import "rsuite/dist/rsuite.css";
 import { API_URL } from "../../constants";
 import { IAttributeResponse } from "../../interfaces/attribute";
 import axios from "../../lib";
-import AttributeSingle from "./attribute-single";
+import AttributeSingle from "../attribute/attribute-single";
 
 // const animatedComponents = makeAnimated();
 
@@ -30,7 +30,9 @@ const CreateProduct: React.FC = () => {
   const navigate = useNavigate();
   const { categories } = useAppSelector((state) => state.category);
   const [campaignDate, setCampaignDate] = useState<[Date, Date] | null>(null);
-  const { isCreate } = useAppSelector((state) => state.product);
+  const { isCreate, error, message, errorMessage, isError } = useAppSelector(
+    (state) => state.product
+  );
   const [title, setTile] = useState<string>("");
   const [slug, setSlug] = useState("");
   const [description, setDescription] = useState("");
@@ -300,22 +302,30 @@ const CreateProduct: React.FC = () => {
   }, [discountType, discountSelectedAmount]);
 
   useEffect(() => {
+    if (isError) {
+      toast.error(`${errorMessage}`);
+    }
+  }, [errorMessage, isError]);
+
+  useEffect(() => {
     if (isCreate) {
-      toast.success("Product created successfully");
+      toast.success(`${message}`);
       navigate("/products");
     }
+
     return () => {
       dispatch(reset());
     };
-  }, [dispatch, isCreate, navigate]);
+  }, [dispatch, isCreate, navigate, message]);
 
   useEffect(() => {
-    dispatch(getCategories({ page: 1, limit: 50 }));
+    dispatch(getCategories({ page: 1, limit: 200 }));
 
     return () => {
       dispatch(reset());
     };
   }, [dispatch]);
+  console.log(error);
 
   return (
     <div className="create-product">
@@ -331,6 +341,7 @@ const CreateProduct: React.FC = () => {
                   onBlur={(e) => setTile(e.target.value)}
                   htmlFor="name"
                   required
+                  errorMessage={error.title}
                 />
                 <Input
                   label="Slug *"
@@ -338,6 +349,7 @@ const CreateProduct: React.FC = () => {
                   onBlur={(e) => setSlug(e.target.value)}
                   htmlFor="slug"
                   required
+                  errorMessage={error.slug}
                 />
               </Display>
 
@@ -374,6 +386,7 @@ const CreateProduct: React.FC = () => {
                   label="Video Link"
                   htmlFor="video"
                   onBlur={(e) => setVideoUrl(e.target.value)}
+                  errorMessage={error.video_url}
                 />
                 <p className="wearing">
                   Use proper link without extra parameter.
@@ -468,11 +481,17 @@ const CreateProduct: React.FC = () => {
                   value={description}
                   setValue={setDescription}
                 />
+                {error.description && (
+                  <p className="validation__error">{error.description}</p>
+                )}
                 <h5 className="product-title">Product Policy</h5>
                 <div className="des-none">
                   <TextArea label="policy" value={policy} required />
                 </div>
                 <DescriptionInput value={policy} setValue={setPolicy} />
+                {error.policy && (
+                  <p className="validation__error">{error.policy}</p>
+                )}
               </Display>
             </div>
           </div>
@@ -492,6 +511,7 @@ const CreateProduct: React.FC = () => {
                   htmlFor="regular-price"
                   onChange={(e) => setRegularPrice(Number(e.target.value))}
                   required
+                  errorMessage={error.regular_price}
                 />
                 <div className="discount-area">
                   <Input
@@ -501,6 +521,7 @@ const CreateProduct: React.FC = () => {
                     onChange={(e) =>
                       setDiscountSelectedAmount(Number(e.target.value))
                     }
+                    errorMessage={error.discount_price}
                   />
                   <div>
                     <Select
@@ -541,6 +562,7 @@ const CreateProduct: React.FC = () => {
                     label="Product short description *"
                     placeholder="Product short description"
                     onBlur={(e) => setSortDesc(e.target.value)}
+                    errorMessage={error.sort_description}
                   />
 
                   <Input
@@ -551,6 +573,7 @@ const CreateProduct: React.FC = () => {
                     onBlur={(e) => setQuantity(Number(e.target.value))}
                     defaultValue="0"
                     required
+                    errorMessage={error.quantity}
                   />
                 </div>
               </Display>

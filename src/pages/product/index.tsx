@@ -106,6 +106,16 @@ const AllProducts: React.FC = () => {
     dispatch(updateProduct({ id, productData: updateData }));
   };
 
+  useEffect(() => {
+    if (isUpdate) {
+      toast.success(`${message}`);
+    }
+
+    return () => {
+      dispatch(reset());
+    };
+  }, [isUpdate, dispatch, message]);
+
   return (
     <div>
       <CardBody header="Product" to="/products/create" />
@@ -212,13 +222,13 @@ const AllProducts: React.FC = () => {
                 </Column>
               </Row>
             ))}
-            <Pagination
-              pageCount={pageNumber}
-              handlePageClick={handlePageChange}
-              totalPage={totalPage}
-            />
           </>
         )}
+        <Pagination
+          pageCount={pageNumber}
+          handlePageClick={handlePageChange}
+          totalPage={totalPage}
+        />
       </Display>
     </div>
   );

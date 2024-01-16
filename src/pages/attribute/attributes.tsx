@@ -10,33 +10,27 @@ import Row from "../../components/table/row";
 import { API_URL } from "../../constants";
 import { Attribute, IAttributeResponse } from "../../interfaces/attribute";
 import axios from "../../lib";
-
-// Assuming your data is stored in a file named types.ts
+import Loader from "../../components/loader";
 
 const Attributes = () => {
   const [attributes, setAttributes] = useState<Attribute[]>([]);
-
-  useEffect(() => {
-    // Fetch data when the component mounts
-    fetchData();
-  }, []); // Empty dependency array ensures the effect runs only once when the component mounts
+  const [isLoading, setLoading] = useState(true);
 
   const fetchData = async () => {
     try {
       const response = await axios.get<IAttributeResponse>(
         `${API_URL}/attributes`
       );
-
-      // Handle successful response
-      console.log("Fetched data successfully", response.data);
-
-      // Update state with the fetched data
+      setLoading(false);
       setAttributes(response.data?.data?.rows);
     } catch (error) {
-      // Handle error
+      setLoading(true);
       console.error("Failed to fetch data", error);
     }
   };
+  useEffect(() => {
+    fetchData();
+  }, []);
 
   const handleDeleteAttribute = async (id: number) => {
     try {
@@ -44,16 +38,12 @@ const Attributes = () => {
 
       if (response.status === 200) {
         toast.success(response.data.message);
-        console.log(`Attribute with id ${id} deleted successfully`);
 
-        // Refresh the data after deletion
         fetchData();
       } else {
-        // Handle unsuccessful deletion
         console.error(`Failed to delete attribute with id ${id}`);
       }
     } catch (error) {
-      // Handle error
       console.error("Error while deleting attribute", error);
     }
   };
@@ -67,20 +57,26 @@ const Attributes = () => {
           <Column className="col-md-5">Attributes Value</Column>
           <Column className="col-md-2">Actions</Column>
         </Row>
-        {attributes.map((attribute, index) => (
-          <Row className="row" key={index}>
-            <Column className="col-md-5">{attribute.name}</Column>
-            <Column className="col-md-5">{attribute.value}</Column>
-            <Column className="col-md-2">
-              <CustomIconArea>
-                <EditButton editUrl={`/attributes/edit/${attribute.id}`} />
-                <DeleteButton
-                  onClick={() => handleDeleteAttribute(attribute.id)}
-                />
-              </CustomIconArea>
-            </Column>
-          </Row>
-        ))}
+        {isLoading ? (
+          <>
+            <Loader />
+          </>
+        ) : (
+          attributes.map((attribute, index) => (
+            <Row className="row" key={index}>
+              <Column className="col-md-5">{attribute.name}</Column>
+              <Column className="col-md-5">{attribute.value}</Column>
+              <Column className="col-md-2">
+                <CustomIconArea>
+                  <EditButton editUrl={`/attributes/edit/${attribute.id}`} />
+                  <DeleteButton
+                    onClick={() => handleDeleteAttribute(attribute.id)}
+                  />
+                </CustomIconArea>
+              </Column>
+            </Row>
+          ))
+        )}
       </Display>
     </div>
   );

@@ -37,11 +37,11 @@ import UpdateOrder from "./orders/update-order";
 import OrderView from "./orders/view";
 import PaymentMessage from "./payment/message";
 import AllProducts from "./product";
-import Attributes from "./product/attributes";
-import CreateAttributes from "./product/create-attributes";
+import Attributes from "./attribute/attributes";
+import CreateAttributes from "./attribute/create-attributes";
 import CreateProduct from "./product/create-product";
 import StockOutProducts from "./product/stockout";
-import UpdateAttribute from "./product/update-attribute";
+import UpdateAttribute from "./attribute/update-attribute";
 import UpdateProduct from "./product/update-product";
 import Profile from "./profile";
 import Warranty from "./refund";
@@ -71,6 +71,7 @@ import VideosPage from "./videos";
 import CreateVideo from "./videos/create-video";
 import UpdateVideo from "./videos/update-video";
 import Login from "../pages/login";
+import Csv from "./csv/csv";
 export {
   AllOrders,
   AllProducts,
@@ -141,5 +142,6 @@ export {
   VideosPage,
   Warranty,
   WarrantyDetails,
-  Login
+  Login,
+  Csv,
 };

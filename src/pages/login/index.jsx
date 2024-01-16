@@ -1,9 +1,9 @@
-import { useNavigate } from 'react-router-dom';
-import { toast } from 'react-toastify';
-import './index.scss';
-import { Button } from '../../components/button';
-import { useForm } from 'react-hook-form';
-import axios from 'axios';
+import { useNavigate } from "react-router-dom";
+import { toast } from "react-toastify";
+import "./index.scss";
+import { Button } from "../../components/button";
+import { useForm } from "react-hook-form";
+import axios from "axios";
 
 function Login() {
   const {
@@ -19,10 +19,11 @@ function Login() {
         `${import.meta.env.VITE_API_URL}/auths/login`,
         data
       );
-      localStorage.setItem('user', JSON.stringify(response.data));
+      localStorage.setItem("user", JSON.stringify(response.data));
+      window.location.reload();
     } catch (error) {
       toast.error(error.response.data.message);
-      navigate('/');
+      navigate("/");
     }
   };
 
@@ -38,11 +39,11 @@ function Login() {
           <input
             placeholder="Enter your email"
             type="email"
-            {...register('user_name', {
-              required: 'Email Address is required',
+            {...register("user_name", {
+              required: "Email Address is required",
               pattern: {
                 value: /^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,4}$/i,
-                message: 'Invalid email address',
+                message: "Invalid email address",
               },
             })}
           />
@@ -55,7 +56,7 @@ function Login() {
           <input
             type="password"
             placeholder="Enter password"
-            {...register('password', { required: 'Password is required' })}
+            {...register("password", { required: "Password is required" })}
           />
           {errors.password && (
             <p className="validation__error">{errors.password.message}</p>

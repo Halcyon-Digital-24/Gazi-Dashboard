@@ -12,11 +12,16 @@ import Column from "../../components/table/column";
 import Row from "../../components/table/row";
 import { API_ROOT } from "../../constants";
 import { useAppDispatch, useAppSelector } from "../../redux/hooks";
-import { getProducts, reset } from "../../redux/products/product-slice";
+import {
+  getProducts,
+  reset,
+  updateProduct,
+} from "../../redux/products/product-slice";
+import Loader from "../../components/loader";
 
 const StockOutProducts: React.FC = () => {
   const dispatch = useAppDispatch();
-  const { products, isLoading, totalCount } = useAppSelector(
+  const { products, isLoading, totalCount, isUpdate } = useAppSelector(
     (state) => state.product
   );
   const [displayItem, setDisplayItem] = useState(10);
@@ -32,6 +37,13 @@ const StockOutProducts: React.FC = () => {
     setDisplayItem(Number(e.target.value));
   };
 
+  const handleKeyPoint = (
+    id: number,
+    updateData: { [key: string]: string | number | boolean }
+  ) => {
+    dispatch(updateProduct({ id, productData: updateData }));
+  };
+
   useEffect(() => {
     dispatch(
       getProducts({ page: pageNumber, limit: displayItem, quantity: 0 })
@@ -39,7 +51,7 @@ const StockOutProducts: React.FC = () => {
     return () => {
       dispatch(reset());
     };
-  }, [dispatch, pageNumber, displayItem]);
+  }, [dispatch, pageNumber, displayItem, isUpdate]);
 
   return (
     <div>
@@ -58,7 +70,7 @@ const StockOutProducts: React.FC = () => {
           <Column className="col-md-2">Action</Column>
         </Row>
         {isLoading ? (
-          <div>Loading ...</div>
+          <Loader />
         ) : (
           products.map((product, index) => (
             <Row key={index} className="row">
@@ -83,10 +95,24 @@ const StockOutProducts: React.FC = () => {
               <Column className="col-md-1">৳ {product.regular_price}</Column>
               <Column className="col-md-1">৳ {product.discount_price}</Column>
               <Column className="col-md-1">
-                <ToggleButton isChecked={product.is_visible == 1} />
+                <ToggleButton
+                  onClick={() =>
+                    handleKeyPoint(product.id as number, {
+                      is_visible: product.is_visible == 0 ? 1 : 0,
+                    })
+                  }
+                  isChecked={product.is_visible == 1}
+                />
               </Column>
               <Column className="col-md-1">
-                <ToggleButton isChecked={product.is_homepage} />
+                <ToggleButton
+                  onClick={() =>
+                    handleKeyPoint(product.id as number, {
+                      is_homepage: !product.is_homepage,
+                    })
+                  }
+                  isChecked={product.is_homepage}
+                />
               </Column>
               <Column className="col-md-2">
                 <CustomIconArea>

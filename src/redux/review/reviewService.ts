@@ -1,6 +1,6 @@
-import { IRevieResponse, IReview } from './../../interfaces/review';
-import axios from 'axios';
-import { API_URL } from '../../constants';
+import { IRevieResponse, IReview } from "./../../interfaces/review";
+import axios from "../../lib";
+import { API_URL } from "../../constants";
 
 const getReview = async (filter: {
   [key: string]: string | number;
@@ -12,7 +12,7 @@ const getReview = async (filter: {
         ([key, value]) =>
           `${encodeURIComponent(key)}=${encodeURIComponent(value)}`
       )
-      .join('&');
+      .join("&");
 
     // Add query string to the URL
     url += `?${queryString}`;

@@ -1,15 +1,17 @@
-import React, { FormEvent, useEffect, useState } from 'react';
-import CardBody from '../../components/card-body';
-import Display from '../../components/display';
-import Input from '../../components/forms/text-input';
-import { Button } from '../../components/button';
-import axios from '../../lib';
-import { API_URL } from '../../constants';
-import { useNavigate, useParams } from 'react-router-dom';
+import React, { FormEvent, useEffect, useState } from "react";
+import CardBody from "../../components/card-body";
+import Display from "../../components/display";
+import Input from "../../components/forms/text-input";
+import { Button } from "../../components/button";
+import axios from "../../lib";
+import { API_URL } from "../../constants";
+import { useNavigate, useParams } from "react-router-dom";
+import { AxiosError } from "axios";
+import { toast } from "react-toastify";
 
 const attributeData = {
-  name: '',
-  value: '',
+  name: "",
+  value: "",
 };
 const UpdateAttribute = () => {
   const navigate = useNavigate();
@@ -23,12 +25,14 @@ const UpdateAttribute = () => {
         `${API_URL}/attributes/${slug}`,
         attributes
       );
-
-      console.log('Attributes updated successfully', response.data);
-      navigate('/attributes');
+      toast.success(response.data.message);
+      navigate("/attributes");
     } catch (error) {
       // Handle error
-      console.error('Failed to post attributes', error);
+      if (error instanceof AxiosError) {
+        toast.error(error.response?.data?.message);
+      }
+      console.error("Failed to post attributes", error);
     }
   };
 
@@ -53,7 +57,7 @@ const UpdateAttribute = () => {
           value: data.value,
         });
       } catch (error) {
-        console.error('Error fetching category data:', error);
+        console.error("Error fetching category data:", error);
       }
     };
 

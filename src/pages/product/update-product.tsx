@@ -1,27 +1,27 @@
-import { useState, useEffect, ChangeEvent, FormEvent } from 'react';
-import CardBody from '../../components/card-body';
-import Display from '../../components/display';
-import Input from '../../components/forms/text-input';
-import FileInput from '../../components/forms/file-input';
-import DescriptionInput from '../../components/description';
-import { Button } from '../../components/button';
-import TextArea from '../../components/forms/textarea';
-import Select from '../../components/select';
-import './create-product.scss';
-import ToggleButton from '../../components/forms/checkbox';
-import { useAppDispatch, useAppSelector } from '../../redux/hooks';
-import { getCategories } from '../../redux/category/categorySlice';
-import { DateRangePicker } from 'rsuite';
-import { RxCross2 } from 'react-icons/rx';
-import { toast } from 'react-toastify';
-import 'rsuite/dist/rsuite.css';
-import { reset, updateProduct } from '../../redux/products/product-slice';
-import axios from '../../lib';
-import { API_ROOT, API_URL } from '../../constants';
-import { useNavigate, useParams } from 'react-router-dom';
-import { IGalleryPhoto } from '../../interfaces/product';
-import AttributeSingle from './attribute-single';
-import { IAttributeResponse } from '../../interfaces/attribute';
+import { useState, useEffect, ChangeEvent, FormEvent } from "react";
+import CardBody from "../../components/card-body";
+import Display from "../../components/display";
+import Input from "../../components/forms/text-input";
+import FileInput from "../../components/forms/file-input";
+import DescriptionInput from "../../components/description";
+import { Button } from "../../components/button";
+import TextArea from "../../components/forms/textarea";
+import Select from "../../components/select";
+import "./create-product.scss";
+import ToggleButton from "../../components/forms/checkbox";
+import { useAppDispatch, useAppSelector } from "../../redux/hooks";
+import { getCategories } from "../../redux/category/categorySlice";
+import { DateRangePicker } from "rsuite";
+import { RxCross2 } from "react-icons/rx";
+import { toast } from "react-toastify";
+import "rsuite/dist/rsuite.css";
+import { reset, updateProduct } from "../../redux/products/product-slice";
+import axios from "../../lib";
+import { API_ROOT, API_URL } from "../../constants";
+import { useNavigate, useParams } from "react-router-dom";
+import { IGalleryPhoto } from "../../interfaces/product";
+import AttributeSingle from "../attribute/attribute-single";
+import { IAttributeResponse } from "../../interfaces/attribute";
 interface IPhoto {
   id: number;
   product_id: number;
@@ -38,32 +38,32 @@ const UpdateProduct: React.FC = () => {
   const dispatch = useAppDispatch();
   const { categories } = useAppSelector((state) => state.category);
   const [campaignDate, setCampaignDate] = useState<[Date, Date] | null>(null);
-  const { isUpdate, isError, message } = useAppSelector(
+  const { isUpdate, isError, message, errorMessage, error } = useAppSelector(
     (state) => state.product
   );
-  const [title, setTile] = useState<string>('');
-  const [url, setUrl] = useState('');
-  const [description, setDescription] = useState('');
+  const [title, setTile] = useState<string>("");
+  const [url, setUrl] = useState("");
+  const [description, setDescription] = useState("");
   const [image, setImage] = useState<File | null>(null);
   const [updateImage, setUpdateImage] = useState<File | null>(null);
   const [galleryImages, setGalleryImages] = useState<IGalleryPhoto[] | null>(
     null
   );
-  const [category, setCategory] = useState<string>('');
+  const [category, setCategory] = useState<string>("");
   const [quantity, setQuantity] = useState(0);
   const [regularPrice, setRegularPrice] = useState(0);
   const [discountPrice, setDiscountPrice] = useState(0);
 
   const [deliveryFee, setDeliveryFee] = useState(0);
-  const [videoUrl, setVideoUrl] = useState('');
-  const [metaTitle, setMetaTitle] = useState('');
-  const [metaDescription, setMetaDescription] = useState('');
+  const [videoUrl, setVideoUrl] = useState("");
+  const [metaTitle, setMetaTitle] = useState("");
+  const [metaDescription, setMetaDescription] = useState("");
   const [status, setStatus] = useState<0 | 1>(1);
   const [isSale, setIsSale] = useState<0 | 1>(0);
   const [isFeature, setIsFeature] = useState<0 | 1>(0);
   const [isNew, setIsNew] = useState<0 | 1>(0);
-  const [sortDesc, setSortDesc] = useState('');
-  const [policy, setPolicy] = useState('');
+  const [sortDesc, setSortDesc] = useState("");
+  const [policy, setPolicy] = useState("");
   const [availability, setAvailability] = useState<number>(0);
   const [orderNumber] = useState(1);
   const [isLoading, setIsLoading] = useState(false);
@@ -73,7 +73,7 @@ const UpdateProduct: React.FC = () => {
   const [previousSelectedAttributes, setPreviousSelectedAttributes] = useState<
     any[]
   >([]);
-console.log(previousSelectedAttributes);
+  console.log(previousSelectedAttributes);
   useEffect(() => {
     const fetchData = async () => {
       try {
@@ -100,7 +100,7 @@ console.log(previousSelectedAttributes);
                 if (tempAttributes?.length > 0) {
                   tempAttributes?.map((item) => {
                     let matchFound = false;
-                    let valuesFound: any = '';
+                    let valuesFound: any = "";
                     selectedAttributeList = selectedAttributeList?.filter(
                       (row: any) => {
                         if (item?.name === row?.attribute_key) {
@@ -115,15 +115,15 @@ console.log(previousSelectedAttributes);
                     if (matchFound) {
                       setSelectedAttributes((prevState) => {
                         if (Array.isArray(valuesFound)) {
-                          valuesFound = valuesFound.join(',');
+                          valuesFound = valuesFound.join(",");
                         }
                         valuesFound =
-                          valuesFound.indexOf(',') > -1
-                            ? valuesFound.split(',')
+                          valuesFound.indexOf(",") > -1
+                            ? valuesFound.split(",")
                             : [valuesFound];
                         let itemValue: any[] =
-                          item?.value?.indexOf(',') > -1
-                            ? item?.value?.split(',')
+                          item?.value?.indexOf(",") > -1
+                            ? item?.value?.split(",")
                             : [item?.value];
                         itemValue = itemValue?.filter((val) => {
                           if (valuesFound.find((itm: any) => itm === val)) {
@@ -136,7 +136,7 @@ console.log(previousSelectedAttributes);
                           return [
                             {
                               ...item,
-                              value: itemValue.join(','),
+                              value: itemValue.join(","),
                               selectedValues: valuesFound,
                             },
                           ];
@@ -150,7 +150,7 @@ console.log(previousSelectedAttributes);
                               ...prevState,
                               {
                                 ...item,
-                                value: itemValue.join(','),
+                                value: itemValue.join(","),
                                 selectedValues: valuesFound,
                               },
                             ];
@@ -181,7 +181,7 @@ console.log(previousSelectedAttributes);
           }
         }
       } catch (error) {
-        console.error('Failed to fetch data', error);
+        console.error("Failed to fetch data", error);
       }
     };
     fetchData();
@@ -196,13 +196,13 @@ console.log(previousSelectedAttributes);
         prevState.map((item) => {
           if (item.name === attribute) {
             let tempAttrVals: string[] =
-              item.value.indexOf(',') > -1
-                ? item.value.split(',')
+              item.value.indexOf(",") > -1
+                ? item.value.split(",")
                 : [item.value];
             let tempFilteredAttrVals: string[] = tempAttrVals.filter(
               (val) => val !== attributeValue
             );
-            let tempFilteredValsString: string = '';
+            let tempFilteredValsString: string = "";
             if (tempFilteredAttrVals?.length > 1) {
               tempFilteredAttrVals?.map((val, i) => {
                 if (tempFilteredAttrVals.length == i + 1) {
@@ -216,7 +216,7 @@ console.log(previousSelectedAttributes);
             }
             item.value =
               tempFilteredValsString === undefined
-                ? ''
+                ? ""
                 : tempFilteredValsString;
             item.selectedValues.push(attributeValue);
           }
@@ -224,7 +224,7 @@ console.log(previousSelectedAttributes);
         })
       );
     } else {
-      if (attribute !== '') {
+      if (attribute !== "") {
         let tempObj = {};
         attributes.map((item) => {
           if (item?.name === attribute) {
@@ -248,7 +248,7 @@ console.log(previousSelectedAttributes);
         prevState.map((item) => {
           if (item.name === attribute) {
             item.value =
-              item.value === ''
+              item.value === ""
                 ? attributeValue
                 : `${item.value},${attributeValue}`;
             item.selectedValues = item.selectedValues.filter(
@@ -285,17 +285,17 @@ console.log(previousSelectedAttributes);
 
     if (e.target.files) {
       const file = e.target.files[0];
-      formData.append('image', file);
-      formData.append('order_number', orderNumber.toString());
-      formData.append('product_id', slug as string);
+      formData.append("image", file);
+      formData.append("order_number", orderNumber.toString());
+      formData.append("product_id", slug as string);
 
       axios
         .post(`${API_URL}/product-photos`, formData)
         .then((response) => {
-           console.log('API call successful', response.data);
+          console.log("API call successful", response.data);
         })
         .catch((error) => {
-          console.error('API call failed', error);
+          console.error("API call failed", error);
         })
         .finally(() => {
           setIsLoading(false);
@@ -307,7 +307,7 @@ console.log(previousSelectedAttributes);
     setIsLoading(true);
     const res = await axios.delete(`${API_URL}/product-photos?ids=[${id}]`);
     if (res.data) {
-      toast.success('Gallery image deleted Successfully');
+      toast.success("Gallery image deleted Successfully");
     }
     setIsLoading(false);
   };
@@ -316,47 +316,47 @@ console.log(previousSelectedAttributes);
     e.preventDefault();
     const formData = new FormData();
 
-    formData.append('title', title);
-    formData.append('slug', url);
-    formData.append('description', description);
-    formData.append('policy', policy);
+    formData.append("title", title);
+    formData.append("slug", url);
+    formData.append("description", description);
+    formData.append("policy", policy);
     if (updateImage !== null) {
-      formData.append('image', updateImage);
+      formData.append("image", updateImage);
     }
-    formData.append('category_slug', category);
-    formData.append('quantity', quantity.toString());
-    formData.append('regular_price', regularPrice.toString());
-    formData.append('discount_price', discountPrice.toString());
-    formData.append('delivery_fee', deliveryFee.toString());
-    formData.append('is_visible', status.toString());
-    formData.append('video_url', videoUrl);
+    formData.append("category_slug", category);
+    formData.append("quantity", quantity.toString());
+    formData.append("regular_price", regularPrice.toString());
+    formData.append("discount_price", discountPrice.toString());
+    formData.append("delivery_fee", deliveryFee.toString());
+    formData.append("is_visible", status.toString());
+    formData.append("video_url", videoUrl);
     if (campaignDate !== null) {
-      formData.append('camping_start_date', campaignDate[0].toString());
-      formData.append('camping_end_date', campaignDate[1].toString());
+      formData.append("camping_start_date", campaignDate[0].toString());
+      formData.append("camping_end_date", campaignDate[1].toString());
     }
-    formData.append('upload_by', 'admin');
-    formData.append('availability', availability.toString());
-    formData.append('meta_title', metaTitle);
-    formData.append('meta_description', metaDescription);
-    formData.append('sort_description', sortDesc);
-    formData.append('is_homepage', '1');
+    formData.append("upload_by", "admin");
+    formData.append("availability", availability.toString());
+    formData.append("meta_title", metaTitle);
+    formData.append("meta_description", metaDescription);
+    formData.append("sort_description", sortDesc);
+    formData.append("is_homepage", "1");
 
-    formData.append('is_sale', isSale.toString());
-    formData.append('is_feature', isFeature.toString());
-    formData.append('is_new', isNew.toString());
+    formData.append("is_sale", isSale.toString());
+    formData.append("is_feature", isFeature.toString());
+    formData.append("is_new", isNew.toString());
     if (isVariant) {
       let tempSelAttri: any[] = [];
-        selectedAttributes?.map((item) => {
-          if (item?.selectedValues?.length > 0) {
-            tempSelAttri.push({
-              name: item.name,
-              value: item?.selectedValues,
-            });
-          }
-        });
-      formData.append('attributes', JSON.stringify(tempSelAttri));
-    }else{
-      formData.append('attributes', JSON.stringify([]));
+      selectedAttributes?.map((item) => {
+        if (item?.selectedValues?.length > 0) {
+          tempSelAttri.push({
+            name: item.name,
+            value: item?.selectedValues,
+          });
+        }
+      });
+      formData.append("attributes", JSON.stringify(tempSelAttri));
+    } else {
+      formData.append("attributes", JSON.stringify([]));
     }
     dispatch(updateProduct({ id: Number(slug), productData: formData }));
   };
@@ -364,17 +364,20 @@ console.log(previousSelectedAttributes);
   const handleAvailability = (data: string) => setAvailability(Number(data));
 
   useEffect(() => {
-    if (isUpdate) {
-      toast.success(`Product updated successfully`);
-      navigate('/products');
-    }
     if (isError) {
-      toast.error(`${message}`);
+      toast.error(`${errorMessage}`);
     }
+  }, [isError, errorMessage]);
+  useEffect(() => {
+    if (isUpdate) {
+      toast.success(`${message}`);
+      navigate("/products");
+    }
+
     return () => {
       dispatch(reset());
     };
-  }, [dispatch, isUpdate]);
+  }, [dispatch, isUpdate, message, navigate]);
 
   useEffect(() => {
     dispatch(getCategories({ limit: 200 }));
@@ -402,7 +405,7 @@ console.log(previousSelectedAttributes);
         setIsFeature(data.is_feature);
         setIsNew(data.is_new);
         setSortDesc(data.sort_description);
-        setPolicy(data?.policy || '');
+        setPolicy(data?.policy || "");
         setAvailability(data.availability);
 
         if (data.camping_start_date && data.camping_end_date) {
@@ -412,8 +415,8 @@ console.log(previousSelectedAttributes);
           ]);
         }
 
-        if (data['product-photos'] && data['product-photos'].length > 0) {
-          const galleryImageFiles = data['product-photos'].map(
+        if (data["product-photos"] && data["product-photos"].length > 0) {
+          const galleryImageFiles = data["product-photos"].map(
             (photo: IPhoto) => ({
               id: photo.id,
               product_id: photo.product_id,
@@ -426,7 +429,7 @@ console.log(previousSelectedAttributes);
           setGalleryImages(galleryImageFiles);
         }
       } catch (error) {
-        console.error('Error fetching EMI data:', error);
+        console.error("Error fetching EMI data:", error);
       }
     };
     fetchEmiData();
@@ -447,6 +450,7 @@ console.log(previousSelectedAttributes);
                   onChange={(e) => setTile(e.target.value)}
                   htmlFor="name"
                   required
+                  errorMessage={error.title}
                 />
                 <Input
                   label="Slug *"
@@ -455,6 +459,7 @@ console.log(previousSelectedAttributes);
                   onChange={(e) => setUrl(e.target.value)}
                   htmlFor="slug"
                   required
+                  errorMessage={error.slug}
                 />
               </Display>
               <Display>
@@ -466,7 +471,7 @@ console.log(previousSelectedAttributes);
                   Image Size Should Be 600 x 600.
                   <br /> or square size
                 </p>
-                {typeof image === 'string' && (
+                {typeof image === "string" && (
                   <div className="product-image">
                     <img
                       src={`${API_ROOT}/images/product/${image}`}
@@ -489,6 +494,7 @@ console.log(previousSelectedAttributes);
                   value={videoUrl}
                   htmlFor="video"
                   onChange={(e) => setVideoUrl(e.target.value)}
+                  errorMessage={error.video_url}
                 />
                 <p className="wearing">
                   Use proper link without extra parameter.
@@ -548,7 +554,7 @@ console.log(previousSelectedAttributes);
                       name="attributes"
                       onChange={(e) => handleAddAttribute(e.target.value)}
                       className="attribute-list"
-                      value={''}
+                      value={""}
                     >
                       <option value="">Select attributes</option>
                       {attributes?.length > 0 &&
@@ -581,11 +587,17 @@ console.log(previousSelectedAttributes);
                   value={description}
                   setValue={setDescription}
                 />
+                {error.description && (
+                  <p className="validation__error">{error.description}</p>
+                )}
                 <h5 className="product-title">Product Policy</h5>
                 <div className="des-none">
                   <TextArea label="policy" value={policy} required />
                 </div>
                 <DescriptionInput value={policy} setValue={setPolicy} />
+                {error.policy && (
+                  <p className="validation__error">{error.policy}</p>
+                )}
               </Display>
             </div>
           </div>
@@ -605,6 +617,7 @@ console.log(previousSelectedAttributes);
                   value={regularPrice}
                   onChange={(e) => setRegularPrice(Number(e.target.value))}
                   required
+                  errorMessage={error.regular_price}
                 />
                 <Input
                   placeholder="Discount Price"
@@ -612,6 +625,7 @@ console.log(previousSelectedAttributes);
                   htmlFor="discount-price"
                   value={discountPrice}
                   onChange={(e) => setDiscountPrice(Number(e.target.value))}
+                  errorMessage={error.discount_price}
                 />
                 <div className="discount-area">
                   {/*                   <div>
@@ -662,6 +676,7 @@ console.log(previousSelectedAttributes);
                   placeholder="Product short description"
                   value={sortDesc}
                   onChange={(e) => setSortDesc(e.target.value)}
+                  errorMessage={error.sort_description}
                 />
                 <Input
                   type="number"
@@ -671,6 +686,7 @@ console.log(previousSelectedAttributes);
                   value={quantity.toString()}
                   onChange={(e) => setQuantity(Number(e.target.value))}
                   required
+                  errorMessage={error.quantity}
                 />
               </Display>
 

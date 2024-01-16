@@ -1,12 +1,12 @@
-import { ChangeEvent, useEffect, useState } from 'react';
-import Display from '../../components/display';
-import OrderTable from '../../components/order-table';
-import Pagination from '../../components/pagination';
-import Filter from '../../components/filter';
-import { useAppDispatch, useAppSelector } from '../../redux/hooks';
-import { getOrders } from '../../redux/order/orderSlice';
-import { toast } from 'react-toastify';
-import { reset } from '../../redux/products/product-slice';
+import { ChangeEvent, useEffect, useState } from "react";
+import Display from "../../components/display";
+import OrderTable from "../../components/order-table";
+import Pagination from "../../components/pagination";
+import Filter from "../../components/filter";
+import { useAppDispatch, useAppSelector } from "../../redux/hooks";
+import { getOrders } from "../../redux/order/orderSlice";
+import { toast } from "react-toastify";
+import { reset } from "../../redux/products/product-slice";
 
 const PendingOrders: React.FC = () => {
   const dispatch = useAppDispatch();
@@ -22,13 +22,19 @@ const PendingOrders: React.FC = () => {
   };
 
   useEffect(() => {
-    dispatch(getOrders({ order_status: 'pending' }));
-  }, [dispatch]);
+    dispatch(
+      getOrders({
+        order_status: "pending",
+        page: pageNumber,
+        limit: displayItem,
+      })
+    );
+  }, [dispatch, pageNumber, displayItem]);
 
   useEffect(() => {
     if (isDelete) {
-      toast.success('Order deleted successfully');
-      dispatch(getOrders({ order_status: 'delivered' }));
+      toast.success("Order deleted successfully");
+      dispatch(getOrders({ order_status: "delivered" }));
     }
     return () => {
       dispatch(reset());

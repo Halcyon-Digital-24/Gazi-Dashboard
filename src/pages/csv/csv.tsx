@@ -1,16 +1,16 @@
-import React, { ChangeEvent, FormEvent, useEffect, useState } from 'react';
-import Display from '../../components/display';
-import FileInput from '../../components/forms/file-input';
-import { Button } from '../../components/button';
-import './csv.scss';
-import { BsDownload } from 'react-icons/bs';
-import { useAppDispatch, useAppSelector } from '../../redux/hooks';
+import React, { ChangeEvent, FormEvent, useEffect, useState } from "react";
+import Display from "../../components/display";
+import FileInput from "../../components/forms/file-input";
+import { Button } from "../../components/button";
+import "./csv.scss";
+import { BsDownload } from "react-icons/bs";
+import { useAppDispatch, useAppSelector } from "../../redux/hooks";
 import {
   csvProduct,
   reset,
   uploadCsvProduct,
-} from '../../redux/products/product-slice';
-import { toast } from 'react-toastify';
+} from "../../redux/products/product-slice";
+import { toast } from "react-toastify";
 
 const Csv: React.FC = () => {
   const dispatch = useAppDispatch();
@@ -30,7 +30,7 @@ const Csv: React.FC = () => {
       toast.error(`${errorMessage}`);
     }
     if (isCsvUpload) {
-      toast.success(`Csv uploaded`);
+      toast.success(`${message}`);
     }
     return () => {
       dispatch(reset());
@@ -49,7 +49,7 @@ const Csv: React.FC = () => {
     const formData = new FormData();
 
     if (csv !== null) {
-      formData.append('csv', csv);
+      formData.append("csv", csv);
     }
     dispatch(uploadCsvProduct(formData));
   };
@@ -84,7 +84,7 @@ const Csv: React.FC = () => {
       </Display>
       <Display>
         <form onSubmit={handleSubmit}>
-          <FileInput onChange={handleFileChange} />
+          <FileInput onChange={handleFileChange} required />
           <Button type="submit">Upload CSV</Button>
         </form>
       </Display>

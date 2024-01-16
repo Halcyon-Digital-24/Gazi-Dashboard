@@ -69,8 +69,8 @@ import {
   VideosPage,
   Warranty,
   WarrantyDetails,
+  Csv,
 } from "./pages";
-import Csv from "./product/csv";
 
 function PageRoutes() {
   return (
@@ -128,8 +128,8 @@ function PageRoutes() {
       <Route path="/banner" element={<BannerPage />} />
       <Route path="/banner/edit/:slug" element={<UpdateBanner />} />
       <Route path="/banner/create" element={<CreateBanner />} />
-      
-         {/* shipping */}
+
+      {/* shipping */}
       <Route path="/shipping" element={<Shipping />} />
       <Route path="/shipping/create" element={<CreateShipping />} />
       <Route path="/shipping/edit/:slug" element={<UpdateShipping />} />

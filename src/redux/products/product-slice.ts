@@ -53,12 +53,7 @@ export const getProducts = createAsyncThunk(
     try {
       return await productService.getAllProducts(fileter);
     } catch (error) {
-      if (axios.isAxiosError(error)) {
-        const message = error.response?.data.message || "An error occurred";
-        return thunkAPI.rejectWithValue(message);
-      } else {
-        return thunkAPI.rejectWithValue("An error occurred");
-      }
+      return thunkAPI.rejectWithValue(error);
     }
   }
 );
@@ -78,12 +73,7 @@ export const updateProduct = createAsyncThunk(
     try {
       return await productService.updateProduct(id, productData);
     } catch (error) {
-      if (axios.isAxiosError(error)) {
-        const message = error.response?.data.message || "An error occurred";
-        return thunkAPI.rejectWithValue(message);
-      } else {
-        return thunkAPI.rejectWithValue("An error occurred");
-      }
+      return thunkAPI.rejectWithValue(error);
     }
   }
 );
@@ -94,12 +84,7 @@ export const deleteProduct = createAsyncThunk(
     try {
       return await productService.deleteProduct(ids);
     } catch (error) {
-      if (axios.isAxiosError(error)) {
-        const message = error.response?.data.message || "An error occurred";
-        return thunkAPI.rejectWithValue(message);
-      } else {
-        return thunkAPI.rejectWithValue("An error occurred");
-      }
+      return thunkAPI.rejectWithValue(error);
     }
   }
 );
@@ -110,12 +95,7 @@ export const csvProduct = createAsyncThunk(
     try {
       return await productService.csvProduct();
     } catch (error) {
-      if (axios.isAxiosError(error)) {
-        const message = error.response?.data.message || "An error occurred";
-        return thunkAPI.rejectWithValue(message);
-      } else {
-        return thunkAPI.rejectWithValue("An error occurred");
-      }
+      return thunkAPI.rejectWithValue(error);
     }
   }
 );
@@ -127,12 +107,7 @@ export const uploadCsvProduct = createAsyncThunk(
     try {
       return await productService.uploadCsvProduct(csvData);
     } catch (error) {
-      if (axios.isAxiosError(error)) {
-        const message = error.response?.data.message || "An error occurred";
-        return thunkAPI.rejectWithValue(message);
-      } else {
-        return thunkAPI.rejectWithValue("An error occurred");
-      }
+      return thunkAPI.rejectWithValue(error);
     }
   }
 );
@@ -150,6 +125,7 @@ export const productSlice = createSlice({
       state.isError = false;
       state.isCsvUpload = false;
       state.message = "";
+      state.errorMessage = "";
       state.error = {};
     },
   },
@@ -163,7 +139,7 @@ export const productSlice = createSlice({
       .addCase(createProduct.fulfilled, (state, action) => {
         state.isLoading = false;
         state.isCreate = true;
-        console.log(action.payload);
+        state.message = action.payload?.message;
       })
       .addCase(createProduct.rejected, (state, action: any) => {
         state.isLoading = false;
@@ -182,10 +158,11 @@ export const productSlice = createSlice({
         state.products = action.payload.data.rows;
         state.totalCount = action.payload.data.count;
       })
-      .addCase(getProducts.rejected, (state, action) => {
+      .addCase(getProducts.rejected, (state, action: any) => {
         state.isLoading = false;
         state.isError = true;
-        state.message = action.payload as string;
+        state.errorMessage = action?.payload?.response?.data?.message;
+        state.error = action?.payload?.response?.data?.errors;
         state.products = [];
       })
       /* TODO: UPDATE PRODUCT DATA SET */
@@ -196,12 +173,13 @@ export const productSlice = createSlice({
       .addCase(updateProduct.fulfilled, (state, action) => {
         state.isLoading = false;
         state.isUpdate = true;
-        state.message = action.payload.message;
+        state.message = action.payload?.message;
       })
-      .addCase(updateProduct.rejected, (state, action) => {
+      .addCase(updateProduct.rejected, (state, action: any) => {
         state.isLoading = false;
         state.isError = true;
-        state.message = action.payload;
+        state.errorMessage = action?.payload?.response?.data?.message;
+        state.error = action?.payload?.response?.data?.errors;
       })
       /* TODO: DELETE Product DATA SET */
       .addCase(deleteProduct.pending, (state) => {
@@ -213,10 +191,10 @@ export const productSlice = createSlice({
         state.isDelete = true;
         state.message = action.payload.message;
       })
-      .addCase(deleteProduct.rejected, (state, action) => {
+      .addCase(deleteProduct.rejected, (state, action: any) => {
         state.isLoading = false;
         state.isError = true;
-        state.message = action.payload;
+        state.errorMessage = action?.payload?.response?.data?.message;
       })
       /* TODO: CSV DOWNLOAD */
       .addCase(csvProduct.pending, (state) => {
@@ -225,11 +203,13 @@ export const productSlice = createSlice({
       .addCase(csvProduct.fulfilled, (state, action) => {
         state.isLoading = false;
         state.csvFile = action.payload;
+        state.message = action.payload?.message;
       })
-      .addCase(csvProduct.rejected, (state, action) => {
+      .addCase(csvProduct.rejected, (state, action: any) => {
         state.isLoading = false;
         state.isError = true;
-        state.message = action.payload;
+        state.errorMessage = action?.payload?.response?.data?.message;
+        state.error = action?.payload?.response?.data?.errors;
       })
       /* TODO: CSV UPLOAD */
       .addCase(uploadCsvProduct.pending, (state) => {
@@ -238,13 +218,14 @@ export const productSlice = createSlice({
       .addCase(uploadCsvProduct.fulfilled, (state, action) => {
         state.isLoading = false;
         state.isCsvUpload = true;
-        state.csvFile = action.payload;
+        state.message = action.payload.message;
       })
-      .addCase(uploadCsvProduct.rejected, (state, action) => {
+      .addCase(uploadCsvProduct.rejected, (state, action: any) => {
         state.isLoading = false;
         state.isError = true;
         state.isCsvUpload = false;
-        state.errorMessage = action.payload;
+        state.errorMessage = action?.payload?.response?.data?.message;
+        state.error = action?.payload?.response?.data?.errors;
       });
   },
 });
