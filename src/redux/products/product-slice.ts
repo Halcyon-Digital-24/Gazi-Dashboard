@@ -1,7 +1,7 @@
-import { createSlice, createAsyncThunk } from '@reduxjs/toolkit';
-import productService from './product-service';
-import { IProduct } from '../../interfaces/product';
-import axios from 'axios';
+import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
+import productService from "./product-service";
+import { IProduct } from "../../interfaces/product";
+import axios from "axios";
 
 interface IState {
   products: IProduct[];
@@ -14,6 +14,7 @@ interface IState {
   isCsvUpload: boolean;
   isLoading: boolean;
   csvFile: string;
+  error: { [key: string]: string };
   message: string | unknown;
   errorMessage: string | unknown;
 }
@@ -27,47 +28,43 @@ const initialState: IState = {
   isCsvUpload: false,
   isDelete: false,
   isLoading: false,
-  csvFile: '',
-  message: '',
-  errorMessage: '',
+  error: {},
+  csvFile: "",
+  message: "",
+  errorMessage: "",
 };
 
 // Create products
 export const createProduct = createAsyncThunk(
-  'product/createProduct',
+  "product/createProduct",
   async (data: FormData, thunkAPI) => {
     try {
       return await productService.createProduct(data);
     } catch (error) {
-      if (axios.isAxiosError(error)) {
-        const message = error.response?.data.message || 'An error occurred';
-        return thunkAPI.rejectWithValue(message);
-      } else {
-        return thunkAPI.rejectWithValue('An error occurred');
-      }
+      return thunkAPI.rejectWithValue(error);
     }
   }
 );
 
 // Get user products
 export const getProducts = createAsyncThunk(
-  'product/getAllProducts',
+  "product/getAllProducts",
   async (fileter: { [key: string]: string | number }, thunkAPI) => {
     try {
       return await productService.getAllProducts(fileter);
     } catch (error) {
       if (axios.isAxiosError(error)) {
-        const message = error.response?.data.message || 'An error occurred';
+        const message = error.response?.data.message || "An error occurred";
         return thunkAPI.rejectWithValue(message);
       } else {
-        return thunkAPI.rejectWithValue('An error occurred');
+        return thunkAPI.rejectWithValue("An error occurred");
       }
     }
   }
 );
 
 export const updateProduct = createAsyncThunk(
-  'category/update',
+  "category/update",
   async (
     {
       id,
@@ -82,42 +79,42 @@ export const updateProduct = createAsyncThunk(
       return await productService.updateProduct(id, productData);
     } catch (error) {
       if (axios.isAxiosError(error)) {
-        const message = error.response?.data.message || 'An error occurred';
+        const message = error.response?.data.message || "An error occurred";
         return thunkAPI.rejectWithValue(message);
       } else {
-        return thunkAPI.rejectWithValue('An error occurred');
+        return thunkAPI.rejectWithValue("An error occurred");
       }
     }
   }
 );
 // Delete Product
 export const deleteProduct = createAsyncThunk(
-  'product/delete',
+  "product/delete",
   async (ids: number[], thunkAPI) => {
     try {
       return await productService.deleteProduct(ids);
     } catch (error) {
       if (axios.isAxiosError(error)) {
-        const message = error.response?.data.message || 'An error occurred';
+        const message = error.response?.data.message || "An error occurred";
         return thunkAPI.rejectWithValue(message);
       } else {
-        return thunkAPI.rejectWithValue('An error occurred');
+        return thunkAPI.rejectWithValue("An error occurred");
       }
     }
   }
 );
 // Download csv
 export const csvProduct = createAsyncThunk(
-  'product/csv_download',
+  "product/csv_download",
   async (_, thunkAPI) => {
     try {
       return await productService.csvProduct();
     } catch (error) {
       if (axios.isAxiosError(error)) {
-        const message = error.response?.data.message || 'An error occurred';
+        const message = error.response?.data.message || "An error occurred";
         return thunkAPI.rejectWithValue(message);
       } else {
-        return thunkAPI.rejectWithValue('An error occurred');
+        return thunkAPI.rejectWithValue("An error occurred");
       }
     }
   }
@@ -125,23 +122,23 @@ export const csvProduct = createAsyncThunk(
 
 // Upload csv
 export const uploadCsvProduct = createAsyncThunk(
-  'product/csv_upload',
+  "product/csv_upload",
   async (csvData: FormData, thunkAPI) => {
     try {
       return await productService.uploadCsvProduct(csvData);
     } catch (error) {
       if (axios.isAxiosError(error)) {
-        const message = error.response?.data.message || 'An error occurred';
+        const message = error.response?.data.message || "An error occurred";
         return thunkAPI.rejectWithValue(message);
       } else {
-        return thunkAPI.rejectWithValue('An error occurred');
+        return thunkAPI.rejectWithValue("An error occurred");
       }
     }
   }
 );
 
 export const productSlice = createSlice({
-  name: 'product',
+  name: "product",
   initialState,
   reducers: {
     reset: (state) => {
@@ -152,7 +149,8 @@ export const productSlice = createSlice({
       state.isDelete = false;
       state.isError = false;
       state.isCsvUpload = false;
-      state.message = '';
+      state.message = "";
+      state.error = {};
     },
   },
 
@@ -162,13 +160,16 @@ export const productSlice = createSlice({
         state.isLoading = true;
         state.isCreate = false;
       })
-      .addCase(createProduct.fulfilled, (state) => {
+      .addCase(createProduct.fulfilled, (state, action) => {
         state.isLoading = false;
         state.isCreate = true;
+        console.log(action.payload);
       })
-      .addCase(createProduct.rejected, (state) => {
+      .addCase(createProduct.rejected, (state, action: any) => {
         state.isLoading = false;
         state.isError = true;
+        state.errorMessage = action?.payload?.response?.data?.message;
+        state.error = action?.payload?.response?.data?.errors;
       })
       // get Product
       .addCase(getProducts.pending, (state) => {

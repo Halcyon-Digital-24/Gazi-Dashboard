@@ -1,35 +1,37 @@
-import { useState, useEffect, ChangeEvent, FormEvent } from 'react';
-import { Button } from '../../components/button';
-import CardBody from '../../components/card-body';
-import Display from '../../components/display';
-import FileInput from '../../components/forms/file-input';
-import Input from '../../components/forms/text-input';
-import TextArea from '../../components/forms/textarea';
-import Column from '../../components/table/column';
-import Select from '../../components/select';
-import { useAppDispatch, useAppSelector } from '../../redux/hooks';
+import { useState, useEffect, ChangeEvent, FormEvent } from "react";
+import { Button } from "../../components/button";
+import CardBody from "../../components/card-body";
+import Display from "../../components/display";
+import FileInput from "../../components/forms/file-input";
+import Input from "../../components/forms/text-input";
+import TextArea from "../../components/forms/textarea";
+import Column from "../../components/table/column";
+import Select from "../../components/select";
+import { useAppDispatch, useAppSelector } from "../../redux/hooks";
 import {
   createCategory,
   getCategories,
   reset,
-} from '../../redux/category/categorySlice';
-import { ICategory } from '../../interfaces/category';
-import { toast } from 'react-toastify';
-import { useNavigate } from 'react-router-dom';
+} from "../../redux/category/categorySlice";
+import { ICategory } from "../../interfaces/category";
+import { toast } from "react-toastify";
+import { useNavigate } from "react-router-dom";
 
 const initialState = {
-  title: '',
-  slug: '',
-  parent_category: '',
+  title: "",
+  slug: "",
+  parent_category: "",
   image: null as File | null,
   is_feature: false,
-  meta_title: '',
-  meta_description: '',
-  order_id: '',
+  meta_title: "",
+  meta_description: "",
+  order_id: "",
 };
 
 const CreateCategory: React.FC = () => {
-  const { categories, isCreate } = useAppSelector((state) => state.category);
+  const { categories, isCreate, error, message } = useAppSelector(
+    (state) => state.category
+  );
   const navigate = useNavigate();
   const dispatch = useAppDispatch();
   const [categoryData, setCategoryData] = useState<ICategory>(initialState);
@@ -69,8 +71,8 @@ const CreateCategory: React.FC = () => {
 
   useEffect(() => {
     if (isCreate) {
-      toast.success('Category create successfully');
-      navigate('/category');
+      toast.success(`${message}`);
+      navigate("/category");
     }
 
     return () => {
@@ -95,6 +97,7 @@ const CreateCategory: React.FC = () => {
                 onChange={handleChange}
                 placeholder="Enter Title"
                 required
+                errorMessage={error.title}
               />
               <Input
                 htmlFor="slug"
@@ -103,6 +106,7 @@ const CreateCategory: React.FC = () => {
                 onChange={handleChange}
                 placeholder="Enter Slug"
                 required
+                errorMessage={error.slug}
               />
               <Input
                 htmlFor="order_id"
@@ -110,6 +114,7 @@ const CreateCategory: React.FC = () => {
                 label="Position No"
                 onChange={handleChange}
                 placeholder="Enter Position"
+                errorMessage={error.order_id}
               />
               <Select
                 htmlFor="Choose Parent category"
@@ -135,6 +140,7 @@ const CreateCategory: React.FC = () => {
                 placeholder="Meta Title"
                 htmlFor="meta-title"
                 onChange={handleChange}
+                errorMessage={error.meta_title}
               />
               <TextArea
                 name="meta_description"

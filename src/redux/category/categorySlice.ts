@@ -1,7 +1,7 @@
-import { createAsyncThunk, createSlice } from '@reduxjs/toolkit';
-import { ICategory } from '../../interfaces/category';
-import { RootState } from '../store';
-import categoryService from './categoryService';
+import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
+import { ICategory } from "../../interfaces/category";
+import { RootState } from "../store";
+import categoryService from "./categoryService";
 
 interface IBlogResponse {
   categories: ICategory[];
@@ -13,6 +13,7 @@ interface IBlogResponse {
   isDelete: boolean;
   isLoading: boolean;
   message: string | unknown;
+  error: { [key: string]: string };
   errorMessage: string | unknown;
 }
 
@@ -25,26 +26,25 @@ const initialState: IBlogResponse = {
   isUpdate: false,
   isDelete: false,
   isLoading: false,
-  message: '',
-  errorMessage: '',
+  message: "",
+  error: {},
+  errorMessage: "",
 };
 
 // Create new Blog
 export const createCategory = createAsyncThunk(
-  'category/create',
+  "category/create",
   async (categoryData: FormData, thunkAPI) => {
     try {
       return await categoryService.createCategory(categoryData);
     } catch (error) {
-      const message =
-        error instanceof Error ? error.message : 'An error occurred';
-      return thunkAPI.rejectWithValue(message);
+      return thunkAPI.rejectWithValue(error);
     }
   }
 );
 
 export const getCategories = createAsyncThunk(
-  'category/getAll',
+  "category/getAll",
   async (
     filter: {
       [key: string]: string | number;
@@ -54,15 +54,13 @@ export const getCategories = createAsyncThunk(
     try {
       return await categoryService.getCategory(filter);
     } catch (error) {
-      const message =
-        error instanceof Error ? error.message : 'An error occurred';
-      return thunkAPI.rejectWithValue(message);
+      return thunkAPI.rejectWithValue(error);
     }
   }
 );
 
 export const updateCategory = createAsyncThunk(
-  'category/update',
+  "category/update",
   async (
     {
       slug,
@@ -73,27 +71,23 @@ export const updateCategory = createAsyncThunk(
     try {
       return await categoryService.updateCategory(slug, categoryData);
     } catch (error) {
-      const message =
-        error instanceof Error ? error.message : 'An error occurred';
-      return thunkAPI.rejectWithValue(message);
+      return thunkAPI.rejectWithValue(error);
     }
   }
 );
 export const deleteCategory = createAsyncThunk(
-  'category/delete',
+  "category/delete",
   async (categoryId: number, thunkAPI) => {
     try {
       return await categoryService.deleteCategory(categoryId);
     } catch (error) {
-      const message =
-        error instanceof Error ? error.message : 'An error occurred';
-      return thunkAPI.rejectWithValue(message);
+      return thunkAPI.rejectWithValue(error);
     }
   }
 );
 
 export const categorySlice = createSlice({
-  name: 'category',
+  name: "category",
   initialState,
   reducers: {
     reset: () => initialState,
@@ -104,14 +98,16 @@ export const categorySlice = createSlice({
         state.isLoading = true;
         state.isCreate = false;
       })
-      .addCase(createCategory.fulfilled, (state) => {
+      .addCase(createCategory.fulfilled, (state, action: any) => {
         state.isLoading = false;
         state.isCreate = true;
+        state.message = action.payload?.message;
       })
-      .addCase(createCategory.rejected, (state) => {
+      .addCase(createCategory.rejected, (state, action: any) => {
         state.isLoading = false;
         state.isError = true;
-        // state.errorMessage = action.payload.message;
+        state.errorMessage = action?.payload?.response?.data?.message;
+        state.error = action?.payload?.response?.data?.errors;
       })
       /* TODO: GET CATEGORY DATA SET */
       .addCase(getCategories.pending, (state) => {
@@ -120,13 +116,14 @@ export const categorySlice = createSlice({
       .addCase(getCategories.fulfilled, (state, action) => {
         state.isLoading = false;
         state.isSuccess = true;
-        state.categories = action.payload.data.rows;
-        state.totalCount = action.payload.data.count;
+        state.categories = action.payload?.data?.rows;
+        state.totalCount = action.payload?.data?.count;
       })
-      .addCase(getCategories.rejected, (state, action) => {
+      .addCase(getCategories.rejected, (state, action: any) => {
         state.isLoading = false;
         state.isError = true;
         state.message = action.payload;
+        state.errorMessage = action?.payload?.response?.data?.message;
       })
       /* TODO: UPDATE CATEGORY DATA SET */
       .addCase(updateCategory.pending, (state) => {
@@ -137,10 +134,11 @@ export const categorySlice = createSlice({
         state.isLoading = false;
         state.isUpdate = true;
       })
-      .addCase(updateCategory.rejected, (state, action) => {
+      .addCase(updateCategory.rejected, (state, action: any) => {
         state.isLoading = false;
         state.isError = true;
-        state.message = action.payload;
+        state.errorMessage = action?.payload?.response?.data?.message;
+        state.error = action?.payload?.response?.data?.errors;
       })
       /* TODO: DELETE CATEGORY DATA SET */
       .addCase(deleteCategory.pending, (state) => {
@@ -152,11 +150,10 @@ export const categorySlice = createSlice({
         state.isDelete = true;
         state.message = action.payload.message;
       })
-      .addCase(deleteCategory.rejected, (state, action) => {
+      .addCase(deleteCategory.rejected, (state, action: any) => {
         state.isLoading = false;
         state.isError = true;
-        state.errorMessage = action.payload;
-        console.log(action.payload)
+        state.errorMessage = action?.payload?.response?.data?.error;
       });
   },
 });

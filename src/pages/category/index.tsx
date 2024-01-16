@@ -29,6 +29,7 @@ const Categories: React.FC = () => {
     isSuccess,
     message,
     isDelete,
+    errorMessage,
     totalCount,
     isLoading,
   } = useAppSelector((state) => state.category);
@@ -46,7 +47,6 @@ const Categories: React.FC = () => {
     );
   };
 
-  console.log(isDelete);
   const handleDeleteCategory = (id: number) => {
     dispatch(deleteCategory(id));
   };
@@ -81,15 +81,14 @@ const Categories: React.FC = () => {
     if (isDelete) {
       toast.success(`${message}`);
     }
+    if (errorMessage) {
+      toast.error(`${errorMessage}`);
+    }
 
     return () => {
       dispatch(reset());
     };
-  }, [dispatch, isDelete]);
-
-  if (isLoading) {
-    return <Loader />;
-  }
+  }, [dispatch, isDelete, errorMessage]);
 
   return (
     <div>
@@ -107,36 +106,41 @@ const Categories: React.FC = () => {
           <Column className="col-md-2">Featured</Column>
           <Column className="col-md-1">Options</Column>
         </Row>
-        {categories.map((category, index) => (
-          <Row className="row" key={index}>
-            <Column className="col-md-3">
-              {category.image ? (
-                <img
-                  src={`${API_ROOT}/images/category/${category.image}`}
-                  alt="brand"
+        {isLoading ? (
+          <Loader />
+        ) : (
+          categories.map((category, index) => (
+            <Row className="row" key={index}>
+              <Column className="col-md-3">
+                {category.image ? (
+                  <img
+                    src={`${API_ROOT}/images/category/${category.image}`}
+                    alt="brand"
+                  />
+                ) : (
+                  "—"
+                )}
+              </Column>
+              <Column className="col-md-3">{category.title}</Column>
+              <Column className="col-md-2">{category.parent_category}</Column>
+              <Column className="col-md-2">
+                <ToggleButton
+                  onClick={() => handleVisibility(category)}
+                  isChecked={category.is_feature}
                 />
-              ) : (
-                "—"
-              )}
-            </Column>
-            <Column className="col-md-3">{category.title}</Column>
-            <Column className="col-md-2">{category.parent_category}</Column>
-            <Column className="col-md-2">
-              <ToggleButton
-                onClick={() => handleVisibility(category)}
-                isChecked={category.is_feature}
-              />
-            </Column>
-            <Column className="col-md-1">
-              <CustomIconArea>
-                <EditButton editUrl={`/categories/edit/${category.id}`} />
-                <DeleteButton
-                  onClick={() => handleDeleteCategory(category.id as number)}
-                />
-              </CustomIconArea>
-            </Column>
-          </Row>
-        ))}
+              </Column>
+              <Column className="col-md-1">
+                <CustomIconArea>
+                  <EditButton editUrl={`/categories/edit/${category.id}`} />
+                  <DeleteButton
+                    onClick={() => handleDeleteCategory(category.id as number)}
+                  />
+                </CustomIconArea>
+              </Column>
+            </Row>
+          ))
+        )}
+
         <Pagination
           pageCount={pageNumber}
           handlePageClick={handlePageChange}

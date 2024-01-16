@@ -1,5 +1,5 @@
-import { ChangeEvent } from 'react';
-import './index.scss';
+import { ChangeEvent } from "react";
+import "./index.scss";
 
 interface IProps {
   type?: string;
@@ -17,6 +17,7 @@ interface IProps {
   max?: string;
   onFocus?: () => void;
   autocomplete?: string;
+  errorMessage?: string;
 }
 
 const Input: React.FC<IProps> = ({
@@ -35,13 +36,14 @@ const Input: React.FC<IProps> = ({
   autocomplete,
   min,
   max,
+  errorMessage,
 }) => {
   return (
     <div className="text">
       <label htmlFor={htmlFor}>{label}</label>
       <input
         name={name}
-        type={type ? type : 'text'}
+        type={type ? type : "text"}
         id={htmlFor}
         onChange={onChange}
         onBlur={onBlur}
@@ -55,6 +57,7 @@ const Input: React.FC<IProps> = ({
         max={max}
         autoComplete={autocomplete}
       />
+      {errorMessage && <p className="validation__error">{errorMessage}</p>}
     </div>
   );
 };

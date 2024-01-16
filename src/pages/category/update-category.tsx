@@ -22,7 +22,9 @@ const UpdateCategory: React.FC = (): JSX.Element => {
   const navigate = useNavigate();
   const dispatch = useAppDispatch();
   const { slug } = useParams();
-  const { categories, isUpdate } = useAppSelector((state) => state.category);
+  const { categories, isUpdate, error } = useAppSelector(
+    (state) => state.category
+  );
   const [loading, setIsLoading] = useState(true);
   const [title, setTitle] = useState("");
   const [slug_url, setSlug] = useState("");
@@ -39,6 +41,7 @@ const UpdateCategory: React.FC = (): JSX.Element => {
     }
   };
 
+  console.log(error);
   const handleSubmit = (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     const formData = new FormData();
@@ -109,6 +112,7 @@ const UpdateCategory: React.FC = (): JSX.Element => {
                 placeholder="Enter Title"
                 value={title}
                 required
+                errorMessage={error.title}
               />
               <Input
                 htmlFor="slug"
@@ -118,6 +122,7 @@ const UpdateCategory: React.FC = (): JSX.Element => {
                 placeholder="Enter Slug"
                 required
                 value={slug_url}
+                errorMessage={error.slug}
               />
               <Input
                 htmlFor="order_id"

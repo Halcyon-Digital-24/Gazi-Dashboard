@@ -1,10 +1,10 @@
 import "./index.scss";
 const Loader = () => {
   return (
-    <div class="loader">
-      <span class="bar"></span>
-      <span class="bar"></span>
-      <span class="bar"></span>
+    <div className="loader">
+      <span className="bar"></span>
+      <span className="bar"></span>
+      <span className="bar"></span>
     </div>
   );
 };
