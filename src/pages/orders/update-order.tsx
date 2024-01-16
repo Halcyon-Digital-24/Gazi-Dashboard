@@ -120,11 +120,6 @@ const UpdateOrder = () => {
         quantity: data.quantity + 1,
       });
 
-      // Update order final price
-      /* await axios.patch(`${API_URL}/orders/${slug}`, {
-        final_price: final_price + data.discount_price,
-      }); */
-
       // Handle success if needed
     } catch (error) {
       console.error(error);
@@ -143,10 +138,7 @@ const UpdateOrder = () => {
         quantity: data.quantity - 1,
       });
 
-      // Update order final price
-      /*  await axios.patch(`${API_URL}/orders/${slug}`, {
-        final_price: final_price - data.discount_price,
-      }); */
+ 
 
       // Handle success if needed
     } catch (error) {
@@ -165,11 +157,6 @@ const UpdateOrder = () => {
       // Delete order item quantity
       await axios.delete(`${API_URL}/order-items/?ids=[${orderId}]`);
 
-      // Update order final price
-      /*  await axios.patch(`${API_URL}/orders/${slug}`, {
-        final_price: final_price - data.discount_price * data.quantity,
-        quantity: quantity - 1,
-      }); */
 
       // Handle success if needed
     } catch (error) {
@@ -253,12 +240,6 @@ const UpdateOrder = () => {
                         placeholder="City"
                         onChange={(e) => setCity(e.target.value)}
                       />
-                      {/*  <Input
-                        htmlFor="thana"
-                        value={thana}
-                        placeholder="Thana"
-                        onChange={(e) => setThana(e.target.value)}
-                      /> */}
                     </div>
                     <div className="order-details right">
                       <div className="product-area" ref={productAreaRef}>
@@ -267,7 +248,6 @@ const UpdateOrder = () => {
                           htmlFor="search"
                           placeholder="Search Product"
                           onChange={(e) => setSearch(e.target.value)}
-                          // onChange={() => setIsFocus(false)}
                           autocomplete="off"
                           onFocus={() => setIsFocus(true)}
                         />
@@ -282,33 +262,13 @@ const UpdateOrder = () => {
                             </ul>
                           </div>
                         )}
-                        {/* {orderItems.map((order) => (
-                          <div className="row order-item">
-                            <div className="col-md-6">
-                              <p className="title">{order.product_name}</p>
-                            </div>
-                            <div className="col-md-2 price">
-                              <p>{order.quantity}</p>
-                            </div>
-                            <div className="col-md-3"></div>
-                            <div className="col-md-1">
-                             
-                            </div>
-                          </div>
-                        ))} */}
+             
                       </div>
                     </div>
                   </div>
                 </div>
 
-                {/* <div className="invoice-body">
-        <p>Bill to:</p>
-        <p>Iftakher</p>
-        <p> House: 12, Road: 01, Block I. Basundhara R/A, Dhaka, Bangladesh </p>
-        <p>Email: iftebmw@gmail.com</p>
-        <p>Phone: 01976100280</p>
-      </div> */}
-
+    
                 <div className="invoice-table">
                   <div className="row ">
                     <Column className="col-md-2 heading">SL. </Column>
@@ -327,7 +287,7 @@ const UpdateOrder = () => {
                             <RxCross2
                               className="cross"
                               onClick={() => handleRemoveOrderItem(product)}
-                            />{' '}
+                            />
                             {index + 1}
                           </Column>
                           <Column className="col-md-4 heading">

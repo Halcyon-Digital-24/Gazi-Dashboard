@@ -26,7 +26,7 @@ function BaseTemplate() {
           </div>
         </div>
        : (
-            <Login onLogout={handleLogOut} />
+            <Login/>
       )}
     </div>
   );
