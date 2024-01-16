@@ -430,7 +430,7 @@ const CreateProduct: React.FC = () => {
                     ))}
                 </div>
                 <p className="wearing">
-                  Image Size Should Be 800 x 800. or square size
+                  Image Size Should Be 800 x 800. or square size.
                 </p>
               </Display>
               <Display>
