@@ -27,17 +27,12 @@ const UpdateOrder = () => {
   const [mobile, setMobile] = useState('');
   const [address, setAddress] = useState('');
   const [city, setCity] = useState('');
-  // const [thana, setThana] = useState('');
-  const [quantity, setQuantity] = useState(0);
-  // const [discount, setDiscount] = useState(0);
   const [shipping, setShipping] = useState(0);
   const [orderItems, setOrderItems] = useState<ISingleOrder[]>([]);
-  const [final_price, setFinalPrice] = useState(0);
   const [isFocus, setIsFocus] = useState(false);
   const [search, setSearch] = useState('');
   const productAreaRef = useRef<HTMLDivElement>(null);
   const [loading, setLoading] = useState(false);
-  console.log({ quantity, final_price });
 
   const orderData = {
     name,
@@ -89,17 +84,13 @@ const UpdateOrder = () => {
       try {
         const response = await axios.get(`${API_URL}/orders/${slug}`);
         const data = response.data.data;
-
         // Set state values based on the fetched data
         setName(data.name);
         setEmail(data.email);
         setMobile(data.mobile);
         setAddress(data.address);
         setCity(data.city);
-        // setThana(data.thana);
-        setFinalPrice(data.final_price);
         setOrderItems(data.orderItems);
-        setQuantity(data.quantity);
         setShipping(data.delivery_fee)
       } catch (error) {
         console.error('Error fetching category data:', error);
