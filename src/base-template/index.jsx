@@ -7,26 +7,34 @@ import "./index.scss";
 function BaseTemplate() {
   const [isOpen, setIsOpen] = useState(true);
 
-  const user=localStorage.getItem('user'); 
+  const user = localStorage.getItem("user");
 
   return (
     <div className="container-fluid">
-      {user ? 
+      {user ? (
         <div className="row">
           <div className={isOpen ? "col-md-2" : "sidebar-none"}>
-            <SideBar handleClose={()=>{setIsOpen(!isOpen)}} />
+            <SideBar
+              handleClose={() => {
+                setIsOpen(!isOpen);
+              }}
+            />
           </div>
 
           <div className={isOpen ? "col-md-10" : "col-md-12"}>
-            <Header isOpen={isOpen} handleOpen={()=>{setIsOpen(!isOpen)}}/>
+            <Header
+              isOpen={isOpen}
+              handleOpen={() => {
+                setIsOpen(!isOpen);
+              }}
+            />
             <main className="main-area">
-              
               <PageRoutes />
             </main>
           </div>
         </div>
-       : (
-            <Login onLogout={handleLogOut} />
+      ) : (
+        <Login />
       )}
     </div>
   );
