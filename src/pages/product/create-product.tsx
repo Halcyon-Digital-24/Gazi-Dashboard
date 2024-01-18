@@ -242,20 +242,28 @@ const CreateProduct: React.FC = () => {
     }
     const formData = new FormData();
 
-    formData.append("title", title);
-    formData.append("slug", slug);
-    formData.append("description", description);
-    formData.append("policy", policy);
+    if (title.trim()) {
+      formData.append("title", title.trim());
+    }
+    if (slug.trim()) {
+      formData.append("slug", slug.trim());
+    }
+    if (description.trim()) {
+      formData.append("description", description.trim());
+    }
+    if (policy.trim()) {
+      formData.append("policy", policy.trim());
+    }
     if (image !== null) {
       formData.append("image", image);
     }
     formData.append("category_slug", category);
-    formData.append("quantity", quantity.toString());
-    formData.append("regular_price", regularPrice.toString());
-    formData.append("discount_price", discountPrice.toString());
+    formData.append("quantity", quantity.toString().trim());
+    formData.append("regular_price", regularPrice.toString().trim());
+    formData.append("discount_price", discountPrice.toString().trim());
     formData.append("delivery_fee", deliveryFee.toString());
     formData.append("is_visible", status.toString());
-    formData.append("video_url", videoUrl);
+    formData.append("video_url", videoUrl.trim());
     if (campaignDate !== null) {
       formData.append("camping_start_date", campaignDate[0].toString());
       formData.append("camping_end_date", campaignDate[1].toString());
@@ -266,10 +274,10 @@ const CreateProduct: React.FC = () => {
       formData.append("gallery_image", g_image);
       formData.append("order_number", imageQuantities[index].toString());
     });
-    formData.append("meta_title", metaTitle);
-    formData.append("meta_description", metaDescription);
-    formData.append("sort_description", sortDesc);
-    formData.append("is_homepage", "1");
+    formData.append("meta_title", metaTitle.trim());
+    formData.append("meta_description", metaDescription.trim());
+    formData.append("sort_description", sortDesc.trim());
+    formData.append("is_homepage", "0");
     formData.append("is_sale", isSale.toString());
     formData.append("is_feature", isFeature.toString());
     formData.append("is_new", isNew.toString());
@@ -325,7 +333,6 @@ const CreateProduct: React.FC = () => {
       dispatch(reset());
     };
   }, [dispatch]);
-  console.log(error);
 
   return (
     <div className="create-product">
@@ -399,7 +406,7 @@ const CreateProduct: React.FC = () => {
                   label="Gallery Images"
                   onChange={handleGalleryImageChange}
                   multiple
-                  required
+                  required={(galleryImages?.length as number) <= 0}
                 />
                 <div>
                   {galleryImages &&
@@ -411,9 +418,9 @@ const CreateProduct: React.FC = () => {
                           alt="gazi home appliance"
                         />
                         <input
-                          type="text"
-                          defaultValue={imageQuantities[index]}
-                          onBlur={(e) =>
+                          type="number"
+                          defaultValue={index + 1}
+                          onChange={(e) =>
                             handleQuantityChange(
                               index,
                               parseInt(e.target.value, 10)
@@ -506,6 +513,7 @@ const CreateProduct: React.FC = () => {
 
               <Display>
                 <Input
+                  type="number"
                   placeholder="Regular Price"
                   label="Regular Price"
                   htmlFor="regular-price"
@@ -515,6 +523,7 @@ const CreateProduct: React.FC = () => {
                 />
                 <div className="discount-area">
                   <Input
+                    type="number"
                     placeholder="Discount Price"
                     label="Discount Price"
                     htmlFor="discount-price"
@@ -528,6 +537,7 @@ const CreateProduct: React.FC = () => {
                       onChange={(e) =>
                         setDiscountType(e.target.value as "flat" | "percent")
                       }
+                      required={discountSelectedAmount ? true : false}
                     >
                       <option value="flat">Flat</option>
                       <option value="percent">Percent</option>
@@ -571,7 +581,6 @@ const CreateProduct: React.FC = () => {
                     label="Quantity"
                     htmlFor="Quantity"
                     onBlur={(e) => setQuantity(Number(e.target.value))}
-                    defaultValue="0"
                     required
                     errorMessage={error.quantity}
                   />
