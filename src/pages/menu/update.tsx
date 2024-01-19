@@ -8,7 +8,6 @@ import Select from "../../components/select";
 import axios from "../../lib";
 import { useAppDispatch, useAppSelector } from "../../redux/hooks";
 import { reset, updateMenus } from "../../redux/menus/menuSlice";
-import "./create-menu.scss";
 
 /* const options = [
   { label: "help", value: "help" },

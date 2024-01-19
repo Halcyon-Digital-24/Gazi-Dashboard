@@ -7,7 +7,6 @@ import Select from "../../components/forms/select";
 import Input from "../../components/forms/text-input";
 import { useAppDispatch, useAppSelector } from "../../redux/hooks";
 import { createMenu, reset } from "../../redux/menus/menuSlice";
-import "./create-menu.scss";
 
 const options = [
   { label: "help", value: "help" },
