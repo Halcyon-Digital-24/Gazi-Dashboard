@@ -22,25 +22,47 @@ const CreateShipping = () => {
     }
   };
 
-
   return (
     <div>
       <CardBody header="Create Shipping" to="/shipping" text="Back" />
 
       <Display>
-        <form  onSubmit={handleSubmit(onSubmit)}>
+        <form onSubmit={handleSubmit(onSubmit)}>
 
-        <div className="text">
-          <label htmlFor="District">District Name</label>
-          <input type="text"  {...register("location", {required: "location is required"})}/>
-          {errors.location && ( <p className="validation__error">{errors.location.message}</p> )}
-        </div>
+          <div className="text">
+            <label htmlFor="location">District Name</label>
+            <input
+              type="text"
+              {...register("location", {
+                required: "Location is required",
+                pattern: {
+                  value: /^[a-zA-Z ]+$/,
+                  message: "Enter a valid location name"
+                }
+              })}
+            />
+            {errors.location && (
+              <p className="validation__error">{errors.location.message}</p>
+            )}
+          </div>
 
-        <div className="text">
-          <label htmlFor="Price">Price</label>
-          <input type="text"  {...register("price", {required: "Price is required"})}/>
-          {errors.price && ( <p className="validation__error">{errors.price.message}</p>)}
-        </div>
+          <div className="text">
+            <label htmlFor="price">Price</label>
+            <input
+              type="text"
+              {...register("price", {
+                required: "Price is required",
+                pattern: {
+                  value: /^[0-9]+$/,
+                  message: "Enter a valid number for price"
+                }
+              })}
+            />
+            {errors.price && (
+              <p className="validation__error">{errors.price.message}</p>
+            )}
+          </div>
+
           <Button type="submit">Submit</Button>
         </form>
       </Display>
