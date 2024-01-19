@@ -5,6 +5,7 @@ import { Button } from "../../components/button";
 import CardBody from "../../components/card-body";
 import Display from "../../components/display";
 import axios from "../../lib";
+import { useForm } from "react-hook-form";
 
 const UpdateVideo = () => {
   const { slug } = useParams();
