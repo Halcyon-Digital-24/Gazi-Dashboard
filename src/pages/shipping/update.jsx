@@ -19,7 +19,8 @@ const UpdateShipping = () => {
         setValue("location", res.data.data.location);
         setValue("price", res.data.data.price);
       } catch (error) {
-        console.log(error);
+        const errorMessage = error.response?.data?.message || 'Error saving data';
+        toast.error(errorMessage);
       }
     };
     fetchData();
@@ -31,8 +32,8 @@ const UpdateShipping = () => {
       navigate('/shipping');
       toast.success(response.data.message);
     } catch (error) {
-      toast.error('Error saving data');
-      console.error(error);
+      const errorMessage = error.response?.data?.message || 'Error saving data';
+    toast.error(errorMessage);
     }
   };
 
