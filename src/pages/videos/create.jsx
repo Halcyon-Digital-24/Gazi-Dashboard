@@ -1,4 +1,4 @@
-import { useState, ChangeEvent, useEffect } from 'react';
+import { useState, useEffect } from 'react';
 import { toast } from 'react-toastify';
 import CardBody from '../../components/card-body';
 import Display from '../../components/display';
@@ -8,12 +8,8 @@ import { useNavigate } from 'react-router-dom';
 import { useForm } from "react-hook-form";
 import axios from "../../lib";
 
-
 const CreateVideo = () => {
   const navigate = useNavigate();
-
-
-
   const { register, handleSubmit, formState: { errors }} = useForm();
 
   const onSubmit = async (data) => {
@@ -27,19 +23,17 @@ const CreateVideo = () => {
     }
   };
 
-  
- 
   return (
     <div>
       <CardBody to="/videos" text="back" header="Create Video" />
 
       <Display>
-        <form onSubmit={handleSubmit(onSubmit)}>          
-<div className="text">
+        <form onSubmit={handleSubmit(onSubmit)}>
+          <div className="text">
             <label htmlFor="title">Video Title *</label>
             <input
               type="text"
-              placeholder="video title"
+              placeholder="Video title"
               {...register("title", {
                 required: "Video Title is required",
                 pattern: {
@@ -53,17 +47,16 @@ const CreateVideo = () => {
             )}
           </div>
 
-
           <div className="text">
-            <label htmlFor="title">Video Embed URL *</label>
+            <label htmlFor="url">Video Embed URL *</label>
             <input
               type="text"
               placeholder="Enter video embed code"
               {...register("url", {
-                required: "url is required",
+                required: "URL is required",
                 pattern: {
                   value: /^[a-zA-Z ]+$/,
-                  message: "Enter a valid url"
+                  message: "Enter a valid URL"
                 }
               })}
             />
