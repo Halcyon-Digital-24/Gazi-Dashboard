@@ -43,10 +43,10 @@ const UpdateOrder = () => {
     formState: { errors },
   } = useForm();
 
-  const handleOrder = async (e) => {
-    e.preventDefault();
+
+  const onSubmit = async (data) => {
     try {
-      await axios.patch(`${API_URL}/orders/${slug}`, orderData).then((res) => {
+      await axios.patch(`${API_URL}/orders/${slug}`, data).then((res) => {
         toast.success(`${res.data.message}`);
         navigate("/orders");
       });
@@ -114,7 +114,7 @@ const UpdateOrder = () => {
     }
   };
 
-  const onSubmit = (data) => console.log(data)
+
   console.log(order)
   const handleRemoveOrderItem = async (data) => {
     const orderId = data.id;
