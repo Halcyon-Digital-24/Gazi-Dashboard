@@ -7,7 +7,7 @@ import Pagination from "../../components/pagination";
 import Column from "../../components/table/column";
 import Row from "../../components/table/row";
 import { useAppDispatch, useAppSelector } from "../../redux/hooks";
-
+import axios from "../../lib";
 import { toast } from "react-toastify";
 import EditButton from "../../components/button/edit";
 import CardBody from "../../components/card-body";
@@ -30,6 +30,18 @@ const Shipping = () => {
   const handlePageChange = () => {
     setPageNumber(selectedItem.selected + 1);
   };
+
+  const handleDeleteVideo=async (id)=>{
+     try{
+      const data=await axios.delete(`/shippings/?ids=[${id}]`);
+      toast.success(data.data.message);
+      dispatch(getLocations({ page: pageNumber, limit: displayItem })).then(() => {
+        setPageNumber((prevPageNumber) => Math.min(prevPageNumber, totalPage));
+      });
+     }catch (error) {
+      toast.success(data.data.message);
+     }
+  }
 
   useEffect(() => {
     if (isDelete) {
@@ -64,7 +76,9 @@ const Shipping = () => {
             <Column className="col-md-4">
               <CustomIconArea>
                 <EditButton editUrl={`/shipping/edit/${location.id}`} />
-                <DeleteButton onClick={() => console.log("first")} />
+                <DeleteButton
+                  onClick={() => handleDeleteVideo(location.id)}
+                />
               </CustomIconArea>
             </Column>
           </Row>
