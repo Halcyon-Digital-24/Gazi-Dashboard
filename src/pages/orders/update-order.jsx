@@ -1,39 +1,33 @@
-import CardBody from '../../components/card-body';
-import { Button } from '../../components/button';
-import Input from '../../components/forms/text-input';
-import Display from '../../components/display';
-import './custom-order.scss';
-import { useEffect, useRef, useState } from 'react';
-import { getProducts, reset } from '../../redux/products/product-slice';
-import { useAppDispatch, useAppSelector } from '../../redux/hooks';
-import axios from '../../lib';
-import { API_URL } from '../../constants';
-import { toast } from 'react-toastify';
-import { FiPlus } from 'react-icons/fi';
-import { LuMinus } from 'react-icons/lu';
-import { RxCross2 } from 'react-icons/rx';
-import { useNavigate, useParams } from 'react-router-dom';
-import { ISingleOrder } from '../../interfaces/order';
-import { IProduct } from '../../interfaces/product';
-import Column from '../../components/table/column';
+import CardBody from "../../components/card-body";
+import { Button } from "../../components/button";
+import Input from "../../components/forms/text-input";
+import Display from "../../components/display";
+import "./custom-order.scss";
+import { useEffect, useRef, useState } from "react";
+import { getProducts, reset } from "../../redux/products/product-slice";
+import { useAppDispatch, useAppSelector } from "../../redux/hooks";
+import axios from "../../lib";
+import { API_URL } from "../../constants";
+import { toast } from "react-toastify";
+import { FiPlus } from "react-icons/fi";
+import { LuMinus } from "react-icons/lu";
+import { RxCross2 } from "react-icons/rx";
+import { useNavigate, useParams } from "react-router-dom";
+import Column from "../../components/table/column";
 import { useForm } from "react-hook-form";
 
 const UpdateOrder = () => {
   const { slug } = useParams();
   const { products } = useAppSelector((state) => state.product);
   const navigate = useNavigate();
+  const [order, setOrder]= useState("");
   const dispatch = useAppDispatch();
-  const [name, setName] = useState('');
-  const [email, setEmail] = useState('');
-  const [mobile, setMobile] = useState('');
-  const [address, setAddress] = useState('');
-  const [city, setCity] = useState('');
-  const [shipping, setShipping] = useState(0);
-  const [orderItems, setOrderItems] = useState<ISingleOrder[]>([]);
   const [isFocus, setIsFocus] = useState(false);
-  const [search, setSearch] = useState('');
-  const productAreaRef = useRef<HTMLDivElement>(null);
+  const [search, setSearch] = useState("");
+  const productAreaRef = useRef(null);
   const [loading, setLoading] = useState(false);
+
+   const {name , email, mobile, address, city, orderItems, shipping=0 }= order;
 
   const orderData = {
     name,
@@ -48,13 +42,13 @@ const UpdateOrder = () => {
     handleSubmit,
     formState: { errors },
   } = useForm();
-  
-  const handleOrder = async (e: React.FormEvent<HTMLFormElement>) => {
+
+  const handleOrder = async (e) => {
     e.preventDefault();
     try {
       await axios.patch(`${API_URL}/orders/${slug}`, orderData).then((res) => {
         toast.success(`${res.data.message}`);
-        navigate('/orders');
+        navigate("/orders");
       });
     } catch (error) {
       console.log(error);
@@ -70,44 +64,22 @@ const UpdateOrder = () => {
   }, [search, dispatch]);
 
   useEffect(() => {
-    const handleClickOutside = (event: MouseEvent) => {
-      if (
-        productAreaRef.current &&
-        !productAreaRef.current.contains(event.target as Node)
-      ) {
-        setIsFocus(false);
-      }
-    };
-
-    document.addEventListener('mousedown', handleClickOutside);
-
-    return () => {
-      document.removeEventListener('mousedown', handleClickOutside);
-    };
-  }, [isFocus]);
-
-  useEffect(() => {
     const fetchData = async () => {
       try {
         const response = await axios.get(`${API_URL}/orders/${slug}`);
         const data = response.data.data;
-        // Set state values based on the fetched data
-        setName(data.name);
-        setEmail(data.email);
-        setMobile(data.mobile);
-        setAddress(data.address);
-        setCity(data.city);
+        setOrder(data);
         setOrderItems(data.orderItems);
-        setShipping(data.delivery_fee)
+        setShipping(data.delivery_fee);
       } catch (error) {
-        console.error('Error fetching category data:', error);
+        console.error("Error fetching category data:", error);
       }
     };
 
     fetchData();
   }, [slug, loading]);
 
-  const handleIncrementOrderItem = async (data: ISingleOrder) => {
+  const handleIncrementOrderItem = async (data) => {
     const orderId = data.id;
 
     try {
@@ -125,7 +97,7 @@ const UpdateOrder = () => {
       setLoading(false);
     }
   };
-  const handleDecrementOrderItem = async (data: ISingleOrder) => {
+  const handleDecrementOrderItem = async (data) => {
     const orderId = data.id;
 
     try {
@@ -136,8 +108,6 @@ const UpdateOrder = () => {
         quantity: data.quantity - 1,
       });
 
- 
-
       // Handle success if needed
     } catch (error) {
       console.error(error);
@@ -146,7 +116,7 @@ const UpdateOrder = () => {
     }
   };
 
-  const handleRemoveOrderItem = async (data: ISingleOrder) => {
+  const handleRemoveOrderItem = async (data) => {
     const orderId = data.id;
 
     try {
@@ -155,7 +125,6 @@ const UpdateOrder = () => {
       // Delete order item quantity
       await axios.delete(`${API_URL}/order-items/?ids=[${orderId}]`);
 
-
       // Handle success if needed
     } catch (error) {
       console.error(error);
@@ -163,7 +132,7 @@ const UpdateOrder = () => {
       setLoading(false);
     }
   };
-  const addOrderItem = async (data: IProduct) => {
+  const addOrderItem = async (data) => {
     const itemData = {
       order_id: slug,
       product_id: data.id,
@@ -175,7 +144,7 @@ const UpdateOrder = () => {
     try {
       setLoading(true);
       await axios.post(`${API_URL}/order-items`, itemData).then(() => {
-        toast.success('Product added successfully');
+        toast.success("Product added successfully");
       });
       // Total price updated
     } catch (error) {
@@ -203,41 +172,48 @@ const UpdateOrder = () => {
                   <h4 className="customer-details">Customer Details</h4>
                   <div className="details">
                     <div className="left">
-                      <Input
-                        label="Name"
-                        htmlFor="customer"
-                        value={name}
-                        placeholder="Name"
-                        onChange={(e) => setName(e.target.value)}
-                      />
-                      <Input
-                        label="Email"
-                        htmlFor="email"
-                        value={email}
-                        placeholder="Email"
-                        onChange={(e) => setEmail(e.target.value)}
-                      />
-                      <Input
-                        label="Mobile"
-                        htmlFor="mobile"
-                        value={mobile}
-                        placeholder="Mobile"
-                        onChange={(e) => setMobile(e.target.value)}
-                      />
-                      <Input
-                        label="Address"
-                        htmlFor="address"
-                        value={address}
-                        placeholder="Address"
-                        onChange={(e) => setAddress(e.target.value)}
-                      />
-                      <Input
-                        label="City"
-                        htmlFor="city"
-                        value={city}
-                        placeholder="City"
-                        onChange={(e) => setCity(e.target.value)}
-                      />
+                      <div className="text">
+                        <label>Name</label>
+                        <input type="text" defaultValue={name} {...register("name", {required: "name is required"})}/>
+                        {errors.name && (
+            <p className="validation__error">{errors.name.message}</p>
+          )}
+                      </div>
+
+
+                      <div className="text">
+                        <label for="Email">Email</label>
+                        <input type="text" defaultValue={email} {...register("email", {required: "email is required"})}/>
+                        {errors.email && (
+            <p className="validation__error">{errors.email.message}</p>
+          )}
+                      </div>
+
+                      <div className="text">
+                        <label for="Email">Mobile</label>
+                        <input type="text" defaultValue={mobile} {...register("mobile", {required: "mobile is required"})}/>
+                        {errors.mobile && (
+            <p className="validation__error">{errors.mobile.message}</p>
+          )}
+                      </div>
+                     
+                     
+                      <div className="text">
+                        <label for="Email">Address</label>
+                        <input type="text" defaultValue={address} {...register("address", {required: "address is required"})}/>
+                        {errors.address && (
+            <p className="validation__error">{errors.address.message}</p>
+          )}
+                      </div>
+
+                       <div className="text">
+                        <label for="Email">City</label>
+                        <input type="text" defaultValue={address} {...register("city", {required: "city is required"})}/>
+                        {errors.city && (
+            <p className="validation__error">{errors.city.message}</p>
+          )}
+                      </div> 
+               
                     </div>
                     <div className="order-details right">
                       <div className="product-area" ref={productAreaRef}>
@@ -260,13 +236,11 @@ const UpdateOrder = () => {
                             </ul>
                           </div>
                         )}
-             
                       </div>
                     </div>
                   </div>
                 </div>
 
-    
                 <div className="invoice-table">
                   <div className="row ">
                     <Column className="col-md-2 heading">SL. </Column>
@@ -291,7 +265,7 @@ const UpdateOrder = () => {
                           <Column className="col-md-4 heading">
                             {product.product_name}
                           </Column>
-                     
+
                           <Column className="col-md-2 heading">
                             <div className="qnty">
                               <FiPlus
@@ -344,9 +318,7 @@ const UpdateOrder = () => {
                           )}`}</p>
                           <p className="heading sort-summery">Shipping cost</p>
                           <p className="heading sort-summery">৳ {shipping}</p>
-                          <p className="heading sort-summery">
-                            Discount
-                          </p>
+                          <p className="heading sort-summery">Discount</p>
                           <p className="heading sort-summery">৳00.00</p>
                           <p className="heading sort-summery">Grand Total</p>
                           <p className="heading sort-summery">{`৳${orderItems?.reduce(
