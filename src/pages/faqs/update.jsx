@@ -4,7 +4,6 @@ import { toast } from "react-toastify";
 import { Button } from "../../components/button";
 import CardBody from "../../components/card-body";
 import Display from "../../components/display";
-import TextArea from "../../components/forms/textarea";
 import axios from "../../lib";
 import { useForm } from "react-hook-form";
 

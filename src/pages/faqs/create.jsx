@@ -3,9 +3,8 @@ import { toast } from "react-toastify";
 import { Button } from "../../components/button";
 import CardBody from "../../components/card-body";
 import Display from "../../components/display";
-import Input from "../../components/forms/text-input";
-import TextArea from "../../components/forms/textarea";
 import { useForm } from "react-hook-form";
+import axios from "../../lib";
 
 
 const CreateFaq = () => {
@@ -29,25 +28,45 @@ const CreateFaq = () => {
       <CardBody header="Create Faq" to="/faqs" text="back" />
       <Display>
         <form onSubmit={handleSubmit(onSubmit)}>
-          <Input
-            name="question"
-            onChange={handleChange}
-            htmlFor="title"
-            label="Question *"
-            placeholder="Question here..."
-            value={faqData.question}
-            required
+  
+        <div className="text">
+            <label htmlFor="Question">Question*</label>
+            <input
+              type="text"
+              placeholder="Question here..."
+              {...register("question", {
+                required: "question is required",
+                pattern: {
+                  value: /\S/,
+                  message: "Enter a valid question"
+                }
+              })}
+            />
+            {errors.question && (
+              <p className="validation__error">{errors.question.message}</p>
+            )}
+          </div>
+
+          <div className="text">
+            <label htmlFor="Question">Question*</label>
+
+          <textarea name="answer"  style={{ width: '100%' }} placeholder="Answer here..." 
+          
+          {...register("answer", {
+            required: "answer is required",
+            pattern: {
+              value: /\S/,
+              message: "Enter a valid answer"
+            }
+          })}
+
           />
 
-          <TextArea
-            name="answer"
-            onChange={handleChange}
-            value={faqData.answer}
-            label="Answer"
-            placeholder="Answer here..."
-            required
-          />
-          <Button>{isLoading ? "Loading" : "Create"}</Button>
+{errors.answer && (
+              <p className="validation__error">{errors.answer.message}</p>
+            )}
+ </div>
+          <Button>Create</Button>
         </form>
       </Display>
     </div>
