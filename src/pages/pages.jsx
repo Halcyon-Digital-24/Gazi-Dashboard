@@ -68,8 +68,8 @@ import Queries from "./support/queries";
 import Replay from "./support/reply";
 import Subscriber from "./support/subscriber";
 import VideosPage from "./videos";
-import CreateVideo from "./videos/create-video";
-import UpdateVideo from "./videos/update-video";
+import CreateVideo from "./videos/create";
+import UpdateVideo from "./videos/update";
 import Login from "../pages/login";
 import Csv from "./csv/csv";
 export {

@@ -39,8 +39,9 @@ const CreateVideo = () => {
             <label htmlFor="title">Video Title *</label>
             <input
               type="text"
+              placeholder="video title"
               {...register("title", {
-                required: "Location is required",
+                required: "Video Title is required",
                 pattern: {
                   value: /^[a-zA-Z ]+$/,
                   message: "Enter a valid title"

@@ -1,39 +1,25 @@
-import { ChangeEvent, useEffect, useState } from "react";
+import { useEffect } from "react";
 import { useNavigate, useParams } from "react-router-dom";
 import { toast } from "react-toastify";
 import { Button } from "../../components/button";
 import CardBody from "../../components/card-body";
 import Display from "../../components/display";
-import Input from "../../components/forms/text-input";
 import axios from "../../lib";
-import { useAppDispatch, useAppSelector } from "../../redux/hooks";
-import { reset, updateVideo } from "../../redux/videos/videoSlice";
 
 const UpdateVideo = () => {
-  const navigate = useNavigate();
-  const dispatch = useAppDispatch();
   const { slug } = useParams();
-  const { isUpdate, isError } = useAppSelector((state) => state.videos);
-  const [title, setTitle] = useState("");
-  const [url, setUrl] = useState("");
 
-  const videoData = {
-    id: slug,
-    title,
-    url,
-  };
+  const navigate = useNavigate();
+  const { register, handleSubmit, setValue, formState: { errors }} = useForm();
 
-  const handleSubmit = (e) => {
-    e.preventDefault();
-    dispatch(updateVideo(videoData));
-  };
+
 
   useEffect(() => {
     const fetchData = async () => {
       try {
-        const response = await axios.get(`/videos/${slug}`);
-        setTitle(response.data?.data?.title);
-        setUrl(response.data?.data?.url);
+        const res = await axios.get(`/videos/${slug}`);
+        setValue("title", res.data.data.title);
+        setValue("url", res.data.data.url);
       } catch (error) {
         console.log("Video fetch error" + error);
       }
@@ -41,44 +27,63 @@ const UpdateVideo = () => {
     fetchData();
   }, [slug]);
 
-  useEffect(() => {
-    if (isUpdate) {
-      toast.success("Video Update successfully");
-      navigate("/videos");
+  const onSubmit = async (data) => {
+    try {
+      const response = await axios.patch(`/videos/${slug}`, data);
+      navigate('/videos');
+      toast.success(response.data.message);
+    } catch (error) {
+      const errorMessage = error.response?.data?.message || 'Error saving data';
+    toast.error(errorMessage);
     }
-
-    if (isError) {
-      toast.error("Failed to update video");
-    }
-    return () => {
-      dispatch(reset());
-    };
-  }, [dispatch, isUpdate, isError, navigate]);
+  };
 
   return (
     <div>
       <CardBody to="/videos" text="back" header="Update Video" />
 
       <Display>
-        <form onSubmit={handleSubmit}>
-          <Input
-            label="Video Title *"
-            placeholder="video title"
-            htmlFor="video"
-            value={title}
-            onChange={(e) => setTitle(e.target.value)}
-            required
-          />
+        <form onSubmit={handleSubmit(onSubmit)}>
 
-          <Input
-            label="Video Embed URL *"
-            placeholder="Enter video embed code"
-            name="url"
-            htmlFor="link"
-            value={url}
-            onChange={(e) => setUrl(e.target.value)}
-            required
-          />
+        <div className="text">
+            <label htmlFor="title">Video Title *</label>
+            <input
+              type="text"
+              placeholder="video title"
+              {...register("title", {
+                required: "Location is required",
+                pattern: {
+                  value: /^[a-zA-Z ]+$/,
+                  message: "Enter a valid title"
+                }
+              })}
+            />
+            {errors.title && (
+              <p className="validation__error">{errors.title.message}</p>
+            )}
+          </div>
+
+
+          <div className="text">
+            <label htmlFor="title">Video Embed URL *</label>
+            <input
+              type="text"
+              placeholder="Enter video embed code"
+              {...register("url", {
+                required: "url is required",
+                pattern: {
+                  value: /^[a-zA-Z ]+$/,
+                  message: "Enter a valid url"
+                }
+              })}
+            />
+            {errors.url && (
+              <p className="validation__error">{errors.url.message}</p>
+            )}
+          </div>
+
+
+
           <Button type="submit">Update</Button>
         </form>
       </Display>
