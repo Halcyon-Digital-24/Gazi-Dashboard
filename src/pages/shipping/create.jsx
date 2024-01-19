@@ -1,52 +1,46 @@
 import CardBody from '../../components/card-body';
 import Display from '../../components/display';
-import Input from '../../components/forms/text-input';
 import { Button } from '../../components/button';
-import { FormEvent, useEffect, useState } from 'react';
-import { useAppDispatch, useAppSelector } from '../../redux/hooks';
-import { createLocation, reset } from '../../redux/location/locationSlice';
 import { useNavigate } from 'react-router-dom';
 import { toast } from 'react-toastify';
+import { useForm } from "react-hook-form";
+import axios from "../../lib";
 
 const CreateShipping = () => {
   const navigate = useNavigate();
-  const dispatch = useAppDispatch();
-  const { isCreate } = useAppSelector((state) => state.location);
-  const [location, setLocation] = useState('');
-  const [price, setPrice] = useState('');
 
-  const handleLocationCreate = (e) => {
-    e.preventDefault();
-    dispatch(createLocation({ location, price }));
+  const { register, handleSubmit, formState: { errors }} = useForm();
+
+  const onSubmit = async (data) => {
+    try {
+      const response = await axios.post('/shippings', data);
+      navigate('/shipping');
+      toast.success(response.data.message);
+    } catch (error) {
+      toast.error('Error saving data');
+      console.error(error);
+    }
   };
 
-  useEffect(() => {
-    if (isCreate) {
-      toast.success('Location create successfully');
-      navigate('/shipping');
-    }
-    return () => {
-      dispatch(reset());
-    };
-  }, [dispatch, isCreate, navigate]);
 
   return (
     <div>
       <CardBody header="Create Shipping" to="/shipping" text="Back" />
 
       <Display>
-        <form onSubmit={handleLocationCreate}>
-          <Input
-            label="District Name"
-            htmlFor="name"
-            onBlur={(e) => setLocation(e.target.value)}
-          />
-          <Input
-            label="Price"
-            htmlFor="name"
-            onBlur={(e) => setPrice(e.target.value)}
-          />
+        <form  onSubmit={handleSubmit(onSubmit)}>
 
+        <div className="text">
+          <label htmlFor="District">District Name</label>
+          <input type="text"  {...register("location", {required: "location is required"})}/>
+          {errors.location && ( <p className="validation__error">{errors.location.message}</p> )}
+        </div>
+
+        <div className="text">
+          <label htmlFor="Price">Price</label>
+          <input type="text"  {...register("price", {required: "Price is required"})}/>
+          {errors.price && ( <p className="validation__error">{errors.price.message}</p>)}
+        </div>
           <Button type="submit">Submit</Button>
         </form>
       </Display>
