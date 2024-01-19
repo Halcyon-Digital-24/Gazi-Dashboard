@@ -1,35 +1,23 @@
-import { FormEvent, useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 import { useNavigate, useParams } from "react-router-dom";
 import { toast } from "react-toastify";
 import { Button } from "../../components/button";
 import CardBody from "../../components/card-body";
 import Display from "../../components/display";
-import Input from "../../components/forms/text-input";
 import axios from "../../lib";
-import { useAppDispatch, useAppSelector } from "../../redux/hooks";
-import { updateLocation } from "../../redux/location/locationSlice";
+import { useForm } from "react-hook-form";
 
 const UpdateShipping = () => {
   const { slug } = useParams();
-  const dispatch = useAppDispatch();
-  const { isUpdate } = useAppSelector((state) => state.location);
   const navigate = useNavigate();
-  const [location, setLocation] = useState("");
-  const [price, setPrice] = useState("");
-
-  const handleSubmit = (e) => {
-    e.preventDefault();
-    dispatch(
-      updateLocation({ id: slug, locationData: { location, price } })
-    );
-  };
+  const { register, handleSubmit, setValue, formState: { errors }} = useForm();
 
   useEffect(() => {
     const fetchData = async () => {
       try {
         const res = await axios.get(`/shippings/${slug}`);
-        setLocation(res.data.data.location);
-        setPrice(res.data.data.price);
+        setValue("location", res.data.data.location);
+        setValue("price", res.data.data.price);
       } catch (error) {
         console.log(error);
       }
@@ -37,31 +25,57 @@ const UpdateShipping = () => {
     fetchData();
   }, [slug]);
 
-  useEffect(() => {
-    if (isUpdate) {
-      toast.success("Update Success");
-      navigate("/shipping");
+  const onSubmit = async (data) => {
+    try {
+      const response = await axios.patch(`/shippings/${slug}`, data);
+      navigate('/shipping');
+      toast.success(response.data.message);
+    } catch (error) {
+      toast.error('Error saving data');
+      console.error(error);
     }
-  }, [isUpdate, navigate]);
+  };
 
   return (
     <div>
       <CardBody header="Update Shipping" to="/shipping" text="Back" />
 
       <Display>
-        <form onSubmit={handleSubmit}>
-          <Input
-            label="District Name"
-            htmlFor="name"
-            value={location}
-            onChange={(e) => setLocation(e.target.value)}
-          />
-          <Input
-            label="Price"
-            htmlFor="name"
-            value={price}
-            onChange={(e) => setPrice(e.target.value)}
-          />
+        <form  onSubmit={handleSubmit(onSubmit)}>
+     
+        <div className="text">
+            <label htmlFor="location">District Name</label>
+            <input
+              type="text"
+              {...register("location", {
+                required: "Location is required",
+                pattern: {
+                  value: /^[a-zA-Z ]+$/,
+                  message: "Enter a valid location name"
+                }
+              })}
+            />
+            {errors.location && (
+              <p className="validation__error">{errors.location.message}</p>
+            )}
+          </div>
+
+          <div className="text">
+            <label htmlFor="price">Price</label>
+            <input
+              type="text"
+              {...register("price", {
+                required: "Price is required",
+                pattern: {
+                  value: /^[0-9]+$/,
+                  message: "Enter a valid number for price"
+                }
+              })}
+            />
+            {errors.price && (
+              <p className="validation__error">{errors.price.message}</p>
+            )}
+          </div>
 
           <Button type="submit">Update</Button>
         </form>
