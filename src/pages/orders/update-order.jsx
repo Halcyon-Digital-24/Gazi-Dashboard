@@ -27,7 +27,7 @@ const UpdateOrder = () => {
   const productAreaRef = useRef(null);
   const [loading, setLoading] = useState(false);
 
-   const {name , email, mobile, address, city, orderItems, shipping=0 }= order;
+   const {name , email, mobile, address, city, orderItems, delivery_fee }= order;
 
   const orderData = {
     name,
@@ -69,8 +69,6 @@ const UpdateOrder = () => {
         const response = await axios.get(`${API_URL}/orders/${slug}`);
         const data = response.data.data;
         setOrder(data);
-        setOrderItems(data.orderItems);
-        setShipping(data.delivery_fee);
       } catch (error) {
         console.error("Error fetching category data:", error);
       }
@@ -116,6 +114,8 @@ const UpdateOrder = () => {
     }
   };
 
+  const onSubmit = (data) => console.log(data)
+  console.log(order)
   const handleRemoveOrderItem = async (data) => {
     const orderId = data.id;
 
@@ -153,13 +153,14 @@ const UpdateOrder = () => {
       setLoading(false);
     }
   };
+  console.log('email:', mobile);
 
   return (
     <div>
       <CardBody header="Update Order" to="/orders" text="Back" />
       <Display>
         <div>
-          <form onSubmit={handleOrder}>
+          <form onSubmit={handleSubmit(onSubmit)}>
             <>
               <div className="invoice">
                 <div className="invoice-header">
@@ -182,7 +183,7 @@ const UpdateOrder = () => {
 
 
                       <div className="text">
-                        <label for="Email">Email</label>
+                        <label htmlFor="Email">Email</label>
                         <input type="text" defaultValue={email} {...register("email", {required: "email is required"})}/>
                         {errors.email && (
             <p className="validation__error">{errors.email.message}</p>
@@ -190,7 +191,7 @@ const UpdateOrder = () => {
                       </div>
 
                       <div className="text">
-                        <label for="Email">Mobile</label>
+                        <label htmlFor="Mobile">Mobile</label>
                         <input type="text" defaultValue={mobile} {...register("mobile", {required: "mobile is required"})}/>
                         {errors.mobile && (
             <p className="validation__error">{errors.mobile.message}</p>
@@ -199,7 +200,7 @@ const UpdateOrder = () => {
                      
                      
                       <div className="text">
-                        <label for="Email">Address</label>
+                        <label htmlFor="Address">Address</label>
                         <input type="text" defaultValue={address} {...register("address", {required: "address is required"})}/>
                         {errors.address && (
             <p className="validation__error">{errors.address.message}</p>
@@ -207,7 +208,7 @@ const UpdateOrder = () => {
                       </div>
 
                        <div className="text">
-                        <label for="Email">City</label>
+                        <label htmlFor="City">City</label>
                         <input type="text" defaultValue={address} {...register("city", {required: "city is required"})}/>
                         {errors.city && (
             <p className="validation__error">{errors.city.message}</p>
@@ -317,7 +318,7 @@ const UpdateOrder = () => {
                             0
                           )}`}</p>
                           <p className="heading sort-summery">Shipping cost</p>
-                          <p className="heading sort-summery">৳ {shipping}</p>
+                          <p className="heading sort-summery">৳ {delivery_fee}</p>
                           <p className="heading sort-summery">Discount</p>
                           <p className="heading sort-summery">৳00.00</p>
                           <p className="heading sort-summery">Grand Total</p>
@@ -333,7 +334,7 @@ const UpdateOrder = () => {
                               }
                               return sum;
                             },
-                            0
+                            delivery_fee
                           )}`}</p>
                         </div>
                       </div>
