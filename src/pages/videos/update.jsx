@@ -9,7 +9,7 @@ import axios from "../../lib";
 import { useAppDispatch, useAppSelector } from "../../redux/hooks";
 import { reset, updateVideo } from "../../redux/videos/videoSlice";
 
-const UpdateVideo: React.FC = () => {
+const UpdateVideo = () => {
   const navigate = useNavigate();
   const dispatch = useAppDispatch();
   const { slug } = useParams();
@@ -23,7 +23,7 @@ const UpdateVideo: React.FC = () => {
     url,
   };
 
-  const handleSubmit = (e: ChangeEvent<HTMLFormElement>) => {
+  const handleSubmit = (e) => {
     e.preventDefault();
     dispatch(updateVideo(videoData));
   };
