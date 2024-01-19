@@ -4,7 +4,7 @@ import CardBody from '../../components/card-body';
 import Display from '../../components/display';
 import Input from '../../components/forms/text-input';
 import Select from '../../components/select';
-import './create-coupon.scss';
+import './index.scss';
 import { Button } from '../../components/button';
 import { useAppDispatch, useAppSelector } from '../../redux/hooks';
 import { reset, updateCoupon } from '../../redux/coupon/couponSlice';
@@ -19,10 +19,8 @@ const UpdateCoupon = () => {
   const dispatch = useAppDispatch();
   const navigate = useNavigate();
   const { isUpdate } = useAppSelector((state) => state.coupon);
-  const [discountType, setDiscountType] = useState<'percent' | 'flat'>(
-    '' as 'percent' | 'flat'
-  );
-  const [coupons, setCoupons] = useState<number[]>([]);
+  const [discountType, setDiscountType] = useState();
+  const [coupons, setCoupons] = useState([]);
   const [code, setCode] = useState('');
   const [discountPrice, setDiscountPrice] = useState(0);
   const [totalCoupon, setTotalCoupon] = useState<number | string>(0);
@@ -32,7 +30,7 @@ const UpdateCoupon = () => {
   const areaRef = useRef<HTMLDivElement>(null);
   const [isFocus, setIsFocus] = useState(false);
 
-  const addProduct = (id: number) => {
+  const addProduct = (id) => {
     if (!coupons.includes(id)) {
       setCoupons((prevCoupons) => [...prevCoupons, id]);
     } else {
@@ -51,9 +49,9 @@ const UpdateCoupon = () => {
     product_id: coupons.length > 0 ? coupons.join() : null,
   };
 
-  const handleSubmit = (e: FormEvent<HTMLFormElement>) => {
+  const handleSubmit = (e) => {
     e.preventDefault();
-    dispatch(updateCoupon({ slug: slug as string, coupondata: couponData }));
+    dispatch(updateCoupon({ slug, coupondata: couponData }));
   };
 
   useEffect(() => {
@@ -97,8 +95,8 @@ const UpdateCoupon = () => {
 
   // display hide and show
   useEffect(() => {
-    const handleClickOutside = (event: MouseEvent) => {
-      if (areaRef.current && !areaRef.current.contains(event.target as Node)) {
+    const handleClickOutside = (event) => {
+      if (areaRef.current && !areaRef.current.contains(event.target)) {
         setIsFocus(false);
       }
     };
@@ -126,7 +124,7 @@ const UpdateCoupon = () => {
           />
           <Select
             onChange={(e) =>
-              setDiscountType(e.target.value as 'flat' | 'percent')
+              setDiscountType(e.target.value)
             }
             htmlFor="Discount Type"
             required
@@ -177,10 +175,10 @@ const UpdateCoupon = () => {
                     <li
                       className="item"
                       key={index}
-                      onClick={() => addProduct(product.id as number)}
+                      onClick={() => addProduct(product.id)}
                     >
                       <span> {product.title}</span>
-                      {coupons.includes(product.id as number) && (
+                      {coupons.includes(product.id) && (
                         <span>
                           <FaCheck />
                         </span>
