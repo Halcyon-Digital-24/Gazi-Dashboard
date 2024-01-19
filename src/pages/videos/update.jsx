@@ -54,7 +54,7 @@ const UpdateVideo = () => {
               {...register("title", {
                 required: "Location is required",
                 pattern: {
-                  value: /^[a-zA-Z ]+$/,
+                  value: /\S/,
                   message: "Enter a valid title"
                 }
               })}
@@ -73,7 +73,7 @@ const UpdateVideo = () => {
               {...register("url", {
                 required: "url is required",
                 pattern: {
-                  value: /^[a-zA-Z ]+$/,
+                  value: /\S/,
                   message: "Enter a valid url"
                 }
               })}

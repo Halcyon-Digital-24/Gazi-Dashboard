@@ -13,6 +13,7 @@ const CreateVideo = () => {
   const { register, handleSubmit, formState: { errors }} = useForm();
 
   const onSubmit = async (data) => {
+    data.is_visible = true;
     try {
       const response = await axios.post('/videos', data);
       navigate('/videos');
