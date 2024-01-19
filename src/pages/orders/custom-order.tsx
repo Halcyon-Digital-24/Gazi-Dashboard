@@ -20,6 +20,7 @@ import { FiPlus } from 'react-icons/fi';
 import { LuMinus } from 'react-icons/lu';
 import { RxCross2 } from 'react-icons/rx';
 import { useNavigate } from 'react-router-dom';
+import { useForm } from "react-hook-form";
 
 const CustomOrder = () => {
   const { products } = useAppSelector((state) => state.product);
@@ -34,10 +35,17 @@ const CustomOrder = () => {
   const [thana, setThana] = useState('');
   const [discount, setDiscount] = useState(0);
   const [shipping, setShipping] = useState(0);
-  // const [varient, setVarient] = useState('');
   const [isFocus, setIsFocus] = useState(false);
   const [search, setSearch] = useState('');
   const productAreaRef = useRef<HTMLDivElement>(null);
+
+
+  const {
+    register,
+    handleSubmit,
+    formState: { errors },
+  } = useForm();
+
 
   const final_price = cartItems.reduce(
     (accumulator, currentValue) =>

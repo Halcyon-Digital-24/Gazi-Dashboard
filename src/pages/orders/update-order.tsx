@@ -16,6 +16,7 @@ import { useNavigate, useParams } from 'react-router-dom';
 import { ISingleOrder } from '../../interfaces/order';
 import { IProduct } from '../../interfaces/product';
 import Column from '../../components/table/column';
+import { useForm } from "react-hook-form";
 
 const UpdateOrder = () => {
   const { slug } = useParams();
@@ -42,6 +43,12 @@ const UpdateOrder = () => {
     city,
   };
 
+  const {
+    register,
+    handleSubmit,
+    formState: { errors },
+  } = useForm();
+  
   const handleOrder = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     try {
