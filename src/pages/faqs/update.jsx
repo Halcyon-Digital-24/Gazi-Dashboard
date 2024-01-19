@@ -1,11 +1,12 @@
 import { useNavigate, useParams } from "react-router-dom";
+import { useEffect } from "react";
 import { toast } from "react-toastify";
 import { Button } from "../../components/button";
 import CardBody from "../../components/card-body";
 import Display from "../../components/display";
-import Input from "../../components/forms/text-input";
 import TextArea from "../../components/forms/textarea";
 import axios from "../../lib";
+import { useForm } from "react-hook-form";
 
 const UpdateFaq= () => {
   const navigate = useNavigate();
@@ -25,11 +26,22 @@ const UpdateFaq= () => {
     fetchData();
   }, [slug]);
 
+  const onSubmit = async (data) => {
+    try {
+      const response = await axios.patch(`/faqs/${slug}`, data);
+      navigate('/faqs');
+      toast.success(response.data.message);
+    } catch (error) {
+      const errorMessage = error.response?.data?.message || 'Error saving data';
+    toast.error(errorMessage);
+    }
+  };
+
   return (
     <div>
       <CardBody header="Update Faq" to="/faqs" text="back" />
       <Display>
-        <form onSubmit={handleSubmit}>
+        <form onSubmit={handleSubmit(onSubmit)}>
 
         <div className="text">
             <label htmlFor="Question">Question*</label>
@@ -49,15 +61,26 @@ const UpdateFaq= () => {
             )}
           </div>
 
-          <TextArea
-            name="answer"
-            onChange={(e) => setAnswer(e.target.value)}
-            value={answer}
-            label="Answer"
-            placeholder="Answer here..."
-            required
+          <div className="text">
+            <label htmlFor="Question">Question*</label>
+
+          <textarea name="answer"  style={{ width: '100%' }} placeholder="Answer here..." 
+          
+          {...register("answer", {
+            required: "answer is required",
+            pattern: {
+              value: /\S/,
+              message: "Enter a valid answer"
+            }
+          })}
+
           />
-          <Button>{isLoading ? "Loading" : "Update"}</Button>
+
+{errors.answer && (
+              <p className="validation__error">{errors.answer.message}</p>
+            )}
+ </div>
+          <Button>Update</Button>
         </form>
       </Display>
     </div>
