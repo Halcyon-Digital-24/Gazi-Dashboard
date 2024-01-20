@@ -1,8 +1,9 @@
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import { toast } from "react-toastify";
 import DeleteButton from "../../components/button/delete";
 import CustomIconArea from "../../components/custom-icon-area";
 import Display from "../../components/display";
+import Pagination from "../../components/pagination";
 import Column from "../../components/table/column";
 import Row from "../../components/table/row";
 import { useAppDispatch, useAppSelector } from "../../redux/hooks";
@@ -10,7 +11,15 @@ import { deleteQueries, getQueries, reset } from "../../redux/query/querySlice";
 
 const Queries = () => {
   const dispatch = useAppDispatch();
-  const { queries, isDelete } = useAppSelector((state) => state.query);
+  const { queries, isDelete, totalCount } = useAppSelector(
+    (state) => state.query
+  );
+  const [pageNumber, setPageNumber] = useState<number>(1);
+
+  const handlePageChange = (selectedItem: { selected: number }) => {
+    setPageNumber(selectedItem.selected + 1);
+  };
+  const totalPage = Math.ceil(totalCount / 10);
 
   const handleDelete = (id: number) => {
     dispatch(deleteQueries(id));
@@ -20,12 +29,12 @@ const Queries = () => {
     if (isDelete) {
       toast.success("Query deleted successfully");
     }
-    dispatch(getQueries({}));
+    dispatch(getQueries({ page: pageNumber }));
 
     return () => {
       dispatch(reset());
     };
-  }, [dispatch, isDelete]);
+  }, [dispatch, isDelete, pageNumber]);
 
   return (
     <div>
@@ -55,6 +64,11 @@ const Queries = () => {
             </Column>
           </Row>
         ))}
+        <Pagination
+          pageCount={pageNumber}
+          handlePageClick={handlePageChange}
+          totalPage={totalPage}
+        />
       </Display>
     </div>
   );

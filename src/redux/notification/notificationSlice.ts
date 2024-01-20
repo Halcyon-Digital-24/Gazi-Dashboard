@@ -1,10 +1,10 @@
-import { createSlice, createAsyncThunk } from '@reduxjs/toolkit';
-import { RootState } from '../store';
-import faqService from './notificationService';
+import { createAsyncThunk, createSlice } from '@reduxjs/toolkit';
 import {
   INotification,
   INotificationResponse,
 } from '../../interfaces/notification';
+import { RootState } from '../store';
+import faqService from './notificationService';
 
 interface IBlogResponse {
   notifications: INotification[];
@@ -48,9 +48,9 @@ export const createNotification = createAsyncThunk(
 
 export const getNotification = createAsyncThunk(
   'notification/getAll',
-  async (_, thunkAPI) => {
+  async (filter: { [key: string]: number | string }, thunkAPI) => {
     try {
-      return await faqService.getNotification();
+      return await faqService.getNotification(filter);
     } catch (error) {
       const message =
         error instanceof Error ? error.message : 'An error occurred';
@@ -59,8 +59,8 @@ export const getNotification = createAsyncThunk(
   }
 );
 
-export const faqSlice = createSlice({
-  name: 'Blog',
+export const notificationSlice = createSlice({
+  name: 'Notification',
   initialState,
   reducers: {
     reset: () => initialState,
@@ -101,6 +101,6 @@ export const faqSlice = createSlice({
   },
 });
 
-export const { reset } = faqSlice.actions;
+export const { reset } = notificationSlice.actions;
 export const selectCount = (state: RootState) => state.faqs;
-export default faqSlice.reducer;
+export default notificationSlice.reducer;

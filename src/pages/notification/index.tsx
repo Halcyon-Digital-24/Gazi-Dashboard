@@ -1,6 +1,7 @@
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import CardBody from "../../components/card-body";
 import Display from "../../components/display";
+import Pagination from "../../components/pagination";
 import Column from "../../components/table/column";
 import Row from "../../components/table/row";
 import { useAppDispatch, useAppSelector } from "../../redux/hooks";
@@ -11,15 +12,23 @@ import {
 
 const Notification = () => {
   const dispatch = useAppDispatch();
-  const { notifications } = useAppSelector((state) => state.notification);
+  const { notifications, totalCount } = useAppSelector(
+    (state) => state.notification
+  );
+  const [pageNumber, setPageNumber] = useState<number>(1);
+  const totalPage = Math.ceil(totalCount / 10);
+
+  const handlePageChange = (selectedItem: { selected: number }) => {
+    setPageNumber(selectedItem.selected + 1);
+  };
 
   useEffect(() => {
-    dispatch(getNotification());
+    dispatch(getNotification({ page: pageNumber }));
 
     return () => {
       dispatch(reset());
     };
-  }, [dispatch]);
+  }, [dispatch, pageNumber]);
   return (
     <div>
       <CardBody header="Notifications" to="/notification/create" />
@@ -36,6 +45,11 @@ const Notification = () => {
             <Column className="col-md-5">{n.details}</Column>
           </Row>
         ))}
+        <Pagination
+          pageCount={pageNumber}
+          handlePageClick={handlePageChange}
+          totalPage={totalPage}
+        />
       </Display>
     </div>
   );

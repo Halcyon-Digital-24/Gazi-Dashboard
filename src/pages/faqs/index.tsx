@@ -1,10 +1,11 @@
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import DeleteButton from "../../components/button/delete";
 import EditButton from "../../components/button/edit";
 import CardBody from "../../components/card-body";
 import CustomIconArea from "../../components/custom-icon-area";
 import Display from "../../components/display";
 import ToggleButton from "../../components/forms/checkbox";
+import Pagination from "../../components/pagination";
 import Column from "../../components/table/column";
 import Row from "../../components/table/row";
 import { IFaq } from "../../interfaces/faq";
@@ -17,16 +18,24 @@ import {
 import { useAppDispatch, useAppSelector } from "../../redux/hooks";
 
 const FaqPage: React.FC = () => {
-  const { faqs, isUpdate, isDelete } = useAppSelector((state) => state.faqs);
+  const { faqs, isUpdate, totalCount, isDelete } = useAppSelector(
+    (state) => state.faqs
+  );
+  const [pageNumber, setPageNumber] = useState<number>(1);
   const dispatch = useAppDispatch();
 
+  const handlePageChange = (selectedItem: { selected: number }) => {
+    setPageNumber(selectedItem.selected + 1);
+  };
+  const totalPage = Math.ceil(totalCount / 10);
+
   useEffect(() => {
-    dispatch(getFaqs());
+    dispatch(getFaqs({ page: pageNumber }));
 
     return () => {
       dispatch(reset());
     };
-  }, [dispatch, isDelete, isUpdate]);
+  }, [dispatch, isDelete, isUpdate, pageNumber]);
 
   /* useEffect(() => {
     if (isUpdate) {
@@ -43,7 +52,6 @@ const FaqPage: React.FC = () => {
 
   const handleDeleteVideo = (id: number) => {
     dispatch(deleteFaq(id));
-    dispatch(getFaqs());
   };
 
   return (
@@ -78,11 +86,11 @@ const FaqPage: React.FC = () => {
             </Column>
           </Row>
         ))}
-        {/* <Pagination
+        <Pagination
           pageCount={pageNumber}
           handlePageClick={handlePageChange}
           totalPage={totalPage}
-        /> */}
+        />
       </Display>
     </div>
   );

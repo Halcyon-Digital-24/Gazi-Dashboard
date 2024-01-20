@@ -1,7 +1,7 @@
-import { createSlice, createAsyncThunk } from '@reduxjs/toolkit';
+import { createAsyncThunk, createSlice } from '@reduxjs/toolkit';
 import axios from 'axios';
-import queryService from './queryService';
 import { IQuery } from '../../interfaces/query';
+import queryService from './queryService';
 
 interface IState {
   queries: IQuery[];
@@ -27,9 +27,11 @@ const initialState: IState = {
 // Get Emi's
 export const getQueries = createAsyncThunk(
   'query/getquery',
-  async ({ page, limit }: { [key: string]: number }, thunkAPI) => {
+  async (filter: {
+    [key: string]: string | number;
+  }, thunkAPI) => {
     try {
-      return await queryService.getQueries({ page, limit });
+      return await queryService.getQueries(filter);
     } catch (error) {
       if (axios.isAxiosError(error)) {
         const message = error.response?.data.message || 'An error occurred';
@@ -79,6 +81,7 @@ export const querySlice = createSlice({
         state.isLoading = false;
         state.isSuccess = true;
         state.queries = action.payload.data.rows;
+        state.totalCount = action.payload.data.count;
       })
       .addCase(getQueries.rejected, (state, action) => {
         state.isLoading = false;

@@ -5,6 +5,7 @@ import CardBody from "../../components/card-body";
 import CustomIconArea from "../../components/custom-icon-area";
 import Display from "../../components/display";
 import ToggleButton from "../../components/forms/checkbox";
+import Pagination from "../../components/pagination";
 import Column from "../../components/table/column";
 import Row from "../../components/table/row";
 import { API_ROOT, API_URL } from "../../constants";
@@ -20,8 +21,17 @@ import "./banner.scss";
 
 const BannerPage = () => {
   const dispatch = useAppDispatch();
-  const { isDelete, isUpdate } = useAppSelector((state) => state.banner);
+  const { isDelete, isUpdate, totalCount } = useAppSelector(
+    (state) => state.banner
+  );
   const [addBanner, setAddBanner] = useState<IAdBanner[]>([]);
+  const [pageNumber, setPageNumber] = useState<number>(1);
+  const [count, setCount] = useState(0);
+
+  const handlePageChange = (selectedItem: { selected: number }) => {
+    setPageNumber(selectedItem.selected + 1);
+  };
+  const totalPage = Math.ceil(count / 10);
   const handleDelete = (id: number) => {
     dispatch(deleteBanner(id));
   };
@@ -29,14 +39,17 @@ const BannerPage = () => {
   useEffect(() => {
     const fetchData = async () => {
       try {
-        const response = await axios.get(`${API_URL}/banners?not_slider=true`);
+        const response = await axios.get(
+          `${API_URL}/banners?not_slider=true&page=${pageNumber}`
+        );
         setAddBanner(response?.data?.rows);
+        setCount(response?.data?.count);
       } catch (error) {
         console.log("Banner data fetch error" + error);
       }
     };
     fetchData();
-  }, [isUpdate]);
+  }, [isUpdate, pageNumber]);
   const handleVisibility = (banner: IAdBanner) => {
     dispatch(
       updateAddBanner({
@@ -44,12 +57,11 @@ const BannerPage = () => {
         bannerData: { is_visible: !banner.is_visible },
       })
     );
-    dispatch(getAddBanner());
   };
 
   useEffect(() => {
-    dispatch(getAddBanner());
-  }, [dispatch, isDelete, isUpdate]);
+    dispatch(getAddBanner({ page: pageNumber }));
+  }, [dispatch, isDelete, isUpdate, pageNumber]);
 
   return (
     <div>
@@ -88,6 +100,11 @@ const BannerPage = () => {
             </Column>
           </Row>
         ))}
+        <Pagination
+          pageCount={pageNumber}
+          handlePageClick={handlePageChange}
+          totalPage={totalPage}
+        />
       </Display>
     </div>
   );

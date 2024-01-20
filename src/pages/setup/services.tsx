@@ -1,10 +1,11 @@
 // import React from 'react';
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import DeleteButton from "../../components/button/delete";
 import EditButton from "../../components/button/edit";
 import CardBody from "../../components/card-body";
 import CustomIconArea from "../../components/custom-icon-area";
 import Display from "../../components/display";
+import Pagination from "../../components/pagination";
 import Column from "../../components/table/column";
 import Row from "../../components/table/row";
 import { API_ROOT } from "../../constants";
@@ -17,14 +18,22 @@ import {
 
 const Services = () => {
   const dispatch = useAppDispatch();
-  const { services, isDelete } = useAppSelector((state) => state.services);
+  const { services, isDelete, totalCount } = useAppSelector(
+    (state) => state.services
+  );
+  const [pageNumber, setPageNumber] = useState<number>(1);
+
+  const handlePageChange = (selectedItem: { selected: number }) => {
+    setPageNumber(selectedItem.selected + 1);
+  };
+  const totalPage = Math.ceil(totalCount / 10);
 
   useEffect(() => {
-    dispatch(getKeypoints({ page: 1, limit: 10 }));
+    dispatch(getKeypoints({ page: pageNumber, limit: 10 }));
     return () => {
       dispatch(reset());
     };
-  }, [dispatch, isDelete]);
+  }, [dispatch, isDelete, pageNumber]);
 
   const handleDelete = (id: number) => {
     dispatch(deleteKeypoint(id));
@@ -64,6 +73,11 @@ const Services = () => {
             </Column>
           </Row>
         ))}
+        <Pagination
+          pageCount={pageNumber}
+          handlePageClick={handlePageChange}
+          totalPage={totalPage}
+        />
       </Display>
     </div>
   );

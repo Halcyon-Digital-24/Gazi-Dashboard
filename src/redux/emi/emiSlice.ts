@@ -1,7 +1,7 @@
-import { createSlice, createAsyncThunk } from '@reduxjs/toolkit';
-import emiService from './emiService';
+import { createAsyncThunk, createSlice } from '@reduxjs/toolkit';
 import axios from 'axios';
 import { IEmi } from '../../interfaces/emi';
+import emiService from './emiService';
 
 interface IState {
   emis: IEmi[];
@@ -129,6 +129,7 @@ export const emiSlice = createSlice({
         state.isLoading = false;
         state.isSuccess = true;
         state.emis = action.payload.data.rows;
+        state.totalCount = action.payload.data.count;
       })
       .addCase(getEmis.rejected, (state, action) => {
         state.isLoading = false;

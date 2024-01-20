@@ -1,10 +1,11 @@
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import { toast } from "react-toastify";
 import DeleteButton from "../../components/button/delete";
 import EditButton from "../../components/button/edit";
 import CardBody from "../../components/card-body";
 import CustomIconArea from "../../components/custom-icon-area";
 import Display from "../../components/display";
+import Pagination from "../../components/pagination";
 import Column from "../../components/table/column";
 import Row from "../../components/table/row";
 import { deleteCoupon, getCoupon, reset } from "../../redux/coupon/couponSlice";
@@ -12,7 +13,15 @@ import { useAppDispatch, useAppSelector } from "../../redux/hooks";
 
 const CouponPage: React.FC = () => {
   const dispatch = useAppDispatch();
-  const { coupons, isDelete } = useAppSelector((state) => state.coupon);
+  const { coupons, isDelete, totalCount } = useAppSelector(
+    (state) => state.coupon
+  );
+  const [pageNumber, setPageNumber] = useState<number>(1);
+
+  const handlePageChange = (selectedItem: { selected: number }) => {
+    setPageNumber(selectedItem.selected + 1);
+  };
+  const totalPage = Math.ceil(totalCount / 10);
 
   const handleDeleteCoupon = (id: number) => {
     dispatch(deleteCoupon(id));
@@ -22,12 +31,12 @@ const CouponPage: React.FC = () => {
     if (isDelete) {
       toast.success("Coupon deleted successfully");
     }
-    dispatch(getCoupon({}));
+    dispatch(getCoupon({ page: pageNumber }));
 
     return () => {
       dispatch(reset());
     };
-  }, [dispatch, isDelete]);
+  }, [dispatch, isDelete, pageNumber]);
 
   return (
     <div>
@@ -58,6 +67,11 @@ const CouponPage: React.FC = () => {
             </Column>
           </Row>
         ))}
+        <Pagination
+          pageCount={pageNumber}
+          handlePageClick={handlePageChange}
+          totalPage={totalPage}
+        />
       </Display>
     </div>
   );
