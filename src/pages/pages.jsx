@@ -14,18 +14,19 @@ import FaqPage from "./faqs";
 import CreateFaq from "./faqs/create";
 import UpdateFaq from "./faqs/update";
 import Home from "./home";
-import BannerPage from "./marketing/banner";
+
+import BannerPage from "./banner";
+import CreateBanner from "./banner/create";
+import UpdateBanner from "./banner/update";
 
 import CouponPage from "./coupon";
 import CreateCoupon from "./coupon/create";
 import UpdateCoupon from "./coupon/update";
 
-import CreateBanner from "./marketing/create-banner";
 import Shipping from "./shipping";
 import CreateShipping from "./shipping/create";
 import UpdateShipping from "./shipping/update";
 
-import UpdateBanner from "./marketing/update-banner";
 
 import Notification from "./notification";
 import CreateNotification from "./notification/create";
