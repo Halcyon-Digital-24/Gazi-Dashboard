@@ -40,6 +40,7 @@ const UpdateOrder = () => {
   const {
     register,
     handleSubmit,
+    setValue,
     formState: { errors },
   } = useForm();
 
@@ -67,7 +68,12 @@ const UpdateOrder = () => {
     const fetchData = async () => {
       try {
         const response = await axios.get(`${API_URL}/orders/${slug}`);
-        const data = response.data.data;
+        const data = await response.data.data;
+        setValue("name", data.name);
+        setValue("email", data.email);
+        setValue("mobile", data.mobile);
+        setValue("address", data.address);
+        setValue("city", data.city);
         setOrder(data);
       } catch (error) {
         console.error("Error fetching category data:", error);
@@ -175,7 +181,10 @@ const UpdateOrder = () => {
                     <div className="left">
                       <div className="text">
                         <label>Name</label>
-                        <input type="text" defaultValue={name} {...register("name", {required: "name is required"})}/>
+                        <input type="text"  {...register("name", {required: "name is required",pattern: {
+                  value: /\S/,
+                  message: "Only space isn't allow"
+                }})}/>
                         {errors.name && (
             <p className="validation__error">{errors.name.message}</p>
           )}
@@ -184,7 +193,10 @@ const UpdateOrder = () => {
 
                       <div className="text">
                         <label htmlFor="Email">Email</label>
-                        <input type="text" defaultValue={email} {...register("email", {required: "email is required"})}/>
+                        <input type="text"  {...register("email", {required: "email is required",pattern: {
+                  value: /\S/,
+                  message: "Only space isn't allow"
+                }})}/>
                         {errors.email && (
             <p className="validation__error">{errors.email.message}</p>
           )}
@@ -192,7 +204,10 @@ const UpdateOrder = () => {
 
                       <div className="text">
                         <label htmlFor="Mobile">Mobile</label>
-                        <input type="text" defaultValue={mobile} {...register("mobile", {required: "mobile is required"})}/>
+                        <input type="text"  {...register("mobile", {required: "mobile is required",pattern: {
+                  value: /\S/,
+                  message: "Only space isn't allow"
+                }})}/>
                         {errors.mobile && (
             <p className="validation__error">{errors.mobile.message}</p>
           )}
@@ -201,7 +216,10 @@ const UpdateOrder = () => {
                      
                       <div className="text">
                         <label htmlFor="Address">Address</label>
-                        <input type="text" defaultValue={address} {...register("address", {required: "address is required"})}/>
+                        <input type="text"  {...register("address", {required: "address is required",pattern: {
+                  value: /\S/,
+                  message: "Only space isn't allow"
+                }})}/>
                         {errors.address && (
             <p className="validation__error">{errors.address.message}</p>
           )}
@@ -209,7 +227,10 @@ const UpdateOrder = () => {
 
                        <div className="text">
                         <label htmlFor="City">City</label>
-                        <input type="text" defaultValue={address} {...register("city", {required: "city is required"})}/>
+                        <input type="text"  {...register("city", {required: "city is required",pattern: {
+                  value: /\S/,
+                  message: "Only space isn't allow"
+                }})}/>
                         {errors.city && (
             <p className="validation__error">{errors.city.message}</p>
           )}
