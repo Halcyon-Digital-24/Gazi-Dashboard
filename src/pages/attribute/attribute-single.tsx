@@ -1,4 +1,4 @@
-import { useState, useEffect } from "react";
+import { useEffect, useState } from "react";
 import "./attribute-single.scss";
 
 interface IProps {
@@ -48,7 +48,7 @@ const AttributeSingle: React.FC<IProps> = ({
         value={""}
         onChange={(e) => handleAddAttribute(data.name, e.target.value)}
       >
-        <option value="">Select atribute values</option>
+        <option value="">Select attribute values</option>
         {attributeValues?.length > 0 &&
           attributeValues?.map((item, i) => (
             <option key={i} value={item}>
