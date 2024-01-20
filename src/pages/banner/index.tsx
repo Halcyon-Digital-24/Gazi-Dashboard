@@ -16,7 +16,7 @@ import {
   updateAddBanner,
 } from "../../redux/add-banner/addBannerSlice";
 import { useAppDispatch, useAppSelector } from "../../redux/hooks";
-import "./banner.scss";
+import "./index.scss";
 
 const BannerPage = () => {
   const dispatch = useAppDispatch();

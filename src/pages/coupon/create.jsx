@@ -21,7 +21,7 @@ const CreateCoupon = () => {
   const [coupons, setCoupons] = useState([]);
   const [code, setCode] = useState('');
   const [discountPrice, setDiscountPrice] = useState(0);
-  const [totalCoupon, setTotalCoupon] = useState<number | string>(0);
+  const [totalCoupon, setTotalCoupon] = useState(0);
   const [date, setDate] = useState('');
   const { products } = useAppSelector((state) => state.product);
   const [search, setSearch] = useState('');
