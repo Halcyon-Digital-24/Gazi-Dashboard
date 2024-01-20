@@ -26,16 +26,10 @@ const UpdateOrder = () => {
   const [search, setSearch] = useState("");
   const productAreaRef = useRef(null);
   const [loading, setLoading] = useState(false);
+  const [amountBeforeCoupon, setAmountBeforeCoupon] = useState(0);
+  const [totalPrice, setTotalPrice] = useState(0);
 
    const {name , email, mobile, address, city, orderItems, delivery_fee }= order;
-
-  const orderData = {
-    name,
-    email,
-    mobile,
-    address,
-    city,
-  };
 
   const {
     register,
@@ -120,8 +114,6 @@ const UpdateOrder = () => {
     }
   };
 
-
-  console.log(order)
   const handleRemoveOrderItem = async (data) => {
     const orderId = data.id;
 
@@ -159,7 +151,34 @@ const UpdateOrder = () => {
       setLoading(false);
     }
   };
-  console.log('email:', mobile);
+
+  useEffect(() => {
+    if (orderItems?.length > 0) {
+      let totalRegularPrice = 0;
+
+      orderItems?.forEach((item) => {
+        totalRegularPrice += item?.regular_price * item?.quantity;
+      });
+
+      setAmountBeforeCoupon(totalRegularPrice);
+
+      if (order?.coupon) {
+        let finalPrice = 0;
+        orderItems?.map((item) => {
+          finalPrice += item?.discount_price * item?.quantity;
+        });
+        setTotalPrice(finalPrice);
+      } else {
+        let finalPrice = 0;
+        orderItems?.map((item) => {
+          finalPrice += item?.discount_price
+            ? item?.discount_price
+            : item?.regular_price * item?.quantity;
+        });
+        setTotalPrice(finalPrice);
+      }
+    }
+  }, [order, orderItems]);
 
   return (
     <div>
@@ -331,22 +350,9 @@ const UpdateOrder = () => {
                           <p className="heading sort-summery">Shipping cost</p>
                           <p className="heading sort-summery">৳ {delivery_fee}</p>
                           <p className="heading sort-summery">Discount</p>
-                          <p className="heading sort-summery">৳00.00</p>
+                          <p className="heading sort-summery">৳ {amountBeforeCoupon - totalPrice}</p>
                           <p className="heading sort-summery">Grand Total</p>
-                          <p className="heading sort-summery">{`৳${orderItems?.reduce(
-                            (sum, item) => {
-                              if (
-                                item.discount_price === null ||
-                                item.discount_price === 0
-                              ) {
-                                sum += item.regular_price * item.quantity;
-                              } else {
-                                sum += item.discount_price * item.quantity;
-                              }
-                              return sum;
-                            },
-                            delivery_fee
-                          )}`}</p>
+                          <p className="heading sort-summery">{totalPrice + delivery_fee}</p>
                         </div>
                       </div>
                     </Column>
