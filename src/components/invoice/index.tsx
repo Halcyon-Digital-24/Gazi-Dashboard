@@ -170,7 +170,7 @@ const Invoice = ({ order }: any) => {
                     ৳{product.regular_price}
                   </Column>
                   <Column className="col-md-2 heading">
-                    ৳ {product.regular_price}
+                    ৳ {product.regular_price * product.quantity}
                   </Column>
                 </div>
               ))}

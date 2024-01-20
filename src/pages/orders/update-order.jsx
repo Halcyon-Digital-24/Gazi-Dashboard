@@ -306,13 +306,10 @@ const UpdateOrder = () => {
                             </div>
                           </Column>
                           <Column className="col-md-2 heading">
-                            ৳{product.discount_price ?? product.regular_price}
+                            ৳{product.regular_price}
                           </Column>
                           <Column className="col-md-2 heading">
-                            ৳
-                            {product.discount_price
-                              ? product.discount_price * product.quantity
-                              : product.regular_price * product.quantity}
+                            ৳{product.regular_price * product.quantity}
                           </Column>
                         </div>
                       ))}
@@ -323,17 +320,10 @@ const UpdateOrder = () => {
                     <Column className="col-md-4">
                       <div className="summery">
                         <div className="row">
-                          <p className="heading sort-summery">Sub Total</p>
+                          <p className="heading sort-summery">Regular Price</p>
                           <p className="heading sort-summery">{`৳${orderItems?.reduce(
                             (sum, item) => {
-                              if (
-                                item.discount_price === null ||
-                                item.discount_price === 0
-                              ) {
                                 sum += item.regular_price * item.quantity;
-                              } else {
-                                sum += item.discount_price * item.quantity;
-                              }
                               return sum;
                             },
                             0
