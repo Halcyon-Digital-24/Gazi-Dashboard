@@ -27,7 +27,7 @@ const CommonPages: React.FC = () => {
 
   useEffect(() => {
     dispatch(getPages({ page: pageNumber }));
-  }, [dispatch, isDelete]);
+  }, [dispatch, isDelete, pageNumber]);
 
   return (
     <div>
