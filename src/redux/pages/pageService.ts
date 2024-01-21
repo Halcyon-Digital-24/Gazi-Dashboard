@@ -1,6 +1,6 @@
-import axios from 'axios';
-import { API_URL } from '../../constants';
-import { IPages, IPagesResponse } from '../../interfaces/pages';
+import axios from "../../lib";
+import { API_URL } from "../../constants";
+import { IPages, IPagesResponse } from "../../interfaces/pages";
 
 const createPages = async (
   pageData: IPages
@@ -9,8 +9,33 @@ const createPages = async (
   return data;
 };
 
-const getPages = async (filter: { [key: string]: number | string }, thunkAPI): Promise<IPagesResponse> => {
-  const { data } = await axios.get(`/pages`);
+const getPages = async (filter: {
+  [key: string]: string | number | boolean;
+}): Promise<IPagesResponse> => {
+  let url = `/pages`;
+
+  // Filter out keys with false values
+  const filteredFilter: { [key: string]: string | number | boolean } = {};
+  Object.entries(filter).forEach(([key, value]) => {
+    if (value !== false) {
+      filteredFilter[key] = value;
+    }
+  });
+
+  if (Object.keys(filteredFilter).length > 0) {
+    const queryString = Object.entries(filteredFilter)
+      .map(
+        ([key, value]) =>
+          `${encodeURIComponent(key)}=${encodeURIComponent(value.toString())}`
+      )
+      .join("&");
+
+    // Add query string to the URL
+    url += `?${queryString}`;
+  }
+
+  const { data } = await axios.get(url);
+
   return data;
 };
 

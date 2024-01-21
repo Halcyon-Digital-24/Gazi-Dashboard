@@ -23,25 +23,24 @@ const Shipping = () => {
 
   const totalPage = Math.ceil(totalCount / displayItem);
 
-  const handleDisplayItem = () => {
+  const handleDisplayItem = (e) => {
     setDisplayItem(Number(e.target.value));
   };
 
-  const handlePageChange = () => {
+  const handlePageChange = (selectedItem) => {
     setPageNumber(selectedItem.selected + 1);
   };
 
-  const handleDeleteVideo=async (id)=>{
-     try{
-      const data=await axios.delete(`/shippings/?ids=[${id}]`);
+  const handleDeleteVideo = async (id) => {
+    try {
+      const data = await axios.delete(`/shippings/?ids=[${id}]`);
       toast.success(data.data.message);
-      dispatch(getLocations({ page: pageNumber, limit: displayItem })).then(() => {
-        setPageNumber((prevPageNumber) => Math.min(prevPageNumber, totalPage));
-      });
-     }catch (error) {
+      dispatch(getLocations({ page: pageNumber, limit: displayItem }));
       toast.success(data.data.message);
-     }
-  }
+    } catch (error) {
+      console.log("Delete Shipping Error" + error);
+    }
+  };
 
   useEffect(() => {
     if (isDelete) {
@@ -76,9 +75,7 @@ const Shipping = () => {
             <Column className="col-md-4">
               <CustomIconArea>
                 <EditButton editUrl={`/shipping/edit/${location.id}`} />
-                <DeleteButton
-                  onClick={() => handleDeleteVideo(location.id)}
-                />
+                <DeleteButton onClick={() => handleDeleteVideo(location.id)} />
               </CustomIconArea>
             </Column>
           </Row>

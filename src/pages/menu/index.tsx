@@ -1,4 +1,4 @@
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import { toast } from "react-toastify";
 import DeleteButton from "../../components/button/delete";
 import EditButton from "../../components/button/edit";
@@ -9,10 +9,19 @@ import Column from "../../components/table/column";
 import Row from "../../components/table/row";
 import { useAppDispatch, useAppSelector } from "../../redux/hooks";
 import { deleteMenu, getMenus, reset } from "../../redux/menus/menuSlice";
+import Pagination from "../../components/pagination";
 
 const Menus = () => {
   const dispatch = useAppDispatch();
-  const { menus, isDelete, message } = useAppSelector((state) => state.menu);
+  const { menus, isDelete, message, totalCount } = useAppSelector(
+    (state) => state.menu
+  );
+  const [pageNumber, setPageNumber] = useState<number>(1);
+
+  const handlePageChange = (selectedItem: { selected: number }) => {
+    setPageNumber(selectedItem.selected + 1);
+  };
+  const totalPage = Math.ceil(totalCount / 10);
 
   const handleDelete = (id: number) => {
     dispatch(deleteMenu([id]));
@@ -22,12 +31,12 @@ const Menus = () => {
     if (isDelete) {
       toast.success(`${message}`);
     }
-    dispatch(getMenus({}));
+    dispatch(getMenus({ page: pageNumber }));
 
     return () => {
       dispatch(reset());
     };
-  }, [dispatch, isDelete]);
+  }, [dispatch, isDelete, pageNumber, message]);
 
   return (
     <div>
@@ -52,6 +61,11 @@ const Menus = () => {
             </Column>
           </Row>
         ))}
+        <Pagination
+          pageCount={pageNumber}
+          handlePageClick={handlePageChange}
+          totalPage={totalPage}
+        />
       </Display>
     </div>
   );

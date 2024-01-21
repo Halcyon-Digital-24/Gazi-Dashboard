@@ -1,7 +1,7 @@
-import { createAsyncThunk, createSlice } from '@reduxjs/toolkit';
-import { IPages } from '../../interfaces/pages';
-import { RootState } from '../store';
-import pageService from './pageService';
+import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
+import { IPages } from "../../interfaces/pages";
+import { RootState } from "../store";
+import pageService from "./pageService";
 
 interface IPagesResponse {
   pages: IPages[];
@@ -25,64 +25,64 @@ const initialState: IPagesResponse = {
   isUpdate: false,
   isDelete: false,
   isLoading: false,
-  message: '',
-  errorMessage: '',
+  message: "",
+  errorMessage: "",
 };
 
 // Create new Blog
 export const createPages = createAsyncThunk(
-  'pages/create',
+  "pages/create",
   async (pageData: IPages, thunkAPI) => {
     try {
       return await pageService.createPages(pageData);
     } catch (error) {
       const message =
-        error instanceof Error ? error.message : 'An error occurred';
+        error instanceof Error ? error.message : "An error occurred";
       return thunkAPI.rejectWithValue(message);
     }
   }
 );
 
 export const getPages = createAsyncThunk(
-  'pages/getAll',
+  "pages/getAll",
   async (filter: { [key: string]: number | string }, thunkAPI) => {
     try {
       return await pageService.getPages(filter);
     } catch (error) {
       const message =
-        error instanceof Error ? error.message : 'An error occurred';
+        error instanceof Error ? error.message : "An error occurred";
       return thunkAPI.rejectWithValue(message);
     }
   }
 );
 
 export const updatePages = createAsyncThunk(
-  'pages/update',
+  "pages/update",
   async (pageData: Partial<IPages>, thunkAPI) => {
     try {
       return await pageService.updatePages(pageData);
     } catch (error) {
       const message =
-        error instanceof Error ? error.message : 'An error occurred';
+        error instanceof Error ? error.message : "An error occurred";
       return thunkAPI.rejectWithValue(message);
     }
   }
 );
 export const deletePages = createAsyncThunk(
-  'pages/delete',
+  "pages/delete",
   async (pageId: number | string, thunkAPI) => {
     try {
       return await pageService.deletePages(pageId);
     } catch (error) {
       const message =
-        error instanceof Error ? error.message : 'An error occurred';
+        error instanceof Error ? error.message : "An error occurred";
       return thunkAPI.rejectWithValue(message);
     }
   }
 );
 
 export const pageSlice = createSlice({
-  name: 'pages',
+  name: "pages",
   initialState,
   reducers: {
     reset: () => initialState,
@@ -112,6 +112,7 @@ export const pageSlice = createSlice({
         state.isLoading = false;
         state.isSuccess = true;
         state.pages = action.payload.data.rows;
+        state.totalCount = action.payload.data.count;
       })
       .addCase(getPages.rejected, (state, action) => {
         state.isLoading = false;

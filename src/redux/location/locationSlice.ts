@@ -1,7 +1,7 @@
-import { createAsyncThunk, createSlice } from '@reduxjs/toolkit';
-import axios from 'axios';
-import { ILcation } from './../../interfaces/location';
-import locationService from './locationService';
+import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
+import axios from "axios";
+import { ILcation } from "./../../interfaces/location";
+import locationService from "./locationService";
 
 interface IState {
   locations: ILcation[];
@@ -24,45 +24,45 @@ const initialState: IState = {
   isUpdate: false,
   isDelete: false,
   isLoading: false,
-  message: '',
-  errorMessage: '',
+  message: "",
+  errorMessage: "",
 };
 
 // Create Location
 export const createLocation = createAsyncThunk(
-  'location/createLocation',
+  "location/createLocation",
   async (data: ILcation, thunkAPI) => {
     try {
       return await locationService.createLocation(data);
     } catch (error) {
       if (axios.isAxiosError(error)) {
-        const message = error.response?.data.message || 'An error occurred';
+        const message = error.response?.data.message || "An error occurred";
         return thunkAPI.rejectWithValue(message);
       } else {
-        return thunkAPI.rejectWithValue('An error occurred');
+        return thunkAPI.rejectWithValue("An error occurred");
       }
     }
   }
 );
 // Get Location
 export const getLocations = createAsyncThunk(
-  'location/getAllProducts',
+  "location/getAllProducts",
   async ({ page, limit }: { [key: string]: number }, thunkAPI) => {
     try {
       return await locationService.getLocations({ page, limit });
     } catch (error) {
       if (axios.isAxiosError(error)) {
-        const message = error.response?.data.message || 'An error occurred';
+        const message = error.response?.data.message || "An error occurred";
         return thunkAPI.rejectWithValue(message);
       } else {
-        return thunkAPI.rejectWithValue('An error occurred');
+        return thunkAPI.rejectWithValue("An error occurred");
       }
     }
   }
 );
 
 export const updateLocation = createAsyncThunk(
-  'location/update',
+  "location/update",
   async (
     { id, locationData }: { id: number | string; locationData: ILcation },
     thunkAPI
@@ -71,33 +71,33 @@ export const updateLocation = createAsyncThunk(
       return await locationService.updateLocation(id, locationData);
     } catch (error) {
       if (axios.isAxiosError(error)) {
-        const message = error.response?.data.message || 'An error occurred';
+        const message = error.response?.data.message || "An error occurred";
         return thunkAPI.rejectWithValue(message);
       } else {
-        return thunkAPI.rejectWithValue('An error occurred');
+        return thunkAPI.rejectWithValue("An error occurred");
       }
     }
   }
 );
 
 export const deleteLocation = createAsyncThunk(
-  'location/delete',
+  "location/delete",
   async (ProductId: number, thunkAPI) => {
     try {
       return await locationService.deleteLocation(ProductId);
     } catch (error) {
       if (axios.isAxiosError(error)) {
-        const message = error.response?.data.message || 'An error occurred';
+        const message = error.response?.data.message || "An error occurred";
         return thunkAPI.rejectWithValue(message);
       } else {
-        return thunkAPI.rejectWithValue('An error occurred');
+        return thunkAPI.rejectWithValue("An error occurred");
       }
     }
   }
 );
 
 export const locationSlice = createSlice({
-  name: 'emi',
+  name: "emi",
   initialState,
   reducers: {
     reset: (state) => {
@@ -106,7 +106,7 @@ export const locationSlice = createSlice({
       state.isUpdate = false;
       state.isSuccess = false;
       state.isError = false;
-      state.message = '';
+      state.message = "";
     },
   },
 
@@ -132,6 +132,7 @@ export const locationSlice = createSlice({
         state.isLoading = false;
         state.isSuccess = true;
         state.locations = action.payload.data.rows;
+        state.totalCount = action.payload.data.count;
       })
       .addCase(getLocations.rejected, (state, action) => {
         state.isLoading = false;
