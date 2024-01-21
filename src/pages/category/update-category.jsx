@@ -20,6 +20,7 @@ const UpdateCategory = () => {
   const {
     register,
     setValue,
+    setError,
     control,
     handleSubmit,
     formState: { errors },
@@ -27,7 +28,7 @@ const UpdateCategory = () => {
   const navigate = useNavigate();
   const dispatch = useAppDispatch();
   const { slug } = useParams();
-  const { categories, isUpdate, error } = useAppSelector(
+  const { categories, isUpdate, error, isError } = useAppSelector(
     (state) => state.category
   );
   const [loading, setIsLoading] = useState(true);
@@ -40,16 +41,18 @@ const UpdateCategory = () => {
 
     dispatch(updateCategory({ slug, categoryData: formData }));
   };
-
   useEffect(() => {
     if (isUpdate) {
       navigate("/category");
+    }
+    if (isError) {
+      setError("slug", { type: "server", message: error.slug });
     }
     dispatch(getCategories({ page: 1, limit: 50 }));
     return () => {
       dispatch(reset());
     };
-  }, [dispatch, isUpdate, navigate]);
+  }, [dispatch, isUpdate, navigate, isError]);
 
   useEffect(() => {
     const fetchData = async () => {

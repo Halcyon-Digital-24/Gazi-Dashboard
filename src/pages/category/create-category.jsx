@@ -18,10 +18,11 @@ const CreateCategory = () => {
   const {
     register,
     control,
+    setError,
     handleSubmit,
     formState: { errors },
   } = useForm();
-  const { categories, isCreate, message } = useAppSelector(
+  const { categories, isCreate, message, isError, error } = useAppSelector(
     (state) => state.category
   );
   const navigate = useNavigate();
@@ -41,11 +42,13 @@ const CreateCategory = () => {
       toast.success(`${message}`);
       navigate("/category");
     }
-
+    if (isError) {
+      setError("slug", { type: "server", message: error.slug });
+    }
     return () => {
       dispatch(reset());
     };
-  }, [isCreate, dispatch, message, navigate]);
+  }, [isCreate, dispatch, message, navigate, isError]);
 
   useEffect(() => {
     dispatch(getCategories({ page: 1, limit: 100 }));
