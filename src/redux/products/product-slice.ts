@@ -1,8 +1,6 @@
 import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
 import productService from "./product-service";
 import { IProduct } from "../../interfaces/product";
-import axios from "axios";
-
 interface IState {
   products: IProduct[];
   totalCount: number;

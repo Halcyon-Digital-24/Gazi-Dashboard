@@ -131,6 +131,7 @@ export const serviceslice = createSlice({
         state.isLoading = false;
         state.isSuccess = true;
         state.services = action.payload.data.rows;
+        state.totalCount = action.payload.data.count;
       })
       .addCase(getKeypoints.rejected, (state, action) => {
         state.isLoading = false;

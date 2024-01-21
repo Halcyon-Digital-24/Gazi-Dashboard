@@ -1,7 +1,7 @@
-import { createSlice, createAsyncThunk } from '@reduxjs/toolkit';
+import { createAsyncThunk, createSlice } from '@reduxjs/toolkit';
+import { IPages } from '../../interfaces/pages';
 import { RootState } from '../store';
 import pageService from './pageService';
-import { IPages } from '../../interfaces/pages';
 
 interface IPagesResponse {
   pages: IPages[];
@@ -45,9 +45,9 @@ export const createPages = createAsyncThunk(
 
 export const getPages = createAsyncThunk(
   'pages/getAll',
-  async (_, thunkAPI) => {
+  async (filter: { [key: string]: number | string }, thunkAPI) => {
     try {
-      return await pageService.getPages();
+      return await pageService.getPages(filter);
     } catch (error) {
       const message =
         error instanceof Error ? error.message : 'An error occurred';

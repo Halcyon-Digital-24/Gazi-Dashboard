@@ -1,25 +1,27 @@
-import { useState, useEffect } from 'react';
-import { toast } from 'react-toastify';
-import CardBody from '../../components/card-body';
-import Display from '../../components/display';
-import Input from '../../components/forms/text-input';
-import { Button } from '../../components/button';
-import { useNavigate } from 'react-router-dom';
+import { toast } from "react-toastify";
+import CardBody from "../../components/card-body";
+import Display from "../../components/display";
+import { Button } from "../../components/button";
+import { useNavigate } from "react-router-dom";
 import { useForm } from "react-hook-form";
 import axios from "../../lib";
 
 const CreateVideo = () => {
   const navigate = useNavigate();
-  const { register, handleSubmit, formState: { errors }} = useForm();
+  const {
+    register,
+    handleSubmit,
+    formState: { errors },
+  } = useForm();
 
   const onSubmit = async (data) => {
     data.is_visible = true;
     try {
-      const response = await axios.post('/videos', data);
-      navigate('/videos');
+      const response = await axios.post("/videos", data);
+      navigate("/videos");
       toast.success(response.data.message);
     } catch (error) {
-      toast.error('Error saving data');
+      toast.error("Error saving data");
       console.error(error);
     }
   };
@@ -39,8 +41,8 @@ const CreateVideo = () => {
                 required: "Video Title is required",
                 pattern: {
                   value: /\S/,
-                  message: "Enter a valid title"
-                }
+                  message: "Enter a valid title",
+                },
               })}
             />
             {errors.title && (
@@ -57,8 +59,8 @@ const CreateVideo = () => {
                 required: "URL is required",
                 pattern: {
                   value: /\S/,
-                  message: "Enter a valid URL"
-                }
+                  message: "Enter a valid URL",
+                },
               })}
             />
             {errors.url && (

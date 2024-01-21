@@ -1,8 +1,9 @@
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import EditButton from "../../components/button/edit";
 import CardBody from "../../components/card-body";
 import CustomIconArea from "../../components/custom-icon-area";
 import Display from "../../components/display";
+import Pagination from "../../components/pagination";
 import Column from "../../components/table/column";
 import Row from "../../components/table/row";
 import { getEmis, reset } from "../../redux/emi/emiSlice";
@@ -10,15 +11,21 @@ import { useAppDispatch, useAppSelector } from "../../redux/hooks";
 
 const EmiPage = () => {
   const dispatch = useAppDispatch();
-  const { emis } = useAppSelector((state) => state.emi);
+  const { emis, totalCount } = useAppSelector((state) => state.emi);
+  const [pageNumber, setPageNumber] = useState<number>(1);
+
+  const handlePageChange = (selectedItem: { selected: number }) => {
+    setPageNumber(selectedItem.selected + 1);
+  };
+  const totalPage = Math.ceil(totalCount / 10);
 
   useEffect(() => {
-    dispatch(getEmis({}));
+    dispatch(getEmis({ page: pageNumber, limit: 10 }));
 
     return () => {
       dispatch(reset());
     };
-  }, [dispatch]);
+  }, [dispatch, pageNumber]);
 
   return (
     <div>
@@ -54,6 +61,11 @@ const EmiPage = () => {
             </Column>
           </Row>
         ))}
+        <Pagination
+          pageCount={pageNumber}
+          handlePageClick={handlePageChange}
+          totalPage={totalPage}
+        />
       </Display>
     </div>
   );

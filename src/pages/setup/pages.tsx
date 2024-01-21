@@ -1,9 +1,10 @@
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import DeleteButton from "../../components/button/delete";
 import EditButton from "../../components/button/edit";
 import CardBody from "../../components/card-body";
 import CustomIconArea from "../../components/custom-icon-area";
 import Display from "../../components/display";
+import Pagination from "../../components/pagination";
 import Column from "../../components/table/column";
 import Row from "../../components/table/row";
 import { useAppDispatch, useAppSelector } from "../../redux/hooks";
@@ -11,13 +12,21 @@ import { deletePages, getPages } from "../../redux/pages/pageSlice";
 
 const CommonPages: React.FC = () => {
   const dispatch = useAppDispatch();
-  const { pages, isDelete } = useAppSelector((state) => state.pages);
+  const { pages, isDelete, totalCount } = useAppSelector(
+    (state) => state.pages
+  );
+  const [pageNumber, setPageNumber] = useState<number>(1);
+
+  const handlePageChange = (selectedItem: { selected: number }) => {
+    setPageNumber(selectedItem.selected + 1);
+  };
+  const totalPage = Math.ceil(totalCount / 10);
   const handlePageDelete = (pageNumber: number) => {
     dispatch(deletePages(pageNumber));
   };
 
   useEffect(() => {
-    dispatch(getPages());
+    dispatch(getPages({ page: pageNumber }));
   }, [dispatch, isDelete]);
 
   return (
@@ -45,6 +54,11 @@ const CommonPages: React.FC = () => {
             </Column>
           </Row>
         ))}
+        <Pagination
+          pageCount={pageNumber}
+          handlePageClick={handlePageChange}
+          totalPage={totalPage}
+        />
       </Display>
     </div>
   );

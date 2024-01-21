@@ -9,8 +9,8 @@ const createPages = async (
   return data;
 };
 
-const getPages = async (): Promise<IPagesResponse> => {
-  const { data } = await axios.get(`${API_URL}/pages`);
+const getPages = async (filter: { [key: string]: number | string }, thunkAPI): Promise<IPagesResponse> => {
+  const { data } = await axios.get(`/pages`);
   return data;
 };
 

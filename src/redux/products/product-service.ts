@@ -1,17 +1,25 @@
-import axios from 'axios';
 import { API_URL } from '../../constants';
 import { IProductResponse } from '../../interfaces/product';
+import axios from '../../lib';
 
 // get all products
 const getAllProducts = async (filter: {
   [key: string]: string | number;
 }): Promise<IProductResponse> => {
-  let url = `${API_URL}/products`;
-  if (filter && Object.keys(filter).length > 0) {
-    const queryString = Object.entries(filter)
+  let url = `/products`;
+  // Filter out keys with false values
+  const filteredFilter: { [key: string]: string | number | boolean } = {};
+  Object.entries(filter).forEach(([key, value]) => {
+    if (value !== false) {
+      filteredFilter[key] = value;
+    }
+  });
+
+  if (Object.keys(filteredFilter).length > 0) {
+    const queryString = Object.entries(filteredFilter)
       .map(
         ([key, value]) =>
-          `${encodeURIComponent(key)}=${encodeURIComponent(value)}`
+          `${encodeURIComponent(key)}=${encodeURIComponent(value.toString())}`
       )
       .join('&');
 

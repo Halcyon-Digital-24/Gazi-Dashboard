@@ -5,24 +5,33 @@ import EditButton from "../../components/button/edit";
 import CardBody from "../../components/card-body";
 import CustomIconArea from "../../components/custom-icon-area";
 import Display from "../../components/display";
+import Loader from "../../components/loader";
+import Pagination from "../../components/pagination";
 import Column from "../../components/table/column";
 import Row from "../../components/table/row";
 import { API_URL } from "../../constants";
 import { Attribute, IAttributeResponse } from "../../interfaces/attribute";
 import axios from "../../lib";
-import Loader from "../../components/loader";
 
 const Attributes = () => {
   const [attributes, setAttributes] = useState<Attribute[]>([]);
+  const [count, setCount] = useState(0);
   const [isLoading, setLoading] = useState(true);
+  const [pageNumber, setPageNumber] = useState<number>(1);
+  const totalPage = Math.ceil(count / 10);
+
+  const handlePageChange = (selectedItem: { selected: number }) => {
+    setPageNumber(selectedItem.selected + 1);
+  };
 
   const fetchData = async () => {
     try {
       const response = await axios.get<IAttributeResponse>(
-        `${API_URL}/attributes`
+        `${API_URL}/attributes?page=${pageNumber}&limit=10`
       );
       setLoading(false);
       setAttributes(response.data?.data?.rows);
+      setCount(response.data?.data?.count);
     } catch (error) {
       setLoading(true);
       console.error("Failed to fetch data", error);
@@ -30,7 +39,7 @@ const Attributes = () => {
   };
   useEffect(() => {
     fetchData();
-  }, []);
+  }, [pageNumber]);
 
   const handleDeleteAttribute = async (id: number) => {
     try {
@@ -77,6 +86,11 @@ const Attributes = () => {
             </Row>
           ))
         )}
+        <Pagination
+          pageCount={pageNumber}
+          handlePageClick={handlePageChange}
+          totalPage={totalPage}
+        />
       </Display>
     </div>
   );

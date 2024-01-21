@@ -17,11 +17,30 @@ const createAddBanner = async (
   return data;
 };
 
-const getAddBanner = async (): Promise<IAddBannerResponse> => {
-  const url = `/banners?not_slider=true`;
+const getAddBanner = async (filter: {
+  [key: string]: string | number | boolean;
+}): Promise<IAddBannerResponse> => {
+  let url = `/banners?not_slider=true`;
+  // Filter out keys with false values
+  const filteredFilter: { [key: string]: string | number | boolean } = {};
+  Object.entries(filter).forEach(([key, value]) => {
+    if (value !== false) {
+      filteredFilter[key] = value;
+    }
+  });
 
+  if (Object.keys(filteredFilter).length > 0) {
+    const queryString = Object.entries(filteredFilter)
+      .map(
+        ([key, value]) =>
+          `${encodeURIComponent(key)}=${encodeURIComponent(value.toString())}`
+      )
+      .join('&');
+
+    // Add query string to the URL
+    url += `?${queryString}`;
+  }
   const { data } = await axios.get(url);
-
   return data;
 };
 const getSlider = async (): Promise<ISliderResponse> => {
