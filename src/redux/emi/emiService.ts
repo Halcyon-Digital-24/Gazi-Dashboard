@@ -1,5 +1,5 @@
-import axios from '../../lib';
-import { IEmi, IEmiResponse } from '../../interfaces/emi';
+import axios from "../../lib";
+import { IEmi, IEmiResponse } from "../../interfaces/emi";
 
 // get all Emis
 const getEmis = async (filter: {
@@ -12,7 +12,7 @@ const getEmis = async (filter: {
         ([key, value]) =>
           `${encodeURIComponent(key)}=${encodeURIComponent(value)}`
       )
-      .join('&');
+      .join("&");
 
     // Add query string to the URL
     url += `?${queryString}`;
@@ -29,7 +29,7 @@ const createEmi = async (productData: IEmi) => {
 
 const updateEmi = async (id: number | string, categoryData: IEmi) => {
   const { data } = await axios.patch(`/emis/${id}`, categoryData);
-  return data.data;
+  return data;
 };
 
 const deleteEmi = async (videoId: number) => {

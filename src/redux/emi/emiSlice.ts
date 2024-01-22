@@ -1,7 +1,7 @@
-import { createAsyncThunk, createSlice } from '@reduxjs/toolkit';
-import axios from 'axios';
-import { IEmi } from '../../interfaces/emi';
-import emiService from './emiService';
+import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
+import axios from "axios";
+import { IEmi } from "../../interfaces/emi";
+import emiService from "./emiService";
 
 interface IState {
   emis: IEmi[];
@@ -24,77 +24,77 @@ const initialState: IState = {
   isUpdate: false,
   isDelete: false,
   isLoading: false,
-  message: '',
-  errorMessage: '',
+  message: "",
+  errorMessage: "",
 };
 
 // Get user products
 export const createEmi = createAsyncThunk(
-  'emi/createEmi',
+  "emi/createEmi",
   async (data: IEmi, thunkAPI) => {
     try {
       return await emiService.createEmi(data);
     } catch (error) {
       if (axios.isAxiosError(error)) {
-        const message = error.response?.data.message || 'An error occurred';
+        const message = error.response?.data.message || "An error occurred";
         return thunkAPI.rejectWithValue(message);
       } else {
-        return thunkAPI.rejectWithValue('An error occurred');
+        return thunkAPI.rejectWithValue("An error occurred");
       }
     }
   }
 );
 // Get Emi's
 export const getEmis = createAsyncThunk(
-  'emi/getAllProducts',
+  "emi/getAllProducts",
   async ({ page, limit }: { [key: string]: number }, thunkAPI) => {
     try {
       return await emiService.getEmis({ page, limit });
     } catch (error) {
       if (axios.isAxiosError(error)) {
-        const message = error.response?.data.message || 'An error occurred';
+        const message = error.response?.data.message || "An error occurred";
         return thunkAPI.rejectWithValue(message);
       } else {
-        return thunkAPI.rejectWithValue('An error occurred');
+        return thunkAPI.rejectWithValue("An error occurred");
       }
     }
   }
 );
 
 export const updateEmi = createAsyncThunk(
-  'emi/update',
+  "emi/update",
   async ({ id, emiData }: { id: number | string; emiData: IEmi }, thunkAPI) => {
     try {
       return await emiService.updateEmi(id, emiData);
     } catch (error) {
       if (axios.isAxiosError(error)) {
-        const message = error.response?.data.message || 'An error occurred';
+        const message = error.response?.data.message || "An error occurred";
         return thunkAPI.rejectWithValue(message);
       } else {
-        return thunkAPI.rejectWithValue('An error occurred');
+        return thunkAPI.rejectWithValue("An error occurred");
       }
     }
   }
 );
 
 export const deleteEmi = createAsyncThunk(
-  'emi/delete',
+  "emi/delete",
   async (ProductId: number, thunkAPI) => {
     try {
       return await emiService.deleteEmi(ProductId);
     } catch (error) {
       if (axios.isAxiosError(error)) {
-        const message = error.response?.data.message || 'An error occurred';
+        const message = error.response?.data.message || "An error occurred";
         return thunkAPI.rejectWithValue(message);
       } else {
-        return thunkAPI.rejectWithValue('An error occurred');
+        return thunkAPI.rejectWithValue("An error occurred");
       }
     }
   }
 );
 
 export const emiSlice = createSlice({
-  name: 'emi',
+  name: "emi",
   initialState,
   reducers: {
     reset: (state) => {
@@ -103,7 +103,7 @@ export const emiSlice = createSlice({
       state.isUpdate = false;
       state.isSuccess = false;
       state.isError = false;
-      state.message = '';
+      state.message = "";
     },
   },
 
@@ -113,9 +113,10 @@ export const emiSlice = createSlice({
         state.isLoading = true;
         state.isCreate = false;
       })
-      .addCase(createEmi.fulfilled, (state) => {
+      .addCase(createEmi.fulfilled, (state, action: any) => {
         state.isLoading = false;
         state.isCreate = true;
+        state.message = action.payload.message;
       })
       .addCase(createEmi.rejected, (state) => {
         state.isLoading = false;
@@ -141,9 +142,10 @@ export const emiSlice = createSlice({
         state.isLoading = true;
         state.isUpdate = false;
       })
-      .addCase(updateEmi.fulfilled, (state) => {
+      .addCase(updateEmi.fulfilled, (state, action: any) => {
         state.isLoading = false;
         state.isUpdate = true;
+        state.message = action.payload.message;
       })
       .addCase(updateEmi.rejected, (state, action) => {
         state.isLoading = false;
