@@ -14,9 +14,8 @@ const options = [
   { label: "Gazi Home Appliance", value: "home_appliance" },
 ];
 
-const CreateMenu: FC = () => {
+const CreateMenu = () => {
   const { isCreate } = useAppSelector((state) => state.menu);
-  console.log(isCreate);
   const navigate = useNavigate();
   const [name, setName] = useState("");
   const [slug, setSlug] = useState("");
@@ -24,11 +23,8 @@ const CreateMenu: FC = () => {
 
   const dispatch = useAppDispatch();
 
-  const submitData = { name, slug, position };
-
-  const handleSubmit = (e: FormEvent<HTMLFormElement>) => {
-    e.preventDefault();
-    dispatch(createMenu(submitData));
+  const onSubmit = (data) => {
+    dispatch(createMenu(data));
   };
 
   useEffect(() => {
@@ -44,7 +40,7 @@ const CreateMenu: FC = () => {
     <div>
       <CardBody header="Create Menu" to="/setup/menus" text="remove" />
       <Display>
-        <form onSubmit={handleSubmit}>
+        <form onSubmit={handleSubmit(onSubmit)}>
           <Input
             htmlFor="Name"
             label="Menu Name"
