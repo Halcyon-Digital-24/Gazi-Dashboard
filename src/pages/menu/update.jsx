@@ -1,38 +1,56 @@
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import { useForm } from "react-hook-form";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 import { Button } from "../../components/button";
 import CardBody from "../../components/card-body";
 import Display from "../../components/display";
+import axios from "../../lib";
 import { useAppDispatch, useAppSelector } from "../../redux/hooks";
-import { createMenu, reset } from "../../redux/menus/menuSlice";
+import { reset, updateMenus } from "../../redux/menus/menuSlice";
 
-const CreateMenu = () => {
+const UpdateMenu = () => {
   const {
     register,
+    setValue,
     handleSubmit,
     formState: { errors },
   } = useForm();
-  const { isCreate } = useAppSelector((state) => state.menu);
+  const { isUpdate } = useAppSelector((state) => state.menu);
+  const { slug: menuSlug } = useParams();
   const navigate = useNavigate();
+
   const dispatch = useAppDispatch();
 
   const onSubmit = (data) => {
-    dispatch(createMenu(data));
+    dispatch(updateMenus({ menuData: data, id: menuSlug }));
   };
 
   useEffect(() => {
-    if (isCreate) {
+    if (isUpdate) {
       navigate("/setup/menus");
     }
     return () => {
       dispatch(reset());
     };
-  }, [isCreate, navigate, dispatch]);
+  }, [isUpdate, navigate, dispatch]);
+
+  useEffect(() => {
+    const fetchData = async () => {
+      try {
+        const res = await axios.get(`/menu/${menuSlug}`);
+        setValue("name", res.data.data.name);
+        setValue("slug", res.data.data.slug);
+        setValue("position", res.data.data.position);
+      } catch (error) {
+        console.log(error);
+      }
+    };
+    fetchData();
+  }, [menuSlug]);
 
   return (
     <div>
-      <CardBody header="Create Menu" to="/setup/menus" text="remove" />
+      <CardBody header="Update Menu" to="/setup/menus" text="remove" />
       <Display>
         <form onSubmit={handleSubmit(onSubmit)}>
           <div className="text">
@@ -92,11 +110,11 @@ const CreateMenu = () => {
             <p className="validation__error">{errors.position.message}</p>
           )}
 
-          <Button type="submit">Create</Button>
+          <Button type="submit">Update</Button>
         </form>
       </Display>
     </div>
   );
 };
 
-export default CreateMenu;
+export default UpdateMenu;
