@@ -66,6 +66,7 @@ const CreateCategory = () => {
                   type="text"
                   placeholder="Enter Title"
                   {...register("title", {
+                    trim: true,
                     required: "Title is required",
                     pattern: {
                       value: /\S/,

@@ -11,9 +11,12 @@ const UpdateVideo = () => {
   const { slug } = useParams();
 
   const navigate = useNavigate();
-  const { register, handleSubmit, setValue, formState: { errors }} = useForm();
-
-
+  const {
+    register,
+    handleSubmit,
+    setValue,
+    formState: { errors },
+  } = useForm();
 
   useEffect(() => {
     const fetchData = async () => {
@@ -31,11 +34,11 @@ const UpdateVideo = () => {
   const onSubmit = async (data) => {
     try {
       const response = await axios.patch(`/videos/${slug}`, data);
-      navigate('/videos');
+      navigate("/videos");
       toast.success(response.data.message);
     } catch (error) {
-      const errorMessage = error.response?.data?.message || 'Error saving data';
-    toast.error(errorMessage);
+      const errorMessage = error.response?.data?.message || "Error saving data";
+      toast.error(errorMessage);
     }
   };
 
@@ -45,25 +48,23 @@ const UpdateVideo = () => {
 
       <Display>
         <form onSubmit={handleSubmit(onSubmit)}>
-
-        <div className="text">
+          <div className="text">
             <label htmlFor="title">Video Title *</label>
             <input
               type="text"
               placeholder="video title"
               {...register("title", {
-                required: "Location is required",
+                required: "Title is required",
                 pattern: {
                   value: /\S/,
-                  message: "Enter a valid title"
-                }
+                  message: "Enter a valid title",
+                },
               })}
             />
             {errors.title && (
               <p className="validation__error">{errors.title.message}</p>
             )}
           </div>
-
 
           <div className="text">
             <label htmlFor="title">Video Embed URL *</label>
@@ -74,16 +75,14 @@ const UpdateVideo = () => {
                 required: "url is required",
                 pattern: {
                   value: /\S/,
-                  message: "Enter a valid url"
-                }
+                  message: "Enter a valid url",
+                },
               })}
             />
             {errors.url && (
               <p className="validation__error">{errors.url.message}</p>
             )}
           </div>
-
-
 
           <Button type="submit">Update</Button>
         </form>
