@@ -1,4 +1,5 @@
-import { ChangeEvent, FormEvent, useEffect, useState } from "react";
+import { useEffect, useState } from "react";
+import { useForm } from "react-hook-form";
 import { RxCross2 } from "react-icons/rx";
 import { toast } from "react-toastify";
 import { DateRangePicker } from "rsuite";
@@ -19,56 +20,59 @@ import "./create-product.scss";
 import { useNavigate } from "react-router-dom";
 import "rsuite/dist/rsuite.css";
 import { API_URL } from "../../constants";
-import { IAttributeResponse } from "../../interfaces/attribute";
 import axios from "../../lib";
 import AttributeSingle from "../attribute/attribute-single";
 
 // const animatedComponents = makeAnimated();
 
-const CreateProduct: React.FC = () => {
+const CreateProduct = () => {
+  const {
+    register,
+    handleSubmit,
+    setError,
+    formState: { errors },
+  } = useForm();
   const dispatch = useAppDispatch();
   const navigate = useNavigate();
   const { categories } = useAppSelector((state) => state.category);
-  const [campaignDate, setCampaignDate] = useState<[Date, Date] | null>(null);
+  const [campaignDate, setCampaignDate] = useState(null);
   const { isCreate, error, message, errorMessage, isError } = useAppSelector(
     (state) => state.product
   );
-  const [title, setTile] = useState<string>("");
+  const [title, setTile] = useState("");
   const [slug, setSlug] = useState("");
   const [description, setDescription] = useState("");
-  const [image, setImage] = useState<File | null>(null);
-  const [galleryImages, setGalleryImages] = useState<File[] | null>(null);
-  const [imageQuantities, setImageQuantities] = useState<number[]>([]);
-  const [category, setCategory] = useState<string>("");
+  const [image, setImage] = useState(null);
+  const [galleryImages, setGalleryImages] = useState(null);
+  const [imageQuantities, setImageQuantities] = useState([]);
+  const [category, setCategory] = useState("");
   const [quantity, setQuantity] = useState(0);
   const [regularPrice, setRegularPrice] = useState(0);
   const [discountPrice, setDiscountPrice] = useState(0);
-  const [discountType, setDiscountType] = useState<"percent" | "flat" | "">("");
+  const [discountType, setDiscountType] = useState("");
   const [discountSelectedAmount, setDiscountSelectedAmount] = useState(0);
   // const [discount, setDiscount] = useState(0);
   const [deliveryFee] = useState(0);
   const [videoUrl, setVideoUrl] = useState("");
   const [metaTitle, setMetaTitle] = useState("");
   const [metaDescription, setMetaDescription] = useState("");
-  const [status, setStatus] = useState<0 | 1>(1);
-  const [isSale, setIsSale] = useState<0 | 1>(0);
-  const [isFeature, setIsFeature] = useState<0 | 1>(0);
-  const [isNew, setIsNew] = useState<0 | 1>(0);
+  const [status, setStatus] = useState(1);
+  const [isSale, setIsSale] = useState(0);
+  const [isFeature, setIsFeature] = useState(0);
+  const [isNew, setIsNew] = useState(0);
   const [sortDesc, setSortDesc] = useState("");
   const [policy, setPolicy] = useState("");
   const [availability, setAvailability] = useState("");
   const [isVariant, setIsVariant] = useState(false);
-  const [attributes, setAttributes] = useState<any[]>([]);
-  const [selectedAttributes, setSelectedAttributes] = useState<any[]>([]);
+  const [attributes, setAttributes] = useState([]);
+  const [selectedAttributes, setSelectedAttributes] = useState([]);
 
   useEffect(() => {
     const fetchData = async () => {
       try {
-        const response = await axios.get<IAttributeResponse>(
-          `${API_URL}/attributes`
-        );
+        const response = await axios.get(`${API_URL}/attributes`);
         if (response?.status === 200) {
-          let tempAttributes: any[] = response?.data?.data?.rows;
+          let tempAttributes = response?.data?.data?.rows;
           tempAttributes =
             tempAttributes?.length > 0
               ? tempAttributes?.map((item) => {
@@ -84,19 +88,16 @@ const CreateProduct: React.FC = () => {
     fetchData();
   }, []);
 
-  const handleAddAttribute = (
-    attribute: string,
-    attributeValue: string | null = null
-  ) => {
+  const handleAddAttribute = (attribute, attributeValue = null) => {
     if (attributeValue) {
       setSelectedAttributes((prevState) =>
         prevState.map((item) => {
           if (item.name === attribute) {
-            const tempAttrVals: string[] =
+            const tempAttrVals =
               item.value.indexOf(",") > -1
                 ? item.value.split(",")
                 : [item.value];
-            const tempFilteredAttrVals: string[] = tempAttrVals.filter(
+            const tempFilteredAttrVals = tempAttrVals.filter(
               (val) => val !== attributeValue
             );
             let tempFilteredValsString = "";
@@ -136,10 +137,7 @@ const CreateProduct: React.FC = () => {
     }
   };
 
-  const handleRemoveAttribute = (
-    attribute: string,
-    attributeValue: string | null = null
-  ) => {
+  const handleRemoveAttribute = (attribute, attributeValue = null) => {
     if (attributeValue) {
       setSelectedAttributes((prevState) =>
         prevState.map((item) => {
@@ -149,7 +147,7 @@ const CreateProduct: React.FC = () => {
                 ? attributeValue
                 : `${item.value},${attributeValue}`;
             item.selectedValues = item.selectedValues.filter(
-              (val: string) => val !== attributeValue
+              (val) => val !== attributeValue
             );
           }
           return item;
@@ -169,7 +167,7 @@ const CreateProduct: React.FC = () => {
     }
   };
 
-  const handleImageChange = (e: ChangeEvent<HTMLInputElement>) => {
+  const handleImageChange = (e) => {
     if (e.target.files) {
       const file = e.target.files[0];
       setImage(file);
@@ -182,7 +180,7 @@ const CreateProduct: React.FC = () => {
       setGalleryImages(files);
     }
   }; */
-  const handleGalleryImageChange = (e: ChangeEvent<HTMLInputElement>) => {
+  const handleGalleryImageChange = (e) => {
     if (e.target.files) {
       const files = Array.from(e.target.files);
 
@@ -199,7 +197,7 @@ const CreateProduct: React.FC = () => {
     }
   };
 
-  const removeGalleryImage = (index: number) => {
+  const removeGalleryImage = (index) => {
     setGalleryImages((prevImages) => {
       if (prevImages) {
         const newImages = [...prevImages];
@@ -216,7 +214,7 @@ const CreateProduct: React.FC = () => {
     });
   };
 
-  const handleQuantityChange = (index: number, value: number) => {
+  const handleQuantityChange = (index, value) => {
     setImageQuantities((prevQuantities) => {
       const newQuantities = [...prevQuantities];
       newQuantities[index] = value;
@@ -233,9 +231,7 @@ const CreateProduct: React.FC = () => {
     }
   }; */
 
-  const handleProductSubmit = (e: FormEvent<HTMLFormElement>) => {
-    e.preventDefault();
-
+  const handleProductSubmit = () => {
     if (discountSelectedAmount && !discountType) {
       toast.error("Please select discount option");
       return;
@@ -282,7 +278,7 @@ const CreateProduct: React.FC = () => {
     formData.append("is_feature", isFeature.toString());
     formData.append("is_new", isNew.toString());
     if (isVariant) {
-      const tempSelAttri: any[] = [];
+      const tempSelAttri = [];
       selectedAttributes?.length > 0 &&
         selectedAttributes?.map((item) => {
           if (item?.selectedValues?.length > 0) {
@@ -333,31 +329,68 @@ const CreateProduct: React.FC = () => {
       dispatch(reset());
     };
   }, [dispatch]);
+  console.log(title, slug);
 
   return (
     <div className="create-product">
       <CardBody header="Create Product" to="/products" text="back" />
-      <form onSubmit={handleProductSubmit}>
+      <form onSubmit={handleSubmit(handleProductSubmit)}>
         <div className="row">
           <div className="col-md-8">
             <div className="left-body">
               <Display>
-                <Input
+                <div className="text">
+                  <label htmlFor="title">Product Title *</label>
+                  <input
+                    type="text"
+                    placeholder="Product title"
+                    onChange={(e) => console.log(e)}
+                    {...register("title", {
+                      required: "Title is required",
+                      pattern: {
+                        value: /\S/,
+                        message: "Enter a valid title",
+                      },
+                    })}
+                  />
+                  {errors.title && (
+                    <p className="validation__error">{errors.title.message}</p>
+                  )}
+                </div>
+                {/*   <Input
                   label="Product Title *"
                   placeholder="Enter Name"
                   onBlur={(e) => setTile(e.target.value)}
                   htmlFor="name"
                   required
                   errorMessage={error.title}
-                />
-                <Input
+                /> */}
+                <div className="text">
+                  <label htmlFor="title">Slug *</label>
+                  <input
+                    type="text"
+                    placeholder="Enter Slug"
+                    onChange={(e) => setSlug(e.target.value)}
+                    {...register("slug", {
+                      required: "Slug is required",
+                      pattern: {
+                        value: /^[a-z0-9]+(?:-[a-z0-9]+)*$/,
+                        message: "Enter a valid slug",
+                      },
+                    })}
+                  />
+                  {errors.slug && (
+                    <p className="validation__error">{errors.slug.message}</p>
+                  )}
+                </div>
+                {/*  <Input
                   label="Slug *"
                   placeholder="Enter Slug"
                   onBlur={(e) => setSlug(e.target.value)}
                   htmlFor="slug"
                   required
                   errorMessage={error.slug}
-                />
+                /> */}
               </Display>
 
               <Display>
@@ -406,7 +439,7 @@ const CreateProduct: React.FC = () => {
                   label="Gallery Images"
                   onChange={handleGalleryImageChange}
                   multiple
-                  required={(galleryImages?.length as number) <= 0}
+                  required={galleryImages?.length <= 0}
                 />
                 <div>
                   {galleryImages &&
@@ -480,7 +513,7 @@ const CreateProduct: React.FC = () => {
                 )}
               </Display>
               <Display>
-                <h5 className="product-title">Product Description</h5>
+                <h5 className="product-title">Product Description*</h5>
                 <div className="des-none">
                   <TextArea label="Description" value={description} required />
                 </div>
@@ -491,7 +524,7 @@ const CreateProduct: React.FC = () => {
                 {error.description && (
                   <p className="validation__error">{error.description}</p>
                 )}
-                <h5 className="product-title">Product Policy</h5>
+                <h5 className="product-title">Product Policy*</h5>
                 <div className="des-none">
                   <TextArea label="policy" value={policy} required />
                 </div>
@@ -534,9 +567,7 @@ const CreateProduct: React.FC = () => {
                   />
                   <div>
                     <Select
-                      onChange={(e) =>
-                        setDiscountType(e.target.value as "flat" | "percent")
-                      }
+                      onChange={(e) => setDiscountType(e.target.value)}
                       required={discountSelectedAmount ? true : false}
                     >
                       <option value="flat">Flat</option>

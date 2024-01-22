@@ -1,18 +1,18 @@
-import { FormEvent, useEffect, useRef, useState } from 'react';
-import { FaCheck } from 'react-icons/fa';
-import CardBody from '../../components/card-body';
-import Display from '../../components/display';
-import Input from '../../components/forms/text-input';
-import Select from '../../components/select';
-import './index.scss';
-import { Button } from '../../components/button';
-import { useAppDispatch, useAppSelector } from '../../redux/hooks';
-import { reset, updateCoupon } from '../../redux/coupon/couponSlice';
-import { getProducts } from '../../redux/products/product-slice';
-import { useNavigate, useParams } from 'react-router-dom';
-import { toast } from 'react-toastify';
-import axios from '../../lib';
-import { API_URL } from '../../constants';
+import { useEffect, useRef, useState } from "react";
+import { FaCheck } from "react-icons/fa";
+import CardBody from "../../components/card-body";
+import Display from "../../components/display";
+import Input from "../../components/forms/text-input";
+import Select from "../../components/select";
+import "./index.scss";
+import { Button } from "../../components/button";
+import { useAppDispatch, useAppSelector } from "../../redux/hooks";
+import { reset, updateCoupon } from "../../redux/coupon/couponSlice";
+import { getProducts } from "../../redux/products/product-slice";
+import { useNavigate, useParams } from "react-router-dom";
+import { toast } from "react-toastify";
+import axios from "../../lib";
+import { API_URL } from "../../constants";
 
 const UpdateCoupon = () => {
   const { slug } = useParams();
@@ -21,13 +21,13 @@ const UpdateCoupon = () => {
   const { isUpdate } = useAppSelector((state) => state.coupon);
   const [discountType, setDiscountType] = useState();
   const [coupons, setCoupons] = useState([]);
-  const [code, setCode] = useState('');
+  const [code, setCode] = useState("");
   const [discountPrice, setDiscountPrice] = useState(0);
-  const [totalCoupon, setTotalCoupon] = useState<number | string>(0);
-  const [date, setDate] = useState('');
+  const [totalCoupon, setTotalCoupon] = useState(0);
+  const [date, setDate] = useState("");
   const { products } = useAppSelector((state) => state.product);
-  const [search, setSearch] = useState('');
-  const areaRef = useRef<HTMLDivElement>(null);
+  const [search, setSearch] = useState("");
+  const areaRef = useRef(null);
   const [isFocus, setIsFocus] = useState(false);
 
   const addProduct = (id) => {
@@ -56,8 +56,8 @@ const UpdateCoupon = () => {
 
   useEffect(() => {
     if (isUpdate) {
-      toast.success('Coupon Create Successfully');
-      navigate('/coupons');
+      toast.success("Coupon Create Successfully");
+      navigate("/coupons");
     }
     return () => {
       dispatch(reset());
@@ -79,14 +79,14 @@ const UpdateCoupon = () => {
 
         // Set state values based on the fetched data
         setCode(data.code);
-        const productIdsArray = data.product_id.split(',').map(Number);
+        const productIdsArray = data.product_id.split(",").map(Number);
         setCoupons(productIdsArray);
         setDiscountPrice(data.discount_amount);
         setTotalCoupon(data.total_coupons);
         setDate(data.expire_date);
         setDiscountType(data.discount_type);
       } catch (error) {
-        console.error('Error fetching category data:', error);
+        console.error("Error fetching category data:", error);
       }
     };
 
@@ -101,16 +101,16 @@ const UpdateCoupon = () => {
       }
     };
 
-    document.addEventListener('mousedown', handleClickOutside);
+    document.addEventListener("mousedown", handleClickOutside);
 
     return () => {
-      document.removeEventListener('mousedown', handleClickOutside);
+      document.removeEventListener("mousedown", handleClickOutside);
     };
   }, [isFocus]);
 
   return (
     <div className="coupon">
-      <CardBody header="Create Coupon" to="/coupons" />
+      <CardBody header="Create Coupon" to="/coupons" text="Back" />
 
       <Display>
         <form onSubmit={handleSubmit}>
@@ -123,17 +123,15 @@ const UpdateCoupon = () => {
             required
           />
           <Select
-            onChange={(e) =>
-              setDiscountType(e.target.value)
-            }
+            onChange={(e) => setDiscountType(e.target.value)}
             htmlFor="Discount Type"
             required
           >
             <option>Select One</option>
-            <option value="flat" selected={discountType === 'flat'}>
+            <option value="flat" selected={discountType === "flat"}>
               Flat
             </option>
-            <option value="percent" selected={discountType === 'percent'}>
+            <option value="percent" selected={discountType === "percent"}>
               Percent
             </option>
           </Select>

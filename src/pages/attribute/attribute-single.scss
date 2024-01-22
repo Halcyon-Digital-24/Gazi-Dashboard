@@ -1,49 +1,49 @@
-.attribute-single{
-    width: 100%;
+.attribute-single {
+  // width: 100%;
+  display: flex;
+  justify-content: flex-start;
+  gap: 10px;
+  border: 1px solid gray;
+  padding: 10px;
+  margin-bottom: 10px;
+
+  .attribute-value-list {
+    &:hover {
+      cursor: pointer;
+    }
+  }
+
+  .attributes {
     display: flex;
     justify-content: flex-start;
     gap: 10px;
-    border: 1px solid gray;
-    padding: 10px;
-    margin-bottom: 10px;
+  }
 
-    .attribute-value-list{
-        &:hover{
-            cursor: pointer;
-        }
+  .attribute {
+    border: 1px solid green;
+    padding: 5px 10px;
+    font-family: "Open Sans", sans-serif;
+    font-size: 12px;
+    font-weight: bold;
+    color: green;
+    &:hover {
+      border: 1px solid red;
+      color: red;
+      cursor: pointer;
     }
+  }
 
-    .attributes{
-        display: flex;
-        justify-content: flex-start;
-        gap: 10px;
+  .attribute-value {
+    border: 1px solid rgb(236, 169, 25);
+    padding: 5px 10px;
+    font-family: "Open Sans", sans-serif;
+    font-size: 12px;
+    font-weight: bold;
+    color: rgb(236, 169, 25);
+    &:hover {
+      border: 1px solid red;
+      color: red;
+      cursor: pointer;
     }
-
-    .attribute{
-        border: 1px solid green;
-        padding: 5px 10px;
-        font-family: "Open Sans", sans-serif;
-        font-size: 12px;
-        font-weight: bold;
-        color: green;
-        &:hover{
-          border: 1px solid red;
-          color: red;
-          cursor: pointer;
-        }
-    }
-
-    .attribute-value{
-        border: 1px solid rgb(236, 169, 25);
-        padding: 5px 10px;
-        font-family: "Open Sans", sans-serif;
-        font-size: 12px;
-        font-weight: bold;
-        color: rgb(236, 169, 25);
-        &:hover{
-          border: 1px solid red;
-          color: red;
-          cursor: pointer;
-        }
-    }
+  }
 }
