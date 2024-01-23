@@ -114,10 +114,8 @@ const UpdatePage = () => {
                   />
                 )}
               />
-              {errors.description && (
-                <p className="validation__error">
-                  {errors.description.message}
-                </p>
+              {errors.content && (
+                <p className="validation__error">{errors.content.message}</p>
               )}
             </Display>
           </Column>
