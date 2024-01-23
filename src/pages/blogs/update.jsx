@@ -1,61 +1,80 @@
 import { useEffect } from "react";
-import { useForm, Controller } from "react-hook-form";
 import { Button } from "../../components/button";
 import CardBody from "../../components/card-body";
 import Display from "../../components/display";
 import Input from "../../components/forms/text-input";
-import Column from "../../components/table/column";
+import DescriptionInput from "../../components/description";
+import { useForm, Controller } from "react-hook-form";
+import "./index.scss";
+import { reset, updateBlog } from "../../redux/blogs/blogSlice";
 import { useAppDispatch, useAppSelector } from "../../redux/hooks";
-import {
-  createCategory,
-  getCategories,
-  reset,
-} from "../../redux/category/categorySlice";
+import Column from "../../components/table/column";
+import { useParams, useNavigate } from "react-router-dom";
+import axios from "../../lib";
 import { toast } from "react-toastify";
-import { useNavigate } from "react-router-dom";
 
-const CreateCategory = () => {
+const UpdateBlog = () => {
   const {
     register,
-    control,
     setError,
+    setValue,
+    control,
     handleSubmit,
     formState: { errors },
   } = useForm();
-  const { categories, isCreate, message, isError, error } = useAppSelector(
-    (state) => state.category
+  const { isUpdate, isError, error, errorMessage, message } = useAppSelector(
+    (state) => state.blogs
   );
+  const { slug } = useParams();
   const navigate = useNavigate();
   const dispatch = useAppDispatch();
 
-  const onSubmit = (data) => {
+  const onSubmit = async (data) => {
     const formData = new FormData();
+
     Object.entries(data).forEach(([key, value]) => {
       formData.append(key, value);
     });
-
-    dispatch(createCategory(formData));
+    dispatch(updateBlog({ id: slug, blogData: formData }));
   };
 
   useEffect(() => {
-    if (isCreate) {
+    if (isUpdate) {
       toast.success(`${message}`);
-      navigate("/category");
+      navigate("/blogs");
     }
     if (isError) {
-      setError("slug", { type: "server", message: error.slug });
+      setError("slug", { type: "validate", message: error.slug });
+      toast.error(`${errorMessage}`);
     }
     return () => {
       dispatch(reset());
     };
-  }, [isCreate, dispatch, message, navigate, isError]);
+  }, [isUpdate, dispatch, message, navigate, isError]);
 
   useEffect(() => {
-    dispatch(getCategories({ page: 1, limit: 100 }));
-  }, [dispatch]);
+    const fetchData = async () => {
+      try {
+        const response = await axios.get(`/blogs/${slug}`);
+        const data = response.data.data;
+        // Set state values based on the fetched data
+        setValue("title", data.title);
+        setValue("slug", data.slug);
+        setValue("description", data.description);
+        setValue("image", data.image);
+        setValue("meta_description", data.meta_description);
+        setValue("meta_title", data.meta_title);
+      } catch (error) {
+        console.error("Error fetching category data:", error);
+      }
+    };
+
+    fetchData();
+  }, [slug]);
+
   return (
     <div>
-      <CardBody header="Create Category" to="/category" text="back" />
+      <CardBody header="Create Blog" to="/blogs" text="back" />
       <Display>
         <form onSubmit={handleSubmit(onSubmit)}>
           <div className="row">
@@ -82,9 +101,10 @@ const CreateCategory = () => {
                 <label htmlFor="name">Slug *</label>
                 <input
                   type="text"
-                  placeholder="Enter Slug *"
+                  placeholder="slug"
                   {...register("slug", {
-                    required: "Slug is required",
+                    trim: true,
+                    required: "slug is required",
                     pattern: {
                       value: /\S/,
                       message: "Enter a valid slug",
@@ -95,53 +115,14 @@ const CreateCategory = () => {
                   <p className="validation__error">{errors.slug.message}</p>
                 )}
               </div>
-              <div className="text">
-                <label htmlFor="order_id">Position No</label>
-                <input
-                  type="text"
-                  placeholder="Enter Position Number"
-                  {...register("order_id", {
-                    pattern: {
-                      value: /^[0-9]+$/,
-                      message: "Enter a valid position number (numeric only)",
-                    },
-                  })}
-                />
-                {errors.order_id && (
-                  <p className="validation__error">{errors.order_id.message}</p>
-                )}
-              </div>
-              <label className="label" htmlFor="select">
-                Parent Category
-              </label>
-              <div className="select-wrapper">
-                <select
-                  id="select"
-                  className="select"
-                  {...register("parent_category")}
-                  htmlFor="Choose Parent category"
-                  name="parent_category"
-                >
-                  <option value="">Select Parent Category</option>
-                  {categories.map((category, index) => (
-                    <option key={index} value={category.slug}>
-                      {category.title}
-                    </option>
-                  ))}
-                </select>
-              </div>
 
-              {errors.parent_category && (
-                <p className="validation__error">
-                  {errors.parent_category.message}
-                </p>
-              )}
               <label className="label" htmlFor="select">
-                Choose Explore Image
+                Image *
               </label>
               <Controller
                 control={control}
                 name={"image"}
+                rules={{ required: "image is required" }}
                 render={({ field: { value, onChange, ...field } }) => {
                   return (
                     <Input
@@ -159,22 +140,34 @@ const CreateCategory = () => {
               {errors.image && (
                 <p className="validation__error">{errors.image.message}</p>
               )}
-              {/*   <FileInput
-                label="Set Image"
-                placeholder="Choose an Image"
-                onChange={handleImageChange}
-              /> */}
+              <Controller
+                name="description"
+                rules={{ required: "Description is required" }}
+                control={control} // Set your default value if needed
+                render={({ field }) => (
+                  <DescriptionInput
+                    value={field.value}
+                    setValue={field.onChange}
+                  />
+                )}
+              />
+              {errors.description && (
+                <p className="validation__error">
+                  {errors.description.message}
+                </p>
+              )}
             </Column>
             <Column className="col-md-4">
               <div className="text">
                 <label htmlFor="meta_title">Meta Title</label>
                 <input
                   type="text"
-                  placeholder="Enter Position Number"
+                  placeholder="Meta title"
                   {...register("meta_title", {
+                    trim: true,
                     pattern: {
                       value: /\S/,
-                      message: "Enter Valid Meta title",
+                      message: "Enter a Valid Meta title",
                     },
                   })}
                 />
@@ -184,16 +177,12 @@ const CreateCategory = () => {
                   </p>
                 )}
               </div>
-              {/*   <Input
-                name="meta_title"
-                placeholder="Meta Title"
-                htmlFor="meta-title"
-                errorMessage={error.meta_title}
-              /> */}
+
               <div className="textarea">
                 <label htmlFor="textarea">Meta Description</label>
                 <textarea
                   {...register("meta_description", {
+                    trim: true,
                     pattern: {
                       value: /\S/,
                       message: "Enter Valid Meta Description",
@@ -208,19 +197,13 @@ const CreateCategory = () => {
                   </p>
                 )}
               </div>
-              {/*    <TextArea
-                name="meta_description"
-                placeholder="Meta Description"
-              /> */}
             </Column>
           </div>
-          <div className="text-right">
-            <Button type="submit">Create</Button>
-          </div>
+          <Button>Update</Button>
         </form>
       </Display>
     </div>
   );
 };
 
-export default CreateCategory;
+export default UpdateBlog;
