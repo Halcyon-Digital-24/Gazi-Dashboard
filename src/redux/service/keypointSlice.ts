@@ -1,7 +1,7 @@
-import { createAsyncThunk, createSlice } from '@reduxjs/toolkit';
-import axios from 'axios';
-import { Ikeypoint } from '../../interfaces/keypoints';
-import keypointService from './keypointService';
+import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
+import axios from "axios";
+import { Ikeypoint } from "../../interfaces/keypoints";
+import keypointService from "./keypointService";
 
 interface IState {
   services: Ikeypoint[];
@@ -24,45 +24,45 @@ const initialState: IState = {
   isUpdate: false,
   isDelete: false,
   isLoading: false,
-  message: '',
-  errorMessage: '',
+  message: "",
+  errorMessage: "",
 };
 
 // Get user products
 export const createKeypont = createAsyncThunk(
-  'service/createKeypont',
+  "service/createKeypont",
   async (data: FormData, thunkAPI) => {
     try {
       return await keypointService.createKeypont(data);
     } catch (error) {
       if (axios.isAxiosError(error)) {
-        const message = error.response?.data.message || 'An error occurred';
+        const message = error.response?.data.message || "An error occurred";
         return thunkAPI.rejectWithValue(message);
       } else {
-        return thunkAPI.rejectWithValue('An error occurred');
+        return thunkAPI.rejectWithValue("An error occurred");
       }
     }
   }
 );
 // Get Emi's
 export const getKeypoints = createAsyncThunk(
-  'service/getKeypoint',
+  "service/getKeypoint",
   async ({ page, limit }: { [key: string]: number }, thunkAPI) => {
     try {
       return await keypointService.getKeypoints({ page, limit });
     } catch (error) {
       if (axios.isAxiosError(error)) {
-        const message = error.response?.data.message || 'An error occurred';
+        const message = error.response?.data.message || "An error occurred";
         return thunkAPI.rejectWithValue(message);
       } else {
-        return thunkAPI.rejectWithValue('An error occurred');
+        return thunkAPI.rejectWithValue("An error occurred");
       }
     }
   }
 );
 
 export const updateKeypoint = createAsyncThunk(
-  'service/update',
+  "service/update",
   async (
     { id, updateData }: { id: number | string; updateData: FormData },
     thunkAPI
@@ -71,41 +71,43 @@ export const updateKeypoint = createAsyncThunk(
       return await keypointService.updateKeypoint(id, updateData);
     } catch (error) {
       if (axios.isAxiosError(error)) {
-        const message = error.response?.data.message || 'An error occurred';
+        const message = error.response?.data.message || "An error occurred";
         return thunkAPI.rejectWithValue(message);
       } else {
-        return thunkAPI.rejectWithValue('An error occurred');
+        return thunkAPI.rejectWithValue("An error occurred");
       }
     }
   }
 );
 
 export const deleteKeypoint = createAsyncThunk(
-  'service/delete',
+  "service/delete",
   async (ProductId: number, thunkAPI) => {
     try {
       return await keypointService.deleteKeypoint(ProductId);
     } catch (error) {
       if (axios.isAxiosError(error)) {
-        const message = error.response?.data.message || 'An error occurred';
+        const message = error.response?.data.message || "An error occurred";
         return thunkAPI.rejectWithValue(message);
       } else {
-        return thunkAPI.rejectWithValue('An error occurred');
+        return thunkAPI.rejectWithValue("An error occurred");
       }
     }
   }
 );
 
 export const serviceslice = createSlice({
-  name: 'service',
+  name: "service",
   initialState,
   reducers: {
     reset: (state) => {
       state.isCreate = false;
+      state.isUpdate = false;
       state.isLoading = false;
       state.isSuccess = false;
       state.isError = false;
-      state.message = '';
+      state.message = "";
+      state.errorMessage = "";
     },
   },
 
@@ -143,9 +145,10 @@ export const serviceslice = createSlice({
         state.isLoading = true;
         state.isUpdate = false;
       })
-      .addCase(updateKeypoint.fulfilled, (state) => {
+      .addCase(updateKeypoint.fulfilled, (state, action) => {
         state.isLoading = false;
         state.isUpdate = true;
+        state.message = action.payload.message;
       })
       .addCase(updateKeypoint.rejected, (state, action) => {
         state.isLoading = false;

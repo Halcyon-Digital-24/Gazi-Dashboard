@@ -17,15 +17,21 @@ import {
   updateBlog,
 } from "../../redux/blogs/blogSlice";
 import { useAppDispatch, useAppSelector } from "../../redux/hooks";
+import { toast } from "react-toastify";
 
 const Blogs: React.FC = () => {
   const [displayItem, setDisplayItem] = useState(10);
-  // const [selectedBlog, setSelectedBlog] = useState<number[]>([]);
   const [pageNumber, setPageNumber] = useState<number>(1);
   const dispatch = useAppDispatch();
-  const { blogs, totalCount, isUpdate } = useAppSelector(
-    (state) => state.blogs
-  );
+  const {
+    blogs,
+    totalCount,
+    isUpdate,
+    isDelete,
+    errorMessage,
+    isError,
+    message,
+  } = useAppSelector((state) => state.blogs);
 
   const totalPage = Math.ceil(totalCount / displayItem);
 
@@ -41,35 +47,26 @@ const Blogs: React.FC = () => {
   const handleDeleteBlog = (blogId: number) => {
     dispatch(deleteBlog(blogId));
   };
-  /* useEffect(() => {
-    if (isUpdate) {
-      toast.success('Blog updated successfully');
+  useEffect(() => {
+    if (isDelete) {
+      toast.success(`${message}`);
     }
+    if (isError) {
+      toast.error(`${errorMessage}`);
+    }
+
     return () => {
       dispatch(reset());
     };
-  }, [isUpdate, dispatch]); */
+  }, [dispatch, isDelete, errorMessage]);
 
   useEffect(() => {
     dispatch(getBlogs({ page: pageNumber, limit: displayItem }));
-    window.scrollTo(0, 0);
     return () => {
       dispatch(reset());
     };
-  }, [dispatch, pageNumber, displayItem, isUpdate]);
+  }, [dispatch, pageNumber, displayItem, isUpdate, isDelete]);
 
-  /*   const handleSelectedBlog = (blogId: number) => {
-    const selectedBlogSet = new Set(selectedBlog);
-
-    if (selectedBlogSet.has(blogId)) {
-      selectedBlogSet.delete(blogId);
-    } else {
-      selectedBlogSet.add(blogId);
-    }
-
-    setSelectedBlog(Array.from(selectedBlogSet));
-  };
- */
   const handlePageChange = (selectedItem: { selected: number }) => {
     setPageNumber(selectedItem.selected + 1);
   };

@@ -39,17 +39,14 @@ const getPages = async (filter: {
   return data;
 };
 
-const updatePages = async (pageData: Partial<IPages>) => {
-  const { data } = await axios.patch(
-    `${API_URL}/pages/${pageData.id}`,
-    pageData
-  );
-  return data.data;
+const updatePages = async (id: number, pageData: Partial<IPages>) => {
+  const { data } = await axios.patch(`${API_URL}/pages/${id}`, pageData);
+  return data;
 };
 
 const deletePages = async (pageId: number | string) => {
   const { data } = await axios.delete(`${API_URL}/pages/?ids=[${pageId}]`);
-  return data.data;
+  return data;
 };
 
 const faqService = {

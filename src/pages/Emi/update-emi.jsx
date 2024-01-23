@@ -92,7 +92,7 @@ const UpdateEmi = () => {
                   trim: true,
                   pattern: {
                     value: /^[0-9]+$/,
-                    message: "Enter a valid rate (numeric only)",
+                    message: "Enter a valid rate (number only)",
                   },
                 })}
               />
@@ -111,7 +111,7 @@ const UpdateEmi = () => {
                   trim: true,
                   pattern: {
                     value: /^[0-9]+$/,
-                    message: "Enter a valid rate (numeric only)",
+                    message: "Enter a valid rate (number only)",
                   },
                 })}
               />
@@ -130,7 +130,7 @@ const UpdateEmi = () => {
                   trim: true,
                   pattern: {
                     value: /^[0-9]+$/,
-                    message: "Enter a valid rate (numeric only)",
+                    message: "Enter a valid rate (number only)",
                   },
                 })}
               />
@@ -149,7 +149,7 @@ const UpdateEmi = () => {
                   trim: true,
                   pattern: {
                     value: /^[0-9]+$/,
-                    message: "Enter a valid rate (numeric only)",
+                    message: "Enter a valid rate (number only)",
                   },
                 })}
               />
@@ -170,7 +170,7 @@ const UpdateEmi = () => {
                   trim: true,
                   pattern: {
                     value: /^[0-9]+$/,
-                    message: "Enter a valid rate (numeric only)",
+                    message: "Enter a valid rate (number only)",
                   },
                 })}
               />
@@ -187,7 +187,7 @@ const UpdateEmi = () => {
                   trim: true,
                   pattern: {
                     value: /^[0-9]+$/,
-                    message: "Enter a valid rate (numeric only)",
+                    message: "Enter a valid rate (number only)",
                   },
                 })}
               />
@@ -206,7 +206,7 @@ const UpdateEmi = () => {
                   trim: true,
                   pattern: {
                     value: /^[0-9]+$/,
-                    message: "Enter a valid rate (numeric only)",
+                    message: "Enter a valid rate (number only)",
                   },
                 })}
               />
@@ -225,7 +225,7 @@ const UpdateEmi = () => {
                   trim: true,
                   pattern: {
                     value: /^[0-9]+$/,
-                    message: "Enter a valid rate (numeric only)",
+                    message: "Enter a valid rate (number only)",
                   },
                 })}
               />

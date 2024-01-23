@@ -1,6 +1,6 @@
-import axios from 'axios';
-import { API_URL } from '../../constants';
-import { IKeypointResponse } from '../../interfaces/keypoints';
+import axios from "axios";
+import { API_URL } from "../../constants";
+import { IKeypointResponse } from "../../interfaces/keypoints";
 
 // get all keypoints
 const getKeypoints = async (filter: {
@@ -13,13 +13,12 @@ const getKeypoints = async (filter: {
         ([key, value]) =>
           `${encodeURIComponent(key)}=${encodeURIComponent(value)}`
       )
-      .join('&');
+      .join("&");
 
     // Add query string to the URL
     url += `?${queryString}`;
   }
   const { data } = await axios.get(url);
-  console.log(data);
 
   return data;
 };

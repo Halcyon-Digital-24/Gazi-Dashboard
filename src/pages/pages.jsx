@@ -27,7 +27,6 @@ import Shipping from "./shipping";
 import CreateShipping from "./shipping/create";
 import UpdateShipping from "./shipping/update";
 
-
 import Notification from "./notification";
 import CreateNotification from "./notification/create";
 import AllOrders from "./orders";
@@ -52,16 +51,16 @@ import Reviews from "./reviews";
 import SetupPage from "./setup";
 import CreateMenu from "./menu/create";
 import CreatePage from "./setup/create-pages";
-import CreateService from "./setup/create-service";
+import CreateService from "./service/create-service";
 import CreateSlider from "./setup/create-slider";
 import Menus from "./menu";
 import CommonPages from "./setup/pages";
-import Services from "./setup/services";
+import Services from "./service/services";
 import Settings from "./setup/settings";
 import Sliders from "./setup/sliders";
 import UpdateMenu from "./menu/update";
 import UpdatePage from "./setup/update-pages";
-import UpdateService from "./setup/updateService";
+import UpdateService from "./service/updateService";
 import UpdateSlider from "./setup/updateSlider";
 import Staff from "./staff";
 import CreateProfile from "./staff/create";

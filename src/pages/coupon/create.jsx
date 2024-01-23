@@ -1,31 +1,31 @@
-import { FormEvent, useEffect, useRef, useState } from 'react';
-import { FaCheck } from 'react-icons/fa';
-import CardBody from '../../components/card-body';
-import Display from '../../components/display';
-import Input from '../../components/forms/text-input';
-import Select from '../../components/select';
-import './index.scss';
-import { Button } from '../../components/button';
-import { useAppDispatch, useAppSelector } from '../../redux/hooks';
-import { createCoupon, reset } from '../../redux/coupon/couponSlice';
-import { getProducts } from '../../redux/products/product-slice';
-import { useNavigate } from 'react-router-dom';
-import { toast } from 'react-toastify';
+import { useEffect, useRef, useState } from "react";
+import { FaCheck } from "react-icons/fa";
+import CardBody from "../../components/card-body";
+import Display from "../../components/display";
+import Input from "../../components/forms/text-input";
+import Select from "../../components/select";
+import "./index.scss";
+import { Button } from "../../components/button";
+import { useAppDispatch, useAppSelector } from "../../redux/hooks";
+import { createCoupon, reset } from "../../redux/coupon/couponSlice";
+import { getProducts } from "../../redux/products/product-slice";
+import { useNavigate } from "react-router-dom";
+import { toast } from "react-toastify";
 
 const CreateCoupon = () => {
   const dispatch = useAppDispatch();
   const navigate = useNavigate();
   const { isCreate } = useAppSelector((state) => state.coupon);
-  const [couponType, setCouponType] = useState('');
+  const [couponType, setCouponType] = useState("");
   const [discountType, setDiscountType] = useState();
   const [coupons, setCoupons] = useState([]);
-  const [code, setCode] = useState('');
+  const [code, setCode] = useState("");
   const [discountPrice, setDiscountPrice] = useState(0);
   const [totalCoupon, setTotalCoupon] = useState(0);
-  const [date, setDate] = useState('');
+  const [date, setDate] = useState("");
   const { products } = useAppSelector((state) => state.product);
-  const [search, setSearch] = useState('');
-  const areaRef = useRef<HTMLDivElement>(null);
+  const [search, setSearch] = useState("");
+  const areaRef = useRef < HTMLDivElement > null;
   const [isFocus, setIsFocus] = useState(false);
 
   const addProduct = (id) => {
@@ -54,15 +54,15 @@ const CreateCoupon = () => {
 
   useEffect(() => {
     if (isCreate) {
-      toast.success('Coupon Create Successfully');
-      navigate('/coupons');
+      toast.success("Coupon Create Successfully");
+      navigate("/coupons");
     }
     return () => {
       dispatch(reset());
     };
   }, [isCreate, navigate, dispatch]);
   useEffect(() => {
-    dispatch(getProducts({ page: 1, limit: 50, search: search }));
+    dispatch(getProducts({ page: 1, limit: 100, search: search }));
 
     return () => {
       dispatch(reset());
@@ -77,10 +77,10 @@ const CreateCoupon = () => {
       }
     };
 
-    document.addEventListener('mousedown', handleClickOutside);
+    document.addEventListener("mousedown", handleClickOutside);
 
     return () => {
-      document.removeEventListener('mousedown', handleClickOutside);
+      document.removeEventListener("mousedown", handleClickOutside);
     };
   }, [isFocus]);
 
@@ -94,7 +94,7 @@ const CreateCoupon = () => {
           <option value="product">For Products</option>
         </Select>
       </Display>
-      {couponType === 'product' && (
+      {couponType === "product" && (
         <Display>
           <form onSubmit={handleSubmit}>
             <Input
@@ -105,9 +105,7 @@ const CreateCoupon = () => {
               required
             />
             <Select
-              onChange={(e) =>
-                setDiscountType(e.target.value)
-              }
+              onChange={(e) => setDiscountType(e.target.value)}
               htmlFor="Discount Type"
               required
             >
@@ -168,7 +166,7 @@ const CreateCoupon = () => {
           </form>
         </Display>
       )}
-      {couponType === 'order' && (
+      {couponType === "order" && (
         <Display>
           <form onSubmit={handleSubmit}>
             <Input
@@ -179,9 +177,7 @@ const CreateCoupon = () => {
               required
             />
             <Select
-              onChange={(e) =>
-                setDiscountType(e.target.value)
-              }
+              onChange={(e) => setDiscountType(e.target.value)}
               htmlFor="Discount Type"
               required
             >

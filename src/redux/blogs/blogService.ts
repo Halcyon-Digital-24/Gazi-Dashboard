@@ -1,5 +1,5 @@
-import axios from '../../lib';
-import { BlogData, ResponseBlogData } from '../../interfaces/blog';
+import axios from "../../lib";
+import { BlogData, ResponseBlogData } from "../../interfaces/blog";
 
 export interface ICreateResponse {
   message: string;
@@ -43,12 +43,12 @@ const updateBlog = async (
   blogData: FormData | Partial<BlogData>
 ) => {
   const { data } = await axios.patch(`/blogs/${id}`, blogData);
-  return data.data;
+  return data;
 };
 
 const deleteBlog = async (blogId: number | string) => {
   const { data } = await axios.delete(`/blogs/?ids=[${blogId}]`);
-  return data.data;
+  return data;
 };
 
 const blogService = {

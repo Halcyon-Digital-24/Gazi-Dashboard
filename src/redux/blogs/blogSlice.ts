@@ -1,7 +1,7 @@
-import { createSlice, createAsyncThunk } from '@reduxjs/toolkit';
-import blogService, { ICreateResponse } from './blogService';
-import { BlogData } from '../../interfaces/blog';
-import { RootState } from '../store';
+import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
+import blogService, { ICreateResponse } from "./blogService";
+import { BlogData } from "../../interfaces/blog";
+import { RootState } from "../store";
 
 interface IBlogResponse {
   blogs: BlogData[];
@@ -13,6 +13,7 @@ interface IBlogResponse {
   isUpdate: boolean;
   isDelete: boolean;
   isLoading: boolean;
+  error: any;
   message: string | unknown;
   errorMessage: string | unknown;
 }
@@ -20,13 +21,13 @@ interface IBlogResponse {
 const initialState: IBlogResponse = {
   blogs: [],
   singleBlog: {
-    title: '',
+    title: "",
     image: null,
-    description: '',
+    description: "",
     is_visible: true,
-    meta_title: '',
-    meta_description: '',
-    slug: '',
+    meta_title: "",
+    meta_description: "",
+    slug: "",
   },
   totalCount: 0,
   isError: false,
@@ -35,51 +36,50 @@ const initialState: IBlogResponse = {
   isUpdate: false,
   isDelete: false,
   isLoading: false,
-  message: '',
-  errorMessage: '',
+  error: {},
+  message: "",
+  errorMessage: "",
 };
 
 // Create new Blog
 export const createBlog = createAsyncThunk(
-  'blogs/create',
+  "blogs/create",
   async (blogData: FormData, thunkAPI) => {
     try {
       return await blogService.createNewBlog(blogData);
     } catch (error) {
-      const message =
-        error instanceof Error ? error.message : 'An error occurred';
-      return thunkAPI.rejectWithValue(message);
+      return thunkAPI.rejectWithValue(error);
     }
   }
 );
 export const singleBlog = createAsyncThunk(
-  'blogs/single',
+  "blogs/single",
   async (blogId: number, thunkAPI) => {
     try {
       return await blogService.singleBlog(blogId);
     } catch (error) {
       const message =
-        error instanceof Error ? error.message : 'An error occurred';
+        error instanceof Error ? error.message : "An error occurred";
       return thunkAPI.rejectWithValue(message);
     }
   }
 );
 
 export const getBlogs = createAsyncThunk(
-  'blogs/getAll',
+  "blogs/getAll",
   async ({ page, limit }: { page: number; limit: number }, thunkAPI) => {
     try {
       return await blogService.getBlogs({ page, limit });
     } catch (error) {
       const message =
-        error instanceof Error ? error.message : 'An error occurred';
+        error instanceof Error ? error.message : "An error occurred";
       return thunkAPI.rejectWithValue(message);
     }
   }
 );
 
 export const updateBlog = createAsyncThunk(
-  'blogs/update',
+  "blogs/update",
   async (
     { id, blogData }: { id: number; blogData: FormData | Partial<BlogData> },
     thunkAPI
@@ -87,27 +87,25 @@ export const updateBlog = createAsyncThunk(
     try {
       return await blogService.updateBlog(id, blogData);
     } catch (error) {
-      const message =
-        error instanceof Error ? error.message : 'An error occurred';
-      return thunkAPI.rejectWithValue(message);
+      return thunkAPI.rejectWithValue(error);
     }
   }
 );
 export const deleteBlog = createAsyncThunk(
-  'blogs/delete',
+  "blogs/delete",
   async (blogId: number | string, thunkAPI) => {
     try {
       return await blogService.deleteBlog(blogId);
     } catch (error) {
       const message =
-        error instanceof Error ? error.message : 'An error occurred';
+        error instanceof Error ? error.message : "An error occurred";
       return thunkAPI.rejectWithValue(message);
     }
   }
 );
 
 export const blogSlice = createSlice({
-  name: 'Blog',
+  name: "Blog",
   initialState,
   reducers: {
     reset: () => initialState,
@@ -123,12 +121,12 @@ export const blogSlice = createSlice({
         state.isCreate = true;
         state.message = (action.payload as ICreateResponse).message;
       })
-      .addCase(createBlog.rejected, (state, action) => {
+      .addCase(createBlog.rejected, (state, action: any) => {
         state.isLoading = false;
         state.isLoading = false;
         state.isError = true;
-        console.log(action.payload);
-        state.errorMessage = (action.payload as ICreateResponse).message;
+        state.errorMessage = action?.payload?.response?.data?.message;
+        state.error = action?.payload?.response?.data?.errors;
       })
       /* TODO: GET BLOG DATA SET */
       .addCase(getBlogs.pending, (state) => {
@@ -144,47 +142,37 @@ export const blogSlice = createSlice({
         state.isLoading = false;
         state.message = action.payload;
       })
-      /* TODO: SINGLE BLOG */
-      .addCase(singleBlog.pending, (state) => {
-        state.isLoading = true;
-        state.isSuccess = false;
-      })
-      .addCase(singleBlog.fulfilled, (state, action) => {
-        state.isLoading = false;
-        state.isSuccess = true;
-        state.singleBlog = action.payload;
-      })
-      .addCase(singleBlog.rejected, (state, action) => {
-        state.isLoading = false;
-        state.isError = true;
-        state.message = action.payload;
-      })
+
       /* TODO: UPDATE BLOG DATA SET */
       .addCase(updateBlog.pending, (state) => {
         state.isUpdate = false;
       })
-      .addCase(updateBlog.fulfilled, (state) => {
+      .addCase(updateBlog.fulfilled, (state, action) => {
         state.isLoading = false;
         state.isUpdate = true;
+        state.message = action.payload.message;
       })
-      .addCase(updateBlog.rejected, (state, action) => {
+      .addCase(updateBlog.rejected, (state, action: any) => {
         state.isLoading = false;
         state.isError = true;
-        state.message = action.payload;
+        state.errorMessage = action?.payload?.response?.data?.message;
+        state.error = action?.payload?.response?.data?.errors;
       })
       /* TODO: DELETE BLOG DATA SET */
       .addCase(deleteBlog.pending, (state) => {
         state.isLoading = true;
         state.isDelete = false;
       })
-      .addCase(deleteBlog.fulfilled, (state) => {
+      .addCase(deleteBlog.fulfilled, (state, action) => {
         state.isLoading = false;
         state.isDelete = true;
+        state.message = action.payload.message;
       })
-      .addCase(deleteBlog.rejected, (state, action) => {
+      .addCase(deleteBlog.rejected, (state, action: any) => {
         state.isLoading = false;
         state.isError = true;
-        state.message = action.payload;
+        state.errorMessage = action?.payload?.response?.data?.message;
+        state.error = action?.payload?.response?.data?.errors;
       });
   },
 });
