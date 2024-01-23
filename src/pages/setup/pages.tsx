@@ -8,13 +8,13 @@ import Pagination from "../../components/pagination";
 import Column from "../../components/table/column";
 import Row from "../../components/table/row";
 import { useAppDispatch, useAppSelector } from "../../redux/hooks";
-import { deletePages, getPages } from "../../redux/pages/pageSlice";
+import { deletePages, getPages, reset } from "../../redux/pages/pageSlice";
+import { toast } from "react-toastify";
 
 const CommonPages: React.FC = () => {
   const dispatch = useAppDispatch();
-  const { pages, isDelete, totalCount } = useAppSelector(
-    (state) => state.pages
-  );
+  const { pages, isDelete, totalCount, isError, errorMessage, message } =
+    useAppSelector((state) => state.pages);
   const [pageNumber, setPageNumber] = useState<number>(1);
 
   const handlePageChange = (selectedItem: { selected: number }) => {
@@ -24,6 +24,18 @@ const CommonPages: React.FC = () => {
   const handlePageDelete = (pageNumber: number) => {
     dispatch(deletePages(pageNumber));
   };
+  useEffect(() => {
+    if (isDelete) {
+      toast.success(`${message}`);
+    }
+    if (isError) {
+      toast.error(`${errorMessage}`);
+    }
+
+    return () => {
+      dispatch(reset());
+    };
+  }, [dispatch, isDelete, errorMessage, isError]);
 
   useEffect(() => {
     dispatch(getPages({ page: pageNumber }));

@@ -122,8 +122,8 @@ export const categorySlice = createSlice({
       .addCase(getCategories.rejected, (state, action: any) => {
         state.isLoading = false;
         state.isError = true;
-        state.message = action.payload;
         state.errorMessage = action?.payload?.response?.data?.message;
+        state.error = action?.payload?.response?.data?.errors;
       })
       /* TODO: UPDATE CATEGORY DATA SET */
       .addCase(updateCategory.pending, (state) => {
