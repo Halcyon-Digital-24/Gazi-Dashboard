@@ -184,12 +184,6 @@ const CreateCategory = () => {
                   </p>
                 )}
               </div>
-              {/*   <Input
-                name="meta_title"
-                placeholder="Meta Title"
-                htmlFor="meta-title"
-                errorMessage={error.meta_title}
-              /> */}
               <div className="textarea">
                 <label htmlFor="textarea">Meta Description</label>
                 <textarea
@@ -208,10 +202,6 @@ const CreateCategory = () => {
                   </p>
                 )}
               </div>
-              {/*    <TextArea
-                name="meta_description"
-                placeholder="Meta Description"
-              /> */}
             </Column>
           </div>
           <div className="text-right">
