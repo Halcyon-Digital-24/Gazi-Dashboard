@@ -25,21 +25,11 @@ import { useAppDispatch, useAppSelector } from "../../redux/hooks";
 import { getSettings, reset } from "../../redux/settings/settingSlice";
 import "./index.scss";
 
-const initialState = {
-  meta_title: "",
-  meta_description: "",
-  mobile_number: "",
-  office_time: "",
-  special_product_link: "",
-  special_product_photo: null,
-};
-
 const SetupPage = () => {
   const {
     register,
     control,
     setValue,
-    setError,
     handleSubmit,
     formState: { errors },
   } = useForm();
