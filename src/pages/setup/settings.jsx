@@ -1,18 +1,11 @@
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import { toast } from "react-toastify";
 import { Button } from "../../components/button";
 import Display from "../../components/display";
-import Input from "../../components/forms/text-input";
-import TextArea from "../../components/forms/textarea";
 import Column from "../../components/table/column";
 import Row from "../../components/table/row";
-import { useForm, Controller } from "react-hook-form";
-import { useAppDispatch, useAppSelector } from "../../redux/hooks";
-import {
-  getSettings,
-  reset,
-  updateSettings,
-} from "../../redux/settings/settingSlice";
+import { useForm } from "react-hook-form";
+import axios from "../../lib";
 import "./settings.scss";
 
 const Settings = () => {
@@ -20,27 +13,48 @@ const Settings = () => {
     register,
     control,
     setError,
+    setValue,
     handleSubmit,
     formState: { errors },
   } = useForm();
 
-  /*  useEffect(() => {
-    if (isUpdate) {
-      toast.success("Updated successfully");
+  const onSubmit = async (data) => {
+    try {
+      const response = await axios.put("/settings", data);
+      toast.success(response.data.message);
+    } catch (error) {
+      console.log(error);
     }
-    return () => {
-      dispatch(reset());
-    };
-  }, [isUpdate, dispatch]);
+  };
 
   useEffect(() => {
-    dispatch(getSettings());
-    setSettings(setting);
-  }, [dispatch, isSuccess, isUpdate]); */
+    const fetchData = async () => {
+      try {
+        const response = await axios.get(`/settings`);
+        const data = response.data.setting;
+
+        setValue("app_store_url", data.app_store_url);
+        setValue("contact_email", data.contact_email);
+        setValue("facebook_url", data.facebook_url);
+        setValue("footer_copywrite", data.footer_copywrite);
+        setValue("footer_info", data.footer_info);
+        setValue("instagram_url", data.instagram_url);
+        setValue("play_store_url", data.play_store_url);
+        setValue("twitter_url", data.twitter_url);
+        setValue("youtube_url", data.youtube_url);
+        setValue("address", data.address);
+        setValue("contact_number", data.contact_number);
+      } catch (error) {
+        console.error("Error fetching category data:", error);
+      }
+    };
+
+    fetchData();
+  }, []);
 
   return (
     <div className="footer">
-      <form onSubmit={handleSubmit}>
+      <form onSubmit={handleSubmit(onSubmit)}>
         <Row className="row">
           <Column className="col-md-12 button">
             <Button type="submit">Update</Button>
@@ -111,10 +125,11 @@ const Settings = () => {
                   type="text"
                   placeholder="contact number"
                   {...register("contact_number", {
+                    required: "Mobile number is required",
                     trim: true,
                     pattern: {
-                      value: /\S/,
-                      message: "Enter a valid number",
+                      value: /^\+880\s\d{4}\s\d{6}$/,
+                      message: "Mobile formate +880 17...",
                     },
                   })}
                 />
@@ -139,9 +154,10 @@ const Settings = () => {
                   placeholder="contact email"
                   {...register("contact_email", {
                     trim: true,
+                    required: "Email address is required",
                     pattern: {
-                      value: /\S/,
-                      message: "Enter a valid email",
+                      value: /^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,4}$/i,
+                      message: "Invalid email address",
                     },
                   })}
                 />
