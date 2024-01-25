@@ -128,6 +128,7 @@ const DynamicImages = () => {
         )}
 
         <img
+          style={{ marginBottom: "10px" }}
           src={`${API_ROOT}/images/setting/${setting.popup_image}`}
           alt="popup"
         />
