@@ -138,7 +138,7 @@ const SetupPage: React.FC = () => {
         bannerData: { is_visible: !banner.is_visible },
       })
     );
-    dispatch(getAddBanner());
+    dispatch(getAddBanner({}));
   };
 
   useEffect(() => {
@@ -315,7 +315,9 @@ const SetupPage: React.FC = () => {
                     alt="banner"
                   />
                 </Column>
-                <Column className="col-md-4">{banner.url}</Column>
+                <Column className="col-md-4">
+                  <p>{banner.url}</p>
+                </Column>
                 <Column className="col-md-2">
                   <ToggleButton
                     onClick={() => handleVisibility(banner)}
