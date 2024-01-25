@@ -21,9 +21,7 @@ import "./index.scss";
 
 const BannerPage = () => {
   const dispatch = useAppDispatch();
-  const { isDelete, isUpdate, totalCount } = useAppSelector(
-    (state) => state.banner
-  );
+  const { isDelete, isUpdate } = useAppSelector((state) => state.banner);
   const [addBanner, setAddBanner] = useState<IAdBanner[]>([]);
   const [pageNumber, setPageNumber] = useState<number>(1);
   const [count, setCount] = useState(0);

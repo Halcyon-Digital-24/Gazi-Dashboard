@@ -6,13 +6,20 @@ import Display from "../../components/display";
 import Pagination from "../../components/pagination";
 import Column from "../../components/table/column";
 import Row from "../../components/table/row";
-import { getEmis, reset } from "../../redux/emi/emiSlice";
+import { deleteEmi, getEmis, reset } from "../../redux/emi/emiSlice";
 import { useAppDispatch, useAppSelector } from "../../redux/hooks";
+import DeleteButton from "../../components/button/delete";
+import { toast } from "react-toastify";
 
 const EmiPage = () => {
   const dispatch = useAppDispatch();
-  const { emis, totalCount } = useAppSelector((state) => state.emi);
+  const { emis, totalCount, isDelete, message } = useAppSelector(
+    (state) => state.emi
+  );
   const [pageNumber, setPageNumber] = useState<number>(1);
+  const handleDelete = (id: number) => {
+    dispatch(deleteEmi(id));
+  };
 
   const handlePageChange = (selectedItem: { selected: number }) => {
     setPageNumber(selectedItem.selected + 1);
@@ -20,12 +27,18 @@ const EmiPage = () => {
   const totalPage = Math.ceil(totalCount / 10);
 
   useEffect(() => {
+    if (isDelete) {
+      toast.success(`${message}`);
+    }
+  }, [isDelete]);
+
+  useEffect(() => {
     dispatch(getEmis({ page: pageNumber, limit: 10 }));
 
     return () => {
       dispatch(reset());
     };
-  }, [dispatch, pageNumber]);
+  }, [dispatch, pageNumber, isDelete]);
 
   return (
     <div>
@@ -57,6 +70,7 @@ const EmiPage = () => {
             <Column className="col-md-1">
               <CustomIconArea>
                 <EditButton editUrl={`/emi/edit/${emi.id}`} />
+                <DeleteButton onClick={() => handleDelete(Number(emi?.id))} />
               </CustomIconArea>
             </Column>
           </Row>

@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useEffect } from "react";
 import { toast } from "react-toastify";
 import { Button } from "../../components/button";
 import Display from "../../components/display";
@@ -11,8 +11,6 @@ import "./settings.scss";
 const Settings = () => {
   const {
     register,
-    control,
-    setError,
     setValue,
     handleSubmit,
     formState: { errors },

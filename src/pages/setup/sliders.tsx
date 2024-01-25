@@ -31,7 +31,7 @@ const Sliders = () => {
         bannerData: { is_visible: !banner.is_visible },
       })
     );
-    dispatch(getAddBanner());
+    dispatch(getAddBanner({}));
   };
 
   useEffect(() => {

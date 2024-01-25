@@ -157,9 +157,10 @@ export const emiSlice = createSlice({
         state.isLoading = true;
         state.isDelete = false;
       })
-      .addCase(deleteEmi.fulfilled, (state) => {
+      .addCase(deleteEmi.fulfilled, (state, action) => {
         state.isLoading = false;
         state.isDelete = true;
+        state.message = action.payload.message;
       })
       .addCase(deleteEmi.rejected, (state, action) => {
         state.isLoading = false;
