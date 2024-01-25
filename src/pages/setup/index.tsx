@@ -17,6 +17,7 @@ import { IAdBanner } from "../../interfaces/addBanner";
 import { IHomePage } from "../../interfaces/homePage";
 import { ISettings } from "../../interfaces/settings";
 import axios from "../../lib";
+import CustomScript from "./script";
 import {
   deleteBanner,
   getAddBanner,
@@ -335,37 +336,7 @@ const SetupPage: React.FC = () => {
               </Row>
             ))}
           </Display>
-          <Display>
-            <form onSubmit={handleScript}>
-              <TextArea
-                label="google analytics"
-                value={settings.google_analytics}
-                name="google_analytics"
-                onChange={handleChange}
-              />
-              <TextArea
-                label="Facebook pixel"
-                value={settings.facebook_pixel}
-                name="facebook_pixel"
-                onChange={handleChange}
-              />
-              <TextArea
-                label="Footer script"
-                value={settings.footer_script}
-                name="footer_script"
-                onChange={handleChange}
-              />
-              <TextArea
-                label="Header Script"
-                value={settings.header_script}
-                name="header_script"
-                onChange={handleChange}
-              />
-              <div>
-                <Button type="submit">Update</Button>
-              </div>
-            </form>
-          </Display>
+          <CustomScript />
         </Column>
       </div>
     </div>

@@ -1,7 +1,7 @@
-import { createAsyncThunk, createSlice } from '@reduxjs/toolkit';
-import { IAdBanner, IAddBannerResponse } from '../../interfaces/addBanner';
-import { RootState } from '../store';
-import addBannerService from './addBannerService';
+import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
+import { IAdBanner, IAddBannerResponse } from "../../interfaces/addBanner";
+import { RootState } from "../store";
+import addBannerService from "./addBannerService";
 
 interface IBlogResponse {
   addBanner: IAdBanner[];
@@ -25,77 +25,83 @@ const initialState: IBlogResponse = {
   isUpdate: false,
   isDelete: false,
   isLoading: false,
-  message: '',
-  errorMessage: '',
+  message: "",
+  errorMessage: "",
 };
 
 // Create new Blog
 export const createAddBanner = createAsyncThunk(
-  'addBanner/create',
+  "addBanner/create",
   async (bannerData: FormData, thunkAPI) => {
     try {
       return await addBannerService.createAddBanner(bannerData);
     } catch (error) {
       console.log(error);
       const message =
-        error instanceof Error ? error.message : 'An error occurred';
+        error instanceof Error ? error.message : "An error occurred";
       return thunkAPI.rejectWithValue(message);
     }
   }
 );
 
 export const getAddBanner = createAsyncThunk(
-  'addBanner/getAll',
+  "addBanner/getAll",
   async (filter: { [key: string]: number | string }, thunkAPI) => {
     try {
       return await addBannerService.getAddBanner(filter);
     } catch (error) {
       const message =
-        error instanceof Error ? error.message : 'An error occurred';
+        error instanceof Error ? error.message : "An error occurred";
       return thunkAPI.rejectWithValue(message);
     }
   }
 );
 export const getSlider = createAsyncThunk(
-  'addBanner/slider',
+  "addBanner/slider",
   async (_, thunkAPI) => {
     try {
       return await addBannerService.getSlider();
     } catch (error) {
       const message =
-        error instanceof Error ? error.message : 'An error occurred';
+        error instanceof Error ? error.message : "An error occurred";
       return thunkAPI.rejectWithValue(message);
     }
   }
 );
 
 export const updateAddBanner = createAsyncThunk(
-  'addBanner/update',
-  async ({ bannerData, id }: { bannerData: Partial<IAdBanner> | FormData, id: string | number }, thunkAPI) => {
+  "addBanner/update",
+  async (
+    {
+      bannerData,
+      id,
+    }: { bannerData: Partial<IAdBanner> | FormData; id: string | number },
+    thunkAPI
+  ) => {
     try {
       return await addBannerService.updateAddBanner(bannerData, id);
     } catch (error) {
       const message =
-        error instanceof Error ? error.message : 'An error occurred';
+        error instanceof Error ? error.message : "An error occurred";
       return thunkAPI.rejectWithValue(message);
     }
   }
 );
 export const deleteBanner = createAsyncThunk(
-  'addBanner/delete',
+  "addBanner/delete",
   async (BannerId: number | string, thunkAPI) => {
     try {
       return await addBannerService.deleteBanner(BannerId);
     } catch (error) {
       const message =
-        error instanceof Error ? error.message : 'An error occurred';
+        error instanceof Error ? error.message : "An error occurred";
       return thunkAPI.rejectWithValue(message);
     }
   }
 );
 
 export const addBannerSlice = createSlice({
-  name: 'Blog',
+  name: "ads-banner",
   initialState,
   reducers: {
     reset: () => initialState,
@@ -140,7 +146,6 @@ export const addBannerSlice = createSlice({
         state.isLoading = false;
         state.isSuccess = true;
         state.addBanner = action.payload.data;
-        console.log(action.payload);
       })
       .addCase(getSlider.rejected, (state, action) => {
         state.isLoading = false;
@@ -155,7 +160,7 @@ export const addBannerSlice = createSlice({
       .addCase(updateAddBanner.fulfilled, (state, action) => {
         state.isLoading = false;
         state.isUpdate = true;
-        state.message = action.payload.message
+        state.message = action.payload.message;
       })
       .addCase(updateAddBanner.rejected, (state, action) => {
         state.isLoading = false;
