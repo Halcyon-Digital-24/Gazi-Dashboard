@@ -129,7 +129,7 @@ const Settings = () => {
                     trim: true,
                     pattern: {
                       value: /^\+880\s\d{4}\s\d{6}$/,
-                      message: "Mobile formate +880 17...",
+                      message: "Mobile formate +880 17..",
                     },
                   })}
                 />
