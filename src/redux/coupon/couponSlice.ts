@@ -1,7 +1,7 @@
-import { createSlice, createAsyncThunk } from '@reduxjs/toolkit';
-import { RootState } from '../store';
-import categoryService from './couponService';
-import { ICoupon } from '../../interfaces/coupon';
+import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
+import { RootState } from "../store";
+import categoryService from "./couponService";
+import { ICoupon } from "../../interfaces/coupon";
 
 interface IBlogResponse {
   coupons: ICoupon[];
@@ -25,26 +25,26 @@ const initialState: IBlogResponse = {
   isUpdate: false,
   isDelete: false,
   isLoading: false,
-  message: '',
-  errorMessage: '',
+  message: "",
+  errorMessage: "",
 };
 
-// Create new Blog
+// Create new coupon
 export const createCoupon = createAsyncThunk(
-  'category/create',
+  "category/create",
   async (categoryData: Partial<ICoupon>, thunkAPI) => {
     try {
       return await categoryService.createCoupon(categoryData);
     } catch (error) {
       const message =
-        error instanceof Error ? error.message : 'An error occurred';
+        error instanceof Error ? error.message : "An error occurred";
       return thunkAPI.rejectWithValue(message);
     }
   }
 );
 
 export const getCoupon = createAsyncThunk(
-  'category/getAll',
+  "category/getAll",
   async (
     filter: {
       [key: string]: string | number;
@@ -55,14 +55,14 @@ export const getCoupon = createAsyncThunk(
       return await categoryService.getCoupon(filter);
     } catch (error) {
       const message =
-        error instanceof Error ? error.message : 'An error occurred';
+        error instanceof Error ? error.message : "An error occurred";
       return thunkAPI.rejectWithValue(message);
     }
   }
 );
 
 export const updateCoupon = createAsyncThunk(
-  'category/update',
+  "category/update",
   async (
     {
       slug,
@@ -74,26 +74,26 @@ export const updateCoupon = createAsyncThunk(
       return await categoryService.updateCoupon(slug, coupondata);
     } catch (error) {
       const message =
-        error instanceof Error ? error.message : 'An error occurred';
+        error instanceof Error ? error.message : "An error occurred";
       return thunkAPI.rejectWithValue(message);
     }
   }
 );
 export const deleteCoupon = createAsyncThunk(
-  'category/delete',
+  "category/delete",
   async (categoryId: number, thunkAPI) => {
     try {
       return await categoryService.deleteCoupon(categoryId);
     } catch (error) {
       const message =
-        error instanceof Error ? error.message : 'An error occurred';
+        error instanceof Error ? error.message : "An error occurred";
       return thunkAPI.rejectWithValue(message);
     }
   }
 );
 
 export const couponSlice = createSlice({
-  name: 'coupon',
+  name: "coupon",
   initialState,
   reducers: {
     reset: () => initialState,
@@ -104,9 +104,10 @@ export const couponSlice = createSlice({
         state.isLoading = true;
         state.isCreate = false;
       })
-      .addCase(createCoupon.fulfilled, (state) => {
+      .addCase(createCoupon.fulfilled, (state, action) => {
         state.isLoading = false;
         state.isCreate = true;
+        state.message = action.payload.message;
       })
       .addCase(createCoupon.rejected, (state) => {
         state.isLoading = false;
@@ -133,9 +134,10 @@ export const couponSlice = createSlice({
         state.isLoading = true;
         state.isUpdate = false;
       })
-      .addCase(updateCoupon.fulfilled, (state) => {
+      .addCase(updateCoupon.fulfilled, (state, action) => {
         state.isLoading = false;
         state.isUpdate = true;
+        state.message = action.payload.message;
       })
       .addCase(updateCoupon.rejected, (state, action) => {
         state.isLoading = false;

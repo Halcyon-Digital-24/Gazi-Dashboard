@@ -159,11 +159,6 @@ const CreateCategory = () => {
               {errors.image && (
                 <p className="validation__error">{errors.image.message}</p>
               )}
-              {/*   <FileInput
-                label="Set Image"
-                placeholder="Choose an Image"
-                onChange={handleImageChange}
-              /> */}
             </Column>
             <Column className="col-md-4">
               <div className="text">

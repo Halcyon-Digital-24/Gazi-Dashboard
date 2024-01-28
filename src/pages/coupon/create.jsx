@@ -4,6 +4,7 @@ import CardBody from "../../components/card-body";
 import Display from "../../components/display";
 import Input from "../../components/forms/text-input";
 import Select from "../../components/select";
+import { useForm } from "react-hook-form";
 import "./index.scss";
 import { Button } from "../../components/button";
 import { useAppDispatch, useAppSelector } from "../../redux/hooks";
@@ -13,19 +14,19 @@ import { useNavigate } from "react-router-dom";
 import { toast } from "react-toastify";
 
 const CreateCoupon = () => {
+  const {
+    register,
+    handleSubmit,
+    formState: { errors },
+  } = useForm();
   const dispatch = useAppDispatch();
   const navigate = useNavigate();
-  const { isCreate } = useAppSelector((state) => state.coupon);
+  const { isCreate, message } = useAppSelector((state) => state.coupon);
   const [couponType, setCouponType] = useState("");
-  const [discountType, setDiscountType] = useState();
   const [coupons, setCoupons] = useState([]);
-  const [code, setCode] = useState("");
-  const [discountPrice, setDiscountPrice] = useState(0);
-  const [totalCoupon, setTotalCoupon] = useState(0);
-  const [date, setDate] = useState("");
   const { products } = useAppSelector((state) => state.product);
   const [search, setSearch] = useState("");
-  const areaRef = useRef < HTMLDivElement > null;
+  const areaRef = useRef(null);
   const [isFocus, setIsFocus] = useState(false);
 
   const addProduct = (id) => {
@@ -38,29 +39,29 @@ const CreateCoupon = () => {
     }
   };
 
-  const couponData = {
-    code: code,
-    total_coupons: totalCoupon,
-    discount_type: discountType,
-    discount_amount: discountPrice,
-    expire_date: date,
-    product_id: coupons.length > 0 ? coupons.join() : null,
+  const onSubmit = (data) => {
+    dispatch(createCoupon(data));
   };
 
-  const handleSubmit = (e) => {
-    e.preventDefault();
-    dispatch(createCoupon(couponData));
+  const onProductSubmit = (data) => {
+    const ids = coupons.length > 0 ? coupons.join() : null;
+    if (coupons.length > 0) {
+      dispatch(createCoupon({ ...data, product_id: ids }));
+    } else {
+      toast.error("Please Select Product");
+    }
   };
 
   useEffect(() => {
     if (isCreate) {
-      toast.success("Coupon Create Successfully");
+      toast.success(`${message}`);
       navigate("/coupons");
     }
     return () => {
       dispatch(reset());
     };
-  }, [isCreate, navigate, dispatch]);
+  }, [isCreate, navigate, dispatch, message]);
+
   useEffect(() => {
     dispatch(getProducts({ page: 1, limit: 100, search: search }));
 
@@ -96,43 +97,106 @@ const CreateCoupon = () => {
       </Display>
       {couponType === "product" && (
         <Display>
-          <form onSubmit={handleSubmit}>
-            <Input
-              htmlFor="coupon"
-              placeholder="Coupon code"
-              label="Coupon Code"
-              onChange={(e) => setCode(e.target.value)}
-              required
-            />
-            <Select
-              onChange={(e) => setDiscountType(e.target.value)}
-              htmlFor="Discount Type"
-              required
-            >
-              <option>Select One</option>
-              <option value="flat">Flat</option>
-              <option value="percent">Percent</option>
-            </Select>
-            <Input
-              placeholder="Discount Price"
-              label="Discount Price"
-              htmlFor="discount-price"
-              onChange={(e) => setDiscountPrice(Number(e.target.value))}
-              required
-            />
-            <Input
-              placeholder="Total Coupons"
-              label="Total Coupons"
-              htmlFor="t-coupon"
-              onChange={(e) => setTotalCoupon(e.target.value)}
-              required
-            />
-            <label htmlFor="d">Expire Date</label>
-            <input
-              className="date"
-              type="date"
-              onChange={(e) => setDate(e.target.value)}
-            />
+          <form onSubmit={handleSubmit(onProductSubmit)}>
+            <div className="text">
+              <label htmlFor="name">Coupon Code *</label>
+              <input
+                type="text"
+                placeholder="Coupon Code"
+                {...register("code", {
+                  trim: true,
+                  required: "Code is required",
+                  pattern: {
+                    value: /\S/,
+                    message: "Enter a valid Code",
+                  },
+                })}
+              />
+              {errors.code && (
+                <p className="validation__error">{errors.code.message}</p>
+              )}
+            </div>
+            <>
+              <label className="label" htmlFor="select">
+                Discount Type
+              </label>
+              <div className="select-wrapper">
+                <select
+                  id="select"
+                  className="select"
+                  {...register("discount_type", {
+                    trim: true,
+                    required: "Discount type is required",
+                  })}
+                  htmlFor="select"
+                >
+                  <option value={""}>Select One</option>
+                  <option value="flat">Flat</option>
+                  <option value="percent">Percent</option>
+                </select>
+              </div>
+              {errors.discount_type && (
+                <p className="validation__error">
+                  {errors.discount_type.message}
+                </p>
+              )}
+            </>
+            <div className="text">
+              <label htmlFor="order_id">Discount Price</label>
+              <input
+                type="text"
+                placeholder="Discount Price"
+                {...register("discount_amount", {
+                  required: "Discount amount is required",
+                  pattern: {
+                    value: /^[0-9]+$/,
+                    message: "Enter a valid price (number only)",
+                  },
+                })}
+              />
+              {errors.discount_amount && (
+                <p className="validation__error">
+                  {errors.discount_amount.message}
+                </p>
+              )}
+            </div>
+            <div className="text">
+              <label htmlFor="order_id">Total Coupons</label>
+              <input
+                type="text"
+                placeholder="Total coupons"
+                {...register("total_coupons", {
+                  required: "Total coupons is required",
+                  pattern: {
+                    value: /^[0-9]+$/,
+                    message: "Enter a valid coupon number (number only)",
+                  },
+                })}
+              />
+              {errors.total_coupons && (
+                <p className="validation__error">
+                  {errors.total_coupons.message}
+                </p>
+              )}
+            </div>
+            <div className="text">
+              <label htmlFor="order_id">Expire Date</label>
+              <input
+                type="date"
+                {...register("expire_date", {
+                  required: "Expire date is require",
+                  pattern: {
+                    value: /\S/,
+                    message: "Enter a valid coupon number (number only)",
+                  },
+                })}
+              />
+              {errors.expire_date && (
+                <p className="validation__error">
+                  {errors.expire_date.message}
+                </p>
+              )}
+            </div>
             <div className="select-product" ref={areaRef}>
               <Input
                 placeholder="Search products"
@@ -168,44 +232,105 @@ const CreateCoupon = () => {
       )}
       {couponType === "order" && (
         <Display>
-          <form onSubmit={handleSubmit}>
-            <Input
-              htmlFor="coupon"
-              placeholder="Coupon code"
-              label="Coupon Code"
-              onChange={(e) => setCode(e.target.value)}
-              required
-            />
-            <Select
-              onChange={(e) => setDiscountType(e.target.value)}
-              htmlFor="Discount Type"
-              required
-            >
-              <option>Select One</option>
-              <option value="flat">Flat</option>
-              <option value="percent">Percent</option>
-            </Select>
-            <Input
-              placeholder="Discount Price"
-              label="Discount Price"
-              htmlFor="discount-price"
-              onChange={(e) => setDiscountPrice(Number(e.target.value))}
-              required
-            />
-            <Input
-              placeholder="Total Coupons"
-              label="Total Coupons"
-              htmlFor="t-coupon"
-              onChange={(e) => setTotalCoupon(e.target.value)}
-              required
-            />
-            <label htmlFor="d">Expire Date</label>
-            <label htmlFor="d">Expire Date</label>
-            <input
-              className="date"
-              type="date"
-              onChange={(e) => setDate(e.target.value)}
-            />
+          <form onSubmit={handleSubmit(onSubmit)}>
+            <div className="text">
+              <label htmlFor="name">Coupon Code *</label>
+              <input
+                type="text"
+                placeholder="Coupon Code"
+                {...register("code", {
+                  trim: true,
+                  required: "Code is required",
+                  pattern: {
+                    value: /\S/,
+                    message: "Enter a valid Code",
+                  },
+                })}
+              />
+              {errors.code && (
+                <p className="validation__error">{errors.code.message}</p>
+              )}
+            </div>
+            <>
+              <label className="label" htmlFor="select">
+                Discount Type
+              </label>
+              <div className="select-wrapper">
+                <select
+                  id="select"
+                  className="select"
+                  {...register("discount_type", {
+                    trim: true,
+                    required: "Discount type is required",
+                  })}
+                  htmlFor="select"
+                >
+                  <option value={""}>Select One</option>
+                  <option value="flat">Flat</option>
+                  <option value="percent">Percent</option>
+                </select>
+              </div>
+              {errors.discount_type && (
+                <p className="validation__error">
+                  {errors.discount_type.message}
+                </p>
+              )}
+            </>
+            <div className="text">
+              <label htmlFor="order_id">Discount Price</label>
+              <input
+                type="text"
+                placeholder="Discount Price"
+                {...register("discount_amount", {
+                  required: "Discount amount is required",
+                  pattern: {
+                    value: /^[0-9]+$/,
+                    message: "Enter a valid price (number only)",
+                  },
+                })}
+              />
+              {errors.discount_amount && (
+                <p className="validation__error">
+                  {errors.discount_amount.message}
+                </p>
+              )}
+            </div>
+            <div className="text">
+              <label htmlFor="order_id">Total Coupons</label>
+              <input
+                type="text"
+                placeholder="Total coupons"
+                {...register("total_coupons", {
+                  pattern: {
+                    value: /^[0-9]+$/,
+                    message: "Enter a valid coupon number (number only)",
+                  },
+                })}
+              />
+              {errors.total_coupons && (
+                <p className="validation__error">
+                  {errors.total_coupons.message}
+                </p>
+              )}
+            </div>
+            <div className="text">
+              <label htmlFor="order_id">Expire Date</label>
+              <input
+                type="date"
+                {...register("expire_date", {
+                  required: "Expire date is require",
+                  pattern: {
+                    value: /\S/,
+                    message: "Enter a valid coupon number (number only)",
+                  },
+                })}
+              />
+              {errors.expire_date && (
+                <p className="validation__error">
+                  {errors.expire_date.message}
+                </p>
+              )}
+            </div>
             <Button type="submit">Submit</Button>
           </form>
         </Display>
