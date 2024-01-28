@@ -1,18 +1,19 @@
-import { createSlice, PayloadAction } from '@reduxjs/toolkit';
-import { ICartItem } from '../../interfaces/cart';
+import { createSlice, PayloadAction } from "@reduxjs/toolkit";
+import { ICartItem } from "../../interfaces/cart";
+import { toast } from "react-toastify";
 
 interface CartState {
   cart: ICartItem[];
 }
 
 const initialCart =
-  typeof window !== 'undefined' ? localStorage.getItem('cartItems') : null;
+  typeof window !== "undefined" ? localStorage.getItem("cartItems") : null;
 const initialState: CartState = {
   cart: initialCart ? JSON.parse(initialCart) : [],
 };
 
 export const cartSlice = createSlice({
-  name: 'cart',
+  name: "cart",
   initialState,
   reducers: {
     // Add to cart
@@ -23,13 +24,13 @@ export const cartSlice = createSlice({
       );
 
       if (existingItem) {
-        // toast.success('Item already added in your cart!');
+        toast.success("Item already added in your cart!");
         existingItem.quantity += newItem.quantity ?? 1;
       } else {
         state.cart = [...state.cart, newItem];
-        // toast.success('Item added to your cart!');
+        toast.success("Item added to your cart!");
       }
-      localStorage.setItem('cartItems', JSON.stringify(state.cart));
+      localStorage.setItem("cartItems", JSON.stringify(state.cart));
     },
 
     // Increment card item
@@ -40,7 +41,7 @@ export const cartSlice = createSlice({
 
       if (itemToIncrement && itemToIncrement.quantity < 5) {
         itemToIncrement.quantity += 1;
-        localStorage.setItem('cartItems', JSON.stringify(state.cart));
+        localStorage.setItem("cartItems", JSON.stringify(state.cart));
       }
     },
 
@@ -52,7 +53,7 @@ export const cartSlice = createSlice({
 
       if (itemToDecrement && itemToDecrement.quantity > 1) {
         itemToDecrement.quantity -= 1;
-        localStorage.setItem('cartItems', JSON.stringify(state.cart));
+        localStorage.setItem("cartItems", JSON.stringify(state.cart));
       }
     },
 
@@ -61,13 +62,13 @@ export const cartSlice = createSlice({
       state.cart = state.cart.filter(
         (i) => i.product_id !== action.payload.product_id
       );
-      localStorage.setItem('cartItems', JSON.stringify(state.cart));
+      localStorage.setItem("cartItems", JSON.stringify(state.cart));
     },
 
     // clear cart
     clearCart: (state) => {
       state.cart = [];
-      localStorage.removeItem('cartItems');
+      localStorage.removeItem("cartItems");
     },
   },
 });
