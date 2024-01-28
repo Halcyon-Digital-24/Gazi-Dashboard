@@ -301,6 +301,7 @@ const CreateCoupon = () => {
                 type="text"
                 placeholder="Total coupons"
                 {...register("total_coupons", {
+                  required: "Total coupons is required",
                   pattern: {
                     value: /^[0-9]+$/,
                     message: "Enter a valid coupon number (number only)",
