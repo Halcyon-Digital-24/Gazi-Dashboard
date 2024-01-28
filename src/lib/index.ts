@@ -1,5 +1,5 @@
-import axios from 'axios';
-import { API_URL } from '../constants';
+import axios from "axios";
+import { API_URL } from "../constants";
 
 const api = axios.create({
   baseURL: API_URL,
@@ -8,7 +8,7 @@ const api = axios.create({
 
 api.interceptors.request.use(
   (config) => {
-    const userString = localStorage.getItem('user');
+    const userString = localStorage.getItem("user");
     let accessToken: string | undefined;
     if (userString !== null) {
       const user = JSON.parse(userString);
@@ -32,9 +32,9 @@ api.interceptors.response.use(
   },
   (error) => {
     if (error?.response?.status === 401) {
-      localStorage.removeItem('user');
-      window.location.replace(`${process.env.VITE_FRONTEND_URL}/login`);
+      localStorage.removeItem("user");
       window.location.reload();
+      // window.location.replace(`${process.env.VITE_FRONTEND_URL}/login`);
     }
     return Promise.reject(error);
   }

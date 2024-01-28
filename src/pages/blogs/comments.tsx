@@ -20,7 +20,7 @@ const BlogComment = () => {
 
   return (
     <div>
-      <CardBody header="Blog Comments" to="#" />
+      <CardBody header="Blog Comments" to="#" isHide />
       <Display>
         <Row className="row text-bold">
           <Column className="col-md-4">Name</Column>
