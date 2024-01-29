@@ -5,6 +5,7 @@ import CustomIconArea from "../../components/custom-icon-area";
 import Display from "../../components/display";
 import Column from "../../components/table/column";
 import Row from "../../components/table/row";
+import Pagination from "../../components/pagination";
 
 const Staff = () => {
   return (
@@ -35,6 +36,11 @@ const Staff = () => {
             </Column>
           </Row>
         ))}
+        <Pagination
+          pageCount={2}
+          handlePageClick={() => console.log("first")}
+          totalPage={50}
+        />
       </Display>
     </div>
   );
