@@ -1,4 +1,5 @@
 import DeleteButton from "../../components/button/delete";
+import EditButton from "../../components/button/edit";
 import CardBody from "../../components/card-body";
 import CustomIconArea from "../../components/custom-icon-area";
 import Display from "../../components/display";
@@ -19,11 +20,12 @@ const Staff = () => {
         </Row>
         {[...Array(6).keys()].map(() => (
           <Row className="row">
-            <Column className="col-md-3">Admin</Column>
+            <Column className="col-md-3">Admin Name</Column>
             <Column className="col-md-3">admin@admin.com</Column>
-            <Column className="col-md-3">admin@admin.com</Column>
+            <Column className="col-md-3">admin</Column>
             <Column className="col-md-3">
               <CustomIconArea>
+                <EditButton editUrl={`/staffs/edit/1`} />
                 <DeleteButton
                   onClick={() => {
                     console.log("");

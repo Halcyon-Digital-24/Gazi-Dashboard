@@ -73,6 +73,11 @@ import CreateVideo from "./videos/create";
 import UpdateVideo from "./videos/update";
 import Login from "../pages/login";
 import Csv from "./csv/csv";
+import Roles from "./roles";
+import CreateRole from "./roles/create";
+import UpdateRole from "./roles/update";
+import UpdateProfile from "./staff/update";
+
 export {
   AllOrders,
   AllProducts,
@@ -145,4 +150,8 @@ export {
   WarrantyDetails,
   Login,
   Csv,
+  Roles,
+  CreateRole,
+  UpdateRole,
+  UpdateProfile,
 };

@@ -111,31 +111,33 @@ const CreateCategory = () => {
                   <p className="validation__error">{errors.order_id.message}</p>
                 )}
               </div>
-              <label className="label" htmlFor="select">
-                Parent Category
-              </label>
-              <div className="select-wrapper">
-                <select
-                  id="select"
-                  className="select"
-                  {...register("parent_category")}
-                  htmlFor="Choose Parent category"
-                  name="parent_category"
-                >
-                  <option value="">Select Parent Category</option>
-                  {categories.map((category, index) => (
-                    <option key={index} value={category.slug}>
-                      {category.title}
-                    </option>
-                  ))}
-                </select>
-              </div>
+              <>
+                <label className="label" htmlFor="select">
+                  Parent Category
+                </label>
+                <div className="select-wrapper">
+                  <select
+                    id="select"
+                    className="select"
+                    {...register("parent_category")}
+                    htmlFor="Choose Parent category"
+                    name="parent_category"
+                  >
+                    <option value="">Select Parent Category</option>
+                    {categories.map((category, index) => (
+                      <option key={index} value={category.slug}>
+                        {category.title}
+                      </option>
+                    ))}
+                  </select>
+                </div>
 
-              {errors.parent_category && (
-                <p className="validation__error">
-                  {errors.parent_category.message}
-                </p>
-              )}
+                {errors.parent_category && (
+                  <p className="validation__error">
+                    {errors.parent_category.message}
+                  </p>
+                )}
+              </>
               <label className="label" htmlFor="select">
                 Choose Explore Image
               </label>

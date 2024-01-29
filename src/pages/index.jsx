@@ -70,6 +70,10 @@ import {
   Warranty,
   WarrantyDetails,
   Csv,
+  CreateRole,
+  Roles,
+  UpdateRole,
+  UpdateProfile,
 } from "./pages";
 
 function PageRoutes() {
@@ -170,6 +174,12 @@ function PageRoutes() {
       <Route path="/admin/profile" element={<Profile />} />
       <Route path="/staffs" element={<Staff />} />
       <Route path="/staffs/create" element={<CreateProfile />} />
+      <Route path="/staffs/edit/:slug" element={<UpdateProfile />} />
+
+      {/* Roles */}
+      <Route path="/roles" element={<Roles />} />
+      <Route path="/roles/create" element={<CreateRole />} />
+      <Route path="/roles/edit/:slug" element={<UpdateRole />} />
       {/* 404 Page */}
       <Route path="*" element={<Error />} />
     </Routes>
