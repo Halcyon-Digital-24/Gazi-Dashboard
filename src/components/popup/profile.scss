@@ -2,20 +2,36 @@
 
 .profile-popup {
   position: absolute;
-  bottom: -70px;
-  right: 10px;
-  padding: 7px 15px;
+  top: 70px;
+  right: 18px;
+  width: 200px;
   background: #fff;
   box-shadow: 0 1px 11px rgba(0, 0, 0, 0.15);
   max-width: 200px;
-
+  .profile-area {
+    position: relative;
+    z-index: 5;
+    &::after {
+      position: absolute;
+      content: "";
+      top: 0;
+      right: 0px;
+      width: 30px;
+      height: 20px;
+      // background: red;
+      background: $white-color;
+      transform: translateY(-95%);
+      clip-path: polygon(50% 0%, 0% 100%, 100% 100%);
+      box-shadow: 0 1px 11px rgba(0, 0, 0, 0.15);
+    }
+  }
   .item {
     display: flex;
     align-items: center;
     cursor: pointer;
-    margin-bottom: 10px;
     transition: all linear 0.3s;
-
+    padding: 10px 15px;
+    color: #575757;
     .icon {
       font-size: 14px;
       margin-right: 10px;
@@ -23,7 +39,8 @@
       height: 15px;
     }
     &:hover {
-      transform: scale(1.1);
+      background: $secondary-color;
+      color: #575757;
     }
   }
 }
