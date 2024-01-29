@@ -13,11 +13,15 @@ const CreateRole = () => {
     formState: { errors },
   } = useForm();
 
+  const onSubmit = (data) => {
+    console.log(data);
+  };
+
   return (
     <div>
       <CardBody header="Role Information" to="/roles" text="Back" />
       <Display>
-        <form>
+        <form onSubmit={handleSubmit(onSubmit)}>
           <div className="text">
             <label htmlFor="name">Name</label>
             <input

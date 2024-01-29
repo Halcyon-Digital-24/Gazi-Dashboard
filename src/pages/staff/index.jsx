@@ -19,8 +19,8 @@ const Staff = () => {
           <Column className="col-md-3">Role</Column>
           <Column className="col-md-3">Actions</Column>
         </Row>
-        {[...Array(6).keys()].map(() => (
-          <Row className="row">
+        {[...Array(6).keys()].map((key, index) => (
+          <Row className="row" key={index}>
             <Column className="col-md-3">Admin Name</Column>
             <Column className="col-md-3">admin@admin.com</Column>
             <Column className="col-md-3">admin</Column>
