@@ -1,0 +1,15 @@
+.foo_ter {
+  .table-row {
+    align-items: center;
+    .column {
+      padding: 5px;
+    }
+    .text {
+      min-height: 71px;
+      margin-bottom: 0;
+    }
+    .icon {
+      cursor: pointer;
+    }
+  }
+}

@@ -1,7 +1,7 @@
-import { createAsyncThunk, createSlice } from '@reduxjs/toolkit';
-import axios from 'axios';
-import { IMenu } from '../../interfaces/menu';
-import menuService from './menuService';
+import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
+import axios from "axios";
+import { IMenu } from "../../interfaces/menu";
+import menuService from "./menuService";
 
 interface IState {
   menus: IMenu[];
@@ -24,21 +24,21 @@ const initialState: IState = {
   isDelete: false,
   isLoading: false,
   isUpdate: false,
-  message: '',
-  errorMessage: '',
+  message: "",
+  errorMessage: "",
 };
 
 export const createMenu = createAsyncThunk(
-  'product/createMenu',
+  "product/createMenu",
   async (data: IMenu, thunkAPI) => {
     try {
       return await menuService.createMenu(data);
     } catch (error) {
       if (axios.isAxiosError(error)) {
-        const message = error.response?.data.message || 'An error occurred';
+        const message = error.response?.data.message || "An error occurred";
         return thunkAPI.rejectWithValue(message);
       } else {
-        return thunkAPI.rejectWithValue('An error occurred');
+        return thunkAPI.rejectWithValue("An error occurred");
       }
     }
   }
@@ -46,16 +46,16 @@ export const createMenu = createAsyncThunk(
 
 // Get Order
 export const getMenus = createAsyncThunk(
-  'order/getAllOrder',
+  "order/getAllOrder",
   async (filter: { [key: string]: number | string }, thunkAPI) => {
     try {
       return await menuService.getMenus(filter);
     } catch (error) {
       if (axios.isAxiosError(error)) {
-        const message = error.response?.data.message || 'An error occurred';
+        const message = error.response?.data.message || "An error occurred";
         return thunkAPI.rejectWithValue(message);
       } else {
-        return thunkAPI.rejectWithValue('An error occurred');
+        return thunkAPI.rejectWithValue("An error occurred");
       }
     }
   }
@@ -63,39 +63,42 @@ export const getMenus = createAsyncThunk(
 
 // Update Menu
 export const updateMenus = createAsyncThunk(
-  'menu/update',
-  async ({ menuData, id }: { menuData: Partial<IMenu>, id: number | string }, thunkAPI) => {
+  "menu/update",
+  async (
+    { menuData, id }: { menuData: Partial<IMenu>; id: number | string },
+    thunkAPI
+  ) => {
     try {
       return await menuService.updateMenus(menuData, id);
     } catch (error) {
       if (axios.isAxiosError(error)) {
-        const message = error.response?.data.message || 'An error occurred';
+        const message = error.response?.data.message || "An error occurred";
         return thunkAPI.rejectWithValue(message);
       } else {
-        return thunkAPI.rejectWithValue('An error occurred');
+        return thunkAPI.rejectWithValue("An error occurred");
       }
     }
   }
 );
 // Delete Order
 export const deleteMenu = createAsyncThunk(
-  'order/delete',
+  "order/delete",
   async (ids: number[], thunkAPI) => {
     try {
       return await menuService.deleteMenu(ids);
     } catch (error) {
       if (axios.isAxiosError(error)) {
-        const message = error.response?.data.message || 'An error occurred';
+        const message = error.response?.data.message || "An error occurred";
         return thunkAPI.rejectWithValue(message);
       } else {
-        return thunkAPI.rejectWithValue('An error occurred');
+        return thunkAPI.rejectWithValue("An error occurred");
       }
     }
   }
 );
 
 export const menuSlice = createSlice({
-  name: 'order',
+  name: "order",
   initialState,
   reducers: {
     reset: (state) => {
@@ -105,7 +108,7 @@ export const menuSlice = createSlice({
       state.isSuccess = false;
       state.isDelete = false;
       state.isError = false;
-      state.message = '';
+      state.message = "";
     },
   },
 
@@ -115,9 +118,10 @@ export const menuSlice = createSlice({
         state.isLoading = true;
         state.isCreate = false;
       })
-      .addCase(createMenu.fulfilled, (state) => {
+      .addCase(createMenu.fulfilled, (state, action) => {
         state.isLoading = false;
         state.isCreate = true;
+        state.message = action.payload.message;
       })
       .addCase(createMenu.rejected, (state) => {
         state.isLoading = false;
@@ -148,12 +152,12 @@ export const menuSlice = createSlice({
         state.isLoading = false;
         state.isSuccess = true;
         state.message = action.payload.message;
-        state.isUpdate = true
+        state.isUpdate = true;
       })
       .addCase(updateMenus.rejected, (state, action) => {
         state.isLoading = false;
         state.isError = true;
-        state.isUpdate = false
+        state.isUpdate = false;
         state.message = action.payload as string;
       })
 

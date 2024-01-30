@@ -238,10 +238,10 @@ export const sidebarLinks = [
         subtitle: "Pages",
         slug: "/setup/pages",
       },
-      {
+      /*  {
         subtitle: "Menus",
         slug: "/setup/menus",
-      },
+      }, */
       {
         subtitle: "Shipping",
         slug: "/shipping",

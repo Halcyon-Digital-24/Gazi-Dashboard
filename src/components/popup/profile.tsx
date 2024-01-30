@@ -15,6 +15,7 @@ const ProfilePopup: React.FC<PopupProps> = ({ closePopup }) => {
 
   const handleLogOut = () => {
     localStorage.removeItem("user");
+    window.location.reload();
   };
 
   const handleProfile = () => {

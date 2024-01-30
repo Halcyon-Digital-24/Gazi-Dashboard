@@ -1,4 +1,4 @@
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import { toast } from "react-toastify";
 import { Button } from "../../components/button";
 import Display from "../../components/display";
@@ -6,7 +6,11 @@ import Column from "../../components/table/column";
 import Row from "../../components/table/row";
 import { useForm } from "react-hook-form";
 import axios from "../../lib";
+import { useAppDispatch, useAppSelector } from "../../redux/hooks";
+import { getMenus, reset } from "../../redux/menus/menuSlice";
+import FooterOne from "../../components/menus";
 import "./settings.scss";
+import MenuCreate from "../../components/menus/create";
 
 const Settings = () => {
   const {
@@ -15,7 +19,13 @@ const Settings = () => {
     handleSubmit,
     formState: { errors },
   } = useForm();
-
+  const dispatch = useAppDispatch();
+  const [isHelp, setIsHelp] = useState(false);
+  const [isService, setIsService] = useState(false);
+  const [isHome, setIsHome] = useState(false);
+  const { menus, isDelete, message, isCreate, isUpdate } = useAppSelector(
+    (state) => state.menu
+  );
   const onSubmit = async (data) => {
     try {
       const response = await axios.put("/settings", data);
@@ -49,6 +59,21 @@ const Settings = () => {
 
     fetchData();
   }, []);
+
+  useEffect(() => {
+    if (isDelete | isUpdate | isCreate) {
+      toast.success(`${message}`);
+      setIsHelp(false);
+      setIsHome(false);
+      setIsService(false);
+    }
+
+    dispatch(getMenus({ limit: 100 }));
+
+    return () => {
+      dispatch(reset());
+    };
+  }, [dispatch, isDelete, message, isCreate, isUpdate]);
 
   return (
     <div className="footer">
@@ -289,6 +314,58 @@ const Settings = () => {
           </Column>
         </Row>
       </form>
+      <Row className="row">
+        <Column className="col-md-6">
+          <Display>
+            <h4>Services Menus</h4>
+            {menus
+              .filter((item) => item.position === "customer_service")
+              .map((menu, index) => (
+                <FooterOne
+                  key={index}
+                  name={menu.name}
+                  slug={menu.slug}
+                  id={menu.id}
+                />
+              ))}
+            {isService && <MenuCreate position={"customer_service"} />}
+            <Button onClick={() => setIsService(true)}>Add New</Button>
+          </Display>
+          <Display>
+            <h4>Help Menus</h4>
+            {menus
+              .filter((item) => item.position === "help")
+              .map((menu, index) => (
+                <FooterOne
+                  key={index}
+                  name={menu.name}
+                  slug={menu.slug}
+                  id={menu.id}
+                />
+              ))}
+            {isHelp && <MenuCreate position={"help"} />}
+
+            <Button onClick={() => setIsHelp(true)}>Add New</Button>
+          </Display>
+        </Column>
+        <Column className="col-md-6">
+          <Display>
+            <h4>Appliance Menus</h4>
+            {menus
+              .filter((item) => item.position === "home_appliance")
+              .map((menu, index) => (
+                <FooterOne
+                  key={index}
+                  name={menu.name}
+                  slug={menu.slug}
+                  id={menu.id}
+                />
+              ))}
+            {isHome && <MenuCreate position={"home_appliance"} />}
+            <Button onClick={() => setIsHome(true)}>Add New</Button>
+          </Display>
+        </Column>
+      </Row>
     </div>
   );
 };

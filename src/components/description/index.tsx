@@ -1,6 +1,25 @@
-import ReactQuill from "react-quill";
+import ReactQuill, { Quill } from "react-quill";
 import "./index.scss";
+const Size = Quill.import("attributors/style/size");
 
+const fontSizeArr = [
+  "8px",
+  "9px",
+  "10px",
+  "12px",
+  "14px",
+  "16px",
+  "20px",
+  "24px",
+  "32px",
+  "42px",
+  "54px",
+  "68px",
+  "84px",
+  "98px",
+];
+Size.whitelist = fontSizeArr;
+Quill.register(Size, true);
 interface IProps {
   value: string;
   setValue: React.Dispatch<React.SetStateAction<string>>;
@@ -10,7 +29,7 @@ const DescriptionInput: React.FC<IProps> = ({ value, setValue }) => {
   const modules = {
     toolbar: [
       [{ header: [1, 2, 3, 4, 5, 6, false] }, { font: [] }],
-      [{ size: [] }],
+      [{ size: fontSizeArr }],
       ["bold", "italic", "underline", "strike", "blockquote"],
       [
         { align: "" },
