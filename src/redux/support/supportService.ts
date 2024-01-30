@@ -1,9 +1,23 @@
-import axios from '../../lib';
-import { API_URL } from '../../constants';
-import { ISupport, ISupportResponse } from '../../interfaces/support';
+import axios from "../../lib";
+import { API_URL } from "../../constants";
+import { ISupport, ISupportResponse } from "../../interfaces/support";
 
-const getSupports = async (): Promise<ISupportResponse> => {
-  const { data } = await axios.get(`${API_URL}/supports`);
+const getSupports = async (filter: {
+  [key: string]: string | number;
+}): Promise<ISupportResponse> => {
+  let url = `${API_URL}/supports`;
+  if (filter && Object.keys(filter).length > 0) {
+    const queryString = Object.entries(filter)
+      .map(
+        ([key, value]) =>
+          `${encodeURIComponent(key)}=${encodeURIComponent(value)}`
+      )
+      .join("&");
+
+    // Add query string to the URL
+    url += `?${queryString}`;
+  }
+  const { data } = await axios.get(url);
   return data;
 };
 

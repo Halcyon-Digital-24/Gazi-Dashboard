@@ -11,5 +11,8 @@ export interface ISupport {
 
 export interface ISupportResponse {
   message: string;
-  data: ISupport[];
+  data: {
+    count: number;
+    rows: ISupport[];
+  };
 }

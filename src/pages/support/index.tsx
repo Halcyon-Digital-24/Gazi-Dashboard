@@ -1,4 +1,4 @@
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import ViewButton from "../../components/button/view";
 import CardBody from "../../components/card-body";
 import CustomIconArea from "../../components/custom-icon-area";
@@ -8,14 +8,22 @@ import Column from "../../components/table/column";
 import Row from "../../components/table/row";
 import { useAppDispatch, useAppSelector } from "../../redux/hooks";
 import { getSupport } from "../../redux/support/supportSlice";
+import Pagination from "../../components/pagination";
 
 const TicketPage = () => {
   const dispatch = useAppDispatch();
-  const { supports } = useAppSelector((state) => state.support);
+  const [pageNumber, setPageNumber] = useState<number>(1);
+  const { supports, totalCount } = useAppSelector((state) => state.support);
+
+  const totalPage = Math.ceil(totalCount / 10);
+
+  const handlePageChange = (selectedItem: { selected: number }) => {
+    setPageNumber(selectedItem.selected + 1);
+  };
 
   useEffect(() => {
-    dispatch(getSupport());
-  }, [dispatch]);
+    dispatch(getSupport({ page: pageNumber, limit: 10 }));
+  }, [dispatch, pageNumber]);
   return (
     <div>
       <CardBody header="Support Massages" to="#" />
@@ -43,6 +51,12 @@ const TicketPage = () => {
             </Column>
           </Row>
         ))}
+
+        <Pagination
+          pageCount={pageNumber}
+          handlePageClick={handlePageChange}
+          totalPage={totalPage}
+        />
       </Display>
     </div>
   );

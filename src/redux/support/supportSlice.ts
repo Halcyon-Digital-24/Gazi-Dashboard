@@ -1,7 +1,7 @@
-import { createSlice, createAsyncThunk } from '@reduxjs/toolkit';
-import { RootState } from '../store';
-import supportService from './supportService';
-import { ISupport } from '../../interfaces/support';
+import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
+import { RootState } from "../store";
+import supportService from "./supportService";
+import { ISupport } from "../../interfaces/support";
 
 interface IBlogResponse {
   supports: ISupport[];
@@ -25,50 +25,55 @@ const initialState: IBlogResponse = {
   isUpdate: false,
   isDelete: false,
   isLoading: false,
-  message: '',
-  errorMessage: '',
+  message: "",
+  errorMessage: "",
 };
 
 export const getSupport = createAsyncThunk(
-  'faqs/getAll',
-  async (_, thunkAPI) => {
+  "faqs/getAll",
+  async (
+    filter: {
+      [key: string]: string | number;
+    },
+    thunkAPI
+  ) => {
     try {
-      return await supportService.getSupports();
+      return await supportService.getSupports(filter);
     } catch (error) {
       const message =
-        error instanceof Error ? error.message : 'An error occurred';
+        error instanceof Error ? error.message : "An error occurred";
       return thunkAPI.rejectWithValue(message);
     }
   }
 );
 
 export const updateFaq = createAsyncThunk(
-  'faqs/update',
+  "faqs/update",
   async (supportData: Partial<ISupport>, thunkAPI) => {
     try {
       return await supportService.updateSupport(supportData);
     } catch (error) {
       const message =
-        error instanceof Error ? error.message : 'An error occurred';
+        error instanceof Error ? error.message : "An error occurred";
       return thunkAPI.rejectWithValue(message);
     }
   }
 );
 export const deleteSupport = createAsyncThunk(
-  'faqs/delete',
+  "faqs/delete",
   async (videoId: number | string, thunkAPI) => {
     try {
       return await supportService.deleteSupport(videoId);
     } catch (error) {
       const message =
-        error instanceof Error ? error.message : 'An error occurred';
+        error instanceof Error ? error.message : "An error occurred";
       return thunkAPI.rejectWithValue(message);
     }
   }
 );
 
 export const supportSlice = createSlice({
-  name: 'Blog',
+  name: "Blog",
   initialState,
   reducers: {
     reset: () => initialState,
@@ -83,7 +88,8 @@ export const supportSlice = createSlice({
       .addCase(getSupport.fulfilled, (state, action) => {
         state.isLoading = false;
         state.isSuccess = true;
-        state.supports = action.payload.data;
+        state.supports = action.payload.data.rows;
+        state.totalCount = action.payload.data.count;
       })
       .addCase(getSupport.rejected, (state, action) => {
         state.isLoading = false;
