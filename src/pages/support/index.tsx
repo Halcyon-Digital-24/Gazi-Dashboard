@@ -24,6 +24,7 @@ const TicketPage = () => {
   useEffect(() => {
     dispatch(getSupport({ page: pageNumber, limit: 10 }));
   }, [dispatch, pageNumber]);
+
   return (
     <div>
       <CardBody header="Support Massages" to="#" />

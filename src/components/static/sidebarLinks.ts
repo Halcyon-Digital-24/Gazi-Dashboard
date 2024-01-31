@@ -166,7 +166,7 @@ export const sidebarLinks = [
 
   {
     id: 8,
-    title: "Banner",
+    title: "Ads",
     icon: "advertising.png",
     subLinks: [
       {
