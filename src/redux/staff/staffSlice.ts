@@ -1,10 +1,10 @@
 import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
-import { IRole } from "../../interfaces/role";
+import { IStaff } from "../../interfaces/staff";
 import { RootState } from "../store";
-import roleService from "./roleService";
+import staffService from "./staffService";
 
-interface IRoleResponse {
-  roles: IRole[];
+interface IStaffResponse {
+  staffs: IStaff[];
   totalCount: number;
   isError: boolean;
   isSuccess: boolean;
@@ -17,8 +17,8 @@ interface IRoleResponse {
   errorMessage: string | unknown;
 }
 
-const initialState: IRoleResponse = {
-  roles: [],
+const initialState: IStaffResponse = {
+  staffs: [],
   totalCount: 0,
   isError: false,
   isSuccess: false,
@@ -31,54 +31,54 @@ const initialState: IRoleResponse = {
   errorMessage: "",
 };
 
-export const createRole = createAsyncThunk(
+export const createStaff = createAsyncThunk(
   "role/create",
-  async (roleData: IRole, thunkAPI) => {
+  async (roleData: IStaff, thunkAPI) => {
     try {
-      return await roleService.createRole(roleData);
+      return await staffService.createStaff(roleData);
     } catch (error) {
       return thunkAPI.rejectWithValue(error);
     }
   }
 );
 
-export const getRole = createAsyncThunk(
+export const getStaff = createAsyncThunk(
   "role/getAll",
   async (filter: { [key: string]: number | string }, thunkAPI) => {
     try {
-      return await roleService.getRole(filter);
+      return await staffService.getStaff(filter);
     } catch (error) {
       return thunkAPI.rejectWithValue(error);
     }
   }
 );
 
-export const updateRole = createAsyncThunk(
+export const updateStaff = createAsyncThunk(
   "role/update",
   async (
-    { id, roleData }: { id: number; roleData: Partial<IRole> },
+    { id, staffData }: { id: number; staffData: Partial<IStaff> },
     thunkAPI
   ) => {
     try {
-      return await roleService.updateRole(id, roleData);
+      return await staffService.updateStaff(id, staffData);
     } catch (error) {
       return thunkAPI.rejectWithValue(error);
     }
   }
 );
-export const deleteRole = createAsyncThunk(
+export const deleteStaff = createAsyncThunk(
   "role/delete",
   async (pageId: number | string, thunkAPI) => {
     try {
-      return await roleService.deleteRole(pageId);
+      return await staffService.deleteStaff(pageId);
     } catch (error) {
       return thunkAPI.rejectWithValue(error);
     }
   }
 );
 
-export const roleSlice = createSlice({
-  name: "role",
+export const pageSlice = createSlice({
+  name: "staff",
   initialState,
   reducers: {
     reset: () => initialState,
@@ -86,64 +86,64 @@ export const roleSlice = createSlice({
   extraReducers: (builder) => {
     builder
       /*  TODO: Create ROLE */
-      .addCase(createRole.pending, (state) => {
+      .addCase(createStaff.pending, (state) => {
         state.isLoading = true;
         state.isCreate = false;
       })
-      .addCase(createRole.fulfilled, (state, action) => {
+      .addCase(createStaff.fulfilled, (state, action) => {
         state.isLoading = false;
         state.isCreate = true;
-        state.message = (action.payload as Partial<IRoleResponse>).message;
+        state.message = (action.payload as Partial<IStaffResponse>).message;
       })
-      .addCase(createRole.rejected, (state, action: any) => {
+      .addCase(createStaff.rejected, (state, action: any) => {
         state.isLoading = false;
         state.isError = true;
         state.errorMessage = action?.payload?.response?.data?.message;
         state.error = action?.payload?.response?.data?.errors;
       })
       /* TODO: GET ROLE */
-      .addCase(getRole.pending, (state) => {
+      .addCase(getStaff.pending, (state) => {
         state.isLoading = true;
         state.isSuccess = false;
       })
-      .addCase(getRole.fulfilled, (state, action) => {
+      .addCase(getStaff.fulfilled, (state, action) => {
         state.isLoading = false;
         state.isSuccess = true;
-        state.roles = action.payload.data.rows;
+        state.staffs = action.payload.data.rows;
         state.totalCount = action.payload.data.count;
       })
-      .addCase(getRole.rejected, (state, action: any) => {
+      .addCase(getStaff.rejected, (state, action: any) => {
         state.isLoading = false;
         state.isError = true;
         state.errorMessage = action?.payload?.response?.data?.message;
         state.error = action?.payload?.response?.data?.errors;
       })
       /* TODO: UPDATE ROLE */
-      .addCase(updateRole.pending, (state) => {
+      .addCase(updateStaff.pending, (state) => {
         state.isLoading = true;
         state.isUpdate = false;
       })
-      .addCase(updateRole.fulfilled, (state, action) => {
+      .addCase(updateStaff.fulfilled, (state, action) => {
         state.isLoading = false;
         state.isUpdate = true;
         state.message = action.payload.message;
       })
-      .addCase(updateRole.rejected, (state, action: any) => {
+      .addCase(updateStaff.rejected, (state, action: any) => {
         state.isLoading = false;
         state.isError = true;
         state.errorMessage = action?.payload?.response?.data?.message;
         state.error = action?.payload?.response?.data?.errors;
       })
       /* TODO: DELETE ROLE */
-      .addCase(deleteRole.pending, (state) => {
+      .addCase(deleteStaff.pending, (state) => {
         state.isDelete = false;
       })
-      .addCase(deleteRole.fulfilled, (state, action) => {
+      .addCase(deleteStaff.fulfilled, (state, action) => {
         state.isLoading = false;
         state.isDelete = true;
         state.message = action.payload.message;
       })
-      .addCase(deleteRole.rejected, (state, action: any) => {
+      .addCase(deleteStaff.rejected, (state, action: any) => {
         state.isLoading = false;
         state.isError = true;
         state.errorMessage = action?.payload?.response?.data?.message;
@@ -152,6 +152,6 @@ export const roleSlice = createSlice({
   },
 });
 
-export const { reset } = roleSlice.actions;
-export const selectRole = (state: RootState) => state.role;
-export default roleSlice.reducer;
+export const { reset } = pageSlice.actions;
+export const selectStaff = (state: RootState) => state.staff;
+export default pageSlice.reducer;

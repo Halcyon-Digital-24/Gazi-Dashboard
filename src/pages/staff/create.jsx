@@ -3,22 +3,51 @@ import { toast } from "react-toastify";
 import { Button } from "../../components/button";
 import CardBody from "../../components/card-body";
 import Display from "../../components/display";
-import axios from "../../lib";
 import { useForm } from "react-hook-form";
+import { useAppDispatch, useAppSelector } from "../../redux/hooks";
+import { getRole, selectRole } from "../../redux/roles/roleSlice";
+import { useEffect } from "react";
+import { createStaff, selectStaff, reset } from "../../redux/staff/staffSlice";
 
 const CreateProfile = () => {
-  const navigate = useNavigate();
-
   const {
     register,
+    setError,
     control,
     handleSubmit,
     formState: { errors },
-  } = useForm();
-
+  } = useForm({
+    defaultValues: {
+      role_id: 1,
+    },
+  });
+  const navigate = useNavigate();
+  const dispatch = useAppDispatch();
+  const { roles } = useAppSelector(selectRole);
+  const { error, errorMessage, isError, message, isCreate } =
+    useAppSelector(selectStaff);
   const onSubmit = (data) => {
-    console.log(data);
+    dispatch(createStaff(data));
   };
+
+  useEffect(() => {
+    if (isCreate) {
+      toast.success(`${message}`);
+      navigate("/staffs");
+    }
+    if (isError) {
+      toast.error(`${errorMessage}`);
+      setError("email", { type: "validate", message: error.email });
+      setError("mobile", { type: "validate", message: error.mobile });
+    }
+    return () => {
+      dispatch(reset());
+    };
+  }, [dispatch, isCreate, isError, errorMessage, message, navigate]);
+
+  useEffect(() => {
+    dispatch(getRole({ page: 1, limit: 50 }));
+  }, [dispatch]);
 
   return (
     <div>
@@ -83,7 +112,7 @@ const CreateProfile = () => {
           <div className="text">
             <label htmlFor="name">Password</label>
             <input
-              type="text"
+              type="password"
               placeholder="Password"
               {...register("password", {
                 trim: true,
@@ -104,16 +133,20 @@ const CreateProfile = () => {
             </label>
             <div className="select-wrapper">
               <select
-                id="role"
+                id="access_id"
                 className="select"
-                {...register("role", {
+                {...register("access_id", {
                   required: "Please select role",
                 })}
-                htmlFor="role"
-                name="role"
+                htmlFor="access_id"
+                name="access_id"
               >
                 <option value="">Select Role</option>
-                <option value="admin">Admin</option>
+                {roles.map((role, index) => (
+                  <option key={index} value={role.id}>
+                    {role.name}
+                  </option>
+                ))}
               </select>
             </div>
 

@@ -1,24 +1,71 @@
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 import { toast } from "react-toastify";
 import { Button } from "../../components/button";
 import CardBody from "../../components/card-body";
 import Display from "../../components/display";
 import axios from "../../lib";
 import { useForm } from "react-hook-form";
+import { useAppDispatch, useAppSelector } from "../../redux/hooks";
+import { getRole, selectRole } from "../../redux/roles/roleSlice";
+import { useEffect } from "react";
+import { updateStaff, selectStaff, reset } from "../../redux/staff/staffSlice";
 
 const UpdateProfile = () => {
+  const { slug } = useParams();
   const navigate = useNavigate();
-
+  const dispatch = useAppDispatch();
+  const { roles } = useAppSelector(selectRole);
+  const { error, errorMessage, isError, message, isUpdate } =
+    useAppSelector(selectStaff);
   const {
     register,
-    control,
+    setError,
+    setValue,
     handleSubmit,
     formState: { errors },
   } = useForm();
 
   const onSubmit = (data) => {
-    console.log(data);
+    dispatch(updateStaff({ id: slug, staffData: data }));
   };
+
+  useEffect(() => {
+    if (isUpdate) {
+      toast.success(`${message}`);
+      navigate("/staffs");
+    }
+    if (isError) {
+      toast.error(`${errorMessage}`);
+      setError("email", { type: "validate", message: error.email });
+      setError("mobile", { type: "validate", message: error.mobile });
+    }
+    return () => {
+      dispatch(reset());
+    };
+  }, [dispatch, isUpdate, isError, errorMessage, message, navigate]);
+
+  useEffect(() => {
+    dispatch(getRole({ page: 1, limit: 50 }));
+  }, [dispatch]);
+
+  useEffect(() => {
+    const fetchData = async () => {
+      try {
+        const response = await axios.get(`/users/${slug}`);
+        const data = response.data.data;
+
+        // Set state values based on the fetched data
+        setValue("name", data.name);
+        setValue("email", data.email);
+        setValue("mobile", data.mobile);
+        setValue("access_id", data?.access_id);
+      } catch (error) {
+        console.error("Error fetching category data:", error);
+      }
+    };
+
+    fetchData();
+  }, [slug]);
 
   return (
     <div>
@@ -87,7 +134,6 @@ const UpdateProfile = () => {
               placeholder="Password"
               {...register("password", {
                 trim: true,
-                required: "Password is required",
                 pattern: {
                   value: /\S/,
                   message: "Enter a valid password",
@@ -113,7 +159,11 @@ const UpdateProfile = () => {
                 name="role"
               >
                 <option value="">Select Role</option>
-                <option value="admin">Admin</option>
+                {roles.map((role, index) => (
+                  <option key={index} value={role.id}>
+                    {role.name}
+                  </option>
+                ))}
               </select>
             </div>
 

@@ -24,6 +24,7 @@ import refundReducer from "./refund/refundSlice";
 import supportReducer from "./support/supportSlice";
 import commentReducer from "./comments/commentSlice";
 import roleReducer from "./roles/roleSlice";
+import staffReducer from "./staff/staffSlice";
 // ...
 const store = configureStore({
   reducer: {
@@ -52,6 +53,7 @@ const store = configureStore({
     support: supportReducer,
     comment: commentReducer,
     role: roleReducer,
+    staff: staffReducer,
   },
   // devTools: false,
 });
