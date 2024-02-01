@@ -1,7 +1,7 @@
-import React from 'react';
-import { FaRegEdit } from 'react-icons/fa';
-import { Link } from 'react-router-dom';
-import './edit.scss';
+import React from "react";
+import { FaRegEdit } from "react-icons/fa";
+import { Link } from "react-router-dom";
+import "./edit.scss";
 
 interface IProps {
   editUrl: string;
@@ -10,11 +10,11 @@ interface IProps {
 
 const EditButton: React.FC<IProps> = ({ editUrl, onClick }) => {
   return (
-    <div title="Edit" className="edit-icon" onClick={onClick}>
-      <Link to={editUrl}>
+    <Link to={editUrl}>
+      <div title="Edit" className="edit-icon" onClick={onClick}>
         <FaRegEdit className="i" />
-      </Link>
-    </div>
+      </div>
+    </Link>
   );
 };
 
