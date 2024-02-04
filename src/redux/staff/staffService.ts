@@ -5,14 +5,14 @@ import { IStaff, IStaffResponse } from "../../interfaces/staff";
 const createStaff = async (
   roleData: IStaff
 ): Promise<Partial<IStaffResponse>> => {
-  const { data } = await axios.post(`${API_URL}/users`, roleData);
+  const { data } = await axios.post(`${API_URL}/admins`, roleData);
   return data;
 };
 
 const getStaff = async (filter: {
   [key: string]: string | number | boolean;
 }): Promise<IStaffResponse> => {
-  let url = `/users`;
+  let url = `/admins`;
 
   const filteredFilter: { [key: string]: string | number | boolean } = {};
   Object.entries(filter).forEach(([key, value]) => {
@@ -39,12 +39,12 @@ const getStaff = async (filter: {
 };
 
 const updateStaff = async (id: number, pageData: Partial<IStaff>) => {
-  const { data } = await axios.patch(`${API_URL}/users/${id}`, pageData);
+  const { data } = await axios.patch(`${API_URL}/admins/${id}`, pageData);
   return data;
 };
 
 const deleteStaff = async (pageId: number | string) => {
-  const { data } = await axios.delete(`${API_URL}/users/?ids=[${pageId}]`);
+  const { data } = await axios.delete(`${API_URL}/admins/?ids=[${pageId}]`);
   return data;
 };
 

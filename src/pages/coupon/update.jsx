@@ -86,7 +86,6 @@ const UpdateCoupon = () => {
 
     fetchData();
   }, [slug]);
-  console.log(setValue);
 
   // display hide and show
   useEffect(() => {

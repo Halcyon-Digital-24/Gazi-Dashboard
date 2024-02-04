@@ -22,7 +22,6 @@ import {
 import {
   deleteBanner,
   getAddBanner,
-  getSlider,
   updateAddBanner,
 } from "../../redux/add-banner/addBannerSlice";
 import { useAppDispatch, useAppSelector } from "../../redux/hooks";
@@ -38,7 +37,10 @@ const SetupPage = () => {
     formState: { errors },
   } = useForm();
   const dispatch = useAppDispatch();
-  const { addBanner, isDelete } = useAppSelector((state) => state.banner);
+  const { isDelete: bannerDelete, isUpdate: bannerUpdate } = useAppSelector(
+    (state) => state.banner
+  );
+  const [addBanner, setAddBanner] = useState([]);
   const { categories } = useAppSelector((state) => state.category);
   const { isUpdate, isSuccess: settingSuccess } = useAppSelector(
     (state) => state.settings
@@ -76,7 +78,6 @@ const SetupPage = () => {
         bannerData: { is_visible: !banner.is_visible },
       })
     );
-    dispatch(getAddBanner({}));
   };
 
   useEffect(() => {
@@ -87,6 +88,35 @@ const SetupPage = () => {
       dispatch(reset());
     };
   }, [isUpdate, dispatch]);
+
+  // Load setting data
+  useEffect(() => {
+    dispatch(getSettings());
+    /*  return () => {
+      dispatch(reset());
+    }; */
+  }, [dispatch, settingSuccess, isUpdate]);
+
+  useEffect(() => {
+    const fetchData = async () => {
+      try {
+        const response = await axios.get(`${API_URL}/banners?slider=true`);
+        setAddBanner(response?.data?.rows);
+      } catch (error) {
+        console.log("Banner data fetch error" + error);
+      }
+    };
+    fetchData();
+  }, [isUpdate, bannerDelete, bannerUpdate]);
+
+  // Load category data
+  useEffect(() => {
+    dispatch(getCategories({ page: 1, limit: 100 }));
+
+    return () => {
+      dispatch(categoryReset());
+    };
+  }, [dispatch]);
 
   useEffect(() => {
     const fetchData = async () => {
@@ -110,27 +140,6 @@ const SetupPage = () => {
 
     fetchData();
   }, [isSuccess]);
-
-  // Load setting data
-  useEffect(() => {
-    dispatch(getSettings());
-    /*  return () => {
-      dispatch(reset());
-    }; */
-  }, [dispatch, settingSuccess, isUpdate]);
-
-  useEffect(() => {
-    dispatch(getSlider());
-  }, [dispatch, isDelete]);
-
-  // Load category data
-  useEffect(() => {
-    dispatch(getCategories({ page: 1, limit: 100 }));
-
-    return () => {
-      dispatch(categoryReset());
-    };
-  }, [dispatch]);
 
   return (
     <div>
@@ -376,31 +385,35 @@ const SetupPage = () => {
               <Column className="col-md-2">Status</Column>
               <Column className="col-md-2">Action</Column>
             </Row>
-            {addBanner?.map((banner, index) => (
-              <Row key={index} className="row banner">
-                <Column className="col-md-4">
-                  <img
-                    src={`${API_ROOT}/images/banner/${banner.image}`}
-                    alt="banner"
-                  />
-                </Column>
-                <Column className="col-md-4">
-                  <p>{banner.url}</p>
-                </Column>
-                <Column className="col-md-2">
-                  <ToggleButton
-                    onClick={() => handleVisibility(banner)}
-                    isChecked={banner.is_visible}
-                  />
-                </Column>
-                <Column className="col-md-2">
-                  <CustomIconArea>
-                    <EditButton editUrl={`/setup/sliders/edit/${banner.id}`} />
-                    <DeleteButton onClick={() => handleDelete(banner.id)} />
-                  </CustomIconArea>
-                </Column>
-              </Row>
-            ))}
+            <>
+              {addBanner?.map((banner, index) => (
+                <Row key={index} className="row banner">
+                  <Column className="col-md-4">
+                    <img
+                      src={`${API_ROOT}/images/banner/${banner.image}`}
+                      alt="banner"
+                    />
+                  </Column>
+                  <Column className="col-md-4">
+                    <p>{banner.url}</p>
+                  </Column>
+                  <Column className="col-md-2">
+                    <ToggleButton
+                      onClick={() => handleVisibility(banner)}
+                      isChecked={banner.is_visible}
+                    />
+                  </Column>
+                  <Column className="col-md-2">
+                    <CustomIconArea>
+                      <EditButton
+                        editUrl={`/setup/sliders/edit/${banner.id}`}
+                      />
+                      <DeleteButton onClick={() => handleDelete(banner.id)} />
+                    </CustomIconArea>
+                  </Column>
+                </Row>
+              ))}
+            </>
           </Display>
           <CustomScript />
         </Column>

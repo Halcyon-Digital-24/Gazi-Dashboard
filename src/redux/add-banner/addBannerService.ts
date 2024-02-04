@@ -1,9 +1,5 @@
-import {
-  IAdBanner,
-  IAddBannerResponse,
-  ISliderResponse,
-} from '../../interfaces/addBanner';
-import axios from '../../lib';
+import { IAdBanner, IAddBannerResponse } from "../../interfaces/addBanner";
+import axios from "../../lib";
 
 export interface ICreateResponse {
   message: string;
@@ -20,7 +16,7 @@ const createAddBanner = async (
 const getAddBanner = async (filter: {
   [key: string]: string | number | boolean;
 }): Promise<IAddBannerResponse> => {
-  let url = `/banners?not_slider=true`;
+  let url = `/banners`;
   // Filter out keys with false values
   const filteredFilter: { [key: string]: string | number | boolean } = {};
   Object.entries(filter).forEach(([key, value]) => {
@@ -35,7 +31,7 @@ const getAddBanner = async (filter: {
         ([key, value]) =>
           `${encodeURIComponent(key)}=${encodeURIComponent(value.toString())}`
       )
-      .join('&');
+      .join("&");
 
     // Add query string to the URL
     url += `?${queryString}`;
@@ -43,15 +39,11 @@ const getAddBanner = async (filter: {
   const { data } = await axios.get(url);
   return data;
 };
-const getSlider = async (): Promise<ISliderResponse> => {
-  const url = `/banners/slider`;
 
-  const { data } = await axios.get(url);
-
-  return data;
-};
-
-const updateAddBanner = async (bannerData: Partial<IAdBanner> | FormData, id: number | string) => {
+const updateAddBanner = async (
+  bannerData: Partial<IAdBanner> | FormData,
+  id: number | string
+) => {
   const { data } = await axios.patch(`/banners/${id}`, bannerData);
   return data;
 };
@@ -66,7 +58,6 @@ const addBannerService = {
   getAddBanner,
   updateAddBanner,
   deleteBanner,
-  getSlider,
 };
 
 export default addBannerService;

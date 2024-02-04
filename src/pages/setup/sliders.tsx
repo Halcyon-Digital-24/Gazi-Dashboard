@@ -11,7 +11,6 @@ import { IAdBanner } from "../../interfaces/addBanner";
 import {
   deleteBanner,
   getAddBanner,
-  getSlider,
   updateAddBanner,
 } from "../../redux/add-banner/addBannerSlice";
 import { useAppDispatch, useAppSelector } from "../../redux/hooks";
@@ -31,11 +30,10 @@ const Sliders = () => {
         bannerData: { is_visible: !banner.is_visible },
       })
     );
-    dispatch(getAddBanner({}));
   };
 
   useEffect(() => {
-    dispatch(getSlider());
+    dispatch(getAddBanner({ not_slider: true }));
   }, [dispatch, isDelete]);
 
   return (

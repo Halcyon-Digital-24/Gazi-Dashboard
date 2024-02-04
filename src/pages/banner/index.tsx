@@ -58,7 +58,7 @@ const BannerPage = () => {
   };
 
   useEffect(() => {
-    dispatch(getAddBanner({ page: pageNumber }));
+    dispatch(getAddBanner({ page: pageNumber, not_slider: true }));
   }, [dispatch, isDelete, isUpdate, pageNumber]);
 
   return (
