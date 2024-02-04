@@ -16,6 +16,10 @@ import { useForm, Controller } from "react-hook-form";
 import CustomScript from "./Script";
 import DynamicImage from "./Images";
 import {
+  getCategories,
+  reset as categoryReset,
+} from "../../redux/category/categorySlice";
+import {
   deleteBanner,
   getAddBanner,
   getSlider,
@@ -35,6 +39,7 @@ const SetupPage = () => {
   } = useForm();
   const dispatch = useAppDispatch();
   const { addBanner, isDelete } = useAppSelector((state) => state.banner);
+  const { categories } = useAppSelector((state) => state.category);
   const { isUpdate, isSuccess: settingSuccess } = useAppSelector(
     (state) => state.settings
   );
@@ -88,12 +93,15 @@ const SetupPage = () => {
       try {
         const response = await axios.get(`/home-page`);
         const data = response.data.homePage;
-
+        // set Value
         setValue("mobile_number", data.mobile_number);
         setValue("office_time", data.office_time);
         setValue("special_product_link", data.special_product_link);
         setValue("meta_title", data.meta_title);
         setValue("meta_description", data.meta_description);
+        setValue("category_one", data.category_one);
+        setValue("category_two", data.category_two);
+        setValue("category_three", data.category_three);
         setSpecialPhoto(data.special_product_photo);
       } catch (error) {
         console.error("Error fetching data:", error);
@@ -103,6 +111,7 @@ const SetupPage = () => {
     fetchData();
   }, [isSuccess]);
 
+  // Load setting data
   useEffect(() => {
     dispatch(getSettings());
     /*  return () => {
@@ -113,6 +122,15 @@ const SetupPage = () => {
   useEffect(() => {
     dispatch(getSlider());
   }, [dispatch, isDelete]);
+
+  // Load category data
+  useEffect(() => {
+    dispatch(getCategories({ page: 1, limit: 100 }));
+
+    return () => {
+      dispatch(categoryReset());
+    };
+  }, [dispatch]);
 
   return (
     <div>
@@ -160,6 +178,93 @@ const SetupPage = () => {
                   </p>
                 )}
               </div>
+              <>
+                <label className="label" htmlFor="select">
+                  First Category
+                </label>
+                <div className="select-wrapper">
+                  <select
+                    id="select"
+                    className="select"
+                    {...register("category_one", {
+                      required: "Category is required",
+                    })}
+                    htmlFor="category_one"
+                    name="category_one"
+                  >
+                    <option value="">Select Category</option>
+                    {categories.map((category, index) => (
+                      <option key={index} value={category.slug}>
+                        {category.title}
+                      </option>
+                    ))}
+                  </select>
+                </div>
+
+                {errors.category_one && (
+                  <p className="validation__error">
+                    {errors.category_one.message}
+                  </p>
+                )}
+              </>
+              <>
+                <label className="label" htmlFor="select">
+                  Second Category
+                </label>
+                <div className="select-wrapper">
+                  <select
+                    id="select"
+                    className="select"
+                    {...register("category_two", {
+                      required: "Category is required",
+                    })}
+                    htmlFor="category_two"
+                    name="category_two"
+                  >
+                    <option value="">Select Category</option>
+                    {categories.map((category, index) => (
+                      <option key={index} value={category.slug}>
+                        {category.title}
+                      </option>
+                    ))}
+                  </select>
+                </div>
+
+                {errors.category_two && (
+                  <p className="validation__error">
+                    {errors.category_two.message}
+                  </p>
+                )}
+              </>
+              <>
+                <label className="label" htmlFor="select">
+                  Third Category
+                </label>
+                <div className="select-wrapper">
+                  <select
+                    id="select"
+                    className="select"
+                    {...register("category_three", {
+                      required: "Category is required",
+                    })}
+                    htmlFor="category_three"
+                    name="category_three"
+                  >
+                    <option value="">Select Category</option>
+                    {categories.map((category, index) => (
+                      <option key={index} value={category.slug}>
+                        {category.title}
+                      </option>
+                    ))}
+                  </select>
+                </div>
+
+                {errors.category_three && (
+                  <p className="validation__error">
+                    {errors.category_three.message}
+                  </p>
+                )}
+              </>
               <div className="text">
                 <label htmlFor="name">Special Product Link</label>
                 <input
