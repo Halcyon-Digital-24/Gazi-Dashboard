@@ -1,14 +1,31 @@
-export const sidebarLinks = [
+const permissions = localStorage.getItem('user'); 
+
+let userPermission;
+// Check if user data exists
+if (permissions) {
+  // Parse user data as JSON
+  userPermission = JSON.parse(permissions).permissions;
+  console.log(userPermission);
+} else {
+  console.error("User data not found in local storage");
+}
+
+// Sidebar links that are always visible
+const commonLinks = [
   {
     id: 1,
     title: "Dashboard",
     icon: "home.svg",
     slug: "/",
   },
+];
+
+export const allSidebarLinks = [
   {
     id: 2,
     title: "Manage Categories",
     icon: "list.svg",
+    role_identity:"categories", 
     subLinks: [
       {
         subtitle: "Categories",
@@ -24,6 +41,7 @@ export const sidebarLinks = [
     id: 3,
     title: "Manage Products ",
     icon: "product.png",
+    role_identity:"products", 
     subLinks: [
       {
         subtitle: "New Product",
@@ -52,9 +70,10 @@ export const sidebarLinks = [
     ],
   },
   {
-    id: 3,
+    id: 4,
     title: "Manage Orders ",
     icon: "order.png",
+    role_identity:"orders", 
     subLinks: [
       {
         subtitle: "All Orders",
@@ -79,9 +98,10 @@ export const sidebarLinks = [
     ],
   },
   {
-    id: 45,
+    id: 5,
     title: "Refund",
     icon: "refund.png",
+    role_identity:"refund", 
     subLinks: [
       {
         subtitle: "Refund",
@@ -90,9 +110,10 @@ export const sidebarLinks = [
     ],
   },
   {
-    id: 4,
+    id: 6,
     title: "Manage Blogs",
     icon: "blog.png",
+    role_identity:"blogs", 
     subLinks: [
       {
         subtitle: "Blogs",
@@ -105,14 +126,16 @@ export const sidebarLinks = [
     ],
   },
   {
-    id: 5,
+    id: 7,
     title: "Customers ",
+    role_identity:"customers", 
     icon: "group.png",
     slug: "/customers",
   },
   {
-    id: 6,
+    id: 8,
     title: "Notifications",
+    role_identity:"notifications", 
     icon: "bell.png",
     subLinks: [
       {
@@ -126,9 +149,10 @@ export const sidebarLinks = [
     ],
   },
   {
-    id: 6,
+    id: 9,
     title: "Videos",
     icon: "video.png",
+    role_identity:"videos", 
     subLinks: [
       {
         subtitle: "All Videos",
@@ -141,9 +165,10 @@ export const sidebarLinks = [
     ],
   },
   {
-    id: 7,
+    id: 10,
     title: "Manage Faqs",
     icon: "faq.png",
+    role_identity:"faqs",
     subLinks: [
       {
         subtitle: "Faqs",
@@ -153,8 +178,9 @@ export const sidebarLinks = [
   },
 
   {
-    id: 8,
+    id: 11,
     title: "Marketing",
+    role_identity:"marketing",
     icon: "promotion.png",
     subLinks: [
       {
@@ -165,9 +191,10 @@ export const sidebarLinks = [
   },
 
   {
-    id: 8,
+    id: 12,
     title: "Ads",
     icon: "advertising.png",
+    role_identity:"ads",
     subLinks: [
       {
         subtitle: "Ads Banner",
@@ -176,9 +203,10 @@ export const sidebarLinks = [
     ],
   },
   {
-    id: 9,
+    id: 13,
     title: "Support",
     icon: "support-ticket.png",
+    role_identity:"support",
     subLinks: [
       {
         subtitle: "Support",
@@ -195,9 +223,10 @@ export const sidebarLinks = [
     ],
   },
   {
-    id: 10,
+    id: 14,
     title: "Payment",
     icon: "emi.png",
+    role_identity:"payment",
     subLinks: [
       {
         subtitle: "Available EMI",
@@ -214,9 +243,10 @@ export const sidebarLinks = [
     ],
   },
   {
-    id: 11,
+    id: 15,
     title: "Site Settings",
     icon: "setting.png",
+    role_identity:"setting",
     subLinks: [
       {
         subtitle: "Home Page",
@@ -249,9 +279,10 @@ export const sidebarLinks = [
     ],
   },
   {
-    id: 11,
+    id: 16,
     title: "Staff",
     icon: "user.png",
+    role_identity:"staff",
     subLinks: [
       {
         subtitle: "All Staffs",
@@ -263,4 +294,12 @@ export const sidebarLinks = [
       },
     ],
   },
+];
+
+
+export const sidebarLinks = [
+  ...commonLinks,
+  ...allSidebarLinks.filter((link) =>
+    userPermission?.includes(link.role_identity)
+  ),
 ];

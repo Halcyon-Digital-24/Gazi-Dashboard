@@ -16,7 +16,7 @@ function Login() {
   const onSubmit = async (data) => {
     try {
       const response = await axios.post(
-        `${import.meta.env.VITE_API_URL}/auths/login`,
+        `${import.meta.env.VITE_API_URL}/auths/admin-login`,
         data
       );
       localStorage.setItem("user", JSON.stringify(response.data));
