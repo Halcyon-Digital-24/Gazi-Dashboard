@@ -76,112 +76,91 @@ import {
   UpdateProfile,
 } from "./pages";
 
+const routes = [
+  { path: "/", element: <Home /> },
+  { path: "/category", element: <Categories /> },
+  { path: "/categories/create", element: <CreateCategory /> },
+  { path: "/categories/edit/:slug", element: <UpdateCategory /> },
+  { path: "/products", element: <AllProducts /> },
+  { path: "/products/edit/:slug", element: <UpdateProduct /> },
+  { path: "/products/create", element: <CreateProduct /> },
+  { path: "/products/stockout", element: <StockOutProducts /> },
+  { path: "/products/reviews", element: <Reviews /> },
+  { path: "/attributes", element: <Attributes /> },
+  { path: "/attributes/create", element: <CreateAttributes /> },
+  { path: "/attributes/edit/:slug", element: <UpdateAttribute /> },
+  { path: "/orders", element: <AllOrders /> },
+  { path: "/csv", element: <Csv /> },
+  { path: "/orders/pending", element: <PendingOrders /> },
+  { path: "/orders/delivered", element: <Delivered /> },
+  { path: "/orders/canceled", element: <Canceled /> },
+  { path: "/orders/custom", element: <CustomOrder /> },
+  { path: "/orders/views/:slug", element: <OrderView /> },
+  { path: "/orders/edit/:slug", element: <UpdateOrder /> },
+  { path: "/refund", element: <Warranty /> },
+  { path: "/refund/:slug", element: <WarrantyDetails /> },
+  { path: "/blogs", element: <Blogs /> },
+  { path: "/blogs/create", element: <CreateBlog /> },
+  { path: "/blogs/edit/:slug", element: <UpdateBlog /> },
+  { path: "/blogs/comments", element: <BlogComment /> },
+  { path: "/customers", element: <Customers /> },
+  { path: "/videos", element: <VideosPage /> },
+  { path: "/videos/create", element: <CreateVideo /> },
+  { path: "/videos/edit/:slug", element: <UpdateVideo /> },
+  { path: "/faqs", element: <FaqPage /> },
+  { path: "/faqs/create", element: <CreateFaq /> },
+  { path: "/faqs/edit/:slug", element: <UpdateFaq /> },
+  { path: "/coupons", element: <CouponPage /> },
+  { path: "/coupons/create", element: <CreateCoupon /> },
+  { path: "/coupons/edit/:slug", element: <UpdateCoupon /> },
+  { path: "/banner", element: <BannerPage /> },
+  { path: "/banner/edit/:slug", element: <UpdateBanner /> },
+  { path: "/banner/create", element: <CreateBanner /> },
+  { path: "/shipping", element: <Shipping /> },
+  { path: "/shipping/create", element: <CreateShipping /> },
+  { path: "/shipping/edit/:slug", element: <UpdateShipping /> },
+  { path: "/support", element: <TicketPage /> },
+  { path: "/support/:slug", element: <Replay /> },
+  { path: "/queries", element: <Queries /> },
+  { path: "/subscriber", element: <Subscriber /> },
+  { path: "/emi", element: <EmiPage /> },
+  { path: "/emi/create", element: <CreateEmi /> },
+  { path: "/emi/edit/:slug", element: <UpdateEmi /> },
+  { path: "/payment-message", element: <PaymentMessage /> },
+  { path: "/setup/home-page", element: <SetupPage /> },
+  { path: "/setup/setting", element: <Settings /> },
+  { path: "/setup/menus/create", element: <CreateMenu /> },
+  { path: "/setup/menus/edit/:slug", element: <UpdateMenu /> },
+  { path: "/setup/menus", element: <Menus /> },
+  { path: "/setup/sliders", element: <Sliders /> },
+  { path: "/setup/services", element: <Services /> },
+  { path: "/setup/services/create", element: <CreateService /> },
+  { path: "/setup/services/edit/:slug", element: <UpdateService /> },
+  { path: "/setup/sliders/edit/:slug", element: <UpdateSlider /> },
+  { path: "/setup/sliders/create", element: <CreateSlider /> },
+  { path: "/setup/pages", element: <CommonPages /> },
+  { path: "/setup/pages/create", element: <CreatePage /> },
+  { path: "/setup/pages/edit/:slug", element: <UpdatePage /> },
+  { path: "/notification", element: <Notification /> },
+  { path: "/notification/create", element: <CreateNotification /> },
+  { path: "/admin/profile", element: <Profile /> },
+  { path: "/staffs", element: <Staff /> },
+  { path: "/staffs/create", element: <CreateProfile /> },
+  { path: "/staffs/edit/:slug", element: <UpdateProfile /> },
+  { path: "/roles", element: <Roles /> },
+  { path: "/roles/create", element: <CreateRole /> },
+  { path: "/roles/edit/:slug", element: <UpdateRole /> },
+  { path: "*", element: <Error /> }, // 404 Page
+];
+
 function PageRoutes() {
   return (
     <Routes>
-      <Route path="/" element={<Home />} />
-      {/* categories */}
-      <Route path="/category" element={<Categories />} />
-      <Route path="/categories/create" element={<CreateCategory />} />
-      <Route path="/categories/edit/:slug" element={<UpdateCategory />} />
-
-      {/* Products */}
-      <Route path="/products" element={<AllProducts />} />
-      <Route path="/products/edit/:slug" element={<UpdateProduct />} />
-      <Route path="/products/create" element={<CreateProduct />} />
-      <Route path="/products/stockout" element={<StockOutProducts />} />
-      <Route path="/products/reviews" element={<Reviews />} />
-      <Route path="/attributes" element={<Attributes />} />
-      <Route path="/attributes/create" element={<CreateAttributes />} />
-      <Route path="/attributes/edit/:slug" element={<UpdateAttribute />} />
-
-      {/* Orders */}
-      <Route path="/orders" element={<AllOrders />} />
-      <Route path="/csv" element={<Csv />} />
-      <Route path="/orders/pending" element={<PendingOrders />} />
-      <Route path="/orders/delivered" element={<Delivered />} />
-      <Route path="/orders/canceled" element={<Canceled />} />
-      <Route path="/orders/custom" element={<CustomOrder />} />
-      <Route path="/orders/views/:slug" element={<OrderView />} />
-      <Route path="/orders/edit/:slug" element={<UpdateOrder />} />
-
-      {/* Warranty */}
-      <Route path="/refund" element={<Warranty />} />
-      <Route path="/refund/:slug" element={<WarrantyDetails />} />
-
-      {/* Blog */}
-      <Route path="/blogs" element={<Blogs />} />
-      <Route path="/blogs/create" element={<CreateBlog />} />
-      <Route path="/blogs/edit/:slug" element={<UpdateBlog />} />
-      <Route path="/blogs/comments" element={<BlogComment />} />
-
-      {/* Customers */}
-      <Route path="/customers" element={<Customers />} />
-      {/* Videos */}
-      <Route path="/videos" element={<VideosPage />} />
-      <Route path="/videos/create" element={<CreateVideo />} />
-      <Route path="/videos/edit/:slug" element={<UpdateVideo />} />
-      {/* Faq */}
-      <Route path="/faqs" element={<FaqPage />} />
-      <Route path="/faqs/create" element={<CreateFaq />} />
-      <Route path="/faqs/edit/:slug" element={<UpdateFaq />} />
-      {/* Marketing */}
-      <Route path="/coupons" element={<CouponPage />} />
-      <Route path="/coupons/create" element={<CreateCoupon />} />
-      <Route path="/coupons/edit/:slug" element={<UpdateCoupon />} />
-      <Route path="/banner" element={<BannerPage />} />
-      <Route path="/banner/edit/:slug" element={<UpdateBanner />} />
-      <Route path="/banner/create" element={<CreateBanner />} />
-
-      {/* shipping */}
-      <Route path="/shipping" element={<Shipping />} />
-      <Route path="/shipping/create" element={<CreateShipping />} />
-      <Route path="/shipping/edit/:slug" element={<UpdateShipping />} />
-
-      {/* Support */}
-      <Route path="/support" element={<TicketPage />} />
-      <Route path="/support/:slug" element={<Replay />} />
-      <Route path="/queries" element={<Queries />} />
-      <Route path="/subscriber" element={<Subscriber />} />
-
-      {/* Payment */}
-      <Route path="/emi" element={<EmiPage />} />
-      <Route path="/emi/create" element={<CreateEmi />} />
-      <Route path="/emi/edit/:slug" element={<UpdateEmi />} />
-      <Route path="/payment-message" element={<PaymentMessage />} />
-
-      {/* Settings */}
-      <Route path="/setup/home-page" element={<SetupPage />} />
-      <Route path="/setup/setting" element={<Settings />} />
-      <Route path="/setup/menus/create" element={<CreateMenu />} />
-      <Route path="/setup/menus/edit/:slug" element={<UpdateMenu />} />
-      <Route path="/setup/menus" element={<Menus />} />
-      <Route path="/setup/sliders" element={<Sliders />} />
-      <Route path="/setup/services" element={<Services />} />
-      <Route path="/setup/services/create" element={<CreateService />} />
-      <Route path="/setup/services/edit/:slug" element={<UpdateService />} />
-      <Route path="/setup/sliders/edit/:slug" element={<UpdateSlider />} />
-      <Route path="/setup/sliders/create" element={<CreateSlider />} />
-      <Route path="/setup/pages" element={<CommonPages />} />
-      <Route path="/setup/pages/create" element={<CreatePage />} />
-      <Route path="/setup/pages/edit/:slug" element={<UpdatePage />} />
-
-      {/* Notification */}
-      <Route path="/notification" element={<Notification />} />
-      <Route path="/notification/create" element={<CreateNotification />} />
-
-      {/* Admin */}
-      <Route path="/admin/profile" element={<Profile />} />
-      <Route path="/staffs" element={<Staff />} />
-      <Route path="/staffs/create" element={<CreateProfile />} />
-      <Route path="/staffs/edit/:slug" element={<UpdateProfile />} />
-
-      {/* Roles */}
-      <Route path="/roles" element={<Roles />} />
-      <Route path="/roles/create" element={<CreateRole />} />
-      <Route path="/roles/edit/:slug" element={<UpdateRole />} />
-      {/* 404 Page */}
-      <Route path="*" element={<Error />} />
+      <>
+        {routes.map((route, index) => (
+          <Route key={index} path={route.path} element={route.element} />
+        ))}
+      </>
     </Routes>
   );
 }

@@ -71,6 +71,15 @@ const CreateRole = () => {
           </div>
           <div>
             <div className="row">
+              <div className="col-md-8">Category</div>
+              <div className="col-md-4">
+                <ToggleButton
+                  isChecked={permissions.includes("categories")}
+                  onClick={() => addOptions("categories")}
+                />
+              </div>
+            </div>
+            <div className="row">
               <div className="col-md-8">Products</div>
               <div className="col-md-4">
                 <ToggleButton

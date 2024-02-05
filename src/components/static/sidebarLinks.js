@@ -1,4 +1,4 @@
-const permissions = localStorage.getItem('user'); 
+const permissions = localStorage.getItem("user");
 
 let userPermission;
 // Check if user data exists
@@ -25,7 +25,7 @@ export const allSidebarLinks = [
     id: 2,
     title: "Manage Categories",
     icon: "list.svg",
-    role_identity:"categories", 
+    role_identity: "categories",
     subLinks: [
       {
         subtitle: "Categories",
@@ -41,7 +41,7 @@ export const allSidebarLinks = [
     id: 3,
     title: "Manage Products ",
     icon: "product.png",
-    role_identity:"products", 
+    role_identity: "products",
     subLinks: [
       {
         subtitle: "New Product",
@@ -73,7 +73,7 @@ export const allSidebarLinks = [
     id: 4,
     title: "Manage Orders ",
     icon: "order.png",
-    role_identity:"orders", 
+    role_identity: "orders",
     subLinks: [
       {
         subtitle: "All Orders",
@@ -101,7 +101,7 @@ export const allSidebarLinks = [
     id: 5,
     title: "Refund",
     icon: "refund.png",
-    role_identity:"refund", 
+    role_identity: "refund",
     subLinks: [
       {
         subtitle: "Refund",
@@ -113,7 +113,7 @@ export const allSidebarLinks = [
     id: 6,
     title: "Manage Blogs",
     icon: "blog.png",
-    role_identity:"blogs", 
+    role_identity: "blogs",
     subLinks: [
       {
         subtitle: "Blogs",
@@ -128,14 +128,14 @@ export const allSidebarLinks = [
   {
     id: 7,
     title: "Customers ",
-    role_identity:"customers", 
+    role_identity: "customers",
     icon: "group.png",
     slug: "/customers",
   },
   {
     id: 8,
     title: "Notifications",
-    role_identity:"notifications", 
+    role_identity: "notifications",
     icon: "bell.png",
     subLinks: [
       {
@@ -152,7 +152,7 @@ export const allSidebarLinks = [
     id: 9,
     title: "Videos",
     icon: "video.png",
-    role_identity:"videos", 
+    role_identity: "videos",
     subLinks: [
       {
         subtitle: "All Videos",
@@ -168,7 +168,7 @@ export const allSidebarLinks = [
     id: 10,
     title: "Manage Faqs",
     icon: "faq.png",
-    role_identity:"faqs",
+    role_identity: "faqs",
     subLinks: [
       {
         subtitle: "Faqs",
@@ -180,7 +180,7 @@ export const allSidebarLinks = [
   {
     id: 11,
     title: "Marketing",
-    role_identity:"marketing",
+    role_identity: "marketing",
     icon: "promotion.png",
     subLinks: [
       {
@@ -194,7 +194,7 @@ export const allSidebarLinks = [
     id: 12,
     title: "Ads",
     icon: "advertising.png",
-    role_identity:"ads",
+    role_identity: "ads",
     subLinks: [
       {
         subtitle: "Ads Banner",
@@ -206,7 +206,7 @@ export const allSidebarLinks = [
     id: 13,
     title: "Support",
     icon: "support-ticket.png",
-    role_identity:"support",
+    role_identity: "support",
     subLinks: [
       {
         subtitle: "Support",
@@ -226,7 +226,7 @@ export const allSidebarLinks = [
     id: 14,
     title: "Payment",
     icon: "emi.png",
-    role_identity:"payment",
+    role_identity: "payment",
     subLinks: [
       {
         subtitle: "Available EMI",
@@ -246,7 +246,7 @@ export const allSidebarLinks = [
     id: 15,
     title: "Site Settings",
     icon: "setting.png",
-    role_identity:"setting",
+    role_identity: "setting",
     subLinks: [
       {
         subtitle: "Home Page",
@@ -282,7 +282,7 @@ export const allSidebarLinks = [
     id: 16,
     title: "Staff",
     icon: "user.png",
-    role_identity:"staff",
+    role_identity: "staff",
     subLinks: [
       {
         subtitle: "All Staffs",
@@ -295,7 +295,6 @@ export const allSidebarLinks = [
     ],
   },
 ];
-
 
 export const sidebarLinks = [
   ...commonLinks,
