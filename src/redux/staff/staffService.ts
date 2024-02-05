@@ -39,7 +39,7 @@ const getStaff = async (filter: {
 };
 
 const updateStaff = async (id: number, pageData: Partial<IStaff>) => {
-  const { data } = await axios.patch(`${API_URL}/admins/${id}`, pageData);
+  const { data } = await axios.patch(`${API_URL}/users/${id}`, pageData);
   return data;
 };
 

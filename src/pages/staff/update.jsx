@@ -152,11 +152,11 @@ const UpdateProfile = () => {
               <select
                 id="role"
                 className="select"
-                {...register("role", {
+                {...register("access_id", {
                   required: "Please select role",
                 })}
-                htmlFor="role"
-                name="role"
+                htmlFor="access_id"
+                name="access_id"
               >
                 <option value="">Select Role</option>
                 {roles.map((role, index) => (
