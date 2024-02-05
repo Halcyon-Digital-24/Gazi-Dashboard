@@ -1,5 +1,5 @@
-import { IOrderResponse } from './../../interfaces/order';
-import axios from '../../lib';
+import { IOrderResponse } from "./../../interfaces/order";
+import axios from "../../lib";
 
 // get all products
 const getAllOrders = async (filter: {
@@ -21,7 +21,7 @@ const getAllOrders = async (filter: {
         ([key, value]) =>
           `${encodeURIComponent(key)}=${encodeURIComponent(value.toString())}`
       )
-      .join('&');
+      .join("&");
 
     // Add query string to the URL
     url += `?${queryString}`;
@@ -38,12 +38,11 @@ const updateOrder = async (
   orderData: { [key: string]: string }
 ) => {
   const { data } = await axios.patch(`/orders/${id}`, orderData);
-  console.log(data);
   return data;
 };
 
 const deleteOrder = async (ids: number[]) => {
-  const idsString = ids.join(',');
+  const idsString = ids.join(",");
   const { data } = await axios.delete(`/orders/?ids=[${idsString}]`);
   return data;
 };

@@ -118,7 +118,7 @@ const UpdateSlider = () => {
               <p className="validation__error">{errors.url.message}</p>
             )}
           </div>
-          <Button type="submit">Create</Button>
+          <Button type="submit">Update</Button>
         </form>
       </Display>
     </div>

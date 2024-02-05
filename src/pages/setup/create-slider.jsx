@@ -95,21 +95,6 @@ const CreateSlider = () => {
               <p className="validation__error">{errors.url.message}</p>
             )}
           </div>
-          {/*  <FileInput
-            name="image"
-            onChange={handleImageChange}
-            label="Banner Image"
-            required
-          />
-          <Input
-            htmlFor="url"
-            label="URL"
-            name="url"
-            placeholder="URL"
-            value={bannerData.url}
-            onChange={handleBannerData}
-            required
-          /> */}
           <Button type="submit">Create</Button>
         </form>
       </Display>

@@ -16,9 +16,12 @@ import { useForm, Controller } from "react-hook-form";
 import CustomScript from "./Script";
 import DynamicImage from "./Images";
 import {
+  getCategories,
+  reset as categoryReset,
+} from "../../redux/category/categorySlice";
+import {
   deleteBanner,
   getAddBanner,
-  getSlider,
   updateAddBanner,
 } from "../../redux/add-banner/addBannerSlice";
 import { useAppDispatch, useAppSelector } from "../../redux/hooks";
@@ -34,7 +37,11 @@ const SetupPage = () => {
     formState: { errors },
   } = useForm();
   const dispatch = useAppDispatch();
-  const { addBanner, isDelete } = useAppSelector((state) => state.banner);
+  const { isDelete: bannerDelete, isUpdate: bannerUpdate } = useAppSelector(
+    (state) => state.banner
+  );
+  const [addBanner, setAddBanner] = useState([]);
+  const { categories } = useAppSelector((state) => state.category);
   const { isUpdate, isSuccess: settingSuccess } = useAppSelector(
     (state) => state.settings
   );
@@ -71,7 +78,6 @@ const SetupPage = () => {
         bannerData: { is_visible: !banner.is_visible },
       })
     );
-    dispatch(getAddBanner({}));
   };
 
   useEffect(() => {
@@ -83,26 +89,7 @@ const SetupPage = () => {
     };
   }, [isUpdate, dispatch]);
 
-  useEffect(() => {
-    const fetchData = async () => {
-      try {
-        const response = await axios.get(`/home-page`);
-        const data = response.data.homePage;
-
-        setValue("mobile_number", data.mobile_number);
-        setValue("office_time", data.office_time);
-        setValue("special_product_link", data.special_product_link);
-        setValue("meta_title", data.meta_title);
-        setValue("meta_description", data.meta_description);
-        setSpecialPhoto(data.special_product_photo);
-      } catch (error) {
-        console.error("Error fetching data:", error);
-      }
-    };
-
-    fetchData();
-  }, [isSuccess]);
-
+  // Load setting data
   useEffect(() => {
     dispatch(getSettings());
     /*  return () => {
@@ -111,8 +98,48 @@ const SetupPage = () => {
   }, [dispatch, settingSuccess, isUpdate]);
 
   useEffect(() => {
-    dispatch(getSlider());
-  }, [dispatch, isDelete]);
+    const fetchData = async () => {
+      try {
+        const response = await axios.get(`${API_URL}/banners?slider=true`);
+        setAddBanner(response?.data?.rows);
+      } catch (error) {
+        console.log("Banner data fetch error" + error);
+      }
+    };
+    fetchData();
+  }, [isUpdate, bannerDelete, bannerUpdate]);
+
+  // Load category data
+  useEffect(() => {
+    dispatch(getCategories({ page: 1, limit: 100 }));
+
+    return () => {
+      dispatch(categoryReset());
+    };
+  }, [dispatch]);
+
+  useEffect(() => {
+    const fetchData = async () => {
+      try {
+        const response = await axios.get(`/home-page`);
+        const data = response.data.homePage;
+        // set Value
+        setValue("mobile_number", data.mobile_number);
+        setValue("office_time", data.office_time);
+        setValue("special_product_link", data.special_product_link);
+        setValue("meta_title", data.meta_title);
+        setValue("meta_description", data.meta_description);
+        setValue("category_one", data.category_one);
+        setValue("category_two", data.category_two);
+        setValue("category_three", data.category_three);
+        setSpecialPhoto(data.special_product_photo);
+      } catch (error) {
+        console.error("Error fetching data:", error);
+      }
+    };
+
+    fetchData();
+  }, [isSuccess]);
 
   return (
     <div>
@@ -160,6 +187,93 @@ const SetupPage = () => {
                   </p>
                 )}
               </div>
+              <>
+                <label className="label" htmlFor="select">
+                  First Category
+                </label>
+                <div className="select-wrapper">
+                  <select
+                    id="select"
+                    className="select"
+                    {...register("category_one", {
+                      required: "Category is required",
+                    })}
+                    htmlFor="category_one"
+                    name="category_one"
+                  >
+                    <option value="">Select Category</option>
+                    {categories.map((category, index) => (
+                      <option key={index} value={category.slug}>
+                        {category.title}
+                      </option>
+                    ))}
+                  </select>
+                </div>
+
+                {errors.category_one && (
+                  <p className="validation__error">
+                    {errors.category_one.message}
+                  </p>
+                )}
+              </>
+              <>
+                <label className="label" htmlFor="select">
+                  Second Category
+                </label>
+                <div className="select-wrapper">
+                  <select
+                    id="select"
+                    className="select"
+                    {...register("category_two", {
+                      required: "Category is required",
+                    })}
+                    htmlFor="category_two"
+                    name="category_two"
+                  >
+                    <option value="">Select Category</option>
+                    {categories.map((category, index) => (
+                      <option key={index} value={category.slug}>
+                        {category.title}
+                      </option>
+                    ))}
+                  </select>
+                </div>
+
+                {errors.category_two && (
+                  <p className="validation__error">
+                    {errors.category_two.message}
+                  </p>
+                )}
+              </>
+              <>
+                <label className="label" htmlFor="select">
+                  Third Category
+                </label>
+                <div className="select-wrapper">
+                  <select
+                    id="select"
+                    className="select"
+                    {...register("category_three", {
+                      required: "Category is required",
+                    })}
+                    htmlFor="category_three"
+                    name="category_three"
+                  >
+                    <option value="">Select Category</option>
+                    {categories.map((category, index) => (
+                      <option key={index} value={category.slug}>
+                        {category.title}
+                      </option>
+                    ))}
+                  </select>
+                </div>
+
+                {errors.category_three && (
+                  <p className="validation__error">
+                    {errors.category_three.message}
+                  </p>
+                )}
+              </>
               <div className="text">
                 <label htmlFor="name">Special Product Link</label>
                 <input
@@ -271,31 +385,35 @@ const SetupPage = () => {
               <Column className="col-md-2">Status</Column>
               <Column className="col-md-2">Action</Column>
             </Row>
-            {addBanner?.map((banner, index) => (
-              <Row key={index} className="row banner">
-                <Column className="col-md-4">
-                  <img
-                    src={`${API_ROOT}/images/banner/${banner.image}`}
-                    alt="banner"
-                  />
-                </Column>
-                <Column className="col-md-4">
-                  <p>{banner.url}</p>
-                </Column>
-                <Column className="col-md-2">
-                  <ToggleButton
-                    onClick={() => handleVisibility(banner)}
-                    isChecked={banner.is_visible}
-                  />
-                </Column>
-                <Column className="col-md-2">
-                  <CustomIconArea>
-                    <EditButton editUrl={`/setup/sliders/edit/${banner.id}`} />
-                    <DeleteButton onClick={() => handleDelete(banner.id)} />
-                  </CustomIconArea>
-                </Column>
-              </Row>
-            ))}
+            <>
+              {addBanner?.map((banner, index) => (
+                <Row key={index} className="row banner">
+                  <Column className="col-md-4">
+                    <img
+                      src={`${API_ROOT}/images/banner/${banner.image}`}
+                      alt="banner"
+                    />
+                  </Column>
+                  <Column className="col-md-4">
+                    <p>{banner.url}</p>
+                  </Column>
+                  <Column className="col-md-2">
+                    <ToggleButton
+                      onClick={() => handleVisibility(banner)}
+                      isChecked={banner.is_visible}
+                    />
+                  </Column>
+                  <Column className="col-md-2">
+                    <CustomIconArea>
+                      <EditButton
+                        editUrl={`/setup/sliders/edit/${banner.id}`}
+                      />
+                      <DeleteButton onClick={() => handleDelete(banner.id)} />
+                    </CustomIconArea>
+                  </Column>
+                </Row>
+              ))}
+            </>
           </Display>
           <CustomScript />
         </Column>
