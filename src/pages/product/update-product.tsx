@@ -12,24 +12,16 @@ import ToggleButton from "../../components/forms/checkbox";
 import { useAppDispatch, useAppSelector } from "../../redux/hooks";
 import { getCategories } from "../../redux/category/categorySlice";
 import { DateRangePicker } from "rsuite";
-import { RxCross2 } from "react-icons/rx";
+
 import { toast } from "react-toastify";
 import "rsuite/dist/rsuite.css";
 import { reset, updateProduct } from "../../redux/products/product-slice";
 import axios from "../../lib";
 import { API_ROOT, API_URL } from "../../constants";
 import { useNavigate, useParams } from "react-router-dom";
-import { IGalleryPhoto } from "../../interfaces/product";
 import AttributeSingle from "../attribute/attribute-single";
 import { IAttributeResponse } from "../../interfaces/attribute";
-interface IPhoto {
-  id: number;
-  product_id: number;
-  image: string;
-  order_number: number;
-  created_at: string;
-  updated_at: string;
-}
+import GalleryImages from "./galleryImages";
 
 const UpdateProduct: React.FC = () => {
   // let runCount = 0;
@@ -46,14 +38,12 @@ const UpdateProduct: React.FC = () => {
   const [description, setDescription] = useState("");
   const [image, setImage] = useState<File | null>(null);
   const [updateImage, setUpdateImage] = useState<File | null>(null);
-  const [galleryImages, setGalleryImages] = useState<IGalleryPhoto[] | null>(
-    null
-  );
   const [category, setCategory] = useState<string>("");
   const [quantity, setQuantity] = useState(0);
   const [regularPrice, setRegularPrice] = useState(0);
   const [discountPrice, setDiscountPrice] = useState(0);
-
+  const [discountType, setDiscountType] = useState<"percent" | "flat" | "">("");
+  const [discountSelectedAmount, setDiscountSelectedAmount] = useState(0);
   const [deliveryFee, setDeliveryFee] = useState(0);
   const [videoUrl, setVideoUrl] = useState("");
   const [metaTitle, setMetaTitle] = useState("");
@@ -65,8 +55,7 @@ const UpdateProduct: React.FC = () => {
   const [sortDesc, setSortDesc] = useState("");
   const [policy, setPolicy] = useState("");
   const [availability, setAvailability] = useState<number>(0);
-  const [orderNumber] = useState(1);
-  const [isLoading, setIsLoading] = useState(false);
+
   const [isVariant, setIsVariant] = useState(false);
   const [attributes, setAttributes] = useState<any[]>([]);
   const [selectedAttributes, setSelectedAttributes] = useState<any[]>([]);
@@ -279,39 +268,6 @@ const UpdateProduct: React.FC = () => {
     }
   };
 
-  const handleGalleryImageChange = (e: ChangeEvent<HTMLInputElement>) => {
-    setIsLoading(true);
-    const formData = new FormData();
-
-    if (e.target.files) {
-      const file = e.target.files[0];
-      formData.append("image", file);
-      formData.append("order_number", orderNumber.toString());
-      formData.append("product_id", slug as string);
-
-      axios
-        .post(`${API_URL}/product-photos`, formData)
-        .then((response) => {
-          console.log("API call successful", response.data);
-        })
-        .catch((error) => {
-          console.error("API call failed", error);
-        })
-        .finally(() => {
-          setIsLoading(false);
-        });
-    }
-  };
-
-  const removeGalleryImage = async (id: number) => {
-    setIsLoading(true);
-    const res = await axios.delete(`${API_URL}/product-photos?ids=[${id}]`);
-    if (res.data) {
-      toast.success("Gallery image deleted Successfully");
-    }
-    setIsLoading(false);
-  };
-
   const handleProductSubmit = (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     const formData = new FormData();
@@ -384,7 +340,7 @@ const UpdateProduct: React.FC = () => {
   }, [dispatch]);
 
   useEffect(() => {
-    const fetchEmiData = async () => {
+    const fetchProductData = async () => {
       try {
         const response = await axios.get(`${API_URL}/products/${slug}`);
         const { data } = response.data;
@@ -415,7 +371,7 @@ const UpdateProduct: React.FC = () => {
           ]);
         }
 
-        if (data["product-photos"] && data["product-photos"].length > 0) {
+        /* if (data["product-photos"] && data["product-photos"].length > 0) {
           const galleryImageFiles = data["product-photos"].map(
             (photo: IPhoto) => ({
               id: photo.id,
@@ -427,13 +383,23 @@ const UpdateProduct: React.FC = () => {
             })
           );
           setGalleryImages(galleryImageFiles);
-        }
+        } */
       } catch (error) {
         console.error("Error fetching EMI data:", error);
       }
     };
-    fetchEmiData();
-  }, [slug, isLoading]);
+    fetchProductData();
+  }, [slug]);
+
+  useEffect(() => {
+    if (discountType === "flat") {
+      setDiscountPrice(regularPrice - discountSelectedAmount);
+    } else if (discountType === "percent") {
+      setDiscountPrice(
+        regularPrice - (regularPrice * discountSelectedAmount) / 100
+      );
+    }
+  }, [discountType, discountSelectedAmount]);
 
   return (
     <div className="create-product">
@@ -501,44 +467,7 @@ const UpdateProduct: React.FC = () => {
                   <br /> Don't use short share link/embedded iframe code.
                 </p>
               </Display>
-
-              <Display>
-                <FileInput
-                  label="Gallery Images"
-                  onChange={handleGalleryImageChange}
-                />
-                <div className="update-gallery">
-                  {galleryImages &&
-                    galleryImages.length > 0 &&
-                    galleryImages.map((productPhoto, index) => (
-                      <div key={index} className="product-image">
-                        <img
-                          src={`${API_ROOT}/images/product/${productPhoto.image}`}
-                          alt="gazi home appliance"
-                        />
-                        <input
-                          type="text"
-                          defaultValue={productPhoto.order_number}
-                          /*  onBlur={(e) =>
-                            handleQuantityChange(
-                              index,
-                              parseInt(e.target.value, 10)
-                            )
-                          } */
-                        />
-                        <span
-                          className="cross"
-                          onClick={() => removeGalleryImage(productPhoto.id)}
-                        >
-                          <RxCross2 />
-                        </span>
-                      </div>
-                    ))}
-                </div>
-                <p className="wearing">
-                  Image Size Should Be 800 x 800. or square size
-                </p>
-              </Display>
+              <GalleryImages slug={slug as string} />
               <Display>
                 <div></div>
                 <div className="variant">
@@ -619,25 +548,34 @@ const UpdateProduct: React.FC = () => {
                   required
                   errorMessage={error.regular_price}
                 />
-                <Input
+                {/*  <Input
                   placeholder="Discount Price"
                   label="Discount Price"
                   htmlFor="discount-price"
                   value={discountPrice}
                   onChange={(e) => setDiscountPrice(Number(e.target.value))}
                   errorMessage={error.discount_price}
-                />
+                /> */}
                 <div className="discount-area">
-                  {/*                   <div>
+                  <Input
+                    placeholder="Discount Price"
+                    label="Discount Price"
+                    htmlFor="discount-price"
+                    onChange={(e) =>
+                      setDiscountSelectedAmount(Number(e.target.value))
+                    }
+                    errorMessage={error.discount_price}
+                  />
+                  <div>
                     <Select
                       onChange={(e) =>
-                        setDiscountType(e.target.value as 'flat' | 'percent')
+                        setDiscountType(e.target.value as "flat" | "percent")
                       }
                     >
                       <option value="flat">Flat</option>
                       <option value="percent">Percent</option>
                     </Select>
-                  </div> */}
+                  </div>
                 </div>
               </Display>
 
@@ -645,7 +583,6 @@ const UpdateProduct: React.FC = () => {
                 <label className="label">Select Category*</label>
                 <Select onChange={(e) => setCategory(e.target.value)} required>
                   {categories.map((ctg) => {
-                    console.log(ctg.slug);
                     return (
                       <option
                         key={ctg.id}

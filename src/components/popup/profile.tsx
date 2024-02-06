@@ -47,7 +47,7 @@ const ProfilePopup: React.FC<PopupProps> = ({ closePopup }) => {
             <p>Profile</p>
           </li>
           <Link to={"/setup/home-page"}>
-            <li className="item" onClick={handleLogOut}>
+            <li className="item">
               <CiSettings className="icon" />
               <p>Settings</p>
             </li>

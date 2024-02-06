@@ -34,7 +34,13 @@ const PendingOrders: React.FC = () => {
   useEffect(() => {
     if (isDelete) {
       toast.success("Order deleted successfully");
-      dispatch(getOrders({ order_status: "delivered" }));
+      dispatch(
+        getOrders({
+          order_status: "pending",
+          page: pageNumber,
+          limit: displayItem,
+        })
+      );
     }
     return () => {
       dispatch(reset());

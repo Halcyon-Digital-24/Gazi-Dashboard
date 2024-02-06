@@ -1,9 +1,9 @@
-import { useState, useEffect } from 'react';
-import './index.scss';
+import { useState, useEffect } from "react";
+import "./index.scss";
 // import Chart from '../../components/chart';
-import { API_URL } from '../../constants';
-import axios from '../../lib';
-import { Link } from 'react-router-dom';
+import { API_URL } from "../../constants";
+import axios from "../../lib";
+import { Link } from "react-router-dom";
 
 /* interface IData {
   name: string;
@@ -78,7 +78,7 @@ const HomePage: React.FC = () => {
         setData(response.data);
         setLoading(false);
       } catch (error) {
-        console.error('Error fetching data:', error);
+        console.error("Error fetching data:", error);
         setLoading(false);
       }
     };
@@ -90,132 +90,76 @@ const HomePage: React.FC = () => {
     return <p>Loading...</p>;
   }
 
+  const items = [
+    {
+      to: "/orders",
+      imageSrc: "/assets/images/checkout.png",
+      title: "Total Orders",
+      value: data.totalOrder,
+    },
+    {
+      to: "/orders/pending",
+      imageSrc: "/assets/images/pending.png",
+      title: "Pending Orders",
+      value: data.totalPendingOrder,
+    },
+    {
+      to: "/products",
+      imageSrc: "/assets/images/gift.png",
+      title: "Total Products",
+      value: data.totalProduct,
+    },
+    {
+      to: "/customers",
+      imageSrc: "/assets/images/people.png",
+      title: "Total Customers",
+      value: data.totalUser,
+    },
+    {
+      to: "/products/stockout",
+      imageSrc: "/assets/images/out-of-stock.png",
+      title: "Stock Out Products",
+      value: data.totalOutStock,
+    },
+    {
+      to: "/subscriber",
+      imageSrc: "/assets/images/subscribe.png",
+      title: "Subscribers",
+      value: data.totalSubscribe,
+    },
+    {
+      to: "/blogs",
+      imageSrc: "/assets/images/blog.png",
+      title: "Blogs",
+      value: data.totalBlog,
+    },
+    {
+      to: "/queries",
+      imageSrc: "/assets/images/question.png",
+      title: "Queries",
+      value: data.totalQuery,
+    },
+  ];
+
   return (
     <div className="">
       <div className="row">
-        <div className="col-md-3">
-          <Link to="/orders">
-            <div className="chart-card">
-              <div className="img">
-                <img src="/assets/images/checkout.png" alt="cart" />
+        {items.map((item, index) => (
+          <div className="col-md-3" key={index}>
+            <Link to={item.to}>
+              <div className="chart-card">
+                <div className="img">
+                  <img src={item.imageSrc} alt="cart" />
+                </div>
+                <div className="info">
+                  <h5>{item.title}</h5>
+                  <h3>{item.value}</h3>
+                </div>
               </div>
-              <div className="info">
-                <h5>Total Orders</h5>
-                <h3>{data.totalOrder}</h3>
-              </div>
-            </div>
-          </Link>
-        </div>
-        <div className="col-md-3">
-          <Link to="/orders/pending">
-            <div className="chart-card">
-              <div className="img">
-                <img src="/assets/images/pending.png" alt="cart" />
-              </div>
-              <div className="info">
-                <h5>Pending Orders</h5>
-                <h3>{data.totalPendingOrder}</h3>
-              </div>
-            </div>
-          </Link>
-        </div>
-        <div className="col-md-3">
-          <Link to="/products">
-            <div className="chart-card">
-              <div className="img">
-                <img src="/assets/images/gift.png" alt="cart" />
-              </div>
-              <div className="info">
-                <h5>Total Products</h5>
-                <h3>{data.totalOrder}</h3>
-              </div>
-            </div>
-          </Link>
-        </div>
-        <div className="col-md-3">
-          <Link to="/customers">
-            <div className="chart-card">
-              <div className="img">
-                <img src="/assets/images/people.png" alt="cart" />
-              </div>
-              <div className="info">
-                <h5>Total Customers</h5>
-                <h3>{data.totalUser}</h3>
-              </div>
-            </div>
-          </Link>
-        </div>
-        <div className="col-md-3">
-          <Link to={'/products/stockout'}>
-            <div className="chart-card">
-              <div className="img">
-                <img src="/assets/images/out-of-stock.png" alt="cart" />
-              </div>
-              <div className="info">
-                <h5>Stock Out Products</h5>
-                <h3>{data.totalOutStock}</h3>
-              </div>
-            </div>
-          </Link>
-        </div>
-        <div className="col-md-3">
-          <Link to={'/subscriber'}>
-            <div className="chart-card">
-              <div className="img">
-                <img src="/assets/images/subscribe.png" alt="cart" />
-              </div>
-              <div className="info">
-                <h5>Subscribers</h5>
-                <h3>{data.totalSubscribe}</h3>
-              </div>
-            </div>
-          </Link>
-        </div>
-        <div className="col-md-3">
-          <Link to={'/blogs'}>
-            <div className="chart-card">
-              <div className="img">
-                <img src="/assets/images/blog.png" alt="cart" />
-              </div>
-              <div className="info">
-                <h5>Blogs</h5>
-                <h3>{data.totalBlog}</h3>
-              </div>
-            </div>
-          </Link>
-        </div>
-        <div className="col-md-3">
-          <Link to={'/queries'}>
-            <div className="chart-card">
-              <div className="img">
-                <img src="/assets/images/question.png" alt="cart" />
-              </div>
-              <div className="info">
-                <h5>Queries</h5>
-                <h3>{data.totalQuery}</h3>
-              </div>
-            </div>
-          </Link>
-        </div>
+            </Link>
+          </div>
+        ))}
       </div>
-      {/* <div className="row">
-        <div className="chart-item col-md-6">
-          <Chart
-            data={data}
-            activeIndex={activeIndex}
-            activeItem={activeItem}
-            handleClick={handleClick}
-          />
-        </div>
-        <div className="chart-item col-md-6">
-          <Chart
-            data={data}
-            activeIndex={activeIndex}
-            activeItem={activeItem}
-            handleClick={handleClick}
-          />
-        </div>
-      </div> */}
     </div>
   );
 };

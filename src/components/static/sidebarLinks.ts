@@ -1,6 +1,6 @@
 const permissions = localStorage.getItem("user");
 
-let userPermission;
+let userPermission: any;
 // Check if user data exists
 if (permissions) {
   // Parse user data as JSON

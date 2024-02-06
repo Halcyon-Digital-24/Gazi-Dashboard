@@ -1,6 +1,6 @@
-import { API_URL } from '../../constants';
-import { IProductResponse } from '../../interfaces/product';
-import axios from '../../lib';
+import { API_URL } from "../../constants";
+import { IProductResponse } from "../../interfaces/product";
+import axios from "../../lib";
 
 // get all products
 const getAllProducts = async (filter: {
@@ -10,9 +10,7 @@ const getAllProducts = async (filter: {
   // Filter out keys with false values
   const filteredFilter: { [key: string]: string | number | boolean } = {};
   Object.entries(filter).forEach(([key, value]) => {
-    if (value !== false) {
-      filteredFilter[key] = value;
-    }
+    filteredFilter[key] = value;
   });
 
   if (Object.keys(filteredFilter).length > 0) {
@@ -21,7 +19,7 @@ const getAllProducts = async (filter: {
         ([key, value]) =>
           `${encodeURIComponent(key)}=${encodeURIComponent(value.toString())}`
       )
-      .join('&');
+      .join("&");
 
     // Add query string to the URL
     url += `?${queryString}`;
@@ -45,7 +43,7 @@ const updateProduct = async (
 };
 
 const deleteProduct = async (ids: number[]) => {
-  const idsString = ids.join(',');
+  const idsString = ids.join(",");
   const { data } = await axios.delete(
     `${API_URL}/products/?ids=[${idsString}]`
   );

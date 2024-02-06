@@ -3,11 +3,13 @@ import { Link } from "react-router-dom";
 import Dropdown, { ISideLink } from "../dropdown";
 import Icon from "../icon";
 import Logo from "../logo";
-import { sidebarLinks } from "../static/sidebarLinks";
+import { sidebarLinks } from "../static/sidebarLinks.js";
 import "./index.scss";
 
 function SideBar({ handleClose }: { handleClose: () => void }) {
-  const [sideLinks, setSideLinks] = useState<ISideLink[]>(sidebarLinks);
+  const [sideLinks, setSideLinks] = useState<ISideLink[]>(
+    sidebarLinks as ISideLink[]
+  );
 
   const handleDropdownToggle = (clickedIndex: number) => {
     const updatedSideLinks = sideLinks.map((linkItem, index) => ({
