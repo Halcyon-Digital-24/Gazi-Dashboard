@@ -14,7 +14,7 @@ import { toast } from "react-toastify";
 const Reviews: React.FC = () => {
   const dispatch = useAppDispatch();
   const [pageNumber, setPageNumber] = useState<number>(1);
-  const [displayItem, setDisplayItem] = useState(10);
+  const [displayItem, setDisplayItem] = useState(25);
   const {
     reviews,
     isUpdate,

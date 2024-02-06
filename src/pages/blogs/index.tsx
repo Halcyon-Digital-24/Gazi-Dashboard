@@ -20,7 +20,7 @@ import { useAppDispatch, useAppSelector } from "../../redux/hooks";
 import { toast } from "react-toastify";
 
 const Blogs: React.FC = () => {
-  const [displayItem, setDisplayItem] = useState(10);
+  const [displayItem, setDisplayItem] = useState(25);
   const [pageNumber, setPageNumber] = useState<number>(1);
   const dispatch = useAppDispatch();
   const {

@@ -1,5 +1,5 @@
-import { ChangeEvent } from 'react';
-import './index.scss';
+import { ChangeEvent } from "react";
+import "./index.scss";
 
 interface propsType {
   handleDisplayItem: (e: ChangeEvent<HTMLSelectElement>) => void;
@@ -24,7 +24,6 @@ const Filter: React.FC<propsType> = ({
               name="admin-table_length"
               aria-controls="admin-table"
             >
-              <option value="10">10</option>
               <option value="25">25</option>
               <option value="50">50</option>
               <option value="100">100</option>

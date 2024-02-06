@@ -1,28 +1,28 @@
-import Pagination from '../../components/pagination';
-import OrderTable from '../../components/order-table';
-import Display from '../../components/display';
-import Filter from '../../components/filter';
-import { ChangeEvent, useEffect, useState } from 'react';
-import { BsDownload } from 'react-icons/bs';
-import { CSVLink } from 'react-csv';
-import './index.scss';
-import Overflow from '../../components/overflow';
-import { useAppDispatch, useAppSelector } from '../../redux/hooks';
-import { deleteOrder, getOrders, reset } from '../../redux/order/orderSlice';
-import { toast } from 'react-toastify';
-import { DateRangePicker } from 'rsuite';
+import Pagination from "../../components/pagination";
+import OrderTable from "../../components/order-table";
+import Display from "../../components/display";
+import Filter from "../../components/filter";
+import { ChangeEvent, useEffect, useState } from "react";
+import { BsDownload } from "react-icons/bs";
+import { CSVLink } from "react-csv";
+import "./index.scss";
+import Overflow from "../../components/overflow";
+import { useAppDispatch, useAppSelector } from "../../redux/hooks";
+import { deleteOrder, getOrders, reset } from "../../redux/order/orderSlice";
+import { toast } from "react-toastify";
+import { DateRangePicker } from "rsuite";
 
 const AllOrders: React.FC = () => {
   const dispatch = useAppDispatch();
   const [pageNumber, setPageNumber] = useState<number>(1);
   const [selectedOrders, setSelectedOrders] = useState<number[]>([]);
-  const [orderStatus, setOrderStatus] = useState('');
-  const [onSearch, setOnSearch] = useState('');
+  const [orderStatus, setOrderStatus] = useState("");
+  const [onSearch, setOnSearch] = useState("");
   const [orderDate, setOrderDate] = useState<[Date, Date] | null>(null);
   const { orders, isDelete, totalCount } = useAppSelector(
     (state) => state.order
   );
-  const [displayItem, setDisplayItem] = useState(10);
+  const [displayItem, setDisplayItem] = useState(25);
   const totalPage = Math.ceil(totalCount / displayItem);
 
   const handlePageChange = (selectedItem: { selected: number }) => {
@@ -64,7 +64,7 @@ const AllOrders: React.FC = () => {
 
   const formatDateForURL = (date: Date): string => {
     const isoString = date.toISOString();
-    return isoString.split('T')[0];
+    return isoString.split("T")[0];
   };
 
   useEffect(() => {
@@ -74,15 +74,15 @@ const AllOrders: React.FC = () => {
         limit: displayItem,
         order_status: orderStatus,
         search_term: onSearch,
-        start_date: orderDate ? formatDateForURL(orderDate[0]) : '',
-        end_date: orderDate ? formatDateForURL(orderDate[1]) : '',
+        start_date: orderDate ? formatDateForURL(orderDate[0]) : "",
+        end_date: orderDate ? formatDateForURL(orderDate[1]) : "",
       })
     );
   }, [dispatch, pageNumber, displayItem, orderStatus, onSearch, orderDate]);
 
   useEffect(() => {
     if (isDelete) {
-      toast.success('Order deleted successfully');
+      toast.success("Order deleted successfully");
       dispatch(getOrders({}));
     }
     return () => {
@@ -122,22 +122,22 @@ const AllOrders: React.FC = () => {
               </Overflow>
               <Overflow title="Filter by status">
                 <div>
-                  <p onClick={() => setOrderStatus('pending')}>Pending</p>
+                  <p onClick={() => setOrderStatus("pending")}>Pending</p>
                 </div>
                 <div>
-                  <p onClick={() => setOrderStatus('confirm')}>Confirmed</p>
+                  <p onClick={() => setOrderStatus("confirm")}>Confirmed</p>
                 </div>
                 <div>
-                  <p onClick={() => setOrderStatus('pickup')}>Pick Up</p>
+                  <p onClick={() => setOrderStatus("pickup")}>Pick Up</p>
                 </div>
                 <div>
-                  <p onClick={() => setOrderStatus('on_the_way')}>On The Way</p>
+                  <p onClick={() => setOrderStatus("on_the_way")}>On The Way</p>
                 </div>
                 <div>
-                  <p onClick={() => setOrderStatus('delivered')}>Delivered</p>
+                  <p onClick={() => setOrderStatus("delivered")}>Delivered</p>
                 </div>
                 <div>
-                  <p onClick={() => setOrderStatus('cancel')}>Cancel</p>
+                  <p onClick={() => setOrderStatus("cancel")}>Cancel</p>
                 </div>
               </Overflow>
             </div>

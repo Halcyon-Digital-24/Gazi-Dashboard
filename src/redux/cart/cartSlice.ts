@@ -7,7 +7,7 @@ interface CartState {
 }
 
 const initialCart =
-  typeof window !== "undefined" ? localStorage.getItem("cartItems") : null;
+  typeof window !== "undefined" ? sessionStorage.getItem("cartItems") : null;
 const initialState: CartState = {
   cart: initialCart ? JSON.parse(initialCart) : [],
 };
@@ -30,7 +30,7 @@ export const cartSlice = createSlice({
         state.cart = [...state.cart, newItem];
         toast.success("Item added to your cart!");
       }
-      localStorage.setItem("cartItems", JSON.stringify(state.cart));
+      sessionStorage.setItem("cartItems", JSON.stringify(state.cart));
     },
 
     // Increment card item
@@ -41,7 +41,7 @@ export const cartSlice = createSlice({
 
       if (itemToIncrement && itemToIncrement.quantity < 5) {
         itemToIncrement.quantity += 1;
-        localStorage.setItem("cartItems", JSON.stringify(state.cart));
+        sessionStorage.setItem("cartItems", JSON.stringify(state.cart));
       }
     },
 
@@ -53,7 +53,7 @@ export const cartSlice = createSlice({
 
       if (itemToDecrement && itemToDecrement.quantity > 1) {
         itemToDecrement.quantity -= 1;
-        localStorage.setItem("cartItems", JSON.stringify(state.cart));
+        sessionStorage.setItem("cartItems", JSON.stringify(state.cart));
       }
     },
 
@@ -62,13 +62,13 @@ export const cartSlice = createSlice({
       state.cart = state.cart.filter(
         (i) => i.product_id !== action.payload.product_id
       );
-      localStorage.setItem("cartItems", JSON.stringify(state.cart));
+      sessionStorage.setItem("cartItems", JSON.stringify(state.cart));
     },
 
     // clear cart
     clearCart: (state) => {
       state.cart = [];
-      localStorage.removeItem("cartItems");
+      sessionStorage.removeItem("cartItems");
     },
   },
 });

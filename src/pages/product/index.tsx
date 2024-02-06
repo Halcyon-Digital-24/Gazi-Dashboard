@@ -26,7 +26,7 @@ const AllProducts: React.FC = () => {
   const [selectedProducts, setSelectedProducts] = useState<number[]>([]);
   const [onSearch, setOnSearch] = useState("");
   const dispatch = useAppDispatch();
-  const [displayItem, setDisplayItem] = useState<number>(10);
+  const [displayItem, setDisplayItem] = useState<number>(25);
   const [pageNumber, setPageNumber] = useState<number>(1);
   const [sort_by, setSortBy] = useState("");
 

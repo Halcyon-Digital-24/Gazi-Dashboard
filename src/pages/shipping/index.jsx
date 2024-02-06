@@ -16,7 +16,7 @@ import { getLocations, reset } from "../../redux/location/locationSlice";
 const Shipping = () => {
   const dispatch = useAppDispatch();
   const [pageNumber, setPageNumber] = useState(1);
-  const [displayItem, setDisplayItem] = useState(10);
+  const [displayItem, setDisplayItem] = useState(25);
   const { locations, isError, isDelete, message, totalCount } = useAppSelector(
     (state) => state.location
   );

@@ -27,10 +27,10 @@ const FaqPage: React.FC = () => {
   const handlePageChange = (selectedItem: { selected: number }) => {
     setPageNumber(selectedItem.selected + 1);
   };
-  const totalPage = Math.ceil(totalCount / 10);
+  const totalPage = Math.ceil(totalCount / 25);
 
   useEffect(() => {
-    dispatch(getFaqs({ page: pageNumber }));
+    dispatch(getFaqs({ page: pageNumber, limit: 25 }));
 
     return () => {
       dispatch(reset());

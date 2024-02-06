@@ -27,7 +27,7 @@ const CustomOrder = () => {
   const { cart: cartItems } = useAppSelector((state) => state.cart);
   const navigate = useNavigate();
   const dispatch = useAppDispatch();
-  // const [discount, setDiscount] = useState(0);
+  const [discount, setDiscount] = useState(0);
   const [shipping, setShipping] = useState(0);
   const [isFocus, setIsFocus] = useState(false);
   const [search, setSearch] = useState("");
@@ -88,6 +88,7 @@ const CustomOrder = () => {
           ...data,
           orderItem,
           delivery_fee: shipping,
+          custom_discount: discount,
         });
         toast.success(response.data.message);
         dispatch(clearCart());
@@ -257,6 +258,13 @@ const CustomOrder = () => {
                   label="Shipping Price"
                   onChange={(e) => setShipping(Number(e.target.value))}
                 />
+                <Input
+                  type="number"
+                  htmlFor="discount"
+                  placeholder="Discount Price"
+                  label="Discount Price"
+                  onChange={(e) => setDiscount(Number(e.target.value))}
+                />
                 {/* <Input htmlFor="variant" placeholder="variant" /> */}
                 <div className="product-area" ref={productAreaRef}>
                   <Input
@@ -331,11 +339,11 @@ const CustomOrder = () => {
                     <div className="col-md-3 right">{final_price}</div>
                     <div className="col-md-9 left">Shipping</div>
                     <div className="col-md-3 right">{shipping}</div>
-                    {/* <div className="col-md-9 left">Discount</div>
-                    <div className="col-md-3 right">{discount}</div> */}
+                    <div className="col-md-9 left">Discount</div>
+                    <div className="col-md-3 right">{discount}</div>
                     <div className="col-md-9 left">Total</div>
                     <div className="col-md-3 right">
-                      {final_price + shipping}
+                      {final_price + shipping - discount}
                     </div>
                   </div>
                 </div>

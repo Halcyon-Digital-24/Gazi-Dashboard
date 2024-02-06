@@ -1,16 +1,16 @@
-import { ChangeEvent, useEffect, useState } from 'react';
-import Display from '../../components/display';
-import OrderTable from '../../components/order-table';
-import Pagination from '../../components/pagination';
-import Filter from '../../components/filter';
-import { useAppDispatch, useAppSelector } from '../../redux/hooks';
-import { getOrders } from '../../redux/order/orderSlice';
-import { toast } from 'react-toastify';
-import { reset } from '../../redux/products/product-slice';
+import { ChangeEvent, useEffect, useState } from "react";
+import Display from "../../components/display";
+import OrderTable from "../../components/order-table";
+import Pagination from "../../components/pagination";
+import Filter from "../../components/filter";
+import { useAppDispatch, useAppSelector } from "../../redux/hooks";
+import { getOrders } from "../../redux/order/orderSlice";
+import { toast } from "react-toastify";
+import { reset } from "../../redux/products/product-slice";
 
 const Delivered: React.FC = () => {
   const dispatch = useAppDispatch();
-  const [displayItem, setDisplayItem] = useState(10);
+  const [displayItem, setDisplayItem] = useState(25);
   const [pageNumber, setPageNumber] = useState<number>(1);
   const { orders, isDelete, totalCount } = useAppSelector(
     (state) => state.order
@@ -22,13 +22,13 @@ const Delivered: React.FC = () => {
   };
 
   useEffect(() => {
-    dispatch(getOrders({ order_status: 'delivered' }));
+    dispatch(getOrders({ order_status: "delivered" }));
   }, [dispatch]);
 
   useEffect(() => {
     if (isDelete) {
-      toast.success('Order deleted successfully');
-      dispatch(getOrders({ order_status: 'delivered' }));
+      toast.success("Order deleted successfully");
+      dispatch(getOrders({ order_status: "delivered" }));
     }
     return () => {
       dispatch(reset());

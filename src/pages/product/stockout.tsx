@@ -24,7 +24,7 @@ const StockOutProducts: React.FC = () => {
   const { products, isLoading, totalCount, isUpdate } = useAppSelector(
     (state) => state.product
   );
-  const [displayItem, setDisplayItem] = useState(10);
+  const [displayItem, setDisplayItem] = useState(25);
   const [pageNumber, setPageNumber] = useState<number>(1);
 
   const totalPage = Math.ceil(totalCount / displayItem);

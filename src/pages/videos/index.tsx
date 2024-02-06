@@ -18,7 +18,7 @@ import {
 } from "../../redux/videos/videoSlice";
 
 const VideosPage: React.FC = () => {
-  const [displayItem, setDisplayItem] = useState(10);
+  const [displayItem, setDisplayItem] = useState(25);
   const [pageNumber, setPageNumber] = useState<number>(1);
   const dispatch = useAppDispatch();
 

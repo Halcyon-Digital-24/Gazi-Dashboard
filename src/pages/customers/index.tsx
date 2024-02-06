@@ -19,7 +19,7 @@ import { useAppDispatch, useAppSelector } from "../../redux/hooks";
 const Customers: React.FC = () => {
   const dispatch = useAppDispatch();
   const [pageNumber, setPageNumber] = useState<number>(1);
-  const [displayItem, setDisplayItem] = useState(10);
+  const [displayItem, setDisplayItem] = useState(25);
   const { customers, isError, isDelete, message, totalCount } = useAppSelector(
     (state) => state.customer
   );

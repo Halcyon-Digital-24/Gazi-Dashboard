@@ -6,6 +6,7 @@ import Display from "../../components/display";
 import FileInput from "../../components/forms/file-input";
 import { IGalleryPhoto } from "../../interfaces/product";
 import { RxCross2 } from "react-icons/rx";
+import { FaCheck } from "react-icons/fa";
 
 interface IProps {
   slug: string;
@@ -90,28 +91,10 @@ const GalleryImages: FC<IProps> = ({ slug }) => {
         {galleryImages &&
           galleryImages.length > 0 &&
           galleryImages.map((productPhoto, index) => (
-            <div key={index} className="product-image">
-              <img
-                src={`${API_ROOT}/images/product/${productPhoto.image}`}
-                alt="gazi home appliance"
-              />
-              <input
-                type="text"
-                defaultValue={productPhoto.order_number}
-                /*  onBlur={(e) =>
-                            handleQuantityChange(
-                              index,
-                              parseInt(e.target.value, 10)
-                            )
-                          } */
-              />
-              <span
-                className="cross"
-                onClick={() => removeGalleryImage(productPhoto.id)}
-              >
-                <RxCross2 />
-              </span>
-            </div>
+            <SingleProductPhoto
+              productPhoto={productPhoto}
+              removeGalleryImage={removeGalleryImage}
+            />
           ))}
       </div>
       <p className="wearing">Image Size Should Be 800 x 800. or square size</p>
@@ -120,3 +103,45 @@ const GalleryImages: FC<IProps> = ({ slug }) => {
 };
 
 export default GalleryImages;
+
+function SingleProductPhoto({
+  productPhoto,
+  removeGalleryImage,
+}: {
+  productPhoto: IGalleryPhoto;
+  removeGalleryImage: any;
+}) {
+  const [orderNumber, setOrderNumber] = useState(productPhoto.order_number);
+  const handleChangeOrderNumber = async () => {
+    try {
+      const response = await axios.patch(`/product-photos/${productPhoto.id}`, {
+        order_number: orderNumber,
+      });
+      toast.success(response.data.message);
+    } catch (error) {
+      console.log("Product photo update error" + error);
+    }
+  };
+  return (
+    <div className="product-image">
+      <img
+        src={`${API_ROOT}/images/product/${productPhoto.image}`}
+        alt="gazi home appliance"
+      />
+      <input
+        type="text"
+        defaultValue={productPhoto.order_number}
+        onChange={(e) => setOrderNumber(e.target.value)}
+      />
+      <span className="cross" onClick={handleChangeOrderNumber}>
+        <FaCheck />
+      </span>
+      <span
+        className="cross"
+        onClick={() => removeGalleryImage(productPhoto.id)}
+      >
+        <RxCross2 />
+      </span>
+    </div>
+  );
+}
