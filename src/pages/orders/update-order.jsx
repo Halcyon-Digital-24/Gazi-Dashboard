@@ -20,7 +20,8 @@ const UpdateOrder = () => {
   const { slug } = useParams();
   const { products } = useAppSelector((state) => state.product);
   const navigate = useNavigate();
-  const [order, setOrder]= useState("");
+  const [order, setOrder] = useState("");
+  const [customDiscount, setCustomDiscount] = useState(0);
   const dispatch = useAppDispatch();
   const [isFocus, setIsFocus] = useState(false);
   const [search, setSearch] = useState("");
@@ -29,7 +30,8 @@ const UpdateOrder = () => {
   const [amountBeforeCoupon, setAmountBeforeCoupon] = useState(0);
   const [totalPrice, setTotalPrice] = useState(0);
 
-   const {name , email, mobile, address, city, orderItems, delivery_fee }= order;
+  const { name, email, mobile, address, city, orderItems, delivery_fee } =
+    order;
 
   const {
     register,
@@ -37,7 +39,6 @@ const UpdateOrder = () => {
     setValue,
     formState: { errors },
   } = useForm();
-
 
   const onSubmit = async (data) => {
     try {
@@ -51,7 +52,7 @@ const UpdateOrder = () => {
   };
 
   useEffect(() => {
-    dispatch(getProducts({ search: search, page: 1, limit: 30 }));
+    dispatch(getProducts({ search: search, page: 1, limit: 100 }));
 
     return () => {
       dispatch(reset());
@@ -68,6 +69,7 @@ const UpdateOrder = () => {
         setValue("mobile", data.mobile);
         setValue("address", data.address);
         setValue("city", data.city);
+        setCustomDiscount(data.custom_discount);
         setOrder(data);
       } catch (error) {
         console.error("Error fetching category data:", error);
@@ -200,61 +202,117 @@ const UpdateOrder = () => {
                     <div className="left">
                       <div className="text">
                         <label>Name</label>
-                        <input type="text"  {...register("name", {required: "name is required",pattern: {
-                  value: /\S/,
-                  message: "Only space isn't allow"
-                }})}/>
+                        <input
+                          type="text"
+                          {...register("name", {
+                            required: "name is required",
+                            pattern: {
+                              value: /\S/,
+                              message: "Only space isn't allow",
+                            },
+                          })}
+                        />
                         {errors.name && (
-            <p className="validation__error">{errors.name.message}</p>
-          )}
+                          <p className="validation__error">
+                            {errors.name.message}
+                          </p>
+                        )}
                       </div>
-
 
                       <div className="text">
                         <label htmlFor="Email">Email</label>
-                        <input type="text"  {...register("email", {required: "email is required",pattern: {
-                  value: /\S/,
-                  message: "Only space isn't allow"
-                }})}/>
+                        <input
+                          type="text"
+                          {...register("email", {
+                            required: "email is required",
+                            pattern: {
+                              value: /\S/,
+                              message: "Only space isn't allow",
+                            },
+                          })}
+                        />
                         {errors.email && (
-            <p className="validation__error">{errors.email.message}</p>
-          )}
+                          <p className="validation__error">
+                            {errors.email.message}
+                          </p>
+                        )}
                       </div>
 
                       <div className="text">
                         <label htmlFor="Mobile">Mobile</label>
-                        <input type="text"  {...register("mobile", {required: "mobile is required",pattern: {
-                  value: /\S/,
-                  message: "Only space isn't allow"
-                }})}/>
+                        <input
+                          type="text"
+                          {...register("mobile", {
+                            required: "mobile is required",
+                            pattern: {
+                              value: /\S/,
+                              message: "Only space isn't allow",
+                            },
+                          })}
+                        />
                         {errors.mobile && (
-            <p className="validation__error">{errors.mobile.message}</p>
-          )}
+                          <p className="validation__error">
+                            {errors.mobile.message}
+                          </p>
+                        )}
                       </div>
-                     
-                     
                       <div className="text">
-                        <label htmlFor="Address">Address</label>
-                        <input type="text"  {...register("address", {required: "address is required",pattern: {
-                  value: /\S/,
-                  message: "Only space isn't allow"
-                }})}/>
-                        {errors.address && (
-            <p className="validation__error">{errors.address.message}</p>
-          )}
+                        <label htmlFor="custom_discount">
+                          Special Discount
+                        </label>
+                        <input
+                          type="text"
+                          {...register("custom_discount", {
+                            pattern: {
+                              value: /\S/,
+                              message: "Only space isn't allow",
+                            },
+                          })}
+                        />
+                        {errors.custom_discount && (
+                          <p className="validation__error">
+                            {errors.custom_discount.message}
+                          </p>
+                        )}
                       </div>
 
-                       <div className="text">
+                      <div className="text">
+                        <label htmlFor="Address">Address</label>
+                        <input
+                          type="text"
+                          {...register("address", {
+                            required: "address is required",
+                            pattern: {
+                              value: /\S/,
+                              message: "Only space isn't allow",
+                            },
+                          })}
+                        />
+                        {errors.address && (
+                          <p className="validation__error">
+                            {errors.address.message}
+                          </p>
+                        )}
+                      </div>
+
+                      <div className="text">
                         <label htmlFor="City">City</label>
-                        <input type="text"  {...register("city", {required: "city is required",pattern: {
-                  value: /\S/,
-                  message: "Only space isn't allow"
-                }})}/>
+                        <input
+                          type="text"
+                          {...register("city", {
+                            required: "city is required",
+                            pattern: {
+                              value: /\S/,
+                              message: "Only space isn't allow",
+                            },
+                          })}
+                        />
                         {errors.city && (
-            <p className="validation__error">{errors.city.message}</p>
-          )}
-                      </div> 
-               
+                          <p className="validation__error">
+                            {errors.city.message}
+                          </p>
+                        )}
+                      </div>
                     </div>
                     <div className="order-details right">
                       <div className="product-area" ref={productAreaRef}>
@@ -342,17 +400,24 @@ const UpdateOrder = () => {
                           <p className="heading sort-summery">Regular Price</p>
                           <p className="heading sort-summery">{`৳${orderItems?.reduce(
                             (sum, item) => {
-                                sum += item.regular_price * item.quantity;
+                              sum += item.regular_price * item.quantity;
                               return sum;
                             },
                             0
                           )}`}</p>
                           <p className="heading sort-summery">Shipping cost</p>
-                          <p className="heading sort-summery">৳ {delivery_fee}</p>
+                          <p className="heading sort-summery">
+                            ৳ {delivery_fee}
+                          </p>
                           <p className="heading sort-summery">Discount</p>
-                          <p className="heading sort-summery">৳ {amountBeforeCoupon - totalPrice}</p>
+                          <p className="heading sort-summery">
+                            ৳ {amountBeforeCoupon - totalPrice + customDiscount}
+                          </p>
+
                           <p className="heading sort-summery">Grand Total</p>
-                          <p className="heading sort-summery">{totalPrice + delivery_fee}</p>
+                          <p className="heading sort-summery">
+                            {totalPrice + delivery_fee - customDiscount}
+                          </p>
                         </div>
                       </div>
                     </Column>
