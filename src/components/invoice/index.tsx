@@ -194,11 +194,11 @@ const Invoice = ({ order }: any) => {
                 <p className="heading sort-summery">৳ {order.delivery_fee}</p>
                 <p className="heading sort-summery">Discount</p>
                 <p className="heading sort-summery">
-                  ৳ {amountBeforeCoupon - totalPrice}
+                  ৳ {amountBeforeCoupon - totalPrice + order.custom_discount}
                 </p>
                 <p className="heading sort-summery">Total</p>
                 <p className="heading sort-summery">
-                  ৳ {totalPrice + order.delivery_fee}
+                  ৳ {totalPrice + order.delivery_fee - order.custom_discount}
                 </p>
               </div>
             </div>

@@ -261,13 +261,9 @@ const UpdateOrder = () => {
                           Special Discount
                         </label>
                         <input
-                          type="text"
-                          {...register("custom_discount", {
-                            pattern: {
-                              value: /\S/,
-                              message: "Only space isn't allow",
-                            },
-                          })}
+                          type="number"
+                          value={customDiscount}
+                          onChange={(e) => setCustomDiscount(e.target.value)}
                         />
                         {errors.custom_discount && (
                           <p className="validation__error">
