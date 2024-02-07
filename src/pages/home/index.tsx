@@ -149,10 +149,14 @@ const HomePage: React.FC = () => {
     },
   ];
 
+    // Filter items based on user permissions
+    const userPermissions = JSON.parse(localStorage.getItem("user") || "").permissions;
+    const filteredItems = items.filter(item => userPermissions.includes(item.role_identity));
+
   return (
     <div className="">
       <div className="row">
-        {items.map((item, index) => (
+        {filteredItems.map((item, index) => (
           <div className="col-md-3" key={index}>
             <Link to={item.to}>
               <div className="chart-card">
