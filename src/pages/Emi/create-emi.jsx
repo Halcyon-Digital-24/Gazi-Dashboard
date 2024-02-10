@@ -66,7 +66,7 @@ const CreateEmi = () => {
                 {...register("three_months", {
                   trim: true,
                   pattern: {
-                    value: /^[0-9]+$/,
+                    value: /^[0-9]+(\.[0-9]+)?$/,
                     message: "Enter a valid rate (number only)",
                   },
                 })}
@@ -85,7 +85,7 @@ const CreateEmi = () => {
                 {...register("nine_months", {
                   trim: true,
                   pattern: {
-                    value: /^[0-9]+$/,
+                    value: /^[0-9]+(\.[0-9]+)?$/,
                     message: "Enter a valid rate (number only)",
                   },
                 })}
@@ -104,7 +104,7 @@ const CreateEmi = () => {
                 {...register("eighteen_months", {
                   trim: true,
                   pattern: {
-                    value: /^[0-9]+$/,
+                    value: /^[0-9]+(\.[0-9]+)?$/,
                     message: "Enter a valid rate (number only)",
                   },
                 })}
@@ -123,7 +123,7 @@ const CreateEmi = () => {
                 {...register("thirty_months", {
                   trim: true,
                   pattern: {
-                    value: /^[0-9]+$/,
+                    value: /^[0-9]+(\.[0-9]+)?$/,
                     message: "Enter a valid rate (number only)",
                   },
                 })}
@@ -144,7 +144,7 @@ const CreateEmi = () => {
                 {...register("six_months", {
                   trim: true,
                   pattern: {
-                    value: /^[0-9]+$/,
+                    value: /^[0-9]+(\.[0-9]+)?$/,
                     message: "Enter a valid rate (number only)",
                   },
                 })}
@@ -161,7 +161,7 @@ const CreateEmi = () => {
                 {...register("twelve_months", {
                   trim: true,
                   pattern: {
-                    value: /^[0-9]+$/,
+                    value: /^[0-9]+(\.[0-9]+)?$/,
                     message: "Enter a valid rate (number only)",
                   },
                 })}
@@ -180,7 +180,7 @@ const CreateEmi = () => {
                 {...register("twenty_four_months", {
                   trim: true,
                   pattern: {
-                    value: /^[0-9]+$/,
+                    value: /^[0-9]+(\.[0-9]+)?$/,
                     message: "Enter a valid rate (number only)",
                   },
                 })}
@@ -199,7 +199,7 @@ const CreateEmi = () => {
                 {...register("thirty_six_months", {
                   trim: true,
                   pattern: {
-                    value: /^[0-9]+$/,
+                    value: /^[0-9]+(\.[0-9]+)?$/,
                     message: "Enter a valid rate (number only)",
                   },
                 })}
