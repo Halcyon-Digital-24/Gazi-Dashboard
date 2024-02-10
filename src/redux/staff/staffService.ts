@@ -44,7 +44,7 @@ const updateStaff = async (id: number, pageData: Partial<IStaff>) => {
 };
 
 const deleteStaff = async (pageId: number | string) => {
-  const { data } = await axios.delete(`${API_URL}/admins/?ids=[${pageId}]`);
+  const { data } = await axios.delete(`${API_URL}/users/?ids=[${pageId}]`);
   return data;
 };
 

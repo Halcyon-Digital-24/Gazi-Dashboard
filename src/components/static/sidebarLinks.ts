@@ -5,7 +5,6 @@ let userPermission: any;
 if (permissions) {
   // Parse user data as JSON
   userPermission = JSON.parse(permissions).permissions;
-  console.log(userPermission);
 } else {
   console.error("User data not found in local storage");
 }

@@ -16,6 +16,7 @@ import {
 import axios from "../../lib";
 import { API_URL } from "../../constants";
 import { toast } from "react-toastify";
+import { FaCheck } from "react-icons/fa";
 import { FiPlus } from "react-icons/fi";
 import { LuMinus } from "react-icons/lu";
 import { RxCross2 } from "react-icons/rx";
@@ -32,6 +33,8 @@ const CustomOrder = () => {
   const [isFocus, setIsFocus] = useState(false);
   const [search, setSearch] = useState("");
   const productAreaRef = useRef(null);
+
+  console.log(cartItems);
 
   const {
     register,
@@ -281,21 +284,42 @@ const CustomOrder = () => {
                       <ul>
                         {products.map((product) => (
                           <li
-                            onClick={() =>
-                              dispatch(
-                                addToCart({
-                                  product_id: product?.id,
-                                  price:
-                                    Number(product.discount_price) !== 0
-                                      ? Number(product.discount_price)
-                                      : Number(product.regular_price),
-                                  title: product.title,
-                                  quantity: 1,
-                                })
-                              )
+                            className={
+                              product.availability === 1 &&
+                              product.quantity > 0 &&
+                              product.is_visible !== 0
+                                ? "instock"
+                                : "stockout"
                             }
+                            onClick={() => {
+                              if (
+                                product.availability === 1 &&
+                                product.quantity > 0
+                              ) {
+                                dispatch(
+                                  addToCart({
+                                    product_id: product?.id,
+                                    price:
+                                      Number(product.discount_price) !== 0
+                                        ? Number(product.discount_price)
+                                        : Number(product.regular_price),
+                                    title: product.title,
+                                    quantity: 1,
+                                  })
+                                );
+                              } else {
+                                toast.error("Product  not in stock");
+                              }
+                            }}
                           >
-                            {product.title}
+                            <span>{product.title}</span>
+                            {cartItems.some(
+                              (p) => p.product_id === product.id
+                            ) && (
+                              <span>
+                                <FaCheck />
+                              </span>
+                            )}
                           </li>
                         ))}
                       </ul>

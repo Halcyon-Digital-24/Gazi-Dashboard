@@ -36,6 +36,9 @@
 
     ul {
       li {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
         cursor: pointer;
         padding: 3px;
         &:hover {
@@ -43,6 +46,11 @@
           //   color: #000 !important;
         }
       }
+    }
+    .stockout {
+      background: $octonary-color;
+      color: $white-color;
+      cursor: not-allowed;
     }
   }
 }

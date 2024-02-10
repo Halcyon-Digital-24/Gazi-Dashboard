@@ -129,7 +129,10 @@ const Invoice = ({ order }: any) => {
           <div className="order-details right">
             <p>Order date: {formatDate(order.created_at)}</p>
             <p>Order status: {order?.order_status}</p>
-            <p>Total Order Amount : {totalPrice + order.delivery_fee}</p>
+            <p>
+              Total Order Amount :{" "}
+              {totalPrice + order.delivery_fee - order.custom_discount}
+            </p>
             <p>Shipping Method: {order.delivery_method}</p>
             <p>Payment Method: {order.payment_method}</p>
           </div>

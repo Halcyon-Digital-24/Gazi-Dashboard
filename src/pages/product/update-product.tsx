@@ -548,6 +548,13 @@ const UpdateProduct: React.FC = () => {
                   required
                   errorMessage={error.regular_price}
                 />
+                <Input
+                  label="Current Discount Price"
+                  htmlFor="regular-price"
+                  value={discountPrice}
+                  readOnly
+                  errorMessage={error.regular_price}
+                />
                 {/*  <Input
                   placeholder="Discount Price"
                   label="Discount Price"

@@ -92,6 +92,7 @@ const GalleryImages: FC<IProps> = ({ slug }) => {
           galleryImages.length > 0 &&
           galleryImages.map((productPhoto, index) => (
             <SingleProductPhoto
+              key={index}
               productPhoto={productPhoto}
               removeGalleryImage={removeGalleryImage}
             />
