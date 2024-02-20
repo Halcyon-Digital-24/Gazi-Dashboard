@@ -77,6 +77,7 @@ import Roles from "./roles";
 import CreateRole from "./roles/create";
 import UpdateRole from "./roles/update";
 import UpdateProfile from "./staff/update";
+import SettingPage from "./setting";
 
 export {
   AllOrders,
@@ -154,4 +155,5 @@ export {
   CreateRole,
   UpdateRole,
   UpdateProfile,
+  SettingPage,
 };

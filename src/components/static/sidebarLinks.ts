@@ -259,6 +259,7 @@ export const allSidebarLinks = [
         subtitle: "Footer",
         slug: "/setup/setting",
       },
+
       /* {
         subtitle: 'Homepage Sliders',
         slug: '/setup/sliders',
@@ -274,6 +275,10 @@ export const allSidebarLinks = [
       {
         subtitle: "Shipping",
         slug: "/shipping",
+      },
+      {
+        subtitle: "Manage Settings",
+        slug: "/manage-settings",
       },
     ],
   },

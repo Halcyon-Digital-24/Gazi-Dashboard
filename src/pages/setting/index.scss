@@ -1,0 +1,31 @@
+@import "../../index.scss";
+
+.color-input {
+  label {
+    display: block;
+    margin-bottom: 5px;
+  }
+  margin-bottom: 15px;
+}
+.radio-wrapper {
+  margin-bottom: 7px;
+  .radio-container {
+    display: flex;
+
+    .radio-item {
+      margin-right: 15px;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      margin-top: 5px;
+    }
+  }
+}
+.gateway {
+  img {
+    width: 50%;
+    object-fit: cover;
+    height: auto;
+    margin-bottom: 10px;
+  }
+}

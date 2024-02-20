@@ -74,6 +74,7 @@ import {
   Roles,
   UpdateRole,
   UpdateProfile,
+  SettingPage,
 } from "./pages";
 
 const routes = [
@@ -150,6 +151,7 @@ const routes = [
   { path: "/roles", element: <Roles /> },
   { path: "/roles/create", element: <CreateRole /> },
   { path: "/roles/edit/:slug", element: <UpdateRole /> },
+  { path: "/manage-settings", element: <SettingPage /> },
   { path: "*", element: <Error /> }, // 404 Page
 ];
 
