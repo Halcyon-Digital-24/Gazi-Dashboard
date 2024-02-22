@@ -5,6 +5,7 @@ import Display from "../../components/display";
 import Column from "../../components/table/column";
 import FileInput from "../../components/forms/file-input";
 import "./index.scss";
+import { Button } from "../../components/button";
 
 const SettingPage = () => {
   const {
@@ -13,6 +14,10 @@ const SettingPage = () => {
     handleSubmit,
     formState: { errors },
   } = useForm();
+
+  const onSubmit = (data) => {
+    console.log(data);
+  };
   return (
     <div>
       <CardBody
@@ -22,7 +27,7 @@ const SettingPage = () => {
         isHide
       />
       <Display>
-        <form>
+        <form onSubmit={handleSubmit(onSubmit)}>
           <div className="row">
             <Column className="col-md-6">
               <div className="color-input">
@@ -30,9 +35,167 @@ const SettingPage = () => {
                 <input
                   type="color"
                   placeholder="Enter Title"
-                  {...register("title", {
+                  {...register("primary_text", {
                     trim: true,
                     required: "Title is required",
+                    pattern: {
+                      value: /\S/,
+                      message: "Enter a valid title",
+                    },
+                  })}
+                />
+                {errors.primary_text && (
+                  <p className="validation__error">
+                    {errors.primary_text.message}
+                  </p>
+                )}
+              </div>
+              <div className="color-input">
+                <label htmlFor="name">Secondary Color</label>
+                <input
+                  type="color"
+                  placeholder="Enter Title"
+                  {...register("secondary_tex", {
+                    trim: true,
+                    required: "Title is required",
+                    pattern: {
+                      value: /\S/,
+                      message: "Enter a valid title",
+                    },
+                  })}
+                />
+                {errors.secondary_tex && (
+                  <p className="validation__error">
+                    {errors.secondary_tex.message}
+                  </p>
+                )}
+              </div>
+              <div className="color-input">
+                <label htmlFor="name">Tertiary Color</label>
+                <input
+                  type="color"
+                  placeholder="Enter Title"
+                  {...register("tertiary_text", {
+                    trim: true,
+                    required: "Tertiary color is required",
+                    pattern: {
+                      value: /\S/,
+                      message: "Enter a valid title",
+                    },
+                  })}
+                />
+                {errors.tertiary_text && (
+                  <p className="validation__error">
+                    {errors.tertiary_text.message}
+                  </p>
+                )}
+              </div>
+              <div className="color-input">
+                <label htmlFor="name">Primary Background Color</label>
+                <input
+                  type="color"
+                  placeholder="Enter Title"
+                  {...register("primary_background", {
+                    trim: true,
+                    required: "primary background color is required",
+                    pattern: {
+                      value: /\S/,
+                      message: "Enter a valid title",
+                    },
+                  })}
+                />
+                {errors.primary_background && (
+                  <p className="validation__error">
+                    {errors.primary_background.message}
+                  </p>
+                )}
+              </div>
+              <div className="color-input">
+                <label htmlFor="name">Secondary Background Color</label>
+                <input
+                  type="color"
+                  placeholder="Enter Title"
+                  {...register("secondary_background", {
+                    trim: true,
+                    required: "secondary background color is required",
+                    pattern: {
+                      value: /\S/,
+                      message: "Enter a valid title",
+                    },
+                  })}
+                />
+                {errors.secondary_background && (
+                  <p className="validation__error">
+                    {errors.secondary_background.message}
+                  </p>
+                )}
+              </div>
+              <div className="color-input">
+                <label htmlFor="name">Tertiary Background Color</label>
+                <input
+                  type="color"
+                  placeholder="Enter Title"
+                  {...register("tertiary_background", {
+                    trim: true,
+                    required: "tertiary background color is required",
+                    pattern: {
+                      value: /\S/,
+                      message: "Enter a valid title",
+                    },
+                  })}
+                />
+                {errors.tertiary_background && (
+                  <p className="validation__error">
+                    {errors.tertiary_background.message}
+                  </p>
+                )}
+              </div>
+              <div className="color-input">
+                <label htmlFor="name">Hover Color</label>
+                <input
+                  type="color"
+                  placeholder="Enter Title"
+                  {...register("hover", {
+                    trim: true,
+                    required: "hover color is required",
+                    pattern: {
+                      value: /\S/,
+                      message: "Enter a valid title",
+                    },
+                  })}
+                />
+                {errors.hover && (
+                  <p className="validation__error">{errors.hover.message}</p>
+                )}
+              </div>
+              <div className="color-input">
+                <label htmlFor="name">Link Color</label>
+                <input
+                  type="color"
+                  placeholder="Enter Title"
+                  {...register("link", {
+                    trim: true,
+                    required: "link color is required",
+                    pattern: {
+                      value: /\S/,
+                      message: "Enter a valid link",
+                    },
+                  })}
+                />
+                {errors.link && (
+                  <p className="validation__error">{errors.link.message}</p>
+                )}
+              </div>
+            </Column>
+            <Column className="col-md-6">
+              <div className="color-input">
+                <label htmlFor="name">Border Color</label>
+                <input
+                  type="color"
+                  placeholder="Enter Title"
+                  {...register("border", {
+                    trim: true,
+                    required: "border color is required",
                     pattern: {
                       value: /\S/,
                       message: "Enter a valid title",
@@ -44,7 +207,7 @@ const SettingPage = () => {
                 )}
               </div>
               <div className="color-input">
-                <label htmlFor="name">Secondary Color</label>
+                <label htmlFor="name">Active Color</label>
                 <input
                   type="color"
                   placeholder="Enter Title"
@@ -61,85 +224,99 @@ const SettingPage = () => {
                   <p className="validation__error">{errors.title.message}</p>
                 )}
               </div>
-              <div className="radio-wrapper">
-                <label htmlFor=""> Cash on Delivery</label>
-                <div className="radio-container">
-                  <div className="radio-item">
-                    <input type="radio" id="enable" name="cod" value="HTML" />
-                    <label for="enable">Enable</label>
-                  </div>
-                  <div className="radio-item">
-                    <input
-                      type="radio"
-                      id="disable"
-                      name="cod"
-                      value="CSS"
-                    ></input>
-                    <label for="disable">Disable</label>
-                  </div>
-                </div>
-              </div>
-              <div className="radio-wrapper">
-                <label htmlFor=""> Online Payment Gateway</label>
-                <div className="radio-container">
-                  <div className="radio-item">
-                    <input
-                      type="radio"
-                      id="o-enable"
-                      name="opg"
-                      value="enable"
-                    />
-                    <label for="o-enable">Enable</label>
-                  </div>
-                  <div className="radio-item">
-                    <input
-                      type="radio"
-                      id="o-disable"
-                      name="opg"
-                      value="o-disable"
-                    ></input>
-                    <label for="o-disable">Disable</label>
-                  </div>
-                </div>
-              </div>
-            </Column>
-            <Column className="col-md-6">
-              <div>
-                <FileInput
-                  label="Current Gateway Image *"
-                  //   onChange={handleImageChange}
-                  required
-                />
-                <div className="gateway">
-                  <img src="/payment.png" alt="gazi home appliance" />
-                </div>
-                {/* {image && (
-                )} */}
-                <p className="wearing">
-                  Image Size Should Be 800 x 200. or square size
-                </p>
-              </div>
-              <br />
-              <div className="textarea">
-                <label htmlFor="textarea">Copyright *</label>
-                <textarea
-                  {...register("copyright", {
+              <div className="color-input">
+                <label htmlFor="name">Disable Color</label>
+                <input
+                  type="color"
+                  placeholder="Enter Title"
+                  {...register("title", {
+                    trim: true,
+                    required: "Title is required",
                     pattern: {
                       value: /\S/,
-                      message: "Enter Valid Copyright",
+                      message: "Enter a valid title",
                     },
                   })}
-                  id="textarea"
-                  placeholder="Enter Copyright"
                 />
-                {errors.meta_description && (
-                  <p className="validation__error">
-                    {errors.meta_description.message}
-                  </p>
+                {errors.title && (
+                  <p className="validation__error">{errors.title.message}</p>
+                )}
+              </div>
+              <div className="color-input">
+                <label htmlFor="name">Success Color</label>
+                <input
+                  type="color"
+                  placeholder="Enter Title"
+                  {...register("title", {
+                    trim: true,
+                    required: "Title is required",
+                    pattern: {
+                      value: /\S/,
+                      message: "Enter a valid title",
+                    },
+                  })}
+                />
+                {errors.title && (
+                  <p className="validation__error">{errors.title.message}</p>
+                )}
+              </div>
+              <div className="color-input">
+                <label htmlFor="name">Info Color</label>
+                <input
+                  type="color"
+                  placeholder="Enter Title"
+                  {...register("title", {
+                    trim: true,
+                    required: "Title is required",
+                    pattern: {
+                      value: /\S/,
+                      message: "Enter a valid title",
+                    },
+                  })}
+                />
+                {errors.title && (
+                  <p className="validation__error">{errors.title.message}</p>
+                )}
+              </div>
+              <div className="color-input">
+                <label htmlFor="name">Warning Color</label>
+                <input
+                  type="color"
+                  placeholder="Enter Title"
+                  {...register("title", {
+                    trim: true,
+                    required: "Title is required",
+                    pattern: {
+                      value: /\S/,
+                      message: "Enter a valid title",
+                    },
+                  })}
+                />
+                {errors.title && (
+                  <p className="validation__error">{errors.title.message}</p>
+                )}
+              </div>
+              <div className="color-input">
+                <label htmlFor="name">Error Color</label>
+                <input
+                  type="color"
+                  placeholder="Enter Title"
+                  {...register("title", {
+                    trim: true,
+                    required: "Title is required",
+                    pattern: {
+                      value: /\S/,
+                      message: "Enter a valid title",
+                    },
+                  })}
+                />
+                {errors.title && (
+                  <p className="validation__error">{errors.title.message}</p>
                 )}
               </div>
             </Column>
           </div>
+          <Button type="submit">Create</Button>
         </form>
       </Display>
     </div>
