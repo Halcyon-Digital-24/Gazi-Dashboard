@@ -132,6 +132,7 @@ const SetupPage = () => {
         setValue("category_one", data.category_one);
         setValue("category_two", data.category_two);
         setValue("category_three", data.category_three);
+        //category title
         setValue("category_one_title", data.category_one_title);
         setValue("category_two_title", data.category_two_title);
         setValue("category_three_title", data.category_three_title);
