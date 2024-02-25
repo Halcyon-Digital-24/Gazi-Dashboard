@@ -257,7 +257,7 @@ const CustomOrder = () => {
                 <Input
                   type="number"
                   htmlFor="shipping"
-                  placeholder="shipping"
+                  placeholder="Shipping"
                   label="Shipping Price"
                   onChange={(e) => setShipping(Number(e.target.value))}
                 />
@@ -268,6 +268,30 @@ const CustomOrder = () => {
                   label="Discount Price"
                   onChange={(e) => setDiscount(Number(e.target.value))}
                 />
+                <>
+                  <label className="label" htmlFor="select">
+                    Invoice Prefix
+                  </label>
+                  <div className="select-wrapper">
+                    <select
+                      id="select"
+                      className="select"
+                      {...register("order_prefix")}
+                      htmlFor="Choose Parent category"
+                      name="order_prefix"
+                    >
+                      <option value="">Select Parent Category</option>
+                      <option value="GHA">Home Appliance</option>
+                      <option value="GPHA">Gazi Pumps & Motors</option>
+                    </select>
+                  </div>
+
+                  {errors.order_prefix && (
+                    <p className="validation__error">
+                      {errors.order_prefix.message}
+                    </p>
+                  )}
+                </>
                 {/* <Input htmlFor="variant" placeholder="variant" /> */}
                 <div className="product-area" ref={productAreaRef}>
                   <Input

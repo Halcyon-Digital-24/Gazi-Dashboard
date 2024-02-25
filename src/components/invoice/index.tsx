@@ -133,8 +133,18 @@ const Invoice = ({ order }: any) => {
               Total Order Amount :{" "}
               {totalPrice + order.delivery_fee - order.custom_discount}
             </p>
-            <p>Shipping Method: {order.delivery_method}</p>
-            <p>Payment Method: {order.payment_method}</p>
+            <p>
+              Shipping Method:{" "}
+              {order?.delivery_method === "homeDelivery"
+                ? "Home Delivery"
+                : "Express Delivery"}
+            </p>
+            <p>
+              Payment Method:{" "}
+              {order?.payment_method === "cashOnDelivery"
+                ? "Cash on Delivery"
+                : "Online Payment"}
+            </p>
           </div>
         </div>
       </div>

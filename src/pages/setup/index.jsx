@@ -132,6 +132,9 @@ const SetupPage = () => {
         setValue("category_one", data.category_one);
         setValue("category_two", data.category_two);
         setValue("category_three", data.category_three);
+        setValue("category_one_title", data.category_one_title);
+        setValue("category_two_title", data.category_two_title);
+        setValue("category_three_title", data.category_three_title);
         setSpecialPhoto(data.special_product_photo);
       } catch (error) {
         console.error("Error fetching data:", error);
@@ -187,6 +190,26 @@ const SetupPage = () => {
                   </p>
                 )}
               </div>
+              <div className="text">
+                <label htmlFor="name">First Category Title</label>
+                <input
+                  type="text"
+                  placeholder="Category title"
+                  {...register("category_one_title", {
+                    trim: true,
+                    required: "Category title is required",
+                    pattern: {
+                      value: /\S/,
+                      message: "Enter a valid title",
+                    },
+                  })}
+                />
+                {errors.category_one_title && (
+                  <p className="validation__error">
+                    {errors.category_one_title.message}
+                  </p>
+                )}
+              </div>
               <>
                 <label className="label" htmlFor="select">
                   First Category
@@ -216,6 +239,26 @@ const SetupPage = () => {
                   </p>
                 )}
               </>
+              <div className="text">
+                <label htmlFor="name">Second Category Title</label>
+                <input
+                  type="text"
+                  placeholder="Category title"
+                  {...register("category_two_title", {
+                    trim: true,
+                    required: "Category title is required",
+                    pattern: {
+                      value: /\S/,
+                      message: "Enter a valid title",
+                    },
+                  })}
+                />
+                {errors.category_two_title && (
+                  <p className="validation__error">
+                    {errors.category_two_title.message}
+                  </p>
+                )}
+              </div>
               <>
                 <label className="label" htmlFor="select">
                   Second Category
@@ -245,6 +288,26 @@ const SetupPage = () => {
                   </p>
                 )}
               </>
+              <div className="text">
+                <label htmlFor="name">Third Category Title</label>
+                <input
+                  type="text"
+                  placeholder="Category title"
+                  {...register("category_three_title", {
+                    trim: true,
+                    required: "Category title is required",
+                    pattern: {
+                      value: /\S/,
+                      message: "Enter a valid title",
+                    },
+                  })}
+                />
+                {errors.category_three_title && (
+                  <p className="validation__error">
+                    {errors.category_three_title.message}
+                  </p>
+                )}
+              </div>
               <>
                 <label className="label" htmlFor="select">
                   Third Category

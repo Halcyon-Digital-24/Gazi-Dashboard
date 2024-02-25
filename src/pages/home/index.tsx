@@ -149,9 +149,13 @@ const HomePage: React.FC = () => {
     },
   ];
 
-    // Filter items based on user permissions
-    const userPermissions = JSON.parse(localStorage.getItem("user") || "").permissions;
-    const filteredItems = items.filter(item => userPermissions.includes(item.role_identity));
+  // Filter items based on user permissions
+  const userPermissions = JSON.parse(
+    localStorage.getItem("user") || ""
+  ).permissions;
+  const filteredItems = items.filter((item) =>
+    userPermissions?.includes(item.role_identity)
+  );
 
   return (
     <div className="">
