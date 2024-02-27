@@ -35,8 +35,10 @@
         box-sizing: border-box;
         p {
           margin-bottom: 5px;
+          text-transform: capitalize;
         }
       }
+
       .right {
         background: $decenary-color;
         width: 35%;
@@ -44,6 +46,7 @@
         box-sizing: border-box;
         p {
           margin-bottom: 5px;
+          text-transform: capitalize;
         }
       }
 
@@ -69,7 +72,9 @@
   .invoice-table {
     width: 100%;
     margin-top: 20px;
-
+    .variant {
+      margin-right: 5px;
+    }
     .first-row {
       .heading {
         background: $decenary-color;

@@ -341,7 +341,7 @@ const CreateProduct: React.FC = () => {
                   onBlur={(e) => setTile(e.target.value)}
                   htmlFor="name"
                   required
-                  errorMessage={error.title}
+                  errorMessage={error?.title}
                 />
                 <Input
                   label="Slug *"
@@ -349,7 +349,7 @@ const CreateProduct: React.FC = () => {
                   onBlur={(e) => setSlug(e.target.value)}
                   htmlFor="slug"
                   required
-                  errorMessage={error.slug}
+                  errorMessage={error?.slug}
                 />
               </Display>
 
@@ -386,7 +386,7 @@ const CreateProduct: React.FC = () => {
                   label="Video Link"
                   htmlFor="video"
                   onBlur={(e) => setVideoUrl(e.target.value)}
-                  errorMessage={error.video_url}
+                  errorMessage={error?.video_url}
                 />
                 <p className="wearing">
                   Use proper link without extra parameter.
@@ -481,16 +481,16 @@ const CreateProduct: React.FC = () => {
                   value={description}
                   setValue={setDescription}
                 />
-                {error.description && (
-                  <p className="validation__error">{error.description}</p>
+                {error?.description && (
+                  <p className="validation__error">{error?.description}</p>
                 )}
                 <h5 className="product-title">Product Policy</h5>
                 <div className="des-none">
                   <TextArea label="policy" value={policy} required />
                 </div>
                 <DescriptionInput value={policy} setValue={setPolicy} />
-                {error.policy && (
-                  <p className="validation__error">{error.policy}</p>
+                {error?.policy && (
+                  <p className="validation__error">{error?.policy}</p>
                 )}
               </Display>
             </div>
@@ -511,7 +511,7 @@ const CreateProduct: React.FC = () => {
                   htmlFor="regular-price"
                   onChange={(e) => setRegularPrice(Number(e.target.value))}
                   required
-                  errorMessage={error.regular_price}
+                  errorMessage={error?.regular_price}
                 />
                 <div className="discount-area">
                   <Input
@@ -521,7 +521,7 @@ const CreateProduct: React.FC = () => {
                     onChange={(e) =>
                       setDiscountSelectedAmount(Number(e.target.value))
                     }
-                    errorMessage={error.discount_price}
+                    errorMessage={error?.discount_price}
                   />
                   <div>
                     <Select
@@ -562,7 +562,7 @@ const CreateProduct: React.FC = () => {
                     label="Product short description *"
                     placeholder="Product short description"
                     onBlur={(e) => setSortDesc(e.target.value)}
-                    errorMessage={error.sort_description}
+                    errorMessage={error?.sort_description}
                   />
 
                   <Input
@@ -573,7 +573,7 @@ const CreateProduct: React.FC = () => {
                     onBlur={(e) => setQuantity(Number(e.target.value))}
                     defaultValue="0"
                     required
-                    errorMessage={error.quantity}
+                    errorMessage={error?.quantity}
                   />
                 </div>
               </Display>

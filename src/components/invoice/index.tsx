@@ -127,8 +127,8 @@ const Invoice = ({ order }: any) => {
             <p>Address: {order.address} </p>
           </div>
           <div className="order-details right">
-            <p>Order date: {formatDate(order.created_at)}</p>
-            <p>Order status: {order?.order_status}</p>
+            <p>Order Date: {formatDate(order.created_at)}</p>
+            <p>Order Status: {order?.order_status}</p>
             <p>
               Total Order Amount :{" "}
               {totalPrice + order.delivery_fee - order.custom_discount}
@@ -175,7 +175,18 @@ const Invoice = ({ order }: any) => {
                   <Column className="col-md-3 heading">
                     {product.product_name}
                   </Column>
-                  <Column className="col-md-2 heading">-</Column>
+                  <Column className="col-md-2 heading">
+                    {/* Attribute */}
+                    {product.product_attribute
+                      ? JSON.parse(product.product_attribute).map(
+                          (v: any, i: number) => (
+                            <span className="variant" key={i}>
+                              {v.value}
+                            </span>
+                          )
+                        )
+                      : "-"}
+                  </Column>
                   <Column className="col-md-1 heading">
                     {product.quantity}
                   </Column>
