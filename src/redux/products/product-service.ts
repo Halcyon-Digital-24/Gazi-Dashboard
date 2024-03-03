@@ -51,7 +51,9 @@ const deleteProduct = async (ids: number[]) => {
 };
 
 const csvProduct = async () => {
-  const { data } = await axios.get(`${API_URL}/products/csv`);
+  const { data } = await axios.get(`${API_URL}/products/csv`, {
+    timeout: 10000,
+  });
   return data;
 };
 

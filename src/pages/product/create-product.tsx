@@ -305,7 +305,10 @@ const CreateProduct: React.FC = () => {
     if (isError) {
       toast.error(`${errorMessage}`);
     }
-  }, [errorMessage, isError]);
+    return () => {
+      dispatch(reset());
+    };
+  }, [errorMessage, isError, dispatch]);
 
   useEffect(() => {
     if (isCreate) {
