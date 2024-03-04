@@ -22,6 +22,7 @@ import { API_URL } from "../../constants";
 import { IAttributeResponse } from "../../interfaces/attribute";
 import axios from "../../lib";
 import AttributeSingle from "../attribute/attribute-single";
+import { RiDeleteBin6Line } from "react-icons/ri";
 
 // const animatedComponents = makeAnimated();
 
@@ -471,6 +472,34 @@ const CreateProduct: React.FC = () => {
                             handleRemoveAttribute={handleRemoveAttribute}
                           />
                         ))}
+                    </div>
+                    <div className="varian-table">
+                      <table>
+                        <tr>
+                          <th>Variant</th>
+                          <th>Variant Price</th>
+                          <th>Quantity</th>
+                          <th>Photo</th>
+                          <th></th>
+                        </tr>
+                        <tr>
+                          <td>LPG</td>
+                          <td>
+                            <Input htmlFor="price" type="number" />
+                          </td>
+                          <td>
+                            <Input htmlFor="quantity" type="number" />
+                          </td>
+                          <td>
+                            <FileInput />
+                          </td>
+                          <td>
+                            <div className="delete">
+                              <RiDeleteBin6Line />
+                            </div>
+                          </td>
+                        </tr>
+                      </table>
                     </div>
                   </>
                 )}
