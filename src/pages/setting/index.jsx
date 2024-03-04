@@ -1,23 +1,56 @@
-import React from "react";
+import React, { useEffect } from "react";
 import { useForm } from "react-hook-form";
 import CardBody from "../../components/card-body";
 import Display from "../../components/display";
 import Column from "../../components/table/column";
-import FileInput from "../../components/forms/file-input";
 import "./index.scss";
 import { Button } from "../../components/button";
+import axios from "../../lib";
+import { toast } from "react-toastify";
 
 const SettingPage = () => {
   const {
+    setValue,
     register,
-    control,
     handleSubmit,
     formState: { errors },
   } = useForm();
 
-  const onSubmit = (data) => {
-    console.log(data);
+  const onSubmit = async (data) => {
+    try {
+      const response = await axios.post("/colors", data);
+      console.log(response);
+    } catch (error) {
+      toast.error(error.response.data.message);
+    }
   };
+
+  useEffect(() => {
+    const fetchData = async () => {
+      try {
+        const { data } = await axios.get("/colors");
+        setValue("primary_text", data.primary_text);
+        setValue("secondary_tex", data.secondary_tex);
+        setValue("tertiary_text", data.tertiary_text);
+        setValue("primary_background", data.primary_background);
+        setValue("secondary_background", data.secondary_background);
+        setValue("tertiary_background", data.tertiary_background);
+        setValue("border", data.border);
+        setValue("active", data.active);
+        setValue("disable", data.disable);
+        setValue("success", data.success);
+        setValue("info", data.info);
+        setValue("warning", data.warning);
+        setValue("error", data.error);
+        setValue("link", data.link);
+        setValue("hover", data.hover);
+      } catch (error) {
+        console.log(error);
+      }
+    };
+    fetchData();
+  }, []);
+
   return (
     <div>
       <CardBody
@@ -316,7 +349,7 @@ const SettingPage = () => {
               </div>
             </Column>
           </div>
-          <Button type="submit">Create</Button>
+          <Button type="submit">Update</Button>
         </form>
       </Display>
     </div>
