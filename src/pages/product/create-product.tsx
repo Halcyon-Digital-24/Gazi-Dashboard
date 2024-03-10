@@ -188,7 +188,10 @@ const CreateProduct: React.FC = () => {
       const files = Array.from(e.target.files);
 
       // Initialize quantities for newly added images
-      const newQuantities = Array(files.length).fill(1);
+      const newQuantities = Array.from(
+        { length: files.length },
+        (_, index) => index + 1
+      );
 
       setGalleryImages((prevImages) =>
         prevImages ? [...prevImages, ...files] : files
@@ -224,15 +227,6 @@ const CreateProduct: React.FC = () => {
       return newQuantities;
     });
   };
-
-  /*  const removeGalleryImage = (file: File) => {
-    if (galleryImages !== null) {
-      const filterImages = galleryImages.filter(
-        (singleFile) => singleFile.name != file.name
-      );
-      setGalleryImages(filterImages);
-    }
-  }; */
 
   const handleProductSubmit = (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault();
@@ -329,7 +323,6 @@ const CreateProduct: React.FC = () => {
       dispatch(reset());
     };
   }, [dispatch]);
-  console.log(error);
 
   return (
     <div className="create-product">
@@ -417,7 +410,7 @@ const CreateProduct: React.FC = () => {
                         <input
                           type="text"
                           defaultValue={imageQuantities[index]}
-                          onBlur={(e) =>
+                          onChange={(e) =>
                             handleQuantityChange(
                               index,
                               parseInt(e.target.value, 10)
