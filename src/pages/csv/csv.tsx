@@ -5,7 +5,7 @@ import { Button } from "../../components/button";
 import "./csv.scss";
 import { BsDownload } from "react-icons/bs";
 import { useAppDispatch, useAppSelector } from "../../redux/hooks";
-import axios from "../../lib";
+// import axios from "../../lib";
 import {
   csvProduct,
   reset,
@@ -15,18 +15,17 @@ import { toast } from "react-toastify";
 
 const Csv: React.FC = () => {
   const dispatch = useAppDispatch();
-  const { isError, errorMessage, isCsvUpload, message } = useAppSelector(
-    (state) => state.product
-  );
+  const { csvFile, isError, errorMessage, isCsvUpload, message } =
+    useAppSelector((state) => state.product);
   const [csv, setCsv] = useState<File | null>(null);
-  const [csvFile, setCsvFile] = useState("");
+  // const [csvFile, setCsvFile] = useState("");
 
-  /*   useEffect(() => {
+  useEffect(() => {
     dispatch(csvProduct());
     return () => {
       dispatch(reset());
     };
-  }, [dispatch]); */
+  }, [dispatch]);
 
   /*  useEffect(() => {
     const fetchData = async () => {

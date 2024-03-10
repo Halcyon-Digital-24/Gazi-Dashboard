@@ -24,10 +24,12 @@ const GalleryImages: FC<IProps> = ({ slug }) => {
   const [galleryImages, setGalleryImages] = useState<IGalleryPhoto[] | null>(
     null
   );
+  console.log(galleryImages);
   const [isLoading, setIsLoading] = useState(false);
-  const [orderNumber] = useState(1);
+  const [orderNumber] = useState((galleryImages?.length as number) + 1);
   const handleGalleryImageChange = (e: ChangeEvent<HTMLInputElement>) => {
     setIsLoading(true);
+    console.log(orderNumber);
     const formData = new FormData();
 
     if (e.target.files) {
@@ -98,7 +100,7 @@ const GalleryImages: FC<IProps> = ({ slug }) => {
             />
           ))}
       </div>
-      <p className="wearing">Image Size Should Be 800 x 800. or square size</p>
+      <p className="wearing">Image Size Should Be 900 x 800. or square size</p>
     </Display>
   );
 };
