@@ -656,7 +656,7 @@ const UpdateProduct: React.FC = () => {
                   placeholder="Quantity"
                   label="Quantity"
                   htmlFor="Quantity"
-                  value={quantity.toString()}
+                  value={quantity?.toString()}
                   onChange={(e) => setQuantity(Number(e.target.value))}
                   required
                   errorMessage={error.quantity}

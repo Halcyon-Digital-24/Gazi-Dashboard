@@ -61,7 +61,23 @@ const CreateProduct: React.FC = () => {
   const [isVariant, setIsVariant] = useState(false);
   const [attributes, setAttributes] = useState<any[]>([]);
   const [selectedAttributes, setSelectedAttributes] = useState<any[]>([]);
+  const [productAttributes, setProductAttribuets] = useState<any[]>([]);
+  console.log(productAttributes);
 
+  useEffect(() => {
+    const existingAttributes: any[] = [];
+    selectedAttributes.map((item, i) => {
+      item?.value.split(",").map((value: any, index: number) => {
+        existingAttributes.push({
+          attribute_key: item?.name.replace(" ", "_"),
+          attribute_value: value,
+          attribute_quantity: 0,
+          attrbute_image: "",
+        });
+      });
+    });
+    setProductAttribuets(existingAttributes);
+  }, [selectedAttributes]);
   useEffect(() => {
     const fetchData = async () => {
       try {
@@ -137,7 +153,19 @@ const CreateProduct: React.FC = () => {
     }
   };
 
-  const handleRemoveAttribute = (
+  const handleRemoveProductAttribute = (attribute_key, attribute_value) => {
+    const filterAttribute = selectedAttributes.filter(
+      (att) =>
+        !(
+          att.attribute_key === attribute_key &&
+          att.attribute_value === attribute_value
+        )
+    );
+
+    setSelectedAttributes(filterAttribute);
+  };
+
+  /*  const handleRemoveAttribute = (
     attribute: string,
     attributeValue: string | null = null
   ) => {
@@ -168,7 +196,7 @@ const CreateProduct: React.FC = () => {
       );
       setAttributes((prevState) => [tempObj, ...prevState]);
     }
-  };
+  }; */
 
   const handleImageChange = (e: ChangeEvent<HTMLInputElement>) => {
     if (e.target.files) {
@@ -177,12 +205,18 @@ const CreateProduct: React.FC = () => {
     }
   };
 
-  /* const handleGalleryImageChange = (e: ChangeEvent<HTMLInputElement>) => {
-    if (e.target.files) {
-      const files = Array.from(e.target.files);
-      setGalleryImages(files);
+  const updateProductAttributes = (index: number, data: any) => {
+    if (index >= 0 && index < productAttributes.length) {
+      setProductAttribuets((prevAttributes) => {
+        const newAttributes = [...prevAttributes];
+        newAttributes[index] = { ...newAttributes[index], ...data };
+        return newAttributes;
+      });
+    } else {
+      console.error("Index out of bounds or invalid");
     }
-  }; */
+  };
+
   const handleGalleryImageChange = (e: ChangeEvent<HTMLInputElement>) => {
     if (e.target.files) {
       const files = Array.from(e.target.files);
@@ -269,7 +303,7 @@ const CreateProduct: React.FC = () => {
     formData.append("is_feature", isFeature.toString());
     formData.append("is_new", isNew.toString());
     if (isVariant) {
-      const tempSelAttri: any[] = [];
+      /*  const tempSelAttri: any[] = [];
       selectedAttributes?.length > 0 &&
         selectedAttributes?.map((item) => {
           if (item?.selectedValues?.length > 0) {
@@ -279,7 +313,12 @@ const CreateProduct: React.FC = () => {
             });
           }
         });
-      formData.append("attributes", JSON.stringify(tempSelAttri));
+      formData.append("attributes", JSON.stringify(tempSelAttri)); */
+      productAttributes.map((att: any) => {
+        Object.entries(att).map(([key, value]) => {
+          formData.append(key, value as string | Blob);
+        });
+      });
     } else {
       formData.append("attributes", JSON.stringify([]));
     }
@@ -455,7 +494,7 @@ const CreateProduct: React.FC = () => {
                           </option>
                         ))}
                     </select>
-                    <div className="attribute-selected">
+                    {/* <div className="attribute-selected">
                       {selectedAttributes?.length > 0 &&
                         selectedAttributes?.map((item, i) => (
                           <AttributeSingle
@@ -465,35 +504,64 @@ const CreateProduct: React.FC = () => {
                             handleRemoveAttribute={handleRemoveAttribute}
                           />
                         ))}
-                    </div>
-                    <div className="varian-table">
-                      <table>
-                        <tr>
-                          <th>Variant</th>
-                          <th>Variant Price</th>
-                          <th>Quantity</th>
-                          <th>Photo</th>
-                          <th></th>
-                        </tr>
-                        <tr>
-                          <td>LPG</td>
-                          <td>
-                            <Input htmlFor="price" type="number" />
-                          </td>
-                          <td>
-                            <Input htmlFor="quantity" type="number" />
-                          </td>
-                          <td>
-                            <FileInput />
-                          </td>
-                          <td>
-                            <div className="delete">
-                              <RiDeleteBin6Line />
-                            </div>
-                          </td>
-                        </tr>
-                      </table>
-                    </div>
+                    </div> */}
+                    {productAttributes?.length > 0 && (
+                      <div className="varian-table">
+                        <table>
+                          <thead>
+                            <tr>
+                              <th>Type</th>
+                              <th>Variant</th>
+                              <th>Quantity</th>
+                              <th>Photo</th>
+                              <th></th>
+                            </tr>
+                          </thead>
+                          <tbody>
+                            {productAttributes?.map((att, i) => (
+                              <tr key={i}>
+                                <td>{att?.attribute_key?.replace("_", " ")}</td>
+                                <td>{att?.attribute_value}</td>
+                                <td>
+                                  <Input
+                                    htmlFor="quantity"
+                                    type="number"
+                                    required
+                                    onChange={(e) =>
+                                      updateProductAttributes(i, {
+                                        attribute_quantity: e.target.value,
+                                      })
+                                    }
+                                  />
+                                </td>
+                                <td>
+                                  <FileInput
+                                    onChange={(e) =>
+                                      updateProductAttributes(i, {
+                                        attrbute_image: e.target.files[0],
+                                      })
+                                    }
+                                  />
+                                </td>
+                                <td>
+                                  <div
+                                    className="delete"
+                                    onClick={() =>
+                                      handleRemoveAttribute(
+                                        att.attribute_key,
+                                        att.attribute_value
+                                      )
+                                    }
+                                  >
+                                    <RiDeleteBin6Line />
+                                  </div>
+                                </td>
+                              </tr>
+                            ))}
+                          </tbody>
+                        </table>
+                      </div>
+                    )}
                   </>
                 )}
               </Display>
