@@ -24,12 +24,10 @@ const GalleryImages: FC<IProps> = ({ slug }) => {
   const [galleryImages, setGalleryImages] = useState<IGalleryPhoto[] | null>(
     null
   );
-  console.log(galleryImages);
   const [isLoading, setIsLoading] = useState(false);
   const [orderNumber] = useState((galleryImages?.length as number) + 1);
   const handleGalleryImageChange = (e: ChangeEvent<HTMLInputElement>) => {
     setIsLoading(true);
-    console.log(orderNumber);
     const formData = new FormData();
 
     if (e.target.files) {

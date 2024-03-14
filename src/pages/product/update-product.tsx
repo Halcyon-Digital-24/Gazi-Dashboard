@@ -60,10 +60,10 @@ const UpdateProduct: React.FC = () => {
   const [isVariant, setIsVariant] = useState(false);
   const [attributes, setAttributes] = useState<any[]>([]);
   const [selectedAttributes, setSelectedAttributes] = useState<any[]>([]);
-  const [previousSelectedAttributes, setPreviousSelectedAttributes] = useState<
-    any[]
-  >([]);
-  console.log(previousSelectedAttributes);
+  // const [previousSelectedAttributes, setPreviousSelectedAttributes] = useState<
+  //   any[]
+  // >([]);
+
   useEffect(() => {
     const fetchData = async () => {
       try {
@@ -85,7 +85,7 @@ const UpdateProduct: React.FC = () => {
             if (response2?.status === 200) {
               let selectedAttributeList = response2?.data?.data?.rows;
               if (selectedAttributeList?.length > 0) {
-                setPreviousSelectedAttributes(selectedAttributeList);
+                // setPreviousSelectedAttributes(selectedAttributeList);
                 setIsVariant(true);
                 if (tempAttributes?.length > 0) {
                   tempAttributes?.map((item) => {
