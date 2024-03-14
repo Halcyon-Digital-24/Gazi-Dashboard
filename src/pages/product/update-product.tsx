@@ -22,7 +22,7 @@ import { useNavigate, useParams } from "react-router-dom";
 import AttributeSingle from "../attribute/attribute-single";
 import { IAttributeResponse } from "../../interfaces/attribute";
 import GalleryImages from "./galleryImages";
-import { RiDeleteBin6Line } from "react-icons/ri";
+import UpdateVariant from "../attribute/UpdateVariant";
 
 const UpdateProduct: React.FC = () => {
   // let runCount = 0;
@@ -281,7 +281,7 @@ const UpdateProduct: React.FC = () => {
       formData.append("image", updateImage);
     }
     formData.append("category_slug", category);
-    formData.append("quantity", quantity.toString());
+    formData.append("default_quantity", quantity.toString());
     formData.append("regular_price", regularPrice.toString());
     formData.append("discount_price", discountPrice.toString());
     formData.append("delivery_fee", deliveryFee.toString());
@@ -350,7 +350,7 @@ const UpdateProduct: React.FC = () => {
         setDescription(data.description);
         setImage(data.image);
         setCategory(data.category_slug);
-        setQuantity(data.quantity);
+        setQuantity(data.default_quantity);
         setRegularPrice(data.regular_price);
         setDiscountPrice(Number(data.discount_price));
         setStatus(data.is_visible);
@@ -371,20 +371,6 @@ const UpdateProduct: React.FC = () => {
             new Date(data.camping_end_date),
           ]);
         }
-
-        /* if (data["product-photos"] && data["product-photos"].length > 0) {
-          const galleryImageFiles = data["product-photos"].map(
-            (photo: IPhoto) => ({
-              id: photo.id,
-              product_id: photo.product_id,
-              image: photo.image,
-              order_number: photo.order_number,
-              created_at: photo.created_at,
-              updated_at: photo.updated_at,
-            })
-          );
-          setGalleryImages(galleryImageFiles);
-        } */
       } catch (error) {
         console.error("Error fetching EMI data:", error);
       }
@@ -401,7 +387,7 @@ const UpdateProduct: React.FC = () => {
       );
     }
   }, [discountType, discountSelectedAmount]);
-
+  console.log(title);
   return (
     <div className="create-product">
       <CardBody header="Update Product" to="/products" text="back" />
@@ -506,32 +492,7 @@ const UpdateProduct: React.FC = () => {
                         ))}
                     </div>
                     <div className="varian-table">
-                      <table>
-                        <tr>
-                          <th>Variant</th>
-                          <th>Variant Price</th>
-                          <th>Quantity</th>
-                          <th>Photo</th>
-                          <th></th>
-                        </tr>
-                        <tr>
-                          <td>LPG</td>
-                          <td>
-                            <Input htmlFor="price" type="number" />
-                          </td>
-                          <td>
-                            <Input htmlFor="quantity" type="number" />
-                          </td>
-                          <td>
-                            <FileInput />
-                          </td>
-                          <td>
-                            <div className="delete">
-                              <RiDeleteBin6Line />
-                            </div>
-                          </td>
-                        </tr>
-                      </table>
+                      <UpdateVariant title={title} />
                     </div>
                   </>
                 )}
@@ -584,14 +545,7 @@ const UpdateProduct: React.FC = () => {
                   readOnly
                   errorMessage={error.regular_price}
                 />
-                {/*  <Input
-                  placeholder="Discount Price"
-                  label="Discount Price"
-                  htmlFor="discount-price"
-                  value={discountPrice}
-                  onChange={(e) => setDiscountPrice(Number(e.target.value))}
-                  errorMessage={error.discount_price}
-                /> */}
+
                 <div className="discount-area">
                   <Input
                     placeholder="Discount Price"

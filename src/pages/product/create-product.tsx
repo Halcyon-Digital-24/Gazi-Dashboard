@@ -279,7 +279,7 @@ const CreateProduct: React.FC = () => {
       formData.append("image", image);
     }
     formData.append("category_slug", category);
-    formData.append("quantity", quantity.toString());
+    formData.append("default_quantity", quantity.toString());
     formData.append("regular_price", regularPrice.toString());
     formData.append("discount_price", discountPrice.toString());
     formData.append("delivery_fee", deliveryFee.toString());
