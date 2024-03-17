@@ -25,7 +25,8 @@ const GalleryImages: FC<IProps> = ({ slug }) => {
     null
   );
   const [isLoading, setIsLoading] = useState(false);
-  const [orderNumber] = useState((galleryImages?.length as number) + 1);
+  const [orderNumber, setOrderNumber] = useState(0);
+
   const handleGalleryImageChange = (e: ChangeEvent<HTMLInputElement>) => {
     setIsLoading(true);
     const formData = new FormData();
@@ -62,10 +63,10 @@ const GalleryImages: FC<IProps> = ({ slug }) => {
     const fetchProductData = async () => {
       try {
         const response = await axios.get(`${API_URL}/products/${slug}`);
-        const { data } = response.data;
+        const { productPhoto } = response.data;
 
-        if (data["product-photos"] && data["product-photos"].length > 0) {
-          const galleryImageFiles = data["product-photos"].map(
+        /* if (data["productPhoto"] && data["productPhoto"].length > 0) {
+          const galleryImageFiles = data["productPhoto"].map(
             (photo: IPhoto) => ({
               id: photo.id,
               product_id: photo.product_id,
@@ -75,8 +76,9 @@ const GalleryImages: FC<IProps> = ({ slug }) => {
               updated_at: photo.updated_at,
             })
           );
-          setGalleryImages(galleryImageFiles);
-        }
+        } */
+        setGalleryImages(productPhoto?.rows);
+        setOrderNumber(productPhoto?.rows?.length + 1);
       } catch (error) {
         console.error("Error fetching EMI data:", error);
       }

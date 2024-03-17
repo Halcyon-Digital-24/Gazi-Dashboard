@@ -344,31 +344,31 @@ const UpdateProduct: React.FC = () => {
     const fetchProductData = async () => {
       try {
         const response = await axios.get(`${API_URL}/products/${slug}`);
-        const { data } = response.data;
-        setTile(data.title);
-        setUrl(data.slug);
-        setDescription(data.description);
-        setImage(data.image);
-        setCategory(data.category_slug);
-        setQuantity(data.default_quantity);
-        setRegularPrice(data.regular_price);
-        setDiscountPrice(Number(data.discount_price));
-        setStatus(data.is_visible);
-        setDeliveryFee(data.delivery_fee);
-        setVideoUrl(data.video_url);
-        setMetaTitle(data.meta_title);
-        setMetaDescription(data.meta_description);
-        setIsSale(data.is_sale);
-        setIsFeature(data.is_feature);
-        setIsNew(data.is_new);
-        setSortDesc(data.sort_description);
-        setPolicy(data?.policy || "");
-        setAvailability(data.availability);
+        const { product } = response.data;
+        setTile(product.title);
+        setUrl(product.slug);
+        setDescription(product.description);
+        setImage(product.image);
+        setCategory(product.category_slug);
+        setQuantity(product.default_quantity);
+        setRegularPrice(product.regular_price);
+        setDiscountPrice(Number(product.discount_price));
+        setStatus(product.is_visible);
+        setDeliveryFee(product.delivery_fee);
+        setVideoUrl(product.video_url);
+        setMetaTitle(product.meta_title);
+        setMetaDescription(product.meta_description);
+        setIsSale(product.is_sale);
+        setIsFeature(product.is_feature);
+        setIsNew(product.is_new);
+        setSortDesc(product.sort_description);
+        setPolicy(product?.policy || "");
+        setAvailability(product.availability);
 
-        if (data.camping_start_date && data.camping_end_date) {
+        if (product.camping_start_date && product.camping_end_date) {
           setCampaignDate([
-            new Date(data.camping_start_date),
-            new Date(data.camping_end_date),
+            new Date(product.camping_start_date),
+            new Date(product.camping_end_date),
           ]);
         }
       } catch (error) {
@@ -387,7 +387,7 @@ const UpdateProduct: React.FC = () => {
       );
     }
   }, [discountType, discountSelectedAmount]);
-  console.log(title);
+
   return (
     <div className="create-product">
       <CardBody header="Update Product" to="/products" text="back" />

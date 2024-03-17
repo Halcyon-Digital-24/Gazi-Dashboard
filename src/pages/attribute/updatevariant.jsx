@@ -4,36 +4,45 @@ import { API_URL } from "../../constants";
 import Input from "../../components/forms/text-input";
 import FileInput from "../../components/forms/file-input";
 import { RiDeleteBin6Line } from "react-icons/ri";
+import { useParams } from "react-router-dom";
+import { FaCheck } from "react-icons/fa";
+import { toast } from "react-toastify";
 
-const UpdateVariant = ({ title }) => {
+const UpdateVariant = () => {
+  const { slug } = useParams();
   const [productAttributes, setProductAttributes] = useState([]);
+  const [isLoading, setIsLoading] = useState(true);
 
   const handleDeleteAttribute = async (id) => {
+    setIsLoading(true);
     try {
       const { data } = await axios.delete(
         `${API_URL}/product-attributes/?ids=[${id}]`
       );
+
+      setIsLoading(false);
     } catch (error) {
       console.log(error);
+      setIsLoading(false);
     }
   };
+
   useEffect(() => {
     const fetchProductData = async () => {
       try {
         const response = await axios.get(
-          `${API_URL}/frontend/products/Gazi%20Smiss%20Gas%20Stove%20%7C%20B-23
+          `${API_URL}/products/${slug}
 `
         );
-        const { data } = response.data;
-        setProductAttributes(data.productAttribute);
-
-        console.log(data);
+        const { productAttribute } = response.data;
+        setProductAttributes(productAttribute?.rows);
+        setIsLoading(false);
       } catch (error) {
-        console.error("Error fetching EMI data:", error);
+        console.error("Error fetching update product data:", error);
       }
     };
     fetchProductData();
-  }, []);
+  }, [slug, isLoading]);
 
   return (
     <div>
@@ -52,40 +61,73 @@ const UpdateVariant = ({ title }) => {
             </thead>
             <tbody>
               {productAttributes?.map((att, i) => (
-                <tr key={i}>
-                  <td>{att?.attribute_key?.replace("_", " ")}</td>
-                  <td>{att?.attribute_value}</td>
-                  <td>
-                    <Input
-                      htmlFor="quantity"
-                      type="number"
-                      value={att.attribute_quantity}
-                      required
-                    />
-                  </td>
-                  <td>
-                    <FileInput />
-                  </td>
-                  <td>
-                    <div className="delete">
-                      <RiDeleteBin6Line />
-                    </div>
-                  </td>
-                  <td>
-                    <div
-                      className="delete"
-                      onClick={() => handleDeleteAttribute(att.id)}
-                    >
-                      <RiDeleteBin6Line />
-                    </div>
-                  </td>
-                </tr>
+                <SingleVariant
+                  att={att}
+                  handleDeleteAttribute={handleDeleteAttribute}
+                  key={i}
+                />
               ))}
             </tbody>
           </table>
         </div>
       )}
     </div>
+  );
+};
+
+const SingleVariant = ({ att, handleDeleteAttribute }) => {
+  const [quantity, setQuantity] = useState(0);
+  const [image, setImage] = useState(null);
+
+  const handleUpdateAttribute = async () => {
+    const formData = new FormData();
+    formData.append("attribute_quantity", quantity);
+    if (image) {
+      formData.append("attrbute_image", image);
+    }
+    try {
+      const response = await axios.patch(
+        `${API_URL}/product-attributes/${att.id}
+`,
+        formData
+      );
+      toast.success(response?.data?.message);
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
+  useEffect(() => {
+    setQuantity(att.attribute_quantity);
+  }, []);
+
+  return (
+    <tr>
+      <td>{att?.attribute_key?.replace("_", " ")}</td>
+      <td>{att?.attribute_value}</td>
+      <td>
+        <Input
+          htmlFor="quantity"
+          type="number"
+          value={quantity}
+          onChange={(e) => setQuantity(e.target.value)}
+          required
+        />
+      </td>
+      <td>
+        <FileInput onChange={(e) => setImage(e.target.files[0])} />
+      </td>
+      <td>
+        <div className="check" onClick={handleUpdateAttribute}>
+          <FaCheck />
+        </div>
+      </td>
+      <td>
+        <div className="delete" onClick={() => handleDeleteAttribute(att.id)}>
+          <RiDeleteBin6Line />
+        </div>
+      </td>
+    </tr>
   );
 };
 

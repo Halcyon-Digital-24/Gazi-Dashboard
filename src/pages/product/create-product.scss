@@ -135,4 +135,16 @@
       font-size: 16px;
     }
   }
+  .check {
+    background: $septenary-color;
+    padding: 4px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    cursor: pointer;
+    svg {
+      color: $white-color;
+      font-size: 16px;
+    }
+  }
 }

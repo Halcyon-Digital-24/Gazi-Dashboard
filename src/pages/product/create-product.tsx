@@ -62,7 +62,6 @@ const CreateProduct: React.FC = () => {
   const [attributes, setAttributes] = useState<any[]>([]);
   const [selectedAttributes, setSelectedAttributes] = useState<any[]>([]);
   const [productAttributes, setProductAttribuets] = useState<any[]>([]);
-  console.log(productAttributes);
 
   useEffect(() => {
     const existingAttributes: any[] = [];
