@@ -21,7 +21,6 @@ import "rsuite/dist/rsuite.css";
 import { API_URL } from "../../constants";
 import { IAttributeResponse } from "../../interfaces/attribute";
 import axios from "../../lib";
-import AttributeSingle from "../attribute/attribute-single";
 import { RiDeleteBin6Line } from "react-icons/ri";
 
 // const animatedComponents = makeAnimated();
@@ -65,8 +64,8 @@ const CreateProduct: React.FC = () => {
 
   useEffect(() => {
     const existingAttributes: any[] = [];
-    selectedAttributes.map((item, i) => {
-      item?.value.split(",").map((value: any, index: number) => {
+    selectedAttributes.map((item) => {
+      item?.value.split(",").map((value: any) => {
         existingAttributes.push({
           attribute_key: item?.name.replace(" ", "_"),
           attribute_value: value,
@@ -152,7 +151,7 @@ const CreateProduct: React.FC = () => {
     }
   };
 
-  const handleRemoveProductAttribute = (attribute_key, attribute_value) => {
+  /* const handleRemoveProductAttribute = (attribute_key, attribute_value) => {
     const filterAttribute = selectedAttributes.filter(
       (att) =>
         !(
@@ -162,9 +161,9 @@ const CreateProduct: React.FC = () => {
     );
 
     setSelectedAttributes(filterAttribute);
-  };
+  }; */
 
-  /*  const handleRemoveAttribute = (
+  const handleRemoveAttribute = (
     attribute: string,
     attributeValue: string | null = null
   ) => {
@@ -195,7 +194,7 @@ const CreateProduct: React.FC = () => {
       );
       setAttributes((prevState) => [tempObj, ...prevState]);
     }
-  }; */
+  };
 
   const handleImageChange = (e: ChangeEvent<HTMLInputElement>) => {
     if (e.target.files) {
@@ -537,7 +536,9 @@ const CreateProduct: React.FC = () => {
                                   <FileInput
                                     onChange={(e) =>
                                       updateProductAttributes(i, {
-                                        attrbute_image: e.target.files[0],
+                                        attrbute_image: e.target.files
+                                          ? e.target.files[0]
+                                          : null,
                                       })
                                     }
                                   />

@@ -19,7 +19,7 @@ import { reset, updateProduct } from "../../redux/products/product-slice";
 import axios from "../../lib";
 import { API_ROOT, API_URL } from "../../constants";
 import { useNavigate, useParams } from "react-router-dom";
-import AttributeSingle from "../attribute/attribute-single";
+// import AttributeSingle from "../attribute/attribute-single";
 import { IAttributeResponse } from "../../interfaces/attribute";
 import GalleryImages from "./galleryImages";
 import UpdateVariant from "../attribute/UpdateVariant";
@@ -60,11 +60,10 @@ const UpdateProduct: React.FC = () => {
   const [isVariant, setIsVariant] = useState(false);
   const [attributes, setAttributes] = useState<any[]>([]);
   const [selectedAttributes, setSelectedAttributes] = useState<any[]>([]);
-  // const [previousSelectedAttributes, setPreviousSelectedAttributes] = useState<
-  //   any[]
-  // >([]);
-
-  useEffect(() => {
+  const [variants, setVariants] = useState<any[]>([]);
+  const [exitingVariants, setExitingVariants] = useState<any[]>([]);
+  const [addVariants, setAddVariants] = useState<any[]>([]);
+  /*  useEffect(() => {
     const fetchData = async () => {
       try {
         const response = await axios.get<IAttributeResponse>(
@@ -175,9 +174,62 @@ const UpdateProduct: React.FC = () => {
       }
     };
     fetchData();
+  }, []); */
+
+  useEffect(() => {
+    const fetchData = async () => {
+      try {
+        const { data } = await axios.get<IAttributeResponse>(
+          `${API_URL}/attributes`
+        );
+        setAttributes(data.data.rows);
+        const attrs = data.data.rows
+          .map((row) => {
+            const attributeValues = row.value.split(",").map((value) => ({
+              attribute_key: row.name.replace(" ", "_"),
+              attribute_value: value.trim(),
+              attribute_quantity: 0,
+              attribute_image: "",
+            }));
+            return attributeValues;
+          })
+          .flat();
+        setVariants(attrs);
+      } catch (error) {
+        console.log(error);
+      }
+    };
+    fetchData();
   }, []);
 
-  const handleAddAttribute = (
+  const handleAddAttribute = (name: string) => {
+    const findAttr = name.trim().replace(" ", "_");
+    const filterVariants = variants.filter((v) => v.attribute_key == findAttr);
+    const filteredItems = filterVariants.filter((variant) => {
+      // Check if variant exists in exitsItem
+      return !exitingVariants.some(
+        (exitItem) =>
+          exitItem.attribute_key === variant.attribute_key &&
+          exitItem.attribute_value === variant.attribute_value
+      );
+    });
+
+    setAddVariants((prevAddVariants) => [...prevAddVariants, ...filteredItems]);
+    setExitingVariants((prevAddVariants) => [
+      ...prevAddVariants,
+      ...filteredItems,
+    ]);
+  };
+
+  const handleRemoveAddVariant = (att: any) => {
+    setAddVariants(
+      addVariants.filter((v) => v.attribute_value !== att.attribute_value)
+    );
+    setExitingVariants(
+      exitingVariants.filter((v) => v.attribute_value !== att.attribute_value)
+    );
+  };
+  /*  const handleAddAttribute = (
     attribute: string,
     attributeValue: string | null = null
   ) => {
@@ -227,9 +279,9 @@ const UpdateProduct: React.FC = () => {
         setSelectedAttributes((prevState) => [tempObj, ...prevState]);
       }
     }
-  };
+  }; */
 
-  const handleRemoveAttribute = (
+  /* const handleRemoveAttribute = (
     attribute: string,
     attributeValue: string | null = null
   ) => {
@@ -260,7 +312,7 @@ const UpdateProduct: React.FC = () => {
       );
       setAttributes((prevState) => [tempObj, ...prevState]);
     }
-  };
+  }; */
 
   const handleImageChange = (e: ChangeEvent<HTMLInputElement>) => {
     if (e.target.files) {
@@ -344,7 +396,7 @@ const UpdateProduct: React.FC = () => {
     const fetchProductData = async () => {
       try {
         const response = await axios.get(`${API_URL}/products/${slug}`);
-        const { product } = response.data;
+        const { product, productAttribute } = response.data;
         setTile(product.title);
         setUrl(product.slug);
         setDescription(product.description);
@@ -364,6 +416,7 @@ const UpdateProduct: React.FC = () => {
         setSortDesc(product.sort_description);
         setPolicy(product?.policy || "");
         setAvailability(product.availability);
+        setExitingVariants(productAttribute?.rows);
 
         if (product.camping_start_date && product.camping_end_date) {
           setCampaignDate([
@@ -480,7 +533,7 @@ const UpdateProduct: React.FC = () => {
                           </option>
                         ))}
                     </select>
-                    <div className="attribute-selected">
+                    {/* <div className="attribute-selected">
                       {selectedAttributes?.length > 0 &&
                         selectedAttributes?.map((item, i) => (
                           <AttributeSingle
@@ -490,9 +543,13 @@ const UpdateProduct: React.FC = () => {
                             handleRemoveAttribute={handleRemoveAttribute}
                           />
                         ))}
-                    </div>
+                    </div> */}
                     <div className="varian-table">
-                      <UpdateVariant title={title} />
+                      <UpdateVariant
+                        addVariants={addVariants}
+                        title={title}
+                        handleRemoveAddVariant={handleRemoveAddVariant}
+                      />
                     </div>
                   </>
                 )}

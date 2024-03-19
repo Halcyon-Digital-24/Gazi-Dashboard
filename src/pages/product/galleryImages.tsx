@@ -11,14 +11,14 @@ import { FaCheck } from "react-icons/fa";
 interface IProps {
   slug: string;
 }
-interface IPhoto {
+/* interface IPhoto {
   id: number;
   product_id: number;
   image: string;
   order_number: number;
   created_at: string;
   updated_at: string;
-}
+} */
 
 const GalleryImages: FC<IProps> = ({ slug }) => {
   const [galleryImages, setGalleryImages] = useState<IGalleryPhoto[] | null>(
@@ -64,19 +64,6 @@ const GalleryImages: FC<IProps> = ({ slug }) => {
       try {
         const response = await axios.get(`${API_URL}/products/${slug}`);
         const { productPhoto } = response.data;
-
-        /* if (data["productPhoto"] && data["productPhoto"].length > 0) {
-          const galleryImageFiles = data["productPhoto"].map(
-            (photo: IPhoto) => ({
-              id: photo.id,
-              product_id: photo.product_id,
-              image: photo.image,
-              order_number: photo.order_number,
-              created_at: photo.created_at,
-              updated_at: photo.updated_at,
-            })
-          );
-        } */
         setGalleryImages(productPhoto?.rows);
         setOrderNumber(productPhoto?.rows?.length + 1);
       } catch (error) {

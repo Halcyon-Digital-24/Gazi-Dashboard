@@ -8,7 +8,7 @@ import { useParams } from "react-router-dom";
 import { FaCheck } from "react-icons/fa";
 import { toast } from "react-toastify";
 
-const UpdateVariant = () => {
+const UpdateVariant = ({ addVariants, handleRemoveAddVariant }) => {
   const { slug } = useParams();
   const [productAttributes, setProductAttributes] = useState([]);
   const [isLoading, setIsLoading] = useState(true);
@@ -19,7 +19,8 @@ const UpdateVariant = () => {
       const { data } = await axios.delete(
         `${API_URL}/product-attributes/?ids=[${id}]`
       );
-
+      console.log(data);
+      toast.success(data.message);
       setIsLoading(false);
     } catch (error) {
       console.log(error);
@@ -65,6 +66,14 @@ const UpdateVariant = () => {
                   att={att}
                   handleDeleteAttribute={handleDeleteAttribute}
                   key={i}
+                />
+              ))}
+              {addVariants?.map((variant, i) => (
+                <SingleUploadVariant
+                  key={i}
+                  variant={variant}
+                  slug={slug}
+                  handleRemoveAddVariant={handleRemoveAddVariant}
                 />
               ))}
             </tbody>
@@ -124,6 +133,59 @@ const SingleVariant = ({ att, handleDeleteAttribute }) => {
       </td>
       <td>
         <div className="delete" onClick={() => handleDeleteAttribute(att.id)}>
+          <RiDeleteBin6Line />
+        </div>
+      </td>
+    </tr>
+  );
+};
+const SingleUploadVariant = ({ variant, slug, handleRemoveAddVariant }) => {
+  const [quantity, setQuantity] = useState(0);
+  const [image, setImage] = useState(null);
+
+  const handleSubmitAttribute = async () => {
+    const formData = new FormData();
+    formData.append("product_id", slug);
+    formData.append("attribute_key", variant.attribute_key);
+    formData.append("attribute_value", variant.attribute_value);
+    formData.append("attribute_quantity", quantity);
+    if (image) {
+      formData.append("attrbute_image", image);
+    }
+    try {
+      const response = await axios.post(
+        `${API_URL}/product-attributes
+`,
+        formData
+      );
+      toast.success(response?.data?.message);
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
+  return (
+    <tr>
+      <td>{variant?.attribute_key?.replace("_", " ")}</td>
+      <td>{variant?.attribute_value}</td>
+      <td>
+        <Input
+          htmlFor="quantity"
+          type="number"
+          onBlur={(e) => setQuantity(e.target.value)}
+          required
+        />
+      </td>
+      <td>
+        <FileInput onChange={(e) => setImage(e.target.files[0])} />
+      </td>
+      <td>
+        <div className="check" onClick={handleSubmitAttribute}>
+          <FaCheck />
+        </div>
+      </td>
+      <td>
+        <div className="delete" onClick={() => handleRemoveAddVariant(variant)}>
           <RiDeleteBin6Line />
         </div>
       </td>
