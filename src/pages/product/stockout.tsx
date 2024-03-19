@@ -91,7 +91,7 @@ const StockOutProducts: React.FC = () => {
                 />
               </Column>
               <Column className="col-md-3">{product.title}</Column>
-              <Column className="col-md-1">{product.quantity}</Column>
+              <Column className="col-md-1">{product.default_quantity}</Column>
               <Column className="col-md-1">৳ {product.regular_price}</Column>
               <Column className="col-md-1">৳ {product.discount_price}</Column>
               <Column className="col-md-1">

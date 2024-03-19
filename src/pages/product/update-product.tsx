@@ -22,7 +22,7 @@ import { useNavigate, useParams } from "react-router-dom";
 // import AttributeSingle from "../attribute/attribute-single";
 import { IAttributeResponse } from "../../interfaces/attribute";
 import GalleryImages from "./galleryImages";
-import UpdateVariant from "../attribute/UpdateVariant";
+import UpdateVariant from "./Updatevariant";
 
 const UpdateProduct: React.FC = () => {
   // let runCount = 0;
@@ -59,7 +59,7 @@ const UpdateProduct: React.FC = () => {
 
   const [isVariant, setIsVariant] = useState(false);
   const [attributes, setAttributes] = useState<any[]>([]);
-  const [selectedAttributes, setSelectedAttributes] = useState<any[]>([]);
+  const [selectedAttributes] = useState<any[]>([]);
   const [variants, setVariants] = useState<any[]>([]);
   const [exitingVariants, setExitingVariants] = useState<any[]>([]);
   const [addVariants, setAddVariants] = useState<any[]>([]);
@@ -201,7 +201,6 @@ const UpdateProduct: React.FC = () => {
     };
     fetchData();
   }, []);
-
   const handleAddAttribute = (name: string) => {
     const findAttr = name.trim().replace(" ", "_");
     const filterVariants = variants.filter((v) => v.attribute_key == findAttr);
@@ -213,7 +212,6 @@ const UpdateProduct: React.FC = () => {
           exitItem.attribute_value === variant.attribute_value
       );
     });
-
     setAddVariants((prevAddVariants) => [...prevAddVariants, ...filteredItems]);
     setExitingVariants((prevAddVariants) => [
       ...prevAddVariants,
@@ -423,6 +421,9 @@ const UpdateProduct: React.FC = () => {
             new Date(product.camping_start_date),
             new Date(product.camping_end_date),
           ]);
+        }
+        if (productAttribute?.count > 0) {
+          setIsVariant(true);
         }
       } catch (error) {
         console.error("Error fetching EMI data:", error);
