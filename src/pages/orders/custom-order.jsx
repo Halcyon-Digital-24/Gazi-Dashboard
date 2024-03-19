@@ -33,8 +33,40 @@ const CustomOrder = () => {
   const [isFocus, setIsFocus] = useState(false);
   const [search, setSearch] = useState("");
   const productAreaRef = useRef(null);
+  const [selectedAttributes, setSelectedAttributes] = useState([]);
 
-  console.log(cartItems);
+  const handleAttributeClick = (attribute) => {
+    const isExists = selectedAttributes.filter(
+      (attr) =>
+        attr.attribute_id === attribute.id ||
+        attr.attribute_key === attribute.attribute_key ||
+        attr.attribute_name === attribute.attribute_value
+    );
+    if (isExists.length < 1) {
+      setSelectedAttributes((prev) => [
+        ...prev,
+        {
+          attribute_id: attribute.id,
+          attribute_name: attribute.attribute_value,
+          attribute_quantity: 1,
+          attribute_key: attribute.attribute_key,
+        },
+      ]);
+    } else {
+      const sameType = selectedAttributes.filter(
+        (attr) => attr.attribute_key !== attribute.attribute_key
+      );
+      setSelectedAttributes([
+        ...sameType,
+        {
+          attribute_id: attribute.id,
+          attribute_name: attribute.attribute_value,
+          attribute_quantity: 1,
+          attribute_key: attribute.attribute_key,
+        },
+      ]);
+    }
+  };
 
   const {
     register,
@@ -64,8 +96,8 @@ const CustomOrder = () => {
   const orderItem = cartItems.map((item) => ({
     product_id: item.product_id,
     quantity: item.quantity,
+    attribute: item?.attribute,
   }));
-
   /*  const orderData = {
     name,
     email,
@@ -234,26 +266,6 @@ const CustomOrder = () => {
                 </div>
               </div>
               <div className="col-md-4 custom-item">
-                {/*   <div className="text">
-                  <label htmlFor="name">Shipping Price</label>
-                  <input
-                    onChange={(e) => setShipping(Number(e.target.value))}
-                    type="text"
-                    placeholder="Shipping"
-                    {...register("delivery_fee", {
-                      trim: true,
-                      pattern: {
-                        value: /^[0-9]+$/,
-                        message: "Shipping price will be only numbers",
-                      },
-                    })}
-                  />
-                  {errors.delivery_fee && (
-                    <p className="validation__error">
-                      {errors.delivery_fee.message}
-                    </p>
-                  )}
-                </div> */}
                 <Input
                   type="number"
                   htmlFor="shipping"
@@ -306,46 +318,132 @@ const CustomOrder = () => {
                   {isFocus && (
                     <div className="select-product">
                       <ul>
-                        {products.map((product) => (
-                          <li
-                            className={
-                              product.availability === 1 &&
-                              product.quantity > 0 &&
-                              product.is_visible !== 0
-                                ? "instock"
-                                : "stockout"
-                            }
-                            onClick={() => {
-                              if (
-                                product.availability === 1 &&
-                                product.quantity > 0
-                              ) {
-                                dispatch(
-                                  addToCart({
-                                    product_id: product?.id,
-                                    price:
-                                      Number(product.discount_price) !== 0
-                                        ? Number(product.discount_price)
-                                        : Number(product.regular_price),
-                                    title: product.title,
-                                    quantity: 1,
-                                  })
-                                );
-                              } else {
-                                toast.error("Product  not in stock");
-                              }
-                            }}
-                          >
-                            <span>{product.title}</span>
-                            {cartItems.some(
-                              (p) => p.product_id === product.id
-                            ) && (
-                              <span>
-                                <FaCheck />
-                              </span>
-                            )}
-                          </li>
-                        ))}
+                        {products.map((product, i) => {
+                          return (
+                            <li key={i}>
+                              <div
+                                className={`wrapper ${
+                                  product.availability === 1 &&
+                                  product.default_quantity > 0 &&
+                                  product.is_visible !== 0
+                                    ? "instock"
+                                    : "stockout"
+                                }`}
+                                onClick={() => {
+                                  if (
+                                    product["product-attributes"] &&
+                                    product["product-attributes"].length > 0 &&
+                                    selectedAttributes.length < 1
+                                  ) {
+                                    toast.error("Please Select Variant");
+                                    return;
+                                  }
+                                  if (
+                                    product.availability === 1 &&
+                                    product.default_quantity > 0
+                                  ) {
+                                    dispatch(
+                                      addToCart({
+                                        product_id: product?.id,
+                                        price:
+                                          Number(product.discount_price) !== 0
+                                            ? Number(product.discount_price)
+                                            : Number(product.regular_price),
+                                        title: product.title,
+                                        quantity: 1,
+                                        attribute: selectedAttributes,
+                                      })
+                                    );
+                                    setSelectedAttributes([]);
+                                  } else {
+                                    toast.error("Product  not in stock");
+                                  }
+                                }}
+                              >
+                                <span>{product.title}</span>
+                                {cartItems.some(
+                                  (p) => p.product_id === product.id
+                                ) && (
+                                  <span>
+                                    <FaCheck />
+                                  </span>
+                                )}
+                              </div>
+
+                              {product["product-attributes"] &&
+                                product["product-attributes"].length > 0 && (
+                                  <div className="variant py-2">
+                                    <>
+                                      {(() => {
+                                        let uniqueAttributes = {}; // Initialize uniqueAttributes as an object
+
+                                        product["product-attributes"]?.forEach(
+                                          (attr) => {
+                                            if (
+                                              !uniqueAttributes[
+                                                attr.attribute_key
+                                              ]
+                                            ) {
+                                              uniqueAttributes[
+                                                attr.attribute_key
+                                              ] = [];
+                                            }
+                                            uniqueAttributes[
+                                              attr.attribute_key
+                                            ].push(attr.attribute_value);
+                                          }
+                                        );
+
+                                        return Object.keys(
+                                          uniqueAttributes
+                                        ).map((key, i) => (
+                                          <div key={i}>
+                                            <div className="attribute-wrapper">
+                                              {uniqueAttributes[key].map(
+                                                (value, j) => {
+                                                  const findAttribute = product[
+                                                    "product-attributes"
+                                                  ]?.find(
+                                                    (att) =>
+                                                      att.attribute_key ===
+                                                        key &&
+                                                      att.attribute_value ===
+                                                        value
+                                                  );
+
+                                                  return (
+                                                    <div
+                                                      key={j}
+                                                      className={`attribute-item ${
+                                                        selectedAttributes.find(
+                                                          (item) =>
+                                                            item.attribute_id ===
+                                                            findAttribute?.id
+                                                        )
+                                                          ? "selected"
+                                                          : ""
+                                                      }`}
+                                                      onClick={() => {
+                                                        handleAttributeClick(
+                                                          findAttribute
+                                                        );
+                                                      }}
+                                                    >
+                                                      {value}
+                                                    </div>
+                                                  );
+                                                }
+                                              )}
+                                            </div>
+                                          </div>
+                                        ));
+                                      })()}
+                                    </>
+                                  </div>
+                                )}
+                            </li>
+                          );
+                        })}
                       </ul>
                     </div>
                   )}

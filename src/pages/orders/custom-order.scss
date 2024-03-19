@@ -36,21 +36,44 @@
 
     ul {
       li {
-        display: flex;
-        justify-content: space-between;
-        align-items: center;
-        cursor: pointer;
-        padding: 3px;
-        &:hover {
-          background: $secondary-color;
-          //   color: #000 !important;
+        background: rgba(209, 209, 209, 0.177);
+        margin-bottom: 5px;
+        padding: 4px;
+        .wrapper {
+          display: flex;
+          justify-content: space-between;
+          align-items: center;
+          flex-wrap: wrap;
+          cursor: pointer;
+          padding: 3px;
+          &:hover {
+            background: $secondary-color;
+          }
+        }
+        .variant {
+          width: 100%;
+          .attribute-wrapper {
+            .attribute-item {
+              background: $septenary-color;
+              color: $white-color;
+              padding: 4px;
+              margin-right: 5px;
+              margin-top: 5px;
+              cursor: pointer;
+              display: inline-block;
+              font-size: 12px;
+              &.selected {
+                background: $primary-color;
+              }
+            }
+          }
+        }
+        .stockout {
+          background: $octonary-color;
+          color: $white-color;
+          cursor: not-allowed;
         }
       }
-    }
-    .stockout {
-      background: $octonary-color;
-      color: $white-color;
-      cursor: not-allowed;
     }
   }
 }

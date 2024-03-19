@@ -181,7 +181,7 @@ const Invoice = ({ order }: any) => {
                       ? JSON.parse(product.product_attribute).map(
                           (v: any, i: number) => (
                             <span className="variant" key={i}>
-                              {v.value}
+                              {`${i ? "," : ""}${v.attribute_name}`}
                             </span>
                           )
                         )

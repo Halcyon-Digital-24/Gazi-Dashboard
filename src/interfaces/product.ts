@@ -5,7 +5,7 @@ export interface IProduct {
   description: string;
   sort_description: string;
   image: string;
-  quantity: string;
+  default_quantity: string;
   regular_price: string;
   discount_price: string;
   delivery_fee: string;
