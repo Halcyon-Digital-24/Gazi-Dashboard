@@ -412,25 +412,35 @@ const CustomOrder = () => {
                                                   );
 
                                                   return (
-                                                    <div
-                                                      key={j}
-                                                      className={`attribute-item ${
-                                                        selectedAttributes.find(
-                                                          (item) =>
-                                                            item.attribute_id ===
-                                                            findAttribute?.id
-                                                        )
-                                                          ? "selected"
-                                                          : ""
-                                                      }`}
-                                                      onClick={() => {
-                                                        handleAttributeClick(
-                                                          findAttribute
-                                                        );
-                                                      }}
-                                                    >
-                                                      {value}
-                                                    </div>
+                                                    <>
+                                                      <div
+                                                        key={j}
+                                                        className={`attribute-item ${
+                                                          selectedAttributes.find(
+                                                            (item) =>
+                                                              item.attribute_id ===
+                                                              findAttribute?.id
+                                                          )
+                                                            ? "selected"
+                                                            : ""
+                                                        }`}
+                                                        onClick={() => {
+                                                          if (
+                                                            findAttribute.attribute_quantity
+                                                          ) {
+                                                            handleAttributeClick(
+                                                              findAttribute
+                                                            );
+                                                          } else {
+                                                            toast.error(
+                                                              "Stock Out"
+                                                            );
+                                                          }
+                                                        }}
+                                                      >
+                                                        {value}
+                                                      </div>
+                                                    </>
                                                   );
                                                 }
                                               )}
@@ -447,8 +457,8 @@ const CustomOrder = () => {
                       </ul>
                     </div>
                   )}
-                  {cartItems.map((cart) => (
-                    <div className="row order-item">
+                  {cartItems.map((cart, i) => (
+                    <div key={i} className="row order-item">
                       <div className="col-md-6">
                         <p className="title">{cart.title}</p>
                       </div>
