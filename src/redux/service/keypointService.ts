@@ -33,7 +33,7 @@ const updateKeypoint = async (id: number | string, categoryData: FormData) => {
     `${API_URL}/keypoints/${id}`,
     categoryData
   );
-  return data.data;
+  return data;
 };
 
 const deleteKeypoint = async (videoId: number) => {

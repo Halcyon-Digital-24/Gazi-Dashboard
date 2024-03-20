@@ -192,7 +192,7 @@ const UpdateService = () => {
             </Column>
           </div>
 
-          <Button type="submit">Create</Button>
+          <Button type="submit">Update</Button>
         </Display>
       </form>
     </div>
