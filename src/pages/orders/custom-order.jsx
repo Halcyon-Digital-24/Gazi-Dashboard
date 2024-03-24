@@ -4,7 +4,11 @@ import Input from "../../components/forms/text-input";
 import Display from "../../components/display";
 import "./custom-order.scss";
 import { useEffect, useRef, useState } from "react";
-import { getProducts, reset } from "../../redux/products/product-slice";
+import {
+  getFrontendProducts,
+  getProducts,
+  reset,
+} from "../../redux/products/product-slice";
 import { useAppDispatch, useAppSelector } from "../../redux/hooks";
 import {
   addToCart,
@@ -137,7 +141,7 @@ const CustomOrder = () => {
   };
 
   useEffect(() => {
-    dispatch(getProducts({ search: search, page: 1, limit: 100 }));
+    dispatch(getFrontendProducts({ search: search, page: 1, limit: 100 }));
 
     return () => {
       dispatch(reset());
