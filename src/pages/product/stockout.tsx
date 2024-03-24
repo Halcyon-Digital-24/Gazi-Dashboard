@@ -46,7 +46,7 @@ const StockOutProducts: React.FC = () => {
 
   useEffect(() => {
     dispatch(
-      getProducts({ page: pageNumber, limit: displayItem, quantity: 0 })
+      getProducts({ page: pageNumber, limit: displayItem, default_quantity: 0 })
     );
     return () => {
       dispatch(reset());
