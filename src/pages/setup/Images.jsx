@@ -11,6 +11,7 @@ import {
   getSettings,
 } from "../../redux/settings/settingSlice";
 import { API_ROOT } from "../../constants";
+import ToggleButton from "../../components/forms/checkbox";
 
 const DynamicImages = () => {
   const dispatch = useAppDispatch();
@@ -44,7 +45,15 @@ const DynamicImages = () => {
     setValue("logo", setting.logo);
     setValue("popup_image", setting.popup_image);
     setValue("favicon", setting.favicon);
-  }, [dispatch, isUpdate, setting.logo, setting.favicon, setting.popup_image]);
+    setValue("active_popup", setting.active_popup);
+  }, [
+    dispatch,
+    isUpdate,
+    setting.logo,
+    setting.favicon,
+    setting.popup_image,
+    setting.active_popup,
+  ]);
 
   return (
     <Display>
@@ -106,6 +115,19 @@ const DynamicImages = () => {
         <label className="label" htmlFor="select">
           Popup
         </label>
+        <span>Active Popup?</span>
+        <Controller
+          control={control}
+          name="active_popup"
+          defaultValue={false} // Set default value according to your needs
+          render={({ field: { value, onChange, ...field } }) => (
+            <ToggleButton
+              {...field}
+              isChecked={value}
+              onClick={() => onChange(!value)}
+            />
+          )}
+        />
         <Controller
           control={control}
           rules={{ required: "Popup is required" }}
