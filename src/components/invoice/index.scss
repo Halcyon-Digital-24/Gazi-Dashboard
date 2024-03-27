@@ -4,11 +4,19 @@
   background: url("/assets/logo/invoice-logo.png") no-repeat center 70%;
   background-size: 80% 30%;
   padding: 40px;
+  font-family: $secondary-font;
   img {
     width: 100%;
   }
   .heading {
     border: 1px solid $secondary-color;
+  }
+  .notes {
+    p {
+      margin-bottom: 7px;
+      font-size: 14px;
+      font-family: $secondary-font;
+    }
   }
   .invoice-header {
     padding: 10px 0;
@@ -55,7 +63,6 @@
       }
 
       p {
-        font-family: $primary-font;
         font-size: 14px;
         font-weight: 400;
       }

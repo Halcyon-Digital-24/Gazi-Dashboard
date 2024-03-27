@@ -123,7 +123,7 @@ const Invoice = ({ order }: any) => {
             </p>
             <p>Name: {order.name}</p>
             <p>Email: {order.email}</p>
-            <p>Phone: {order.mobile} </p>
+            <p>Phone: {`+88${order.mobile}`} </p>
             <p>Address: {order.address} </p>
           </div>
           <div className="order-details right">
@@ -201,14 +201,24 @@ const Invoice = ({ order }: any) => {
           </>
         }
         <div className="row">
-          <Column className="col-md-8 ">
+          <Column className="col-md-7 notes">
             <h3>Notes:</h3>
-            <p>1.Please check the product carefully before payment.</p>
             <p>
-              2.After payment there will be no option for refund & exchange.
+              1. All our products come with a one-year service warranty. To
+              claim the warranty, please present this invoice.
             </p>
-            <p>3.No claim will be accepted after receiving the product.</p>
+            <p>
+              2. Please ensure to check for any physical damage to the product
+              upon receiving it. After receiving the product, no claims for
+              physical damage will be accepted.
+            </p>
+            <p>
+              3. For official installation, please inform us upon receiving the
+              product if the customer wishes for us to install it. We will
+              require 24 hours to complete the installation.
+            </p>
           </Column>
+          <Column className="col-md-1 "> </Column>
           <Column className="col-md-4">
             <div className="summery">
               <div className="row">

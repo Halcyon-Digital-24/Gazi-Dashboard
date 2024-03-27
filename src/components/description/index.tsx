@@ -105,6 +105,7 @@ const DescriptionInput: React.FC<IProps> = ({ value, setValue }) => {
     "link",
     "image",
     "color",
+    "align",
   ];
 
   return (
