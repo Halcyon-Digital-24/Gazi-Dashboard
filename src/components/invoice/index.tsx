@@ -159,12 +159,12 @@ const Invoice = ({ order }: any) => {
 
       <div className="invoice-table">
         <div className="row first-row">
-          <Column className="col-md-2 heading">SL. </Column>
-          <Column className="col-md-3 heading">Description</Column>
-          <Column className="col-md-2 heading">Attribute</Column>
-          <Column className="col-md-1 heading">Qty</Column>
-          <Column className="col-md-2 heading">Unit price (BDT)</Column>
-          <Column className="col-md-2 heading">Total</Column>
+          <Column className="col-md-2 heading top-header">SL. </Column>
+          <Column className="col-md-3 heading top-header">Description</Column>
+          <Column className="col-md-2 heading top-header">Attribute</Column>
+          <Column className="col-md-1 heading top-header">Qty</Column>
+          <Column className="col-md-2 heading top-header">Unit price (BDT)</Column>
+          <Column className="col-md-2 heading top-header">Total</Column>
         </div>
         {
           <>
