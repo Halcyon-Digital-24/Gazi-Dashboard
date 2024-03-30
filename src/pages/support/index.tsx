@@ -9,10 +9,13 @@ import Row from "../../components/table/row";
 import { useAppDispatch, useAppSelector } from "../../redux/hooks";
 import { getSupport } from "../../redux/support/supportSlice";
 import Pagination from "../../components/pagination";
+import { DateRangePicker } from "rsuite";
+import { formatDateForURL } from "../../utills/formateDate";
 
 const TicketPage = () => {
   const dispatch = useAppDispatch();
   const [pageNumber, setPageNumber] = useState<number>(1);
+  const [orderDate, setOrderDate] = useState<[Date, Date] | null>(null);
   const { supports, totalCount } = useAppSelector((state) => state.support);
 
   const totalPage = Math.ceil(totalCount / 10);
@@ -22,13 +25,27 @@ const TicketPage = () => {
   };
 
   useEffect(() => {
-    dispatch(getSupport({ page: pageNumber, limit: 10 }));
-  }, [dispatch, pageNumber]);
+    dispatch(
+      getSupport({
+        page: pageNumber,
+        limit: 10,
+        start_date: orderDate ? formatDateForURL(orderDate[0]) : "",
+        end_date: orderDate ? formatDateForURL(orderDate[1]) : "",
+      })
+    );
+  }, [dispatch, pageNumber, orderDate]);
 
   return (
     <div>
       <CardBody header="Support Massages" to="#" />
       <Display>
+        <div className="date-area">
+          <DateRangePicker
+            className={`date-area`}
+            value={orderDate}
+            onChange={(dateRange) => setOrderDate(dateRange)}
+          />
+        </div>
         <Row className="row text-bold">
           <Column className="col-md-2">Ticket ID</Column>
           <Column className="col-md-3">Subject</Column>

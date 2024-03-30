@@ -8,6 +8,8 @@ import Column from "../../components/table/column";
 import Row from "../../components/table/row";
 import { useAppDispatch, useAppSelector } from "../../redux/hooks";
 import { deleteQueries, getQueries, reset } from "../../redux/query/querySlice";
+import { DateRangePicker } from "rsuite";
+import { formatDateForURL } from "../../utills/formateDate";
 
 const Queries = () => {
   const dispatch = useAppDispatch();
@@ -15,6 +17,7 @@ const Queries = () => {
     (state) => state.query
   );
   const [pageNumber, setPageNumber] = useState<number>(1);
+  const [orderDate, setOrderDate] = useState<[Date, Date] | null>(null);
 
   const handlePageChange = (selectedItem: { selected: number }) => {
     setPageNumber(selectedItem.selected + 1);
@@ -29,16 +32,29 @@ const Queries = () => {
     if (isDelete) {
       toast.success("Query deleted successfully");
     }
-    dispatch(getQueries({ page: pageNumber }));
+    dispatch(
+      getQueries({
+        page: pageNumber,
+        start_date: orderDate ? formatDateForURL(orderDate[0]) : "",
+        end_date: orderDate ? formatDateForURL(orderDate[1]) : "",
+      })
+    );
 
     return () => {
       dispatch(reset());
     };
-  }, [dispatch, isDelete, pageNumber]);
+  }, [dispatch, isDelete, pageNumber, orderDate]);
 
   return (
     <div>
       <Display>
+        <div className="date-area">
+          <DateRangePicker
+            className={`date-area`}
+            value={orderDate}
+            onChange={(dateRange) => setOrderDate(dateRange)}
+          />
+        </div>
         <Row className="row text-bold">
           <Column className="col-md-1">#</Column>
           <Column className="col-md-2">Date</Column>

@@ -147,6 +147,34 @@ const HomePage: React.FC = () => {
       value: data.totalQuery,
       role_identity: "support",
     },
+    {
+      to: "/products/reviews",
+      imageSrc: "/assets/images/review.png",
+      title: "Total Review",
+      value: data.totalReview,
+      role_identity: "products",
+    },
+    {
+      to: "/products/reviews",
+      imageSrc: "/assets/images/pending_review.png",
+      title: "Pending Review",
+      value: data.pendingReview,
+      role_identity: "products",
+    },
+    {
+      to: "/refund",
+      imageSrc: "/assets/images/refund.png",
+      title: "Total Refund Products",
+      value: data.totalRefund,
+      role_identity: "refund",
+    },
+    {
+      to: "/refund",
+      imageSrc: "/assets/images/pending_refund.png",
+      title: "Pending Refund Products",
+      value: data.prendingRefund,
+      role_identity: "refund",
+    },
   ];
 
   // Filter items based on user permissions

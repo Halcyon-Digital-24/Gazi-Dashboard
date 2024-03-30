@@ -15,11 +15,14 @@ import {
   reset,
 } from "../../redux/customer/customerSlice";
 import { useAppDispatch, useAppSelector } from "../../redux/hooks";
+import { DateRangePicker } from "rsuite";
+import { formatDateForURL } from "../../utills/formateDate";
 
 const Customers: React.FC = () => {
   const dispatch = useAppDispatch();
   const [pageNumber, setPageNumber] = useState<number>(1);
   const [displayItem, setDisplayItem] = useState(25);
+  const [orderDate, setOrderDate] = useState<[Date, Date] | null>(null);
   const { customers, isError, isDelete, message, totalCount } = useAppSelector(
     (state) => state.customer
   );
@@ -48,15 +51,29 @@ const Customers: React.FC = () => {
   }, [isDelete, isError]);
 
   useEffect(() => {
-    dispatch(getCustomers({ page: pageNumber, limit: displayItem }));
+    dispatch(
+      getCustomers({
+        page: pageNumber,
+        limit: displayItem,
+        start_date: orderDate ? formatDateForURL(orderDate[0]) : "",
+        end_date: orderDate ? formatDateForURL(orderDate[1]) : "",
+      })
+    );
     return () => {
       dispatch(reset());
     };
-  }, [dispatch, pageNumber, displayItem, isDelete]);
+  }, [dispatch, pageNumber, displayItem, isDelete, orderDate]);
 
   return (
     <div>
       <Display>
+        <div className="date-area">
+          <DateRangePicker
+            className={`date-area`}
+            value={orderDate}
+            onChange={(dateRange) => setOrderDate(dateRange)}
+          />
+        </div>
         <div className="csv-icon" title="Download CSV">
           <CSVLink data={customers}>
             <BsDownload />

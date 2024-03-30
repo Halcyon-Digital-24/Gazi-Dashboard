@@ -11,6 +11,7 @@ import { useAppDispatch, useAppSelector } from "../../redux/hooks";
 import { deleteOrder, getOrders, reset } from "../../redux/order/orderSlice";
 import { toast } from "react-toastify";
 import { DateRangePicker } from "rsuite";
+import { formatDateForURL } from "../../utills/formateDate";
 
 const AllOrders: React.FC = () => {
   const dispatch = useAppDispatch();
@@ -60,11 +61,6 @@ const AllOrders: React.FC = () => {
   };
   const handleMultiDelete = () => {
     dispatch(deleteOrder([...selectedOrders]));
-  };
-
-  const formatDateForURL = (date: Date): string => {
-    const isoString = date.toISOString();
-    return isoString.split("T")[0];
   };
 
   useEffect(() => {

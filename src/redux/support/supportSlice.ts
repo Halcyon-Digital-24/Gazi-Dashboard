@@ -95,6 +95,7 @@ export const supportSlice = createSlice({
         state.isLoading = false;
         state.isError = true;
         state.message = action.payload;
+        state.supports = [];
       })
       /* TODO: UPDATE FAQ DATA SET */
       .addCase(updateFaq.pending, (state) => {

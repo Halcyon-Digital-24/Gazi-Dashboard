@@ -1,7 +1,7 @@
-import { ICustomer } from '../../interfaces/customer';
-import { createSlice, createAsyncThunk } from '@reduxjs/toolkit';
-import customerService from './customerService';
-import axios from 'axios';
+import { ICustomer } from "../../interfaces/customer";
+import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
+import customerService from "./customerService";
+import axios from "axios";
 
 interface IState {
   customers: ICustomer[];
@@ -22,22 +22,22 @@ const initialState: IState = {
   isUpdate: false,
   isDelete: false,
   isLoading: false,
-  message: '',
-  errorMessage: '',
+  message: "",
+  errorMessage: "",
 };
 
 // Get customer
 export const getCustomers = createAsyncThunk(
-  'customer/getAllcustomer',
+  "customer/getAllcustomer",
   async (filter: { [key: string]: number | string }, thunkAPI) => {
     try {
       return await customerService.getAllCustomer(filter);
     } catch (error) {
       if (axios.isAxiosError(error)) {
-        const message = error.response?.data.message || 'An error occurred';
+        const message = error.response?.data.message || "An error occurred";
         return thunkAPI.rejectWithValue(message);
       } else {
-        return thunkAPI.rejectWithValue('An error occurred');
+        return thunkAPI.rejectWithValue("An error occurred");
       }
     }
   }
@@ -45,23 +45,23 @@ export const getCustomers = createAsyncThunk(
 
 // Delete customer
 export const deleteCustomer = createAsyncThunk(
-  'customer/delete',
+  "customer/delete",
   async (ids: [number], thunkAPI) => {
     try {
       return await customerService.deleteCustomer(ids);
     } catch (error) {
       if (axios.isAxiosError(error)) {
-        const message = error.response?.data.message || 'An error occurred';
+        const message = error.response?.data.message || "An error occurred";
         return thunkAPI.rejectWithValue(message);
       } else {
-        return thunkAPI.rejectWithValue('An error occurred');
+        return thunkAPI.rejectWithValue("An error occurred");
       }
     }
   }
 );
 
 export const customerSlice = createSlice({
-  name: 'customer',
+  name: "customer",
   initialState,
   reducers: {
     reset: (state) => {
@@ -70,7 +70,7 @@ export const customerSlice = createSlice({
       state.isUpdate = false;
       state.isDelete = false;
       state.isError = false;
-      state.message = '';
+      state.message = "";
     },
   },
 
@@ -89,6 +89,7 @@ export const customerSlice = createSlice({
       .addCase(getCustomers.rejected, (state, action) => {
         state.isLoading = false;
         state.isError = true;
+        state.customers = [];
         state.message = action.payload as string;
       })
 
