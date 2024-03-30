@@ -334,6 +334,9 @@ const CustomOrder = () => {
                                     : "stockout"
                                 }`}
                                 onClick={() => {
+                                  if (product.default_quantity <= 0) {
+                                    return toast.error("Stock out");
+                                  }
                                   if (
                                     product["product-attributes"] &&
                                     product["product-attributes"].length > 0 &&
@@ -429,17 +432,9 @@ const CustomOrder = () => {
                                                             : ""
                                                         }`}
                                                         onClick={() => {
-                                                          if (
-                                                            findAttribute.attribute_quantity
-                                                          ) {
-                                                            handleAttributeClick(
-                                                              findAttribute
-                                                            );
-                                                          } else {
-                                                            toast.error(
-                                                              "Stock Out"
-                                                            );
-                                                          }
+                                                          handleAttributeClick(
+                                                            findAttribute
+                                                          );
                                                         }}
                                                       >
                                                         {value}
