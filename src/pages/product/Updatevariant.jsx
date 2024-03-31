@@ -9,7 +9,6 @@ import { FaCheck } from "react-icons/fa";
 import { toast } from "react-toastify";
 
 const UpdateVariant = ({ addVariants, handleRemoveAddVariant }) => {
-  console.log(addVariants);
   const { slug } = useParams();
   const [productAttributes, setProductAttributes] = useState([]);
   const [isLoading, setIsLoading] = useState(true);

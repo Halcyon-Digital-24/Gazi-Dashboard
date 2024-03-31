@@ -22,6 +22,8 @@ import { useNavigate, useParams } from "react-router-dom";
 // import AttributeSingle from "../attribute/attribute-single";
 import { IAttributeResponse } from "../../interfaces/attribute";
 import GalleryImages from "./galleryImages";
+// eslint-disable-next-line @typescript-eslint/ban-ts-comment
+// @ts-ignore
 import UpdateVariant from "./Updatevariant";
 
 const UpdateProduct: React.FC = () => {

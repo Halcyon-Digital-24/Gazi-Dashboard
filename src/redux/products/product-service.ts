@@ -4,13 +4,17 @@ import axios from "../../lib";
 
 // get all products
 const getAllProducts = async (filter: {
-  [key: string]: string | number;
+  [key: string]: string | number | boolean;
 }): Promise<IProductResponse> => {
   let url = `/products`;
+
   // Filter out keys with false values
-  const filteredFilter: { [key: string]: string | number | boolean } = {};
+  const filteredFilter: { [key: string]: string | number } = {};
   Object.entries(filter).forEach(([key, value]) => {
-    filteredFilter[key] = value;
+    // Exclude if value is false or boolean
+    if (value) {
+      filteredFilter[key] = value as string | number;
+    }
   });
 
   if (Object.keys(filteredFilter).length > 0) {
@@ -24,10 +28,12 @@ const getAllProducts = async (filter: {
     // Add query string to the URL
     url += `?${queryString}`;
   }
+
   const { data } = await axios.get(url);
 
   return data;
 };
+
 const getAllFrontendProducts = async (filter: {
   [key: string]: string | number;
 }): Promise<IProductResponse> => {
