@@ -183,6 +183,10 @@ const UpdateOrder = () => {
     }
   }, [order, orderItems]);
 
+  useEffect(() => {
+    setValue("custom_discount", customDiscount);
+  }, [customDiscount]);
+
   return (
     <div>
       <CardBody header="Update Order" to="/orders" text="Back" />
@@ -225,7 +229,7 @@ const UpdateOrder = () => {
                         <input
                           type="text"
                           {...register("email", {
-                            required: "email is required",
+                            // required: "email is required",
                             pattern: {
                               value: /\S/,
                               message: "Only space isn't allow",
@@ -264,7 +268,9 @@ const UpdateOrder = () => {
                         <input
                           type="number"
                           value={customDiscount}
-                          onChange={(e) => setCustomDiscount(e.target.value)}
+                          onChange={(e) => {
+                            setCustomDiscount(e.target.value);
+                          }}
                         />
                         {errors.custom_discount && (
                           <p className="validation__error">

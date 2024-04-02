@@ -141,7 +141,7 @@ const CustomOrder = () => {
   };
 
   useEffect(() => {
-    dispatch(getFrontendProducts({ search: search, page: 1, limit: 100 }));
+    dispatch(getFrontendProducts({ search: search, page: 1, limit: 50 }));
 
     return () => {
       dispatch(reset());
@@ -284,6 +284,23 @@ const CustomOrder = () => {
                   label="Discount Price"
                   onChange={(e) => setDiscount(Number(e.target.value))}
                 />
+                <div className="text">
+                  <label htmlFor="name">Advanced Price</label>
+                  <input
+                    type="text"
+                    placeholder="Advanced price"
+                    {...register("advanced_price", {
+                      trim: true,
+                      pattern: {
+                        value: /^\d+$/,
+                        message: "Enter a valid price containing only numbers",
+                      },
+                    })}
+                  />
+                  {errors.city && (
+                    <p className="validation__error">{errors.city.message}</p>
+                  )}
+                </div>
                 <>
                   <label className="label" htmlFor="select">
                     Invoice Prefix

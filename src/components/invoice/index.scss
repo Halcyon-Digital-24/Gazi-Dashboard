@@ -12,6 +12,7 @@
   }
   .heading {
     border: 1px solid $secondary-color;
+    font-size: 13px;
   }
   .top-header {
     font-weight: 600;
@@ -20,7 +21,7 @@
   .notes {
     p {
       margin-bottom: 7px;
-      font-size: 14px;
+      font-size: 13px;
       font-family: $secondary-font;
     }
   }
