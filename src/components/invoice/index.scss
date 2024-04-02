@@ -45,7 +45,7 @@
 
       .left {
         background: $decenary-color;
-        width: 65%;
+        width: 63%;
         padding: 10px 15px;
         padding-top: 25px;
         box-sizing: border-box;
@@ -57,7 +57,7 @@
 
       .right {
         background: $decenary-color;
-        width: 35%;
+        width: 37%;
         padding: 10px 15px;
         box-sizing: border-box;
         p {
@@ -93,11 +93,12 @@
     .first-row {
       .heading {
         background: $decenary-color;
-        text-align: center;
         border-bottom: 0;
       }
     }
-
+    .description {
+      padding: 10px;
+    }
     .col-md-8 {
       flex-basis: 65.32%;
     }

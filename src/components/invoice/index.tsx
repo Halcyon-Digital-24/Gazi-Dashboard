@@ -164,8 +164,10 @@ const Invoice = ({ order }: any) => {
 
       <div className="invoice-table">
         <div className="row first-row">
-          <Column className="col-md-2 heading top-header">SL. </Column>
-          <Column className="col-md-3 heading top-header">Description</Column>
+          <Column className="col-md-1 heading top-header">SL. </Column>
+          <Column className="col-md-4 heading top-header description">
+            Description
+          </Column>
           <Column className="col-md-2 heading top-header">Attribute</Column>
           <Column className="col-md-1 heading top-header">Qty</Column>
           <Column className="col-md-2 heading top-header">
@@ -178,9 +180,9 @@ const Invoice = ({ order }: any) => {
             {orderItems?.length > 0 &&
               orderItems?.map((product, index) => (
                 <div className="row" key={index}>
-                  <Column className="col-md-2 heading">{index + 1}</Column>
-                  <Column className="col-md-3 heading">
-                    {product.product_name}
+                  <Column className="col-md-1 heading">{index + 1}</Column>
+                  <Column className="col-md-4 heading">
+                    <p className="description">{product.product_name}</p>
                   </Column>
                   <Column className="col-md-2 heading">
                     {/* Attribute */}
