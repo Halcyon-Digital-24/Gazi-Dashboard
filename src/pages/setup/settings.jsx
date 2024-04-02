@@ -49,6 +49,7 @@ const Settings = () => {
         setValue("instagram_url", data.instagram_url);
         setValue("play_store_url", data.play_store_url);
         setValue("twitter_url", data.twitter_url);
+        setValue("linkedIn_url", data.linkedIn_url);
         setValue("youtube_url", data.youtube_url);
         setValue("address", data.address);
         setValue("contact_number", data.contact_number);
@@ -307,6 +308,26 @@ const Settings = () => {
                 {errors.instagram_url && (
                   <p className="validation__error">
                     {errors.instagram_url.message}
+                  </p>
+                )}
+              </div>
+
+              <div className="text">
+                <label htmlFor="name">LinkedIn url</label>
+                <input
+                  type="text"
+                  placeholder="linkedin url"
+                  {...register("linkedIn_url", {
+                    trim: true,
+                    pattern: {
+                      value: /\S/,
+                      message: "Enter a valid url",
+                    },
+                  })}
+                />
+                {errors.linkedIn_url && (
+                  <p className="validation__error">
+                    {errors.linkedIn_url.message}
                   </p>
                 )}
               </div>
