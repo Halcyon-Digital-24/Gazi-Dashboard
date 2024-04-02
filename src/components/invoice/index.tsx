@@ -112,19 +112,24 @@ const Invoice = ({ order }: any) => {
     <div className="invoice">
       <div className="invoice-header">
         <div className="title">
-          <img src="/assets/images/invoice-header.png" alt="invoice" />
+          {order.order_prefix === "GHA" ? (
+            <img src="/assets/invoice/home_appliance.png" alt="invoice" />
+          ) : (
+            <img src="/assets/invoice/pumps.png" alt="invoice" />
+          )}
         </div>
         <h4 className="customer-details">Customer Details</h4>
         <div className="details">
           <div className="left">
-            <p>Order NO: {order.id}</p>
             <p>
               Invoice: {order.order_prefix}-{order.id}
             </p>
             <p>Name: {order.name}</p>
             <p>Email: {order.email}</p>
             <p>Phone: {`+88${order.mobile}`} </p>
-            <p>Address: {order.address} </p>
+            <p>
+              Address: {order.address} {order.city ? `, ${order.city}` : ""}{" "}
+            </p>
           </div>
           <div className="order-details right">
             <p>Order Date: {formatDate(order.created_at)}</p>
@@ -163,7 +168,9 @@ const Invoice = ({ order }: any) => {
           <Column className="col-md-3 heading top-header">Description</Column>
           <Column className="col-md-2 heading top-header">Attribute</Column>
           <Column className="col-md-1 heading top-header">Qty</Column>
-          <Column className="col-md-2 heading top-header">Unit price (BDT)</Column>
+          <Column className="col-md-2 heading top-header">
+            Unit price (BDT)
+          </Column>
           <Column className="col-md-2 heading top-header">Total</Column>
         </div>
         {

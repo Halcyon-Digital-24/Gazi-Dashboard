@@ -69,6 +69,7 @@ const UpdateOrder = () => {
         setValue("mobile", data.mobile);
         setValue("address", data.address);
         setValue("city", data.city);
+        setValue("order_prefix", data.order_prefix);
         setCustomDiscount(data.custom_discount);
         setOrder(data);
       } catch (error) {
@@ -271,6 +272,30 @@ const UpdateOrder = () => {
                           </p>
                         )}
                       </div>
+                      <>
+                        <label className="label" htmlFor="select">
+                          Invoice Prefix
+                        </label>
+                        <div className="select-wrapper">
+                          <select
+                            id="select"
+                            className="select"
+                            {...register("order_prefix")}
+                            htmlFor="Choose Parent category"
+                            name="order_prefix"
+                          >
+                            <option value="">Select Parent Category</option>
+                            <option value="GHA">Home Appliance</option>
+                            <option value="GPHA">Gazi Pumps & Motors</option>
+                          </select>
+                        </div>
+
+                        {errors.order_prefix && (
+                          <p className="validation__error">
+                            {errors.order_prefix.message}
+                          </p>
+                        )}
+                      </>
 
                       <div className="text">
                         <label htmlFor="Address">Address</label>

@@ -4,7 +4,9 @@
   background: url("/assets/logo/invoice-logo.png") no-repeat center 70%;
   background-size: 80% 30%;
   padding: 40px;
+  padding-top: 15px;
   font-family: $secondary-font;
+  // font-size: 14px;
   img {
     width: 100%;
   }
@@ -33,11 +35,12 @@
       padding: 10px 15px;
       color: $primary-color;
       background: $white-color;
-      transform: translateY(50%);
+      transform: translateY(-50%);
     }
     .details {
       display: flex;
       justify-content: space-between;
+      margin-top: -50px;
 
       .left {
         background: $decenary-color;
@@ -67,7 +70,7 @@
       }
 
       p {
-        font-size: 14px;
+        font-size: 13px;
         font-weight: 400;
       }
     }
@@ -89,6 +92,8 @@
     .first-row {
       .heading {
         background: $decenary-color;
+        text-align: center;
+        border-bottom: 0;
       }
     }
 
