@@ -119,8 +119,16 @@
     padding: 0;
   }
   .summery {
-    margin-right: 8px;
-    margin-top: 30px;
+    margin-right: 26px;
+    transform: scale(1.038);
+    margin-top: 2px;
+
+    @media (min-width: 1300px) {
+      margin-right: 33.5px;
+      transform: scale(1.038);
+      margin-top: 3px;
+    }
+
     .item {
       display: flex;
       justify-content: space-between;
@@ -128,16 +136,30 @@
     }
     p {
       width: 49.55%;
-      font-size: 14px;
+      font-size: 13px;
+      color: #000;
     }
     .sort-summery {
       padding: 5px;
       font-weight: 600;
       box-sizing: border-box;
+      text-align: center;
+
+      .amount {
+        font-weight: 400;
+      }
     }
   }
 }
 
 p + p {
   margin-top: 0 !important;
+}
+
+@media print {
+  .invoice {
+    .summery {
+      margin-right: 16px;
+    }
+  }
 }

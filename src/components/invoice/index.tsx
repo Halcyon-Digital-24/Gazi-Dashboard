@@ -2,6 +2,7 @@ import { useEffect, useState } from "react";
 import { formatDate } from "../date-formate";
 import Column from "../table/column";
 import "./index.scss";
+import FormatPrice from "../../utills/formatePrice";
 
 const Invoice = ({ order }: any) => {
   const [totalPrice, setTotalPrice] = useState(0);
@@ -115,7 +116,7 @@ const Invoice = ({ order }: any) => {
           {order.order_prefix === "GHA" ? (
             <img src="/assets/invoice/home_appliance.png" alt="invoice" />
           ) : (
-            <img src="/assets/invoice/pumps.png" alt="invoice" />
+            <img src="/assets/invoice/pum.png" alt="invoice" />
           )}
         </div>
         <h4 className="customer-details">Customer Details</h4>
@@ -216,10 +217,10 @@ const Invoice = ({ order }: any) => {
                     {product.quantity}
                   </Column>
                   <Column className="col-md-2 heading">
-                    ৳{product.regular_price}
+                    {FormatPrice(product.regular_price)}
                   </Column>
                   <Column className="col-md-2 heading">
-                    ৳ {product.regular_price * product.quantity}
+                    {FormatPrice(product.regular_price * product.quantity)}
                   </Column>
                 </div>
               ))}
@@ -248,18 +249,39 @@ const Invoice = ({ order }: any) => {
             <div className="summery">
               <div className="row">
                 <p className="heading sort-summery">Sub Total</p>
-                <p className="heading sort-summery">{`৳${amountBeforeCoupon}`}</p>
+                <p className="heading sort-summery">
+                  <span className="amount">{` ${FormatPrice(
+                    amountBeforeCoupon
+                  )}`}</span>
+                </p>
                 <p className="heading sort-summery">Delivery</p>
-                <p className="heading sort-summery">৳ {order.delivery_fee}</p>
+                <p className="heading sort-summery">
+                  <span className="amount">
+                    {" "}
+                    {FormatPrice(order.delivery_fee)}
+                  </span>
+                </p>
                 <p className="heading sort-summery">Discount</p>
                 <p className="heading sort-summery">
-                  ৳ {amountBeforeCoupon - totalPrice + order.custom_discount}
+                  <span className="amount">
+                    {" "}
+                    {FormatPrice(
+                      amountBeforeCoupon - totalPrice + order.custom_discount
+                    )}
+                  </span>
                 </p>
-                <p className="heading sort-summery">Advanced</p>
-                <p className="heading sort-summery">৳ 0</p>
+                <p className="heading sort-summery">Advance</p>
+                <p className="heading sort-summery">
+                  <span className="amount">{FormatPrice(0)}</span>
+                </p>
                 <p className="heading sort-summery">Due Amount</p>
                 <p className="heading sort-summery">
-                  ৳ {totalPrice + order.delivery_fee - order.custom_discount}
+                  <span className="amount">
+                    {" "}
+                    {FormatPrice(
+                      totalPrice + order.delivery_fee - order.custom_discount
+                    )}
+                  </span>
                 </p>
               </div>
             </div>
