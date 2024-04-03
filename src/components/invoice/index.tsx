@@ -122,30 +122,46 @@ const Invoice = ({ order }: any) => {
         <div className="details">
           <div className="left">
             <p>
-              Invoice: {order.order_prefix}-{order.id}
+              <span className="invoice-title">Invoice:</span>{" "}
+              {order.order_prefix}-{order.id}
             </p>
-            <p>Name: {order.name}</p>
-            <p>Email: {order.email}</p>
-            <p>Phone: {`+88${order.mobile}`} </p>
             <p>
-              Address: {order.address} {order.city ? `, ${order.city}` : ""}{" "}
+              {" "}
+              <span className="invoice-title">Name: </span> {order.name}
+            </p>
+            <p>
+              <span className="invoice-title">Email: </span> {order.email}
+            </p>
+            <p>
+              <span className="invoice-title">Phone: </span>{" "}
+              {`+88${order.mobile}`}{" "}
+            </p>
+            <p>
+              <span className="invoice-title"> Address: </span> {order.address}{" "}
+              {order.city ? `, ${order.city}` : ""}{" "}
             </p>
           </div>
           <div className="order-details right">
-            <p>Order Date: {formatDate(order.created_at)}</p>
-            <p>Order Status: {order?.order_status}</p>
             <p>
-              Total Order Amount :{" "}
+              <span className="invoice-title">Order Date: </span>{" "}
+              {formatDate(order.created_at)}
+            </p>
+            <p>
+              <span className="invoice-title"> Order Status:</span>{" "}
+              {order?.order_status}
+            </p>
+            <p>
+              <span className="invoice-title"> Total Order Amount : </span>{" "}
               {totalPrice + order.delivery_fee - order.custom_discount}
             </p>
             <p>
-              Shipping Method:{" "}
+              <span className="invoice-title"> Shipping Method: </span>{" "}
               {order?.delivery_method === "homeDelivery"
                 ? "Home Delivery"
                 : "Express Delivery"}
             </p>
             <p>
-              Payment Method:{" "}
+              <span className="invoice-title"> Payment Method: </span>{" "}
               {order?.payment_method === "cashOnDelivery"
                 ? "Cash on Delivery"
                 : "Online Payment"}
@@ -179,7 +195,7 @@ const Invoice = ({ order }: any) => {
           <>
             {orderItems?.length > 0 &&
               orderItems?.map((product, index) => (
-                <div className="row" key={index}>
+                <div className="row orders" key={index}>
                   <Column className="col-md-1 heading">{index + 1}</Column>
                   <Column className="col-md-4 heading">
                     <p className="description">{product.product_name}</p>
@@ -231,7 +247,7 @@ const Invoice = ({ order }: any) => {
           <Column className="col-md-4">
             <div className="summery">
               <div className="row">
-                <p className="heading sort-summery">Regular Price</p>
+                <p className="heading sort-summery">Sub Total</p>
                 <p className="heading sort-summery">{`৳${amountBeforeCoupon}`}</p>
                 <p className="heading sort-summery">Delivery</p>
                 <p className="heading sort-summery">৳ {order.delivery_fee}</p>
@@ -239,7 +255,9 @@ const Invoice = ({ order }: any) => {
                 <p className="heading sort-summery">
                   ৳ {amountBeforeCoupon - totalPrice + order.custom_discount}
                 </p>
-                <p className="heading sort-summery">Total</p>
+                <p className="heading sort-summery">Advanced</p>
+                <p className="heading sort-summery">৳ 0</p>
+                <p className="heading sort-summery">Due Amount</p>
                 <p className="heading sort-summery">
                   ৳ {totalPrice + order.delivery_fee - order.custom_discount}
                 </p>

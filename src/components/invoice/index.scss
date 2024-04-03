@@ -10,6 +10,9 @@
   img {
     width: 100%;
   }
+  .invoice-title {
+    font-weight: bold;
+  }
   .heading {
     border: 1px solid $secondary-color;
     font-size: 13px;
@@ -37,6 +40,7 @@
       color: $primary-color;
       background: $white-color;
       transform: translateY(-50%);
+      font-size: 16px;
     }
     .details {
       display: flex;
@@ -90,10 +94,14 @@
     .variant {
       margin-right: 5px;
     }
+    .orders {
+      text-align: center;
+    }
     .first-row {
       .heading {
         background: $decenary-color;
         border-bottom: 0;
+        text-align: center;
       }
     }
     .description {
