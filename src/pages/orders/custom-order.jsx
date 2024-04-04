@@ -285,11 +285,11 @@ const CustomOrder = () => {
                   onChange={(e) => setDiscount(Number(e.target.value))}
                 />
                 <div className="text">
-                  <label htmlFor="name">Advanced Price</label>
+                  <label htmlFor="name">Advance Payment</label>
                   <input
                     type="text"
-                    placeholder="Advanced price"
-                    {...register("advanced_price", {
+                    placeholder="Advanced payment"
+                    {...register("advance_payment", {
                       trim: true,
                       pattern: {
                         value: /^\d+$/,
@@ -297,7 +297,7 @@ const CustomOrder = () => {
                       },
                     })}
                   />
-                  {errors.city && (
+                  {errors.advance_payment && (
                     <p className="validation__error">{errors.city.message}</p>
                   )}
                 </div>

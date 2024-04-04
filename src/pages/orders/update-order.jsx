@@ -70,6 +70,7 @@ const UpdateOrder = () => {
         setValue("address", data.address);
         setValue("city", data.city);
         setValue("order_prefix", data.order_prefix);
+        setValue("advance_payment", data.advance_payment);
         setCustomDiscount(data.custom_discount);
         setOrder(data);
       } catch (error) {
@@ -275,6 +276,26 @@ const UpdateOrder = () => {
                         {errors.custom_discount && (
                           <p className="validation__error">
                             {errors.custom_discount.message}
+                          </p>
+                        )}
+                      </div>
+                      <div className="text">
+                        <label htmlFor="name">Advance Payment</label>
+                        <input
+                          type="text"
+                          placeholder="Advanced payment"
+                          {...register("advance_payment", {
+                            trim: true,
+                            pattern: {
+                              value: /^\d+$/,
+                              message:
+                                "Enter a valid price containing only numbers",
+                            },
+                          })}
+                        />
+                        {errors.advance_payment && (
+                          <p className="validation__error">
+                            {errors.city.message}
                           </p>
                         )}
                       </div>

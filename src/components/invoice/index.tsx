@@ -114,7 +114,7 @@ const Invoice = ({ order }: any) => {
       <div className="invoice-header">
         <div className="title">
           {order.order_prefix === "GHA" ? (
-            <img src="/assets/invoice/home_appliance.png" alt="invoice" />
+            <img src="/assets/invoice/homeappliance.png" alt="invoice" />
           ) : (
             <img src="/assets/invoice/pum.png" alt="invoice" />
           )}
@@ -227,23 +227,7 @@ const Invoice = ({ order }: any) => {
           </>
         }
         <div className="row">
-          <Column className="col-md-7 notes">
-            <h3>Notes:</h3>
-            <p>
-              1. All our products come with a one-year service warranty. To
-              claim the warranty, please present this invoice.
-            </p>
-            <p>
-              2. Please ensure to check for any physical damage to the product
-              upon receiving it. After receiving the product, no claims for
-              physical damage will be accepted.
-            </p>
-            <p>
-              3. For official installation, please inform us upon receiving the
-              product if the customer wishes for us to install it. We will
-              require 24 hours to complete the installation.
-            </p>
-          </Column>
+          <Column className="col-md-7 "> </Column>
           <Column className="col-md-1 "> </Column>
           <Column className="col-md-4">
             <div className="summery">
@@ -284,6 +268,27 @@ const Invoice = ({ order }: any) => {
                   </span>
                 </p>
               </div>
+            </div>
+          </Column>
+          <Column className="col-md-12">
+            <div className="notes">
+              <h3>Notes:</h3>
+              <p>
+                1. All our products come with a{" "}
+                {order.order_prefix === "GHA" ? "one-year" : "two-years"}{" "}
+                service warranty. To claim the warranty, please present this
+                invoice.
+              </p>
+              <p>
+                2. Please ensure to check for any physical damage to the product
+                upon receiving it. After receiving the product, no claims for
+                physical damage will be accepted.
+              </p>
+              <p>
+                3. For official installation, please inform us upon receiving
+                the product if the customer wishes for us to install it. We will
+                require 24 hours to complete the installation.
+              </p>
             </div>
           </Column>
         </div>

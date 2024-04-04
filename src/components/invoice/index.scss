@@ -22,9 +22,15 @@
     color: #000;
   }
   .notes {
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-end;
+    h3 {
+      font-size: 16px;
+    }
     p {
       margin-bottom: 7px;
-      font-size: 13px;
+      font-size: 11px;
       font-family: $secondary-font;
     }
   }
@@ -98,6 +104,11 @@
       text-align: center;
     }
     .first-row {
+      .column {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+      }
       .heading {
         background: $decenary-color;
         border-bottom: 0;
@@ -123,7 +134,7 @@
     transform: scale(1.038);
     margin-top: 2px;
 
-    @media (min-width: 1300px) {
+    @media (min-width: 1600px) {
       margin-right: 33.5px;
       transform: scale(1.038);
       margin-top: 3px;
