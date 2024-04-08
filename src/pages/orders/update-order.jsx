@@ -69,6 +69,7 @@ const UpdateOrder = () => {
         setValue("mobile", data.mobile);
         setValue("address", data.address);
         setValue("city", data.city);
+        setValue("payment_status", data.payment_status);
         setValue("order_prefix", data.order_prefix);
         setValue("advance_payment", data.advance_payment);
         setCustomDiscount(data.custom_discount);
@@ -299,6 +300,29 @@ const UpdateOrder = () => {
                           </p>
                         )}
                       </div>
+                      <>
+                        <label className="label" htmlFor="select">
+                        Payment Status
+                        </label>
+                        <div className="select-wrapper">
+                          <select
+                            id="select"
+                            className="select"
+                            {...register("payment_status")}
+                            htmlFor="Choose Parent category"
+                            name="payment_status"
+                          >
+                            <option value="unpaid">Unpaid</option>
+                            <option value="paid">Paid</option>
+                          </select>
+                        </div>
+
+                        {errors.order_prefix && (
+                          <p className="validation__error">
+                            {errors.order_prefix.message}
+                          </p>
+                        )}
+                      </>
                       <>
                         <label className="label" htmlFor="select">
                           Invoice Prefix

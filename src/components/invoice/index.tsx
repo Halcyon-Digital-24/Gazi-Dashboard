@@ -163,9 +163,13 @@ const Invoice = ({ order }: any) => {
             </p>
             <p>
               <span className="invoice-title"> Payment Method: </span>{" "}
-              {order?.payment_method === "cashOnDelivery"
+              {order?.payment_method === "cod"
                 ? "Cash on Delivery"
                 : "Online Payment"}
+            </p>
+            <p>
+              <span className="invoice-title"> Payment Status: </span>{" "}
+              {order?.payment_status}
             </p>
           </div>
         </div>
