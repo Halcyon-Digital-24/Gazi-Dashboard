@@ -325,6 +325,29 @@ const CustomOrder = () => {
                     </p>
                   )}
                 </>
+                <>
+                  <label className="label" htmlFor="select">
+                    Payment Status
+                  </label>
+                  <div className="select-wrapper">
+                    <select
+                      id="select"
+                      className="select"
+                      {...register("payment_status")}
+                      htmlFor="Choose Parent category"
+                      name="payment_status"
+                    >
+                      <option value="unpaid">Unpaid</option>
+                      <option value="paid">Paid</option>
+                    </select>
+                  </div>
+
+                  {errors.order_prefix && (
+                    <p className="validation__error">
+                      {errors.order_prefix.message}
+                    </p>
+                  )}
+                </>
                 {/* <Input htmlFor="variant" placeholder="variant" /> */}
                 <div className="product-area" ref={productAreaRef}>
                   <Input

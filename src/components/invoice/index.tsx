@@ -9,6 +9,7 @@ const Invoice = ({ order }: any) => {
   const [orderItems, setOrderItems] = useState<any[]>(
     order?.orderItems?.length > 0 ? order?.orderItems : []
   );
+  const advancePayment = order.advance_payment ?? 0;
   const [amountBeforeCoupon, setAmountBeforeCoupon] = useState<number>(0);
 
   useEffect(() => {
@@ -260,14 +261,19 @@ const Invoice = ({ order }: any) => {
                 </p>
                 <p className="heading sort-summery">Advance</p>
                 <p className="heading sort-summery">
-                  <span className="amount">{FormatPrice(0)}</span>
+                  <span className="amount">
+                    {FormatPrice(order.advance_payment ?? 0)}
+                  </span>
                 </p>
                 <p className="heading sort-summery">Due Amount</p>
                 <p className="heading sort-summery">
                   <span className="amount">
                     {" "}
                     {FormatPrice(
-                      totalPrice + order.delivery_fee - order.custom_discount
+                      totalPrice +
+                        order.delivery_fee -
+                        order.custom_discount -
+                        advancePayment
                     )}
                   </span>
                 </p>
