@@ -86,7 +86,30 @@
       }
     }
   }
-
+  .invoice-details-table {
+    border-collapse: collapse;
+    width: 100%;
+    th,
+    td {
+      border: 1px solid $secondary-color;
+      text-align: center;
+      padding: 4px;
+    }
+    .table-heading {
+      background: $decenary-color;
+    }
+    .span-item {
+      border: 0;
+    }
+    .heading-title {
+      font-weight: 700;
+    }
+    .order-item {
+      td {
+        height: 40px;
+      }
+    }
+  }
   .invoice-body {
     margin-top: 20px;
     p {

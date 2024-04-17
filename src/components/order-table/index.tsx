@@ -78,8 +78,8 @@ const OrderTable = ({
           </Column>
           <Column className="col-md-1">Invoice NO</Column>
           <Column className="col-md-1">Total Amount</Column>
-          <Column className="col-md-1">Customer</Column>
-          <Column className="col-md-2">Contact No</Column>
+          <Column className="col-md-2">Customer</Column>
+          <Column className="col-md-1">Contact No</Column>
           <Column className="col-md-1">Products</Column>
           {/*  <Column className="col-md-1">Payment Status</Column> */}
           <Column className="col-md-2">Delivery Status</Column>

@@ -176,16 +176,78 @@ const Invoice = ({ order }: any) => {
         </div>
       </div>
 
-      {/* <div className="invoice-body">
-        <p>Bill to:</p>
-        <p>Iftakher</p>
-        <p> House: 12, Road: 01, Block I. Basundhara R/A, Dhaka, Bangladesh </p>
-        <p>Email: iftebmw@gmail.com</p>
-        <p>Phone: 01976100280</p>
-      </div> */}
-
+      {/* Order table summery */}
+      <table className="invoice-details-table">
+        <tr className="table-heading">
+          <th>SL.</th>
+          <th>Description</th>
+          <th>Attribute</th>
+          <th>Qty</th>
+          <th>Unit price (BDT)</th>
+          <th>Total</th>
+        </tr>
+        {orderItems?.length > 0 &&
+          orderItems?.map((product, index) => (
+            <tr key={index} className="order-item">
+              <td>{index + 1}</td>
+              <td>{product.product_name}</td>
+              <td>
+                {/* Attribute */}
+                {product.product_attribute
+                  ? JSON.parse(product.product_attribute).map(
+                      (v: any, i: number) => (
+                        <span className="variant" key={i}>
+                          {`${i ? "," : ""}${v.attribute_name}`}
+                        </span>
+                      )
+                    )
+                  : "-"}
+              </td>
+              <td> {product.quantity}</td>
+              <td>{FormatPrice(product.regular_price)}</td>
+              <td> {FormatPrice(product.regular_price * product.quantity)}</td>
+            </tr>
+          ))}
+        <tr>
+          <td className="span-item" colSpan="4"></td>
+          <td className="heading-title">Sub Total</td>
+          <td>{` ${FormatPrice(amountBeforeCoupon)}`}</td>
+        </tr>
+        <tr>
+          <td className="span-item" colSpan="4"></td>
+          <td className="heading-title">Delivery</td>
+          <td>{FormatPrice(order.delivery_fee)}</td>
+        </tr>
+        <tr>
+          <td className="span-item" colSpan="4"></td>
+          <td className="heading-title">Discount</td>
+          <td>
+            {FormatPrice(
+              amountBeforeCoupon - totalPrice + order.custom_discount
+            )}
+          </td>
+        </tr>
+        <tr>
+          <td className="span-item" colSpan="4"></td>
+          <td className="heading-title">Advance</td>
+          <td>{FormatPrice(order.advance_payment ?? 0)}</td>
+        </tr>
+        <tr>
+          <td className="span-item" colSpan="4"></td>
+          <td className="heading-title">Due Amount</td>
+          <td>
+            {FormatPrice(
+              totalPrice +
+                order.delivery_fee -
+                order.custom_discount -
+                advancePayment
+            )}
+          </td>
+        </tr>
+      </table>
+      {/* .... */}
       <div className="invoice-table">
-        <div className="row first-row">
+        {/*   <div className="row first-row">
           <Column className="col-md-1 heading top-header">SL. </Column>
           <Column className="col-md-4 heading top-header description">
             Description
@@ -196,43 +258,10 @@ const Invoice = ({ order }: any) => {
             Unit price (BDT)
           </Column>
           <Column className="col-md-2 heading top-header">Total</Column>
-        </div>
-        {
-          <>
-            {orderItems?.length > 0 &&
-              orderItems?.map((product, index) => (
-                <div className="row orders" key={index}>
-                  <Column className="col-md-1 heading">{index + 1}</Column>
-                  <Column className="col-md-4 heading">
-                    <p className="description">{product.product_name}</p>
-                  </Column>
-                  <Column className="col-md-2 heading">
-                    {/* Attribute */}
-                    {product.product_attribute
-                      ? JSON.parse(product.product_attribute).map(
-                          (v: any, i: number) => (
-                            <span className="variant" key={i}>
-                              {`${i ? "," : ""}${v.attribute_name}`}
-                            </span>
-                          )
-                        )
-                      : "-"}
-                  </Column>
-                  <Column className="col-md-1 heading">
-                    {product.quantity}
-                  </Column>
-                  <Column className="col-md-2 heading">
-                    {FormatPrice(product.regular_price)}
-                  </Column>
-                  <Column className="col-md-2 heading">
-                    {FormatPrice(product.regular_price * product.quantity)}
-                  </Column>
-                </div>
-              ))}
-          </>
-        }
+        </div> */}
+
         <div className="row">
-          <Column className="col-md-7 "> </Column>
+          {/*  <Column className="col-md-7 "> </Column>
           <Column className="col-md-1 "> </Column>
           <Column className="col-md-4">
             <div className="summery">
@@ -279,7 +308,7 @@ const Invoice = ({ order }: any) => {
                 </p>
               </div>
             </div>
-          </Column>
+          </Column> */}
           <Column className="col-md-12">
             <div className="notes">
               <h3>Notes:</h3>

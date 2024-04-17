@@ -86,7 +86,7 @@ const CustomOrder = () => {
       order_form: "custom",
       order_prefix: "GHA",
       order_status: "pending",
-      payment_method: "cashOnDelivery", // || 'onlinePayment'
+      payment_method: "cod", // || 'onlinePayment'
       delivery_method: "homeDelivery", // 'pickup'
     },
   });
@@ -177,6 +177,7 @@ const CustomOrder = () => {
                   <label htmlFor="name">Customer Name *</label>
                   <input
                     type="text"
+                    name="name"
                     placeholder="Customer Name"
                     {...register("name", {
                       trim: true,
@@ -268,8 +269,6 @@ const CustomOrder = () => {
                     <p className="validation__error">{errors.city.message}</p>
                   )}
                 </div>
-              </div>
-              <div className="col-md-4 custom-item">
                 <Input
                   type="number"
                   htmlFor="shipping"
@@ -277,6 +276,8 @@ const CustomOrder = () => {
                   label="Shipping Price"
                   onChange={(e) => setShipping(Number(e.target.value))}
                 />
+              </div>
+              <div className="col-md-4 custom-item">
                 <Input
                   type="number"
                   htmlFor="discount"
@@ -339,6 +340,30 @@ const CustomOrder = () => {
                     >
                       <option value="unpaid">Unpaid</option>
                       <option value="paid">Paid</option>
+                    </select>
+                  </div>
+
+                  {errors.order_prefix && (
+                    <p className="validation__error">
+                      {errors.order_prefix.message}
+                    </p>
+                  )}
+                </>
+                <>
+                  <label className="label" htmlFor="select">
+                    Payment Method
+                  </label>
+                  <div className="select-wrapper">
+                    <select
+                      id="select"
+                      className="select"
+                      {...register("payment_method")}
+                      htmlFor="Choose Parent category"
+                      name="payment_status"
+                    >
+                      <option value="">Select Payment Method</option>
+                      <option value="cod">Cash on Delivery</option>
+                      <option value="online">Online Payment</option>
                     </select>
                   </div>
 
