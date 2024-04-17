@@ -159,7 +159,7 @@ const Invoice = ({ order }: any) => {
             <p>
               <span className="invoice-title"> Shipping Method: </span>{" "}
               {order?.delivery_method === "homeDelivery"
-                ? "Home Delivery"
+                ? "Free Home Delivery"
                 : "Express Delivery"}
             </p>
             <p>
