@@ -117,7 +117,7 @@ const Invoice = ({ order }: any) => {
           {order.order_prefix === "GHA" ? (
             <img src="/assets/invoice/homeappliance.png" alt="invoice" />
           ) : (
-            <img src="/assets/invoice/pum.png" alt="invoice" />
+            <img src="/assets/invoice/pump.png" alt="invoice" />
           )}
         </div>
         <h4 className="customer-details">Customer Details</h4>
@@ -209,17 +209,17 @@ const Invoice = ({ order }: any) => {
             </tr>
           ))}
         <tr>
-          <td className="span-item" colSpan="4"></td>
+          <td className="span-item" colSpan={4}></td>
           <td className="heading-title">Sub Total</td>
           <td>{` ${FormatPrice(amountBeforeCoupon)}`}</td>
         </tr>
         <tr>
-          <td className="span-item" colSpan="4"></td>
+          <td className="span-item" colSpan={4}></td>
           <td className="heading-title">Delivery</td>
           <td>{FormatPrice(order.delivery_fee)}</td>
         </tr>
         <tr>
-          <td className="span-item" colSpan="4"></td>
+          <td className="span-item" colSpan={4}></td>
           <td className="heading-title">Discount</td>
           <td>
             {FormatPrice(
@@ -228,12 +228,12 @@ const Invoice = ({ order }: any) => {
           </td>
         </tr>
         <tr>
-          <td className="span-item" colSpan="4"></td>
+          <td className="span-item" colSpan={4}></td>
           <td className="heading-title">Advance</td>
           <td>{FormatPrice(order.advance_payment ?? 0)}</td>
         </tr>
         <tr>
-          <td className="span-item" colSpan="4"></td>
+          <td className="span-item" colSpan={4}></td>
           <td className="heading-title">Due Amount</td>
           <td>
             {FormatPrice(
