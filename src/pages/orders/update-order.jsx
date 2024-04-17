@@ -15,6 +15,7 @@ import { RxCross2 } from "react-icons/rx";
 import { useNavigate, useParams } from "react-router-dom";
 import Column from "../../components/table/column";
 import { useForm } from "react-hook-form";
+import FormatPrice from "../../utills/formatePrice";
 
 const UpdateOrder = () => {
   const { slug } = useParams();
@@ -302,7 +303,7 @@ const UpdateOrder = () => {
                       </div>
                       <>
                         <label className="label" htmlFor="select">
-                        Payment Status
+                          Payment Status
                         </label>
                         <div className="select-wrapper">
                           <select
@@ -400,7 +401,10 @@ const UpdateOrder = () => {
                           <div className="select-product">
                             <ul>
                               {products.map((product) => (
-                                <li onClick={() => addOrderItem(product)}>
+                                <li
+                                  style={{ cursor: "pointer" }}
+                                  onClick={() => addOrderItem(product)}
+                                >
                                   {product.title}
                                 </li>
                               ))}
@@ -413,58 +417,87 @@ const UpdateOrder = () => {
                 </div>
 
                 <div className="invoice-table">
-                  <div className="row ">
-                    <Column className="col-md-2 heading">SL. </Column>
-                    <Column className="col-md-4 heading">Description</Column>
-                    <Column className="col-md-2 heading">Qty</Column>
-                    <Column className="col-md-2 heading">
-                      Unit price (BDT)
-                    </Column>
-                    <Column className="col-md-2 heading">Total</Column>
-                  </div>
-                  {
-                    <>
-                      {orderItems?.map((product, index) => (
-                        <div className="row" key={index}>
-                          <Column className="col-md-2 heading">
-                            <RxCross2
-                              className="cross"
-                              onClick={() => handleRemoveOrderItem(product)}
+                  <table className="invoice-details-table">
+                    <tr className="table-heading">
+                      <th>SL.</th>
+                      <th>Description</th>
+                      <th>Qty</th>
+                      <th>Unit price (BDT)</th>
+                      <th>Total</th>
+                    </tr>
+                    {orderItems?.map((product, index) => (
+                      <tr key={index} className="order-item">
+                        <td>
+                          <RxCross2
+                            className="cross"
+                            title="Delete"
+                            onClick={() => handleRemoveOrderItem(product)}
+                          />
+                          {index + 1}
+                        </td>
+                        <td>{product.product_name}</td>
+                        <td>
+                          <div className="qnty">
+                            <FiPlus
+                              className="plus"
+                              onClick={() => handleIncrementOrderItem(product)}
                             />
-                            {index + 1}
-                          </Column>
-                          <Column className="col-md-4 heading">
-                            {product.product_name}
-                          </Column>
-
-                          <Column className="col-md-2 heading">
-                            <div className="qnty">
-                              <FiPlus
-                                className="plus"
-                                onClick={() =>
-                                  handleIncrementOrderItem(product)
-                                }
-                              />
-                              <p>{product.quantity}</p>
-                              <LuMinus
-                                className="minus"
-                                onClick={() =>
-                                  handleDecrementOrderItem(product)
-                                }
-                              />
-                            </div>
-                          </Column>
-                          <Column className="col-md-2 heading">
-                            ৳{product.regular_price}
-                          </Column>
-                          <Column className="col-md-2 heading">
-                            ৳{product.regular_price * product.quantity}
-                          </Column>
-                        </div>
-                      ))}
-                    </>
-                  }
-                  <div className="row">
+                            <p>{product.quantity}</p>
+                            <LuMinus
+                              className="minus"
+                              onClick={() => handleDecrementOrderItem(product)}
+                            />
+                          </div>
+                        </td>
+                        <td>৳ {FormatPrice(product.regular_price)}</td>
+                        <td>
+                          ৳{" "}
+                          {FormatPrice(
+                            product.regular_price * product.quantity
+                          )}
+                        </td>
+                      </tr>
+                    ))}
+                    <tr>
+                      <td className="span-item" colSpan={3}></td>
+                      <td className="heading-title">Sub Total</td>
+                      <td>{` ${FormatPrice(amountBeforeCoupon)}`}</td>
+                    </tr>
+                    <tr>
+                      <td className="span-item" colSpan={3}></td>
+                      <td className="heading-title">Delivery</td>
+                      <td>{FormatPrice(order.delivery_fee)}</td>
+                    </tr>
+                    <tr>
+                      <td className="span-item" colSpan={3}></td>
+                      <td className="heading-title">Discount</td>
+                      <td>
+                        {FormatPrice(
+                          amountBeforeCoupon -
+                            totalPrice +
+                            order.custom_discount
+                        )}
+                      </td>
+                    </tr>
+                    <tr>
+                      <td className="span-item" colSpan={3}></td>
+                      <td className="heading-title">Advance</td>
+                      <td>{FormatPrice(order.advance_payment ?? 0)}</td>
+                    </tr>
+                    <tr>
+                      <td className="span-item" colSpan={3}></td>
+                      <td className="heading-title">Due Amount</td>
+                      <td>
+                        {FormatPrice(
+                          totalPrice +
+                            order.delivery_fee -
+                            order.custom_discount -
+                            order.advance_payment ?? 0
+                        )}
+                      </td>
+                    </tr>
+                  </table>
+                  {/*   <div className="row">
                     <Column className="col-md-8 "> </Column>
                     <Column className="col-md-4">
                       <div className="summery">
@@ -493,7 +526,7 @@ const UpdateOrder = () => {
                         </div>
                       </div>
                     </Column>
-                  </div>
+                  </div> */}
                 </div>
               </div>
             </>
