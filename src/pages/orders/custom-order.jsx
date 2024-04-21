@@ -4,11 +4,7 @@ import Input from "../../components/forms/text-input";
 import Display from "../../components/display";
 import "./custom-order.scss";
 import { useEffect, useRef, useState } from "react";
-import {
-  getFrontendProducts,
-  getProducts,
-  reset,
-} from "../../redux/products/product-slice";
+import { getFrontendProducts, reset } from "../../redux/products/product-slice";
 import { useAppDispatch, useAppSelector } from "../../redux/hooks";
 import {
   addToCart,
