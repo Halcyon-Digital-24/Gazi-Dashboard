@@ -4,12 +4,14 @@ import { IoIosLogOut } from "react-icons/io";
 import { Link, useNavigate } from "react-router-dom";
 import { CiSettings } from "react-icons/ci";
 import "./profile.scss";
+import { useAppSelector } from "../../redux/hooks";
 
 interface PopupProps {
   closePopup: () => void;
 }
 
 const ProfilePopup: React.FC<PopupProps> = ({ closePopup }) => {
+  const { user } = useAppSelector((state) => state.auth);
   const navigate = useNavigate();
   const popupRef = useRef<HTMLDivElement>(null);
 
@@ -17,9 +19,8 @@ const ProfilePopup: React.FC<PopupProps> = ({ closePopup }) => {
     localStorage.removeItem("user");
     window.location.reload();
   };
-
   const handleProfile = () => {
-    navigate("/admin/profile");
+    navigate(`/admin/profile/${user?.user.id}`);
   };
   useEffect(() => {
     const handleClickOutside = (event: MouseEvent) => {
