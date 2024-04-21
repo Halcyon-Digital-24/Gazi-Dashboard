@@ -144,7 +144,7 @@ const routes = [
   { path: "/setup/pages/edit/:slug", element: <UpdatePage /> },
   { path: "/notification", element: <Notification /> },
   { path: "/notification/create", element: <CreateNotification /> },
-  { path: "/admin/profile", element: <Profile /> },
+  { path: "/admin/profile/:slug", element: <Profile /> },
   { path: "/staffs", element: <Staff /> },
   { path: "/staffs/create", element: <CreateProfile /> },
   { path: "/staffs/edit/:slug", element: <UpdateProfile /> },
