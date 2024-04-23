@@ -161,23 +161,6 @@ const SingleItem: FC<IProps> = ({
         <Column className="col-md-2">{order.name}</Column>
         <Column className="col-md-1">{order.mobile}</Column>
         <Column className="col-md-1">{order.orderItems?.length}</Column>
-        {/*   <Column className="col-md-1">
-          <Select
-            onChange={(e: ChangeEvent<HTMLSelectElement>) =>
-              handlePaymentChange(order.id, e)
-            }
-          >
-            <option value={"paid"} selected>
-              Paid
-            </option>
-            <option
-              value={"unpaid"}
-              selected={order.delivery_method == "unpaid"}
-            >
-              Unpaid
-            </option>
-          </Select>
-        </Column> */}
         <Column className="col-md-2">
           <Select
             onChange={(e: ChangeEvent<HTMLSelectElement>) =>

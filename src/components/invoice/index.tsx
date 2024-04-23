@@ -247,68 +247,7 @@ const Invoice = ({ order }: any) => {
       </table>
       {/* .... */}
       <div className="invoice-table">
-        {/*   <div className="row first-row">
-          <Column className="col-md-1 heading top-header">SL. </Column>
-          <Column className="col-md-4 heading top-header description">
-            Description
-          </Column>
-          <Column className="col-md-2 heading top-header">Attribute</Column>
-          <Column className="col-md-1 heading top-header">Qty</Column>
-          <Column className="col-md-2 heading top-header">
-            Unit price (BDT)
-          </Column>
-          <Column className="col-md-2 heading top-header">Total</Column>
-        </div> */}
-
         <div className="row">
-          {/*  <Column className="col-md-7 "> </Column>
-          <Column className="col-md-1 "> </Column>
-          <Column className="col-md-4">
-            <div className="summery">
-              <div className="row">
-                <p className="heading sort-summery">Sub Total</p>
-                <p className="heading sort-summery">
-                  <span className="amount">{` ${FormatPrice(
-                    amountBeforeCoupon
-                  )}`}</span>
-                </p>
-                <p className="heading sort-summery">Delivery</p>
-                <p className="heading sort-summery">
-                  <span className="amount">
-                    {" "}
-                    {FormatPrice(order.delivery_fee)}
-                  </span>
-                </p>
-                <p className="heading sort-summery">Discount</p>
-                <p className="heading sort-summery">
-                  <span className="amount">
-                    {" "}
-                    {FormatPrice(
-                      amountBeforeCoupon - totalPrice + order.custom_discount
-                    )}
-                  </span>
-                </p>
-                <p className="heading sort-summery">Advance</p>
-                <p className="heading sort-summery">
-                  <span className="amount">
-                    {FormatPrice(order.advance_payment ?? 0)}
-                  </span>
-                </p>
-                <p className="heading sort-summery">Due Amount</p>
-                <p className="heading sort-summery">
-                  <span className="amount">
-                    {" "}
-                    {FormatPrice(
-                      totalPrice +
-                        order.delivery_fee -
-                        order.custom_discount -
-                        advancePayment
-                    )}
-                  </span>
-                </p>
-              </div>
-            </div>
-          </Column> */}
           <Column className="col-md-12">
             <div className="notes">
               <h3>Notes:</h3>
