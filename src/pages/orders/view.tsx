@@ -10,8 +10,6 @@ import "./view.scss";
 
 const OrderView: React.FC = () => {
   const [order, setOrder] = useState<IOrder>({} as IOrder);
-
-  console.log(order);
   const { slug } = useParams();
   const componentRef = useRef<HTMLDivElement>(null);
 
