@@ -21,7 +21,6 @@ import {
 } from "../../redux/category/categorySlice";
 import {
   deleteBanner,
-  getAddBanner,
   updateAddBanner,
 } from "../../redux/add-banner/addBannerSlice";
 import { useAppDispatch, useAppSelector } from "../../redux/hooks";
@@ -78,6 +77,14 @@ const SetupPage = () => {
         bannerData: { is_visible: !banner.is_visible },
       })
     );
+  };
+  const handleResetCache = async () => {
+    try {
+      await axios.delete(`/cashes`);
+      toast.success("Home page cache reset successfully");
+    } catch (error) {
+      console.error("Error deleting item:", error);
+    }
   };
 
   useEffect(() => {
@@ -480,6 +487,9 @@ const SetupPage = () => {
             </>
           </Display>
           <CustomScript />
+          <Display>
+            <Button onClick={handleResetCache}>Reset Cache</Button>
+          </Display>
         </Column>
       </div>
     </div>
