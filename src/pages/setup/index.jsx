@@ -80,8 +80,8 @@ const SetupPage = () => {
   };
   const handleResetCache = async () => {
     try {
-      await axios.delete(`/cashes`);
-      toast.success("Home page cache reset successfully");
+      const response = await axios.delete(`/caches`);
+      toast.success(response.data.message);
     } catch (error) {
       console.error("Error deleting item:", error);
     }
