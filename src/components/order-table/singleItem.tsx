@@ -160,7 +160,9 @@ const SingleItem: FC<IProps> = ({
         </Column>
         <Column className="col-md-2">{order.name}</Column>
         <Column className="col-md-1">{order.mobile}</Column>
-        <Column className="col-md-1">{order.orderItems?.length}</Column>
+        <Column className="col-md-1 product-iem">
+          {order.orderItems?.length}
+        </Column>
         <Column className="col-md-2">
           <Select
             onChange={(e: ChangeEvent<HTMLSelectElement>) =>

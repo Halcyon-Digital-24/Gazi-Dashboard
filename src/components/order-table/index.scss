@@ -20,6 +20,9 @@
 .print-area {
   display: none; /* Hide by default */
 }
+.product-iem {
+  text-align: center;
+}
 
 @media print {
   .print-area {
