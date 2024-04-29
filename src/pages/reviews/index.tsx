@@ -71,11 +71,11 @@ const Reviews: React.FC = () => {
         ) : (
           reviews.map((review, index) => (
             <Row className="row" key={index}>
-              <Column className="col-md-1">1</Column>
+              <Column className="col-md-1">{index + 1}</Column>
               <Column className="col-md-2">{review.name}</Column>
               <Column className="col-md-4">{review.product_name}</Column>
               <Column className="col-md-3">{review.comment}</Column>
-              <Column className="col-md-1">3.5</Column>
+              <Column className="col-md-1">{review.rating}</Column>
               <Column className="col-md-1">
                 <ToggleButton
                   isChecked={review.is_visible}
