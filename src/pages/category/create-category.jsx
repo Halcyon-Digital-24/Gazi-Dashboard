@@ -43,7 +43,7 @@ const CreateCategory = () => {
       navigate("/category");
     }
     if (isError) {
-      setError("slug", { type: "server", message: error.slug });
+      setError("slug", { type: "server", message: error?.slug });
     }
     return () => {
       dispatch(reset());
