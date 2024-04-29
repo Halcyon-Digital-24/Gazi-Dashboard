@@ -679,21 +679,21 @@ const UpdateProduct: React.FC = () => {
 
               <Display>
                 <div className="sudo-item">
-                  <span>Is New</span>
+                  <span>New</span>
                   <ToggleButton
                     isChecked={isNew == 1}
                     onClick={() => setIsNew(isNew == 0 ? 1 : 0)}
                   />
                 </div>
                 <div className="sudo-item">
-                  <span>Is Sale</span>
+                  <span>Top Sale</span>
                   <ToggleButton
                     isChecked={isSale === 1}
                     onClick={() => setIsSale(isSale == 0 ? 1 : 0)}
                   />
                 </div>
                 <div className="sudo-item">
-                  <span>Is Feature</span>
+                  <span>Feature</span>
                   <ToggleButton
                     isChecked={isFeature == 1}
                     onClick={() => setIsFeature(isFeature == 0 ? 1 : 0)}
