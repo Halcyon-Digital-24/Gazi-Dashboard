@@ -34,6 +34,7 @@ const CustomOrder = () => {
   const [search, setSearch] = useState("");
   const productAreaRef = useRef(null);
   const [selectedAttributes, setSelectedAttributes] = useState([]);
+  const [advancedPayment, setAdvancedPayment] = useState(0);
 
   const handleAttributeClick = (attribute) => {
     const isExists = selectedAttributes.filter(
@@ -75,7 +76,6 @@ const CustomOrder = () => {
   } = useForm({
     defaultValues: {
       name: "",
-      email: "",
       mobile: "",
       address: "",
       city: "",
@@ -123,6 +123,7 @@ const CustomOrder = () => {
           ...data,
           orderItem,
           delivery_fee: shipping,
+          advance_payment: advancedPayment,
           custom_discount: discount,
         });
         toast.success(response.data.message);
@@ -262,7 +263,7 @@ const CustomOrder = () => {
                     })}
                   />
                   {errors.city && (
-                    <p className="validation__error">{errors.city.message}</p>
+                    <p className="validation__error">{errors.city?.message}</p>
                   )}
                 </div>
                 <Input
@@ -281,23 +282,14 @@ const CustomOrder = () => {
                   label="Discount Price"
                   onChange={(e) => setDiscount(Number(e.target.value))}
                 />
-                <div className="text">
-                  <label htmlFor="name">Advance Payment</label>
-                  <input
-                    type="text"
-                    placeholder="Advanced payment"
-                    {...register("advance_payment", {
-                      trim: true,
-                      pattern: {
-                        value: /^\d+$/,
-                        message: "Enter a valid price containing only numbers",
-                      },
-                    })}
-                  />
-                  {errors.advance_payment && (
-                    <p className="validation__error">{errors.city.message}</p>
-                  )}
-                </div>
+                <Input
+                  type="number"
+                  htmlFor="advanced_payment"
+                  placeholder="Advanced payment"
+                  label="Advanced Price"
+                  onChange={(e) => setAdvancedPayment(Number(e.target.value))}
+                />
+
                 <>
                   <label className="label" htmlFor="select">
                     Invoice Prefix
@@ -557,9 +549,11 @@ const CustomOrder = () => {
                     <div className="col-md-3 right">{shipping}</div>
                     <div className="col-md-9 left">Discount</div>
                     <div className="col-md-3 right">{discount}</div>
-                    <div className="col-md-9 left">Total</div>
+                    <div className="col-md-9 left">Advanced</div>
+                    <div className="col-md-3 right">{advancedPayment}</div>
+                    <div className="col-md-9 left">Due Amount</div>
                     <div className="col-md-3 right">
-                      {final_price + shipping - discount}
+                      {final_price + shipping - discount - advancedPayment}
                     </div>
                   </div>
                 </div>
