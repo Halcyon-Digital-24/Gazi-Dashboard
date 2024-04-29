@@ -221,11 +221,7 @@ const Invoice = ({ order }: any) => {
         <tr>
           <td className="span-item" colSpan={4}></td>
           <td className="heading-title">Discount</td>
-          <td>
-            {FormatPrice(
-              amountBeforeCoupon - totalPrice + order.custom_discount
-            )}
-          </td>
+          <td>{FormatPrice(totalPrice + order.custom_discount)}</td>
         </tr>
         <tr>
           <td className="span-item" colSpan={4}></td>
@@ -237,7 +233,8 @@ const Invoice = ({ order }: any) => {
           <td className="heading-title">Due Amount</td>
           <td>
             {FormatPrice(
-              totalPrice +
+              amountBeforeCoupon -
+                totalPrice +
                 order.delivery_fee -
                 order.custom_discount -
                 advancePayment
