@@ -267,12 +267,20 @@ const CreateProduct: React.FC = () => {
       toast.error("Please select discount option");
       return;
     }
+    if (sortDesc.length > 200) {
+      return toast.error("Sort description is too long");
+    }
     const formData = new FormData();
-
-    formData.append("title", title);
-    formData.append("slug", slug);
+    if (title.trim()) {
+      formData.append("title", title.trim());
+    }
+    if (slug.trim()) {
+      formData.append("slug", slug.trim());
+    }
     formData.append("description", description);
-    formData.append("policy", policy);
+    if (policy) {
+      formData.append("policy", policy);
+    }
     if (image !== null) {
       formData.append("image", image);
     }
@@ -282,7 +290,9 @@ const CreateProduct: React.FC = () => {
     formData.append("discount_price", discountPrice.toString());
     formData.append("delivery_fee", deliveryFee.toString());
     formData.append("is_visible", status.toString());
-    formData.append("video_url", videoUrl);
+    if (videoUrl) {
+      formData.append("video_url", videoUrl);
+    }
     if (campaignDate !== null) {
       formData.append("camping_start_date", campaignDate[0].toString());
       formData.append("camping_end_date", campaignDate[1].toString());
@@ -293,8 +303,12 @@ const CreateProduct: React.FC = () => {
       formData.append("gallery_image", g_image);
       formData.append("order_number", imageQuantities[index].toString());
     });
-    formData.append("meta_title", metaTitle);
-    formData.append("meta_description", metaDescription);
+    if (metaTitle) {
+      formData.append("meta_title", metaTitle);
+    }
+    if (metaDescription) {
+      formData.append("meta_description", metaDescription);
+    }
     formData.append("sort_description", sortDesc);
     formData.append("is_homepage", "1");
     formData.append("is_sale", isSale.toString());
@@ -337,9 +351,6 @@ const CreateProduct: React.FC = () => {
     if (isError) {
       toast.error(`${errorMessage}`);
     }
-    return () => {
-      dispatch(reset());
-    };
   }, [errorMessage, isError, dispatch]);
 
   useEffect(() => {
@@ -372,7 +383,10 @@ const CreateProduct: React.FC = () => {
                 <Input
                   label="Product Title *"
                   placeholder="Enter Name"
-                  onBlur={(e) => setTile(e.target.value)}
+                  onBlur={(e) => {
+                    setTile(e.target.value);
+                    setSlug(e.target.value.replace(" ", "-"));
+                  }}
                   htmlFor="name"
                   required
                   errorMessage={error?.title}
@@ -380,7 +394,8 @@ const CreateProduct: React.FC = () => {
                 <Input
                   label="Slug *"
                   placeholder="Enter Slug"
-                  onBlur={(e) => setSlug(e.target.value)}
+                  value={slug}
+                  onChange={(e) => setSlug(e.target.value)}
                   htmlFor="slug"
                   required
                   errorMessage={error?.slug}
@@ -673,21 +688,21 @@ const CreateProduct: React.FC = () => {
 
               <Display>
                 <div className="sudo-item">
-                  <span>Is New</span>
+                  <span>New</span>
                   <ToggleButton
                     isChecked={isNew == 1}
                     onClick={() => setIsNew(isNew == 0 ? 1 : 0)}
                   />
                 </div>
                 <div className="sudo-item">
-                  <span>Is Sale</span>
+                  <span>Top Sale</span>
                   <ToggleButton
                     isChecked={isSale === 1}
                     onClick={() => setIsSale(isSale == 0 ? 1 : 0)}
                   />
                 </div>
                 <div className="sudo-item">
-                  <span>Is Feature</span>
+                  <span>Feature</span>
                   <ToggleButton
                     isChecked={isFeature == 1}
                     onClick={() => setIsFeature(isFeature == 0 ? 1 : 0)}
