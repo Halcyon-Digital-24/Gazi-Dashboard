@@ -119,6 +119,7 @@ function SingleProductPhoto({
         alt="gazi home appliance"
       />
       <input
+        className="gallery-image-input"
         type="text"
         defaultValue={productPhoto.order_number}
         onChange={(e) => setOrderNumber(e.target.value)}

@@ -222,7 +222,7 @@ const CreateProduct: React.FC = () => {
       // Initialize quantities for newly added images
       const newQuantities = Array.from(
         { length: files.length },
-        (_, index) => index + 1
+        (_, index) => index + 1 + imageQuantities.length
       );
 
       setGalleryImages((prevImages) =>
@@ -234,7 +234,7 @@ const CreateProduct: React.FC = () => {
       ]);
     }
   };
-
+  console.log(imageQuantities);
   const removeGalleryImage = (index: number) => {
     setGalleryImages((prevImages) => {
       if (prevImages) {
@@ -385,7 +385,9 @@ const CreateProduct: React.FC = () => {
                   placeholder="Enter Name"
                   onBlur={(e) => {
                     setTile(e.target.value);
-                    setSlug(e.target.value.replace(" ", "-"));
+                    setSlug(
+                      e.target.value.toLowerCase().trim().replaceAll(" ", "-")
+                    );
                   }}
                   htmlFor="name"
                   required
@@ -460,6 +462,7 @@ const CreateProduct: React.FC = () => {
                           alt="gazi home appliance"
                         />
                         <input
+                          className="gallery-image-input"
                           type="text"
                           defaultValue={imageQuantities[index]}
                           onChange={(e) =>
