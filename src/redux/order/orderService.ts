@@ -8,10 +8,11 @@ const getAllOrders = async (filter: {
   let url = `/orders`;
 
   // Filter out keys with false values
-  const filteredFilter: { [key: string]: string | number | boolean } = {};
+  const filteredFilter: { [key: string]: string | number } = {};
   Object.entries(filter).forEach(([key, value]) => {
-    if (value !== false) {
-      filteredFilter[key] = value;
+    // Exclude if value is false or boolean
+    if (value) {
+      filteredFilter[key] = value as string | number;
     }
   });
 

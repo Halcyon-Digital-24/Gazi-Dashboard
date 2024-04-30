@@ -6,19 +6,22 @@ import Display from "../../components/display";
 import { useForm } from "react-hook-form";
 import axios from "../../lib";
 
-
 const CreateFaq = () => {
   const navigate = useNavigate();
-  const { register, handleSubmit, formState: { errors }} = useForm();
+  const {
+    register,
+    handleSubmit,
+    formState: { errors },
+  } = useForm();
 
   const onSubmit = async (data) => {
     data.is_visible = true;
     try {
-      const response = await axios.post('/faqs', data);
-      navigate('/faqs');
+      const response = await axios.post("/faqs", data);
+      navigate("/faqs");
       toast.success(response.data.message);
     } catch (error) {
-      toast.error('Error saving data');
+      toast.error("Error saving data");
       console.error(error);
     }
   };
@@ -28,8 +31,7 @@ const CreateFaq = () => {
       <CardBody header="Create Faq" to="/faqs" text="back" />
       <Display>
         <form onSubmit={handleSubmit(onSubmit)}>
-  
-        <div className="text">
+          <div className="text">
             <label htmlFor="Question">Question*</label>
             <input
               type="text"
@@ -38,8 +40,8 @@ const CreateFaq = () => {
                 required: "question is required",
                 pattern: {
                   value: /\S/,
-                  message: "Enter a valid question"
-                }
+                  message: "Enter a valid question",
+                },
               })}
             />
             {errors.question && (
@@ -48,24 +50,25 @@ const CreateFaq = () => {
           </div>
 
           <div className="text">
-            <label htmlFor="Question">Question*</label>
+            <label htmlFor="Question">Answer*</label>
 
-          <textarea name="answer"  style={{ width: '100%' }} placeholder="Answer here..." 
-          
-          {...register("answer", {
-            required: "answer is required",
-            pattern: {
-              value: /\S/,
-              message: "Enter a valid answer"
-            }
-          })}
+            <textarea
+              name="answer"
+              style={{ width: "100%" }}
+              placeholder="Answer here..."
+              {...register("answer", {
+                required: "answer is required",
+                pattern: {
+                  value: /\S/,
+                  message: "Enter a valid answer",
+                },
+              })}
+            />
 
-          />
-
-{errors.answer && (
+            {errors.answer && (
               <p className="validation__error">{errors.answer.message}</p>
             )}
- </div>
+          </div>
           <Button>Create</Button>
         </form>
       </Display>

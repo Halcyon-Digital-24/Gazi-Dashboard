@@ -109,7 +109,7 @@ const Invoice = ({ order }: any) => {
   useEffect(() => {
     setOrderItems(order.orderItems);
   }, [order]);
-
+  console.log(totalPrice);
   return (
     <div className="invoice">
       <div className="invoice-header">
@@ -233,8 +233,7 @@ const Invoice = ({ order }: any) => {
           <td className="heading-title">Due Amount</td>
           <td>
             {FormatPrice(
-              amountBeforeCoupon -
-                totalPrice +
+              totalPrice -
                 order.delivery_fee -
                 order.custom_discount -
                 advancePayment
