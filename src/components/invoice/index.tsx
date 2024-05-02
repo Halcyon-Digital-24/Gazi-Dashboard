@@ -64,6 +64,7 @@ const Invoice = ({ order }: any) => {
             return item;
           });
         } else {
+          console.log("tempDisCart ", tempDisCart)
           tempDisCart = tempDisCart?.map((item: any) => {
             return {
               ...item,
@@ -73,6 +74,7 @@ const Invoice = ({ order }: any) => {
             };
           });
         }
+        console.log("tempDisCart ", tempDisCart);
         setOrderItems(tempDisCart);
       }
     }
@@ -204,8 +206,8 @@ const Invoice = ({ order }: any) => {
                   : "-"}
               </td>
               <td> {product.quantity}</td>
-              <td>{FormatPrice(product.regular_price)}</td>
-              <td> {FormatPrice(product.regular_price * product.quantity)}</td>
+              <td> {FormatPrice(product.regular_price)}</td>
+              <td>{product.regular_price * product.quantity}</td>
             </tr>
           ))}
         <tr>
@@ -221,7 +223,11 @@ const Invoice = ({ order }: any) => {
         <tr>
           <td className="span-item" colSpan={4}></td>
           <td className="heading-title">Discount</td>
-          <td>{FormatPrice(totalPrice + order.custom_discount)}</td>
+          <td>
+            {FormatPrice(
+              amountBeforeCoupon - totalPrice + order.custom_discount
+            )}
+          </td>
         </tr>
         <tr>
           <td className="span-item" colSpan={4}></td>
