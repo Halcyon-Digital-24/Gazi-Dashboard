@@ -156,8 +156,8 @@ const Invoice = ({ order }: any) => {
             </p>
             <p>
               <span className="invoice-title"> Total Order Amount : </span>{" "}
-              {totalPrice + order.delivery_fee - order.custom_discount}
-            </p>
+              {(Number(totalPrice) + Number(order.delivery_fee)) - (Number(order.custom_discount) + Number(advancePayment))}
+            </p>                
             <p>
               <span className="invoice-title"> Shipping Method: </span>{" "}
               {order?.delivery_method === "homeDelivery"
