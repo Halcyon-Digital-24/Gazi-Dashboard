@@ -239,8 +239,7 @@ const Invoice = ({ order }: any) => {
           <td className="heading-title">Due Amount</td>
           <td>
             {FormatPrice(
-              totalPrice -
-                order.delivery_fee -
+              totalPrice + order.delivery_fee -
                 order.custom_discount -
                 advancePayment
             )}

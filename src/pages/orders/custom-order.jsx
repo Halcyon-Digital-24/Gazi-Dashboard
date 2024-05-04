@@ -197,10 +197,6 @@ const CustomOrder = () => {
                     placeholder="Email"
                     {...register("email", {
                       trim: true,
-                      pattern: {
-                        value: /^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,4}$/i,
-                        message: "Enter a valid email",
-                      },
                     })}
                   />
                   {errors.email && (
@@ -406,7 +402,7 @@ const CustomOrder = () => {
                                       addToCart({
                                         product_id: product?.id,
                                         price:
-                                          Number(product.discount_price) !== 0
+                                          (Number(product.discount_price) !== 0 || Number(product.discount_price) != undefined)
                                             ? Number(product.discount_price)
                                             : Number(product.regular_price),
                                         title: product.title,
