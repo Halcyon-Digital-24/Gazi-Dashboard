@@ -93,15 +93,15 @@ const Invoice = ({ order }: any) => {
       if (order?.coupon) {
         let finalPrice = 0;
         orderItems?.map((item: any) => {
-          finalPrice += item?.discount_price * item?.quantity;
+          finalPrice += item?.regular_price * item?.quantity;
         });
         setTotalPrice(finalPrice);
       } else {
         let finalPrice = 0;
         orderItems?.map((item: any) => {
-          finalPrice += item?.discount_price
+          finalPrice +=(item?.discount_price
             ? item?.discount_price
-            : item?.regular_price * item?.quantity;
+            : item?.regular_price )* item?.quantity;
         });
         setTotalPrice(finalPrice);
       }

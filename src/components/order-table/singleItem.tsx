@@ -124,9 +124,9 @@ const SingleItem: FC<IProps> = ({
       } else {
         let finalPrice = 0;
         orderItems?.map((item: any) => {
-          finalPrice += item?.discount_price
+          finalPrice +=(item?.discount_price
             ? item?.discount_price
-            : item?.regular_price * item?.quantity;
+            : item?.regular_price )* item?.quantity;
         });
         setTotalPrice(finalPrice);
       }

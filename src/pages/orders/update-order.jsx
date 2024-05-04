@@ -177,9 +177,9 @@ const UpdateOrder = () => {
       } else {
         let finalPrice = 0;
         orderItems?.map((item) => {
-          finalPrice += item?.discount_price
+          finalPrice += (item?.discount_price
             ? item?.discount_price
-            : item?.regular_price * item?.quantity;
+            : item?.regular_price )* item?.quantity;
         });
         setTotalPrice(finalPrice);
       }
