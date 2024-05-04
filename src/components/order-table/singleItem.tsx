@@ -157,6 +157,8 @@ const SingleItem: FC<IProps> = ({
         </Column>
         <Column className="col-md-1">
           ৳{totalPrice + order.delivery_fee - order.custom_discount}
+
+          {(Number(totalPrice) + Number(order.delivery_fee)) - Number(order.custom_discount)}
         </Column>
         <Column className="col-md-2">{order.name}</Column>
         <Column className="col-md-1">{order.mobile}</Column>
