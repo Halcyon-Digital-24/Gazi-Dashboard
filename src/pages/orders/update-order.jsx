@@ -177,9 +177,10 @@ const UpdateOrder = () => {
       } else {
         let finalPrice = 0;
         orderItems?.map((item) => {
-          finalPrice += (item?.discount_price
-            ? item?.discount_price
-            : item?.regular_price )* item?.quantity;
+          finalPrice +=
+            (item?.discount_price
+              ? item?.discount_price
+              : item?.regular_price) * item?.quantity;
         });
         setTotalPrice(finalPrice);
       }
@@ -423,7 +424,7 @@ const UpdateOrder = () => {
                       <th>Description</th>
                       <th>Qty</th>
                       <th>Unit price (BDT)</th>
-                      <th>Total</th>
+                      <th>Total (BDT)</th>
                     </tr>
                     {orderItems?.map((product, index) => (
                       <tr key={index} className="order-item">
@@ -463,15 +464,11 @@ const UpdateOrder = () => {
                       <td className="heading-title">Sub Total</td>
                       <td>{` ${FormatPrice(amountBeforeCoupon)}`}</td>
                     </tr>
-                    <tr>
-                      <td className="span-item" colSpan={3}></td>
-                      <td className="heading-title">Delivery</td>
-                      <td>{FormatPrice(order.delivery_fee)}</td>
-                    </tr>
+
                     <tr>
                       <td className="span-item" colSpan={3}></td>
                       <td className="heading-title">Discount</td>
-                      <td>
+                      <td>- 
                         {FormatPrice(
                           amountBeforeCoupon -
                             totalPrice +
@@ -479,14 +476,27 @@ const UpdateOrder = () => {
                         )}
                       </td>
                     </tr>
+
+                    <tr>
+                      <td className="span-item" colSpan={3}></td>
+                      <td className="heading-title">After Discount</td>
+                      <td>{FormatPrice(totalPrice - order.custom_discount)}</td>
+                    </tr>
+
+                    <tr>
+                      <td className="span-item" colSpan={3}></td>
+                      <td className="heading-title">Delivery</td>
+                      <td>{FormatPrice(order.delivery_fee)}</td>
+                    </tr>
+
                     <tr>
                       <td className="span-item" colSpan={3}></td>
                       <td className="heading-title">Advance</td>
-                      <td>{FormatPrice(order.advance_payment ?? 0)}</td>
+                      <td>- {FormatPrice(order.advance_payment ?? 0)}</td>
                     </tr>
                     <tr>
                       <td className="span-item" colSpan={3}></td>
-                      <td className="heading-title">Due Amount</td>
+                      <td className="text-bold">Due Amount</td>
                       <td>
                         {FormatPrice(
                           totalPrice +
@@ -497,36 +507,6 @@ const UpdateOrder = () => {
                       </td>
                     </tr>
                   </table>
-                  {/*   <div className="row">
-                    <Column className="col-md-8 "> </Column>
-                    <Column className="col-md-4">
-                      <div className="summery">
-                        <div className="row">
-                          <p className="heading sort-summery">Regular Price</p>
-                          <p className="heading sort-summery">{`৳${orderItems?.reduce(
-                            (sum, item) => {
-                              sum += item.regular_price * item.quantity;
-                              return sum;
-                            },
-                            0
-                          )}`}</p>
-                          <p className="heading sort-summery">Shipping cost</p>
-                          <p className="heading sort-summery">
-                            ৳ {delivery_fee}
-                          </p>
-                          <p className="heading sort-summery">Discount</p>
-                          <p className="heading sort-summery">
-                            ৳ {amountBeforeCoupon - totalPrice + customDiscount}
-                          </p>
-
-                          <p className="heading sort-summery">Grand Total</p>
-                          <p className="heading sort-summery">
-                            {totalPrice + delivery_fee - customDiscount}
-                          </p>
-                        </div>
-                      </div>
-                    </Column>
-                  </div> */}
                 </div>
               </div>
             </>
