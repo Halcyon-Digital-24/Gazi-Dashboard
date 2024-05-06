@@ -22,6 +22,7 @@ import { API_URL } from "../../constants";
 import { IAttributeResponse } from "../../interfaces/attribute";
 import axios from "../../lib";
 import { RiDeleteBin6Line } from "react-icons/ri";
+import makeSlug from "../../utills/make-slug";
 
 // const animatedComponents = makeAnimated();
 
@@ -64,18 +65,39 @@ const CreateProduct: React.FC = () => {
 
   useEffect(() => {
     const existingAttributes: any[] = [];
-    selectedAttributes.map((item) => {
+    selectedAttributes.map((item: any) => {
+
       item?.value.split(",").map((value: any) => {
-        existingAttributes.push({
-          attribute_key: item?.name.replace(" ", "_"),
-          attribute_value: value,
-          attribute_quantity: 0,
-          attrbute_image: "",
-        });
+        let flag = false;
+        for (let i = 0; i < productAttributes?.length; i++) {
+          if (productAttributes[i].attribute_key == item?.name.replace(" ", "_") && productAttributes[i].attribute_value == value) {
+            existingAttributes.push({ ...productAttributes[i] })
+            flag = true
+            return
+          }
+        }
+        // productAttributes?.map((pa: any) => {
+        //   if (pa.attribute_key == item?.name.replace(" ", "_") && pa.attribute_value == value) {
+        //     existingAttributes.push({ ...pa })
+        //     flag = true
+        //     return
+        //   }
+
+        //   console.log(',,item', item, pa)
+
+        // })
+        if (!flag)
+          existingAttributes.push({
+            attribute_key: item?.name.replace(" ", "_"),
+            attribute_value: value,
+            attribute_quantity: 0,
+            attrbute_image: "",
+          });
       });
     });
-    setProductAttribuets(existingAttributes);
+    // setProductAttribuets( JSON.parse(JSON.stringify(existingAttributes)));
   }, [selectedAttributes]);
+  console.log('productAttributes', productAttributes)
   useEffect(() => {
     const fetchData = async () => {
       try {
@@ -87,8 +109,8 @@ const CreateProduct: React.FC = () => {
           tempAttributes =
             tempAttributes?.length > 0
               ? tempAttributes?.map((item) => {
-                  return { ...item, selectedValues: [] };
-                })
+                return { ...item, selectedValues: [] };
+              })
               : [];
           setAttributes(tempAttributes);
         }
@@ -103,53 +125,72 @@ const CreateProduct: React.FC = () => {
     attribute: string,
     attributeValue: string | null = null
   ) => {
-    if (attributeValue) {
-      setSelectedAttributes((prevState) =>
-        prevState.map((item) => {
-          if (item.name === attribute) {
-            const tempAttrVals: string[] =
-              item.value.indexOf(",") > -1
-                ? item.value.split(",")
-                : [item.value];
-            const tempFilteredAttrVals: string[] = tempAttrVals.filter(
-              (val) => val !== attributeValue
-            );
-            let tempFilteredValsString = "";
-            if (tempFilteredAttrVals?.length > 1) {
-              tempFilteredAttrVals?.map((val, i) => {
-                if (tempFilteredAttrVals.length == i + 1) {
-                  tempFilteredValsString += `${val}`;
-                } else {
-                  tempFilteredValsString += `${val},`;
-                }
-              });
-            } else {
-              tempFilteredValsString = tempFilteredAttrVals[0];
-            }
-            item.value =
-              tempFilteredValsString === undefined
-                ? ""
-                : tempFilteredValsString;
-            item.selectedValues.push(attributeValue);
-          }
-          return item;
-        })
+
+    console.log('attribute', attribute, attributeValue)
+
+    // if (attributeValue) {
+    //   setSelectedAttributes((prevState) =>
+    //     prevState.map((item) => {
+    //       if (item.name === attribute) {
+    //         const tempAttrVals: string[] =
+    //           item.value.indexOf(",") > -1
+    //             ? item.value.split(",")
+    //             : [item.value];
+    //         const tempFilteredAttrVals: string[] = tempAttrVals.filter(
+    //           (val) => val !== attributeValue
+    //         );
+    //         let tempFilteredValsString = "";
+    //         if (tempFilteredAttrVals?.length > 1) {
+    //           tempFilteredAttrVals?.map((val, i) => {
+    //             if (tempFilteredAttrVals.length == i + 1) {
+    //               tempFilteredValsString += `${val}`;
+    //             } else {
+    //               tempFilteredValsString += `${val},`;
+    //             }
+    //           });
+    //         } else {
+    //           tempFilteredValsString = tempFilteredAttrVals[0];
+    //         }
+    //         item.value =
+    //           tempFilteredValsString === undefined
+    //             ? ""
+    //             : tempFilteredValsString;
+    //         item.selectedValues.push(attributeValue);
+    //       }
+    //       return item;
+    //     })
+    //   );
+    // } else {
+    if (attribute !== "") {
+      let tempObj = {};
+      attributes.map((item) => {
+        if (item?.name === attribute) {
+          tempObj = item;
+        }
+      });
+      setAttributes((prevState) =>
+        prevState?.filter((item) => item.name !== attribute)
       );
-    } else {
-      if (attribute !== "") {
-        let tempObj = {};
-        attributes.map((item) => {
-          if (item?.name === attribute) {
-            tempObj = item;
-          }
-        });
-        setAttributes((prevState) =>
-          prevState?.filter((item) => item.name !== attribute)
-        );
-        setSelectedAttributes((prevState) => [tempObj, ...prevState]);
-      }
+      console.log('tempObj', tempObj)
+      setSelectedAttributes((prevState) => [tempObj, ...prevState]);
+      setProductAttribuets((prevState) => [...prevState, ...formateData(tempObj)])
     }
+    // }
   };
+
+  const formateData = (data: any) => {
+    let tempData: any[] = []
+    data?.value?.split(',').map((value: any) => {
+      tempData.push({
+        attribute_key: data?.name.replace(" ", "_"),
+        attribute_value: value,
+        attribute_quantity: 0,
+        attrbute_image: "",
+        // id:Math.floor(1000 + Math.random() * 9000)
+      })
+    })
+    return tempData
+  }
 
   /* const handleRemoveProductAttribute = (attribute_key, attribute_value) => {
     const filterAttribute = selectedAttributes.filter(
@@ -162,38 +203,19 @@ const CreateProduct: React.FC = () => {
 
     setSelectedAttributes(filterAttribute);
   }; */
+  console.log("attributes", attributes, selectedAttributes)
 
   const handleRemoveAttribute = (
-    attribute: string,
-    attributeValue: string | null = null
+    index: number
   ) => {
-    if (attributeValue) {
-      setSelectedAttributes((prevState) =>
-        prevState.map((item) => {
-          if (item.name === attribute) {
-            item.value =
-              item.value === ""
-                ? attributeValue
-                : `${item.value},${attributeValue}`;
-            item.selectedValues = item.selectedValues.filter(
-              (val: string) => val !== attributeValue
-            );
-          }
-          return item;
-        })
-      );
-    } else {
-      let tempObj = {};
-      selectedAttributes.map((item) => {
-        if (item?.name === attribute) {
-          tempObj = item;
-        }
-      });
-      setSelectedAttributes((prevState) =>
-        prevState?.filter((item) => item.name !== attribute)
-      );
-      setAttributes((prevState) => [tempObj, ...prevState]);
-    }
+    let tempAttribute = [...productAttributes]
+    tempAttribute = tempAttribute?.filter((_, i) => i != index)
+
+    setTimeout(() => {
+      setProductAttribuets(tempAttribute)
+
+    }, 200);
+    console.log('tempAttribute', tempAttribute)
   };
 
   const handleImageChange = (e: ChangeEvent<HTMLInputElement>) => {
@@ -214,6 +236,11 @@ const CreateProduct: React.FC = () => {
       console.error("Index out of bounds or invalid");
     }
   };
+  useEffect(()=>{
+    let sum=0
+    productAttributes?.map((item) => sum+=parseInt(item?.attribute_quantity))
+    setQuantity(sum)
+  },[productAttributes])
 
   const handleGalleryImageChange = (e: ChangeEvent<HTMLInputElement>) => {
     if (e.target.files) {
@@ -372,6 +399,12 @@ const CreateProduct: React.FC = () => {
     };
   }, [dispatch]);
 
+
+  const getQuantity = () => {
+    productAttributes?.map((item) => console.log('item',item))
+    return 0;
+  }
+
   return (
     <div className="create-product">
       <CardBody header="Create Product" to="/products" text="back" />
@@ -385,11 +418,12 @@ const CreateProduct: React.FC = () => {
                   placeholder="Enter Name"
                   onBlur={(e) => {
                     setTile(e.target.value);
-                    setSlug(
-                      e.target.value.toLowerCase().trim().replaceAll(" ", "-")
-                    );
+
                   }}
                   htmlFor="name"
+                  onChange={(e: any) => setSlug(
+                    makeSlug(e.target.value)
+                  )}
                   required
                   errorMessage={error?.title}
                 />
@@ -397,7 +431,7 @@ const CreateProduct: React.FC = () => {
                   label="Slug *"
                   placeholder="Enter Slug"
                   value={slug}
-                  onChange={(e) => setSlug(e.target.value)}
+                  onChange={(e) => setSlug(makeSlug(e.target.value))}
                   htmlFor="slug"
                   required
                   errorMessage={error?.slug}
@@ -534,48 +568,49 @@ const CreateProduct: React.FC = () => {
                             </tr>
                           </thead>
                           <tbody>
-                            {productAttributes?.map((att, i) => (
-                              <tr key={i}>
-                                <td>{att?.attribute_key?.replace("_", " ")}</td>
-                                <td>{att?.attribute_value}</td>
-                                <td>
-                                  <Input
-                                    htmlFor="quantity"
-                                    type="number"
-                                    required
-                                    onChange={(e) =>
-                                      updateProductAttributes(i, {
-                                        attribute_quantity: e.target.value,
-                                      })
-                                    }
-                                  />
-                                </td>
-                                <td>
-                                  <FileInput
-                                    onChange={(e) =>
-                                      updateProductAttributes(i, {
-                                        attrbute_image: e.target.files
-                                          ? e.target.files[0]
-                                          : null,
-                                      })
-                                    }
-                                  />
-                                </td>
-                                <td>
-                                  <div
-                                    className="delete"
-                                    onClick={() =>
-                                      handleRemoveAttribute(
-                                        att.attribute_key,
-                                        att.attribute_value
-                                      )
-                                    }
-                                  >
-                                    <RiDeleteBin6Line />
-                                  </div>
-                                </td>
-                              </tr>
-                            ))}
+                            {productAttributes?.map((att, i) => {
+                              if (att?.attribute_key != '')
+                                return <tr key={i}>
+                                  <td>{att?.attribute_key?.replace("_", " ")}</td>
+                                  <td>{att?.attribute_value}</td>
+                                  <td>
+                                    <Input
+                                      htmlFor="quantity"
+                                      type="number"
+                                      required
+                                      value={att.attribute_quantity == 0 ? '' : att.attribute_quantity}
+                                      onChange={(e) =>
+                                        updateProductAttributes(i, {
+                                          attribute_quantity: e.target.value,
+                                        })
+                                      }
+                                    />
+                                  </td>
+                                  <td>
+                                    <FileInput
+                                      onChange={(e) =>
+                                        updateProductAttributes(i, {
+                                          attrbute_image: e.target.files
+                                            ? e.target.files[0]
+                                            : null,
+                                        })
+                                      }
+                                    />
+                                  </td>
+                                  <td>
+                                    <div
+                                      className="delete"
+                                      onClick={() =>
+                                        handleRemoveAttribute(
+                                          i
+                                        )
+                                      }
+                                    >
+                                      <RiDeleteBin6Line />
+                                    </div>
+                                  </td>
+                                </tr>
+                            })}
                           </tbody>
                         </table>
                       </div>
@@ -675,17 +710,30 @@ const CreateProduct: React.FC = () => {
                     onBlur={(e) => setSortDesc(e.target.value)}
                     errorMessage={error?.sort_description}
                   />
+                  {
+                    isVariant ?
+                      <Input
+                        type="number"
+                        placeholder="Quantity"
+                        label="Quantity"
+                        htmlFor="Quantity"
+                        onBlur={(e) => setQuantity(Number(e.target.value))}
+                        value={quantity}
+                        required
+                        errorMessage={error?.quantity}
+                        readOnly
+                      /> : <Input
+                        type="number"
+                        placeholder="Quantity"
+                        label="Quantity"
+                        htmlFor="Quantity"
+                        onBlur={(e) => setQuantity(Number(e.target.value))}
+                        defaultValue="0"
+                        required
+                        errorMessage={error?.quantity}
+                      />
+                  }
 
-                  <Input
-                    type="number"
-                    placeholder="Quantity"
-                    label="Quantity"
-                    htmlFor="Quantity"
-                    onBlur={(e) => setQuantity(Number(e.target.value))}
-                    defaultValue="0"
-                    required
-                    errorMessage={error?.quantity}
-                  />
                 </div>
               </Display>
 

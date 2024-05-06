@@ -214,6 +214,7 @@ const UpdateProduct: React.FC = () => {
           exitItem.attribute_value === variant.attribute_value
       );
     });
+
     setAddVariants((prevAddVariants) => [...prevAddVariants, ...filteredItems]);
     setExitingVariants((prevAddVariants) => [
       ...prevAddVariants,
@@ -222,9 +223,11 @@ const UpdateProduct: React.FC = () => {
   };
 
   const handleRemoveAddVariant = (att: any) => {
+    console.log("variant",att)
     setAddVariants(
       addVariants.filter((v) => v.attribute_value !== att.attribute_value)
     );
+
     setExitingVariants(
       exitingVariants.filter((v) => v.attribute_value !== att.attribute_value)
     );
