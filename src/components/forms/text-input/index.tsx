@@ -18,6 +18,7 @@ interface IProps {
   onFocus?: () => void;
   autocomplete?: string;
   errorMessage?: string;
+  children?: any;
 }
 
 const Input: React.FC<IProps> = ({
@@ -37,6 +38,7 @@ const Input: React.FC<IProps> = ({
   min,
   max,
   errorMessage,
+  children
 }) => {
   return (
     <div className="text">
@@ -58,6 +60,7 @@ const Input: React.FC<IProps> = ({
         autoComplete={autocomplete}
       />
       {errorMessage && <p className="validation__error">{errorMessage}</p>}
+      {children ? children : null}
     </div>
   );
 };

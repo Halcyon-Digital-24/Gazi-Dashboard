@@ -2,6 +2,7 @@
 
 .text {
   margin-bottom: 15px;
+  position: relative;
   label {
     display: block;
     color: $secondary-color;
@@ -21,5 +22,10 @@
       border: 1px solid $primary-color;
       outline: none;
     }
+  }
+  .children{
+    position: absolute;
+    right:0;
+    bottom: 0;
   }
 }
