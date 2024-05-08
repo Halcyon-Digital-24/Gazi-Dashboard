@@ -81,6 +81,9 @@ export const allSidebarLinks = [
       {
         subtitle: "Custom Orders",
         slug: "/orders/custom",
+      },{
+        subtitle: "Custom Invoice",
+        slug: "/orders/custom-invoice",
       },
       {
         subtitle: "Pending Orders",

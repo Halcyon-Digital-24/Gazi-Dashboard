@@ -76,6 +76,7 @@ import {
   UpdateProfile,
   SettingPage,
 } from "./pages";
+import CustomInvoice from "./orders/custom-invoice";
 
 const routes = [
   { path: "/", element: <Home /> },
@@ -96,6 +97,7 @@ const routes = [
   { path: "/orders/delivered", element: <Delivered /> },
   { path: "/orders/canceled", element: <Canceled /> },
   { path: "/orders/custom", element: <CustomOrder /> },
+  { path: "/orders/custom-invoice", element: <CustomInvoice /> },
   { path: "/orders/views/:slug", element: <OrderView /> },
   { path: "/orders/edit/:slug", element: <UpdateOrder /> },
   { path: "/refund", element: <Warranty /> },
