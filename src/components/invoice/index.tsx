@@ -183,7 +183,7 @@ const Invoice = ({ order }: any) => {
           <th>Attribute</th>
           <th>Qty</th>
           <th>Unit price (BDT)</th>
-          <th>Total</th>
+          <th>Total (BDT)</th>
         </tr>
         {orderItems?.length > 0 &&
           orderItems?.map((product, index) => (
@@ -219,28 +219,41 @@ const Invoice = ({ order }: any) => {
           <td className="heading-title">Sub Total</td>
           <td>{` ${FormatPrice(amountBeforeCoupon)}`}</td>
         </tr>
-        <tr>
-          <td className="span-item" colSpan={4}></td>
-          <td className="heading-title">Delivery</td>
-          <td>{FormatPrice(order.delivery_fee)}</td>
-        </tr>
+
         <tr>
           <td className="span-item" colSpan={4}></td>
           <td className="heading-title">Discount</td>
-          <td>
+          <td>- 
             {FormatPrice(
               amountBeforeCoupon - totalPrice + order.custom_discount
             )}
           </td>
         </tr>
+
+        <tr>
+          <td className="span-item" colSpan={4}></td>
+          <td className="heading-title">After Discount</td>
+          <td>
+            {FormatPrice(
+              totalPrice - order.custom_discount
+            )}
+          </td>
+        </tr>
+
+        <tr>
+          <td className="span-item" colSpan={4}></td>
+          <td className="heading-title">Delivery Charge</td>
+          <td>{FormatPrice(order.delivery_fee)}</td>
+        </tr>
+
         <tr>
           <td className="span-item" colSpan={4}></td>
           <td className="heading-title">Advance</td>
-          <td>{FormatPrice(order.advance_payment ?? 0)}</td>
+          <td>- {FormatPrice(order.advance_payment ?? 0)}</td>
         </tr>
         <tr>
           <td className="span-item" colSpan={4}></td>
-          <td className="heading-title">Due Amount</td>
+          <td className="text-bold">Due Amount</td>
           <td>
             {FormatPrice(
               totalPrice + order.delivery_fee -
