@@ -63,6 +63,21 @@
           margin-bottom: 5px;
           text-transform: capitalize;
         }
+        .invoice-no{
+          padding-top: 5px;
+          input{
+            border: 1px solid #ddd;
+            background: #ffffff21;
+            padding-left: .5rem;
+            padding-top: 2px;
+            width: 100px;
+            &:focus{
+              outline: none;
+              border: 1px solid #bbb;
+
+            }
+          }
+        }
       }
 
       .right {

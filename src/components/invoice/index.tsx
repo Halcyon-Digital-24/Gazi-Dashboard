@@ -6,6 +6,7 @@ import FormatPrice from "../../utills/formatePrice";
 
 const Invoice = ({ order }: any) => {
   const [totalPrice, setTotalPrice] = useState(0);
+  const[invoiceNo,setInvoiceNo]=useState<any>()
   const [orderItems, setOrderItems] = useState<any[]>(
     order?.orderItems?.length > 0 ? order?.orderItems : []
   );
@@ -122,6 +123,17 @@ const Invoice = ({ order }: any) => {
         <h4 className="customer-details">Customer Details</h4>
         <div className="details">
           <div className="left">
+            <p className="invoice-no">
+              <span className="invoice-title">Invoice No.:</span>{" "}
+              <input
+                type="text"
+                name="invoice_no"
+                placeholder=""
+                defaultValue={1}
+                onChange={(e)=>setInvoiceNo(e?.target?.value)}
+
+              />
+            </p>
             <p>
               <span className="invoice-title">Invoice:</span>{" "}
               {order.order_prefix}-{order.id}
@@ -223,7 +235,7 @@ const Invoice = ({ order }: any) => {
         <tr>
           <td className="span-item" colSpan={4}></td>
           <td className="heading-title">Discount</td>
-          <td>- 
+          <td>-
             {FormatPrice(
               amountBeforeCoupon - totalPrice + order.custom_discount
             )}
