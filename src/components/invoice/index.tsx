@@ -11,7 +11,6 @@ const Invoice = ({ order }: any) => {
   );
   const advancePayment = order.advance_payment ?? 0;
   const [amountBeforeCoupon, setAmountBeforeCoupon] = useState<number>(0);
-
   useEffect(() => {
     if (order?.coupon) {
       if (order?.coupon?.discount_type === "flat") {
@@ -64,7 +63,6 @@ const Invoice = ({ order }: any) => {
             return item;
           });
         } else {
-          console.log("tempDisCart ", tempDisCart)
           tempDisCart = tempDisCart?.map((item: any) => {
             return {
               ...item,
@@ -74,7 +72,6 @@ const Invoice = ({ order }: any) => {
             };
           });
         }
-        console.log("tempDisCart ", tempDisCart);
         setOrderItems(tempDisCart);
       }
     }
@@ -99,9 +96,9 @@ const Invoice = ({ order }: any) => {
       } else {
         let finalPrice = 0;
         orderItems?.map((item: any) => {
-          finalPrice +=(item?.discount_price
+          finalPrice += (item?.discount_price
             ? item?.discount_price
-            : item?.regular_price )* item?.quantity;
+            : item?.regular_price) * item?.quantity;
         });
         setTotalPrice(finalPrice);
       }
@@ -111,7 +108,7 @@ const Invoice = ({ order }: any) => {
   useEffect(() => {
     setOrderItems(order.orderItems);
   }, [order]);
-  console.log(totalPrice);
+
   return (
     <div className="invoice">
       <div className="invoice-header">
@@ -157,7 +154,7 @@ const Invoice = ({ order }: any) => {
             <p>
               <span className="invoice-title"> Total Order Amount : </span>{" "}
               {(Number(totalPrice) + Number(order.delivery_fee)) - Number(order.custom_discount)}
-            </p>                
+            </p>
             <p>
               <span className="invoice-title"> Shipping Method: </span>{" "}
               {order?.delivery_method === "homeDelivery"
@@ -196,13 +193,20 @@ const Invoice = ({ order }: any) => {
               <td>
                 {/* Attribute */}
                 {product.product_attribute
-                  ? JSON.parse(product.product_attribute).map(
-                      (v: any, i: number) => (
-                        <span className="variant" key={i}>
-                          {`${i ? "," : ""}${v.attribute_name}`}
-                        </span>
-                      )
-                    )
+                  ? <>
+                    {
+                      product.product_attribute.charAt(0) == '[' ?  //need to modify
+                        JSON.parse(product.product_attribute).map(
+                          (v: any, i: number) => (
+                            <span className="variant" key={i}>
+                              {`${i ? "," : ""}${v.attribute_name}`}
+                            </span>
+                          )
+                        )
+                        : product.product_attribute
+
+                    }
+                  </>
                   : "-"}
               </td>
               <td> {product.quantity}</td>
@@ -240,8 +244,8 @@ const Invoice = ({ order }: any) => {
           <td>
             {FormatPrice(
               totalPrice + order.delivery_fee -
-                order.custom_discount -
-                advancePayment
+              order.custom_discount -
+              advancePayment
             )}
           </td>
         </tr>

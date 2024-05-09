@@ -132,7 +132,6 @@ const SingleItem: FC<IProps> = ({
       }
     }
   }, [order, orderItems]);
-
   return (
     <>
       <Row className="row">

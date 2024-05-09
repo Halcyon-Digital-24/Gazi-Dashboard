@@ -59,12 +59,7 @@ const CustomInvoice = () => {
       toast.error("Please select product");
     } else {
       try {
-        console.log('data', {
-          ...data, orderItem: productArray,
-          delivery_fee: shipping,
-          advance_payment: advancedPayment,
-          custom_discount: discount,
-        })
+        
 
         let temp = [...productArray];
         for (let i = 0; i < temp.length; i++) {
@@ -79,13 +74,10 @@ const CustomInvoice = () => {
           custom_discount: discount
 
         })
-        console.log('resp', response)
         toast.success(response.data.message);
-        // navigate("/orders");
-        window.location.reload();
+        navigate("/orders");
       } catch (error) {
         toast.error(error?.response?.data?.message);
-        console.log(error);
       }
     }
   };
