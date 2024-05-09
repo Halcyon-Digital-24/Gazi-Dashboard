@@ -6,7 +6,6 @@ import FormatPrice from "../../utills/formatePrice";
 
 const Invoice = ({ order }: any) => {
   const [totalPrice, setTotalPrice] = useState(0);
-  const[invoiceNo,setInvoiceNo]=useState<any>()
   const [orderItems, setOrderItems] = useState<any[]>(
     order?.orderItems?.length > 0 ? order?.orderItems : []
   );
@@ -123,17 +122,6 @@ const Invoice = ({ order }: any) => {
         <h4 className="customer-details">Customer Details</h4>
         <div className="details">
           <div className="left">
-            <p className="invoice-no">
-              <span className="invoice-title">Invoice No.:</span>{" "}
-              <input
-                type="text"
-                name="invoice_no"
-                placeholder=""
-                defaultValue={1}
-                onChange={(e)=>setInvoiceNo(e?.target?.value)}
-
-              />
-            </p>
             <p>
               <span className="invoice-title">Invoice:</span>{" "}
               {order.order_prefix}-{order.id}
@@ -167,12 +155,12 @@ const Invoice = ({ order }: any) => {
               <span className="invoice-title"> Total Order Amount : </span>{" "}
               {(Number(totalPrice) + Number(order.delivery_fee)) - Number(order.custom_discount)}
             </p>
-            <p>
+            {/* <p>
               <span className="invoice-title"> Shipping Method: </span>{" "}
               {order?.delivery_method === "homeDelivery"
                 ? "Free Delivery"
                 : "Express Delivery"}
-            </p>
+            </p> */}
             <p>
               <span className="invoice-title"> Payment Method: </span>{" "}
               {order?.payment_method === "cod"
@@ -200,9 +188,9 @@ const Invoice = ({ order }: any) => {
         {orderItems?.length > 0 &&
           orderItems?.map((product, index) => (
             <tr key={index} className="order-item">
-              <td>{index + 1}</td>
-              <td>{product.product_name}</td>
-              <td>
+              <td style={{ width: '3%' }}>{index + 1}</td>
+              <td style={{ width: '45%' }}>{product.product_name}</td>
+              <td style={{ width: '10%' }}>
                 {/* Attribute */}
                 {product.product_attribute
                   ? <>
@@ -221,9 +209,9 @@ const Invoice = ({ order }: any) => {
                   </>
                   : "-"}
               </td>
-              <td> {product.quantity}</td>
-              <td> {FormatPrice(product.regular_price)}</td>
-              <td>{product.regular_price * product.quantity}</td>
+              <td style={{ width: '7%' }}> {product.quantity}</td>
+              <td style={{ width: '22%' }}> {FormatPrice(product.regular_price)}</td>
+              <td style={{ width: '12%' }}>{product.regular_price * product.quantity}</td>
             </tr>
           ))}
         <tr>
@@ -274,6 +262,20 @@ const Invoice = ({ order }: any) => {
             )}
           </td>
         </tr>
+        <div className="payment-status">
+          {
+            order?.payment_status == 'Unpaid' ?
+              <div>Unpaid</div> :
+              <div className="img-sec">
+                <img src="/assets/invoice/paid.png" alt="invoice" />
+
+              </div>
+          }
+          <span>
+            {order?.note}
+          </span>
+
+        </div>
       </table>
       {/* .... */}
       <div className="invoice-table">
@@ -299,6 +301,16 @@ const Invoice = ({ order }: any) => {
               </p>
             </div>
           </Column>
+        </div>
+      </div>
+
+      <div className="invoice-footer">
+        <div className="title">
+          {order.order_prefix === "GHA" ? (
+            <img src="/assets/invoice/home-footer.png" alt="invoice" />
+          ) : (
+            <img src="/assets/invoice/pump-footer.png" alt="invoice" />
+          )}
         </div>
       </div>
     </div>

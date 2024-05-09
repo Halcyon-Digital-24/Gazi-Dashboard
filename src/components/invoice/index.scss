@@ -63,21 +63,6 @@
           margin-bottom: 5px;
           text-transform: capitalize;
         }
-        .invoice-no{
-          padding-top: 5px;
-          input{
-            border: 1px solid #ddd;
-            background: #ffffff21;
-            padding-left: .5rem;
-            padding-top: 2px;
-            width: 100px;
-            &:focus{
-              outline: none;
-              border: 1px solid #bbb;
-
-            }
-          }
-        }
       }
 
       .right {
@@ -102,6 +87,7 @@
     }
   }
   .invoice-details-table {
+    position: relative;
     border-collapse: collapse;
     width: 100%;
     font-size: 13px;
@@ -123,6 +109,19 @@
     .order-item {
       td {
         height: 40px;
+      }
+    }
+    .payment-status{
+      position: absolute;
+      bottom: .5rem;
+      left: 2rem;
+      .img-sec{
+        img{
+          width: 120px;
+          height: 120px;
+          max-width: 100%;
+          max-height: 100%;
+        }
       }
     }
   }

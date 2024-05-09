@@ -31,6 +31,7 @@ const CustomInvoice = () => {
 
   const {
     register,
+    watch,
     handleSubmit,
     formState: { errors },
   } = useForm({
@@ -52,30 +53,39 @@ const CustomInvoice = () => {
       accumulator + currentValue.price * currentValue.quantity,
     0
   );
-
+  useEffect(() => {
+    console.log('watch',watch('order_prefix'))
+  }, [watch('order_prefix')])
 
   const onSubmit = async (data) => {
+    console.log(data)
     if (productArray.length <= 0) {
       toast.error("Please select product");
     } else {
       try {
-        
+
 
         let temp = [...productArray];
         for (let i = 0; i < temp.length; i++) {
           temp[i].product_id = i + 1;
         }
-
-        const response = await axios.post(`${API_URL}/invoices`, {
-          ...data,
+        console.log('aaaaa',{...data,
+          invoice_no: data?.order_prefix+'-'+data.invoice_no,
           orderItem: temp,
           delivery_fee: shipping,
           advance_payment: advancedPayment,
-          custom_discount: discount
+          custom_discount: discount})
 
-        })
-        toast.success(response.data.message);
-        navigate("/orders");
+        // const response = await axios.post(`${API_URL}/invoices`, {
+        //   ...data,
+        //   orderItem: temp,
+        //   delivery_fee: shipping,
+        //   advance_payment: advancedPayment,
+        //   custom_discount: discount
+
+        // })
+        // toast.success(response.data.message);
+        // navigate("/orders");
       } catch (error) {
         toast.error(error?.response?.data?.message);
       }
@@ -99,7 +109,7 @@ const CustomInvoice = () => {
     };
   }, [isFocus]);
 
-
+console.log('productArray',productArray)
   const addNewLine = () => {
     let temp = [...productArray]
     temp.push({
@@ -125,7 +135,6 @@ const CustomInvoice = () => {
     setProductArray(tempProducts)
   }
 
-
   return (
     <div>
       <CardBody header="Custom Invoice" to="/orders" text="Back" />
@@ -134,11 +143,13 @@ const CustomInvoice = () => {
           <form onSubmit={handleSubmit(onSubmit)}>
             <div className="row">
               <div className="col-md-5 custom-item">
+
                 <div className="text">
                   <label htmlFor="name">Customer Name *</label>
                   <input
                     type="text"
                     name="name"
+                    required
                     placeholder="Customer Name"
                     {...register("name", {
                       trim: true,
@@ -169,9 +180,11 @@ const CustomInvoice = () => {
                 </div>
 
                 <div className="text">
-                  <label htmlFor="name">Customer Mobile</label>
+                  <label htmlFor="name">Customer Mobile *</label>
                   <input
                     type="text"
+                    required
+
                     placeholder="Mobile"
                     {...register("mobile", {
                       trim: true,
@@ -189,10 +202,12 @@ const CustomInvoice = () => {
                 </div>
 
                 <div className="text">
-                  <label htmlFor="name">Address</label>
+                  <label htmlFor="name">Address *</label>
                   <input
                     type="text"
                     placeholder="Address"
+                    required
+
                     {...register("address", {
                       trim: true,
                       required: "Address is required",
@@ -210,8 +225,9 @@ const CustomInvoice = () => {
                 </div>
 
                 <div className="text">
-                  <label htmlFor="name">City</label>
+                  <label htmlFor="name">City *</label>
                   <input
+                    required
                     type="text"
                     placeholder="City"
                     {...register("city", {
@@ -226,24 +242,42 @@ const CustomInvoice = () => {
                     <p className="validation__error">{errors.city?.message}</p>
                   )}
                 </div>
+                <div className="text">
+                  <label htmlFor="note">Notes *</label>
+                  <input
+                    type="text"
+                    required
+                    placeholder="Note"
+                    {...register("note", {
+                      trim: true,
+
+                    })}
+                  />
+                  {errors.city && (
+                    <p className="validation__error">{errors.city?.message}</p>
+                  )}
+                </div>
 
               </div>
               <div className="col-md-4 custom-item">
                 <Input
                   type="number"
+                  required
                   htmlFor="shipping"
-                  placeholder="Shipping"
-                  label="Shipping Price"
+                  placeholder="Delivery Charges"
+                  label="Delivery Charges"
                   onChange={(e) => setShipping(Number(e.target.value))}
                 />
                 <Input
                   type="number"
+                  required
                   htmlFor="discount"
                   placeholder="Discount Price"
                   label="Discount Price"
                   onChange={(e) => setDiscount(Number(e.target.value))}
                 />
                 <Input
+                  required
                   type="number"
                   htmlFor="advanced_payment"
                   placeholder="Advanced payment"
@@ -253,7 +287,7 @@ const CustomInvoice = () => {
 
                 <>
                   <label className="label" htmlFor="select">
-                    Invoice Prefix
+                    Invoice Prefix *
                   </label>
                   <div className="select-wrapper">
                     <select
@@ -275,9 +309,30 @@ const CustomInvoice = () => {
                     </p>
                   )}
                 </>
+                <div className="text invoice-no">
+                  <label htmlFor="name">Invoice No. *</label>
+                  <input
+                    type="text"
+                    name="invoice_no"
+                    placeholder="Invoice No"
+                    {...register("invoice_no", {
+                      trim: true,
+                    })}
+                  />
+                  {errors.invoice_no && (
+                    <p className="validation__error">{errors.name.message}</p>
+                  )}
+                  {
+                    watch('order_prefix')=='GPHA'?
+                    <span className="prefix">GPHA</span>
+                    :watch('order_prefix')=='GHA'?
+                    <span className="prefix">GHA</span>
+                    :<span className="prefix">-</span>
+                  }
+                </div>
                 <>
                   <label className="label" htmlFor="select">
-                    Payment Status
+                    Payment Status *
                   </label>
                   <div className="select-wrapper">
                     <select
@@ -300,7 +355,7 @@ const CustomInvoice = () => {
                 </>
                 <>
                   <label className="label" htmlFor="select">
-                    Payment Method
+                    Payment Method *
                   </label>
                   <div className="select-wrapper">
                     <select
