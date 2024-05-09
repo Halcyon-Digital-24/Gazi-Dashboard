@@ -399,12 +399,6 @@ const CreateProduct: React.FC = () => {
     };
   }, [dispatch]);
 
-
-  const getQuantity = () => {
-    productAttributes?.map((item) => console.log('item',item))
-    return 0;
-  }
-
   return (
     <div className="create-product">
       <CardBody header="Create Product" to="/products" text="back" />
