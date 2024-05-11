@@ -124,7 +124,7 @@ const Invoice = ({ order }: any) => {
           <div className="left">
             <p>
               <span className="invoice-title">Invoice:</span>{" "}
-              {order.order_prefix}-{order.id}
+              {order.order_prefix}-{order?.invoice_no || order.id}
             </p>
             <p>
               {" "}
@@ -264,16 +264,20 @@ const Invoice = ({ order }: any) => {
         </tr>
         <div className="payment-status">
           {
-            order?.payment_status == 'Unpaid' ?
+            order?.payment_status == 'Unpaid' || order?.payment_status == "unpaid" ?
               <div>Unpaid</div> :
               <div className="img-sec">
                 <img src="/assets/invoice/paid.png" alt="invoice" />
 
               </div>
           }
-          <span>
-            {order?.note}
-          </span>
+          {
+            order?.payment_status == 'Paid' || order?.payment_status == "paid" ?
+              <span>
+                {order?.note}
+              </span> : ''
+          }
+
 
         </div>
       </table>

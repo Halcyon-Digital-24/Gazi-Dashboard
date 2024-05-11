@@ -48,13 +48,13 @@ const CustomInvoice = () => {
     },
   });
 
-  const final_price = cartItems.reduce(
+  const final_price = productArray.reduce(
     (accumulator, currentValue) =>
-      accumulator + currentValue.price * currentValue.quantity,
+      accumulator + currentValue.regular_price * currentValue.quantity,
     0
   );
   useEffect(() => {
-    console.log('watch',watch('order_prefix'))
+    console.log('watch', watch('order_prefix'))
   }, [watch('order_prefix')])
 
   const onSubmit = async (data) => {
@@ -69,23 +69,17 @@ const CustomInvoice = () => {
         for (let i = 0; i < temp.length; i++) {
           temp[i].product_id = i + 1;
         }
-        console.log('aaaaa',{...data,
-          invoice_no: data?.order_prefix+'-'+data.invoice_no,
+
+        const response = await axios.post(`${API_URL}/invoices`, {
+          ...data,
           orderItem: temp,
           delivery_fee: shipping,
           advance_payment: advancedPayment,
-          custom_discount: discount})
+          custom_discount: discount
 
-        // const response = await axios.post(`${API_URL}/invoices`, {
-        //   ...data,
-        //   orderItem: temp,
-        //   delivery_fee: shipping,
-        //   advance_payment: advancedPayment,
-        //   custom_discount: discount
-
-        // })
-        // toast.success(response.data.message);
-        // navigate("/orders");
+        })
+        toast.success(response.data.message);
+        navigate("/orders");
       } catch (error) {
         toast.error(error?.response?.data?.message);
       }
@@ -109,7 +103,7 @@ const CustomInvoice = () => {
     };
   }, [isFocus]);
 
-console.log('productArray',productArray)
+  console.log('productArray', productArray)
   const addNewLine = () => {
     let temp = [...productArray]
     temp.push({
@@ -323,11 +317,11 @@ console.log('productArray',productArray)
                     <p className="validation__error">{errors.name.message}</p>
                   )}
                   {
-                    watch('order_prefix')=='GPHA'?
-                    <span className="prefix">GPHA</span>
-                    :watch('order_prefix')=='GHA'?
-                    <span className="prefix">GHA</span>
-                    :<span className="prefix">-</span>
+                    watch('order_prefix') == 'GPHA' ?
+                      <span className="prefix">GPHA</span>
+                      : watch('order_prefix') == 'GHA' ?
+                        <span className="prefix">GHA</span>
+                        : <span className="prefix">-</span>
                   }
                 </div>
                 <>
