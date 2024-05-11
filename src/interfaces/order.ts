@@ -36,6 +36,7 @@ export interface IOrder {
   total_item: number;
   custom_discount: number;
   coupon: any;
+  invoice_no?:any;
 }
 
 export type ISingleOrder = {

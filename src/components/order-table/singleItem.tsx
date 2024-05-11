@@ -152,7 +152,7 @@ const SingleItem: FC<IProps> = ({
           <div className="sudo">{order.id}</div>
         </Column>
         <Column className="col-md-1">
-          {order.order_prefix} - {order.id}
+          {order.order_prefix} - {order?.invoice_no || order.id}
         </Column>
         <Column className="col-md-1">
           {(Number(totalPrice) + Number(order.delivery_fee)) - Number(order.custom_discount)}
