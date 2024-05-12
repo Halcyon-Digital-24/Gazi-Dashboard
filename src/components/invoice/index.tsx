@@ -264,12 +264,12 @@ const Invoice = ({ order }: any) => {
         </tr>
         <div className="payment-status">
           {
-            order?.payment_status == 'Unpaid' || order?.payment_status == "unpaid" ?
-              <div>Unpaid</div> :
+            order?.payment_status == 'paid' || order?.payment_status == "Paid" ?
+              
               <div className="img-sec">
                 <img src="/assets/invoice/paid.png" alt="invoice" />
 
-              </div>
+              </div>:''
           }
           {
             order?.payment_status == 'Paid' || order?.payment_status == "paid" ?

@@ -415,7 +415,7 @@ const CustomInvoice = () => {
                           <div style={{ width: "24%", marginRight: '2%' }}>
                             <Input
                               htmlFor="product_attribute"
-                              placeholder="Product Attributes"
+                              placeholder="Attributes"
                               // label="Product Attributes"
                               value={item?.product_attribute}
 
@@ -428,7 +428,7 @@ const CustomInvoice = () => {
                               required
 
                               htmlFor="quantity"
-                              placeholder="Product Quantity"
+                              placeholder="Quantity"
                               value={item?.quantity}
                               // label="Product Quantity"
                               onChange={(e) => onChangeProduct(e.target.value, index, "quantity")}
@@ -440,7 +440,7 @@ const CustomInvoice = () => {
                               required
 
                               htmlFor="regular_price"
-                              placeholder="Product Price"
+                              placeholder="Price"
                               // label="Product Price"
                               value={item?.regular_price}
 
