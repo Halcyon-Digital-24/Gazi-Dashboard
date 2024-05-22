@@ -111,6 +111,8 @@ const Invoice = ({ order }: any) => {
 
   return (
     <div className="invoice">
+      <div className="invoice-body">
+
       <div className="invoice-header">
         <div className="title">
           {order.order_prefix === "GHA" ? (
@@ -306,6 +308,7 @@ const Invoice = ({ order }: any) => {
             </div>
           </Column>
         </div>
+      </div>
       </div>
 
       <div className="invoice-footer">

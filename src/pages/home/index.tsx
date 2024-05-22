@@ -4,6 +4,7 @@ import "./index.scss";
 import { API_URL } from "../../constants";
 import axios from "../../lib";
 import { Link } from "react-router-dom";
+import TextEditor from "../../components/forms/text-editor";
 
 /* interface IData {
   name: string;
@@ -60,6 +61,8 @@ const data: IData[] = [
 const HomePage: React.FC = () => {
   const [data, setData] = useState<any>({});
   const [loading, setLoading] = useState(true);
+  const [editorData, setEditorData] = useState<any>('')
+
   /* const [activeIndex, setActiveIndex] = useState(0);
   const activeItem = data[activeIndex];
 
@@ -185,6 +188,13 @@ const HomePage: React.FC = () => {
     userPermissions?.includes(item.role_identity)
   );
 
+  const handleChange = (data: any) => {
+    setEditorData(data)
+   let view:any =  document.getElementById('view-html')
+   if(view) view.innerHTML =data
+   view.in
+  }
+
   return (
     <div className="">
       <div className="row">
@@ -204,6 +214,16 @@ const HomePage: React.FC = () => {
           </div>
         ))}
       </div>
+
+<div style={{display:'none'}}>
+  
+<div className="row mt5 mb-5">
+        <TextEditor onChangeFunction={handleChange} editroText={editorData} />
+      </div>
+      <div className="row mt5 mb-5">
+        <div id="view-html" ></div>
+      </div>
+</div>
     </div>
   );
 };

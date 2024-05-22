@@ -60,8 +60,6 @@ const UpdateRole = () => {
     const fetchData = async () => {
       try {
         const { data } = await axios.get(`/roles/${slug}`);
-        console.log(data);
-        setValue("name", data.data[0].name);
         setPermissions(JSON.parse(data.data[0].permissions));
       } catch (error) {
         console.log("role data fetch error" + error);

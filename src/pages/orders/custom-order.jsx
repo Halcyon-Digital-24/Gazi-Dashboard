@@ -358,7 +358,7 @@ const CustomOrder = () => {
                   )}
                 </>
                 {/* <Input htmlFor="variant" placeholder="variant" /> */}
-                <div className="product-area" ref={productAreaRef}>
+                <div className="product-area" ref={productAreaRef}> 
                   <Input
                     htmlFor="search"
                     placeholder="Search Product"

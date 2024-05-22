@@ -4,7 +4,13 @@ import Input from "../../components/forms/text-input";
 import Display from "../../components/display";
 import "./custom-order.scss";
 import { useEffect, useRef, useState } from "react";
-import { getProducts, reset } from "../../redux/products/product-slice";
+import { getProducts, reset } from "../../redux/products/product-slice";import {
+  addToCart,
+  clearCart,
+  decrementQuantity,
+  incrementQuantity,
+  removeFromCart,
+} from "../../redux/cart/cartSlice";
 import { useAppDispatch, useAppSelector } from "../../redux/hooks";
 import axios from "../../lib";
 import { API_URL } from "../../constants";
@@ -16,10 +22,13 @@ import { useNavigate, useParams } from "react-router-dom";
 import Column from "../../components/table/column";
 import { useForm } from "react-hook-form";
 import FormatPrice from "../../utills/formatePrice";
+import { FaCheck } from "react-icons/fa";
 
 const UpdateOrder = () => {
   const { slug } = useParams();
   const { products } = useAppSelector((state) => state.product);
+  const { cart: cartItems } = useAppSelector((state) => state.cart);
+
   const navigate = useNavigate();
   const [order, setOrder] = useState("");
   const [customDiscount, setCustomDiscount] = useState(0);
@@ -30,6 +39,8 @@ const UpdateOrder = () => {
   const [loading, setLoading] = useState(false);
   const [amountBeforeCoupon, setAmountBeforeCoupon] = useState(0);
   const [totalPrice, setTotalPrice] = useState(0);
+  const [selectedAttributes, setSelectedAttributes] = useState([]);
+
 
   const { name, email, mobile, address, city, orderItems, delivery_fee } =
     order;
@@ -190,6 +201,42 @@ const UpdateOrder = () => {
   useEffect(() => {
     setValue("custom_discount", customDiscount);
   }, [customDiscount]);
+
+  const handleChangeAttribute = (product) => {
+
+    if (product.default_quantity <= 0) {
+      return toast.error("Stock out");
+    }
+    if (
+      product["product-attributes"] &&
+      product["product-attributes"].length > 0 &&
+      selectedAttributes.length < 1
+    ) {
+      toast.error("Please Select Variant");
+      return;
+    }
+    if (
+      product.availability === 1 &&
+      product.default_quantity > 0
+    ) {
+      dispatch(
+        addToCart({
+          product_id: product?.id,
+          price:
+            (Number(product.discount_price) !== 0 || Number(product.discount_price) != undefined)
+              ? Number(product.discount_price)
+              : Number(product.regular_price),
+          title: product.title,
+          quantity: 1,
+          attribute: selectedAttributes,
+        })
+      );
+      setSelectedAttributes([]);
+    } else {
+      toast.error("Product  not in stock");
+    }
+  }
+
 
   return (
     <div>
@@ -388,7 +435,7 @@ const UpdateOrder = () => {
                         )}
                       </div>
                     </div>
-                    <div className="order-details right">
+                    {/* <div className="order-details right">
                       <div className="product-area" ref={productAreaRef}>
                         <Input
                           label="Search"
@@ -413,6 +460,149 @@ const UpdateOrder = () => {
                           </div>
                         )}
                       </div>
+                    </div> */}
+                    <div className="product-area" ref={productAreaRef}>
+                      <Input
+                        htmlFor="search"
+                        placeholder="Search Product"
+                        label="Search Product"
+                        onChange={(e) => setSearch(e.target.value)}
+                        // onBlur={() => setIsFocus(false)}
+                        autocomplete="off"
+                        onFocus={() => setIsFocus(true)}
+                      />
+                      {isFocus && (
+                        <div className="select-product">
+                          <ul>
+                            {products.map((product, i) => {
+                              return (
+                                <li key={i}>
+                                  <div
+                                    className={`wrapper ${product.availability === 1 &&
+                                        product.default_quantity > 0 &&
+                                        product.is_visible !== 0
+                                        ? "instock"
+                                        : "stockout"
+                                      }`}
+                                    onClick={() => handleChangeAttribute(product)}
+                                  >
+                                    <span>{product.title}</span>
+                                    {cartItems.some(
+                                      (p) => p.product_id === product.id
+                                    ) && (
+                                        <span>
+                                          <FaCheck />
+                                        </span>
+                                      )}
+                                  </div>
+
+                                  {product["product-attributes"] &&
+                                    product["product-attributes"].length > 0 && (
+                                      <div className="variant py-2">
+                                        <>
+                                          {(() => {
+                                            let uniqueAttributes = {}; // Initialize uniqueAttributes as an object
+
+                                            product["product-attributes"]?.forEach(
+                                              (attr) => {
+                                                if (
+                                                  !uniqueAttributes[
+                                                  attr.attribute_key
+                                                  ]
+                                                ) {
+                                                  uniqueAttributes[
+                                                    attr.attribute_key
+                                                  ] = [];
+                                                }
+                                                uniqueAttributes[
+                                                  attr.attribute_key
+                                                ].push(attr.attribute_value);
+                                              }
+                                            );
+
+                                            return Object.keys(
+                                              uniqueAttributes
+                                            ).map((key, i) => (
+                                              <div key={i}>
+                                                <div className="attribute-wrapper">
+                                                  {uniqueAttributes[key].map(
+                                                    (value, j) => {
+                                                      const findAttribute = product[
+                                                        "product-attributes"
+                                                      ]?.find(
+                                                        (att) =>
+                                                          att.attribute_key ===
+                                                          key &&
+                                                          att.attribute_value ===
+                                                          value
+                                                      );
+
+                                                      return (
+                                                        <>
+                                                          <div
+                                                            key={j}
+                                                            className={`attribute-item ${selectedAttributes.find(
+                                                              (item) =>
+                                                                item.attribute_id ===
+                                                                findAttribute?.id
+                                                            )
+                                                                ? "selected"
+                                                                : ""
+                                                              }`}
+                                                            onClick={() => {
+                                                              handleAttributeClick(
+                                                                findAttribute
+                                                              );
+                                                            }}
+                                                          >
+                                                            {value}
+                                                          </div>
+                                                        </>
+                                                      );
+                                                    }
+                                                  )}
+                                                </div>
+                                              </div>
+                                            ));
+                                          })()}
+                                        </>
+                                      </div>
+                                    )}
+                                </li>
+                              );
+                            })}
+                          </ul>
+                        </div>
+                      )}
+                      {cartItems.map((cart, i) => (
+                        <div key={i} className="row order-item">
+                          <div className="col-md-6">
+                            <p className="title">{cart.title}</p>
+                          </div>
+                          <div className="col-md-2 price">
+                            <p>{cart.price}</p>
+                          </div>
+                          <div className="col-md-3">
+                            <div className="qnty">
+                              <FiPlus
+                                className="plus"
+                                onClick={() => dispatch(incrementQuantity(cart))}
+                              />
+                              <p>{cart.quantity}</p>
+                              <LuMinus
+                                className="minus"
+                                onClick={() => dispatch(decrementQuantity(cart))}
+                              />
+                            </div>
+                          </div>
+                          <div className="col-md-1">
+                            <RxCross2
+                              className="cross"
+                              onClick={() => dispatch(removeFromCart(cart))}
+                            />
+                          </div>
+                        </div>
+                      ))}
                     </div>
                   </div>
                 </div>
@@ -468,11 +658,11 @@ const UpdateOrder = () => {
                     <tr>
                       <td className="span-item" colSpan={3}></td>
                       <td className="heading-title">Discount</td>
-                      <td>- 
+                      <td>-
                         {FormatPrice(
                           amountBeforeCoupon -
-                            totalPrice +
-                            order.custom_discount
+                          totalPrice +
+                          order.custom_discount
                         )}
                       </td>
                     </tr>
@@ -500,9 +690,9 @@ const UpdateOrder = () => {
                       <td>
                         {FormatPrice(
                           totalPrice +
-                            order.delivery_fee -
-                            order.custom_discount -
-                            order.advance_payment ?? 0
+                          order.delivery_fee -
+                          order.custom_discount -
+                          order.advance_payment ?? 0
                         )}
                       </td>
                     </tr>
