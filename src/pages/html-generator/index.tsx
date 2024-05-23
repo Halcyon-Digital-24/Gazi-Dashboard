@@ -37,7 +37,13 @@ const HtmlGenerator = () => {
                     <Button onClick={previewData}>Preview</Button>
                     <Button onClick={() => navigator.clipboard.writeText(data || '')}>Copy</Button>
                 </div>
-                <div id="view-html" ></div>
+                {
+                    isShow&&data ?
+                        <div
+                            dangerouslySetInnerHTML={{ __html: data }}
+                        /> : ''
+                }
+
             </Display>
 
         </section>
