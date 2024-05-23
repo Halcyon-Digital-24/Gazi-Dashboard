@@ -178,6 +178,14 @@ const HomePage: React.FC = () => {
       value: data.prendingRefund,
       role_identity: "refund",
     },
+    
+    {
+      to: "/html-generator",
+      imageSrc: "/assets/images/html.png",
+      title: "HTML Generator",
+      value: '',
+      role_identity: "html-generator",
+    },
   ];
 
   // Filter items based on user permissions
@@ -185,14 +193,16 @@ const HomePage: React.FC = () => {
     localStorage.getItem("user") || ""
   ).permissions;
   const filteredItems = items.filter((item) =>
-    userPermissions?.includes(item.role_identity)
+    userPermissions?.includes(item.role_identity)||
+  item.role_identity?.includes('html-generator')
+
   );
 
   const handleChange = (data: any) => {
     setEditorData(data)
    let view:any =  document.getElementById('view-html')
    if(view) view.innerHTML =data
-   view.in
+   
   }
 
   return (
@@ -202,12 +212,15 @@ const HomePage: React.FC = () => {
           <div className="col-md-3" key={index}>
             <Link to={item.to}>
               <div className="chart-card">
-                <div className="img">
+                <div className={"img "+item.role_identity?.includes('html-generator')?'img-lg':''}>
                   <img src={item.imageSrc} alt="cart" />
                 </div>
                 <div className="info">
                   <h5>{item.title}</h5>
-                  <h3>{item.value}</h3>
+                  {
+                    item?.value!=''?
+                    <h3>{item.value}</h3>:''
+                  }
                 </div>
               </div>
             </Link>

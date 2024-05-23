@@ -75,6 +75,7 @@ import {
   UpdateRole,
   UpdateProfile,
   SettingPage,
+  HtmlGenerator
 } from "./pages";
 import CustomInvoice from "./orders/custom-invoice";
 
@@ -154,6 +155,7 @@ const routes = [
   { path: "/roles/create", element: <CreateRole /> },
   { path: "/roles/edit/:slug", element: <UpdateRole /> },
   { path: "/manage-settings", element: <SettingPage /> },
+  { path: "/html-generator", element: <HtmlGenerator /> },
   { path: "*", element: <Error /> }, // 404 Page
 ];
 

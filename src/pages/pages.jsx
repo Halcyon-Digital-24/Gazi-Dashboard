@@ -78,6 +78,8 @@ import CreateRole from "./roles/create";
 import UpdateRole from "./roles/update";
 import UpdateProfile from "./staff/update";
 import SettingPage from "./setting";
+import HtmlGenerator from "./html-generator";
+
 
 export {
   AllOrders,
@@ -156,4 +158,5 @@ export {
   UpdateRole,
   UpdateProfile,
   SettingPage,
+  HtmlGenerator
 };
