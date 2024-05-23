@@ -237,10 +237,9 @@ const CustomInvoice = () => {
                   )}
                 </div>
                 <div className="text">
-                  <label htmlFor="note">Notes *</label>
+                  <label htmlFor="note">Notes</label>
                   <input
                     type="text"
-                    required
                     placeholder="Note"
                     {...register("note", {
                       trim: true,
@@ -385,8 +384,8 @@ const CustomInvoice = () => {
                     <div className="col-md-3 right">{discount}</div>
                     <div className="col-md-9 left">Advanced</div>
                     <div className="col-md-3 right">{advancedPayment}</div>
-                    <div className="col-md-9 left">Due Amount</div>
-                    <div className="col-md-3 right">
+                    <div className="col-md-9 left text-bold">Due Amount</div>
+                    <div className="col-md-3 right text-bold">
                       {final_price + shipping - discount - advancedPayment}
                     </div>
                   </div>

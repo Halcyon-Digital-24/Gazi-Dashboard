@@ -128,13 +128,16 @@
   .invoice-body {
     margin-top: 20px;
     p {
-      font-size: 14px;
+      font-size: 10px;
     }
   }
 
   .invoice-table {
     width: 100%;
-    margin-top: 20px;
+    // margin-top: 20px;
+    p{
+      font-size: 9px;
+    }
     .variant {
       margin-right: 5px;
     }
