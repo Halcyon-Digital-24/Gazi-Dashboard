@@ -24,7 +24,7 @@ function SideBar({ handleClose }: { handleClose: () => void }) {
     <div className="sidebar">
       <div className="sidebar__logo">
         <Link to="/">
-          <Logo file="logo.png" />
+          <Logo file="gcart.jpg" />
         </Link>
         <button onClick={handleClose}>
           <Icon iconName="left-double-arrow.svg" />

@@ -53,12 +53,8 @@ const CustomInvoice = () => {
       accumulator + currentValue.regular_price * currentValue.quantity,
     0
   );
-  useEffect(() => {
-    console.log('watch', watch('order_prefix'))
-  }, [watch('order_prefix')])
 
   const onSubmit = async (data) => {
-    console.log(data)
     if (productArray.length <= 0) {
       toast.error("Please select product");
     } else {
@@ -103,7 +99,6 @@ const CustomInvoice = () => {
     };
   }, [isFocus]);
 
-  console.log('productArray', productArray)
   const addNewLine = () => {
     let temp = [...productArray]
     temp.push({
@@ -293,6 +288,7 @@ const CustomInvoice = () => {
                       <option value="">Select Parent Category</option>
                       <option value="GHA">Home Appliance</option>
                       <option value="GPHA">Gazi Pumps & Motors</option>
+                      <option value="GC">gCart</option>
                     </select>
                   </div>
 
@@ -320,7 +316,7 @@ const CustomInvoice = () => {
                       <span className="prefix">GPHA</span>
                       : watch('order_prefix') == 'GHA' ?
                         <span className="prefix">GHA</span>
-                        : <span className="prefix">-</span>
+                        : <span className="prefix">GC</span>
                   }
                 </div>
                 <>
@@ -371,7 +367,6 @@ const CustomInvoice = () => {
                   )}
                 </>
               </div>
-              {/* <Input htmlFor="variant" placeholder="variant" /> */}
 
               <div className="col-md-3 custom-item">
                 <div className="summery">

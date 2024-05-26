@@ -33,7 +33,7 @@ const OrderView: React.FC = () => {
         )}
         content={() => componentRef.current}
       />
-      <div ref={componentRef}>{<Invoice order={order} />}</div>
+      <div ref={componentRef}>{<Invoice componentRef={componentRef} order={order} />}</div>
     </div>
   );
 };

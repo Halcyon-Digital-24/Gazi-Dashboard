@@ -1,12 +1,29 @@
 @import "../../styles/index.scss";
 
 .invoice {
-  background: url("/assets/logo/invoice-logo.png") no-repeat center 70%;
-  background-size: 80% 30%;
+  // background: url("/assets/logo/invoice-logo.png") no-repeat center 70%;
+  // background-size: 80% 30%;
+  position: relative;
   padding: 40px;
   padding-top: 15px;
   font-family: $secondary-font;
   // font-size: 14px;
+  .watermark{
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    img{
+      max-width: 300px;
+      width: 100%;
+      height: auto;
+      opacity: .1;
+    }
+  }
   img {
     width: 100%;
   }
@@ -223,10 +240,4 @@ p + p {
   height: 100%;
 }
 
-// .invoice{
-//   .invoice-footer{
-//     position: absolute;
-//     bottom: 0;
-//   }
-// }
 }

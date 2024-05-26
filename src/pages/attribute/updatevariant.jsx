@@ -9,7 +9,6 @@ import { FaCheck } from "react-icons/fa";
 import { toast } from "react-toastify";
 
 const UpdateVariant = ({ addVariants, handleRemoveAddVariant }) => {
-  console.log(addVariants);
   const { slug } = useParams();
   const [productAttributes, setProductAttributes] = useState([]);
   const [isLoading, setIsLoading] = useState(true);
@@ -20,11 +19,9 @@ const UpdateVariant = ({ addVariants, handleRemoveAddVariant }) => {
       const { data } = await axios.delete(
         `${API_URL}/product-attributes/?ids=[${id}]`
       );
-      console.log(data);
       toast.success(data.message);
       setIsLoading(false);
     } catch (error) {
-      console.log(error);
       setIsLoading(false);
     }
   };

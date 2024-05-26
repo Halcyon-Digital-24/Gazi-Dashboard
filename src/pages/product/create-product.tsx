@@ -97,7 +97,6 @@ const CreateProduct: React.FC = () => {
     });
     // setProductAttribuets( JSON.parse(JSON.stringify(existingAttributes)));
   }, [selectedAttributes]);
-  console.log('productAttributes', productAttributes)
   useEffect(() => {
     const fetchData = async () => {
       try {
@@ -122,11 +121,9 @@ const CreateProduct: React.FC = () => {
   }, []);
 
   const handleAddAttribute = (
-    attribute: string,
-    attributeValue: string | null = null
+    attribute: string
   ) => {
 
-    console.log('attribute', attribute, attributeValue)
 
     // if (attributeValue) {
     //   setSelectedAttributes((prevState) =>
@@ -171,7 +168,6 @@ const CreateProduct: React.FC = () => {
       setAttributes((prevState) =>
         prevState?.filter((item) => item.name !== attribute)
       );
-      console.log('tempObj', tempObj)
       setSelectedAttributes((prevState) => [tempObj, ...prevState]);
       setProductAttribuets((prevState) => [...prevState, ...formateData(tempObj)])
     }
@@ -203,7 +199,6 @@ const CreateProduct: React.FC = () => {
 
     setSelectedAttributes(filterAttribute);
   }; */
-  console.log("attributes", attributes, selectedAttributes)
 
   const handleRemoveAttribute = (
     index: number
@@ -215,7 +210,6 @@ const CreateProduct: React.FC = () => {
       setProductAttribuets(tempAttribute)
 
     }, 200);
-    console.log('tempAttribute', tempAttribute)
   };
 
   const handleImageChange = (e: ChangeEvent<HTMLInputElement>) => {
@@ -261,7 +255,6 @@ const CreateProduct: React.FC = () => {
       ]);
     }
   };
-  console.log(imageQuantities);
   const removeGalleryImage = (index: number) => {
     setGalleryImages((prevImages) => {
       if (prevImages) {
