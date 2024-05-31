@@ -7,8 +7,9 @@
   padding: 40px;
   padding-top: 15px;
   font-family: $secondary-font;
+
   // font-size: 14px;
-  .watermark{
+  .watermark {
     position: absolute;
     top: 0;
     left: 0;
@@ -17,54 +18,71 @@
     display: flex;
     align-items: center;
     justify-content: center;
-    img{
+
+    img {
       max-width: 300px;
       width: 100%;
       height: auto;
       opacity: .1;
     }
   }
+
   img {
     width: 100%;
   }
+
   .invoice-title {
     font-weight: bold;
   }
+
   .heading {
     border: 1px solid $secondary-color;
     font-size: 13px;
   }
+
   .top-header {
     font-weight: 600;
     color: #000;
   }
+
   .notes {
     display: flex;
     flex-direction: column;
     justify-content: flex-end;
+
     h3 {
-      font-size: 16px;
+      font-size: 14px;
     }
+
     p {
       margin-bottom: 7px;
       font-size: 11px;
       font-family: $secondary-font;
     }
   }
+
   .invoice-header {
     padding: 10px 0;
+
     .title {
       display: flex;
       justify-content: space-between;
     }
+
     .customer-details {
+      color: $primary-color;
+
       display: inline-block;
       padding: 10px 15px;
-      color: $primary-color;
       background: $white-color;
       transform: translateY(-50%);
       font-size: 16px;
     }
+
+    .color-danger {
+      color: #e21e26;
+    }
+
     .details {
       display: flex;
       justify-content: space-between;
@@ -76,6 +94,7 @@
         padding: 10px 15px;
         padding-top: 25px;
         box-sizing: border-box;
+
         p {
           margin-bottom: 5px;
           text-transform: capitalize;
@@ -87,6 +106,7 @@
         width: 37%;
         padding: 10px 15px;
         box-sizing: border-box;
+
         p {
           margin-bottom: 5px;
           text-transform: capitalize;
@@ -103,37 +123,45 @@
       }
     }
   }
+
   .invoice-details-table {
     position: relative;
     border-collapse: collapse;
     width: 100%;
     font-size: 13px;
+
     th,
     td {
       border: 1px solid $secondary-color;
       text-align: center;
       padding: 4px;
     }
+
     .table-heading {
       background: $decenary-color;
     }
+
     .span-item {
       border: 0;
     }
+
     .heading-title {
-    font-weight: 500;
+      font-weight: 500;
     }
+
     .order-item {
       td {
         height: 30px;
       }
     }
-    .payment-status{
+
+    .payment-status {
       position: absolute;
       bottom: .5rem;
       left: 2rem;
-      .img-sec{
-        img{
+
+      .img-sec {
+        img {
           width: 120px;
           height: 120px;
           max-width: 100%;
@@ -142,8 +170,10 @@
       }
     }
   }
+
   .invoice-body {
     margin-top: 20px;
+
     p {
       font-size: 10px;
     }
@@ -151,42 +181,47 @@
 
   .invoice-table {
     width: 100%;
-    // margin-top: 20px;
-    p{
+
+    p {
       font-size: 9px;
     }
+
     .variant {
       margin-right: 5px;
     }
+
     .orders {
       text-align: center;
     }
+
     .first-row {
       .column {
         display: flex;
         justify-content: center;
         align-items: center;
       }
+
       .heading {
         background: $decenary-color;
         border-bottom: 0;
         text-align: center;
       }
     }
+
     .description {
       padding: 10px;
     }
+
     .col-md-8 {
       flex-basis: 65.32%;
     }
 
-    /* .heading {
-      border: 1px solid $decenary-color;
-    } */
   }
+
   .col-md-4 {
     padding: 0;
   }
+
   .summery {
     margin-right: 26px;
     transform: scale(1.038);
@@ -203,11 +238,13 @@
       justify-content: space-between;
       flex-wrap: wrap;
     }
+
     p {
       width: 49.55%;
       font-size: 13px;
       color: #000;
     }
+
     .sort-summery {
       padding: 5px;
       font-weight: 600;
@@ -221,23 +258,96 @@
   }
 }
 
-p + p {
+p+p {
   margin-top: 0 !important;
 }
 
+.page-footer {
+  display: none;
+}
+
+.page-header {
+  display: none;
+}
+
 @media print {
+  .watermark {
+    position: fixed !important;
+  }
+
+  thead {
+    display: table-header-group;
+  }
+
+  tfoot {
+    display: table-footer-group;
+  }
+
   .invoice {
     .summery {
       margin-right: 16px;
     }
   }
-  html, body {
-  position: relative;
-}
 
-.invoice-body{
-  min-height: 78vh;
-  height: 100%;
-}
+  html,
+  body {
+    position: relative;
+  }
 
+  .invoice-body {
+    min-height: 78vh;
+    height: 100%;
+
+  }
+
+  .header-space {
+    height: 186px;
+
+  }
+
+  .footer-space {
+    height: 76px;
+
+  }
+
+  .invoice-footer {
+    display: none;
+    height: 0px;
+  }
+
+  .invoice-header .title {
+    display: none;
+    height: 0px;
+
+
+  }
+
+  .page-footer {
+    position: fixed;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    display: block;
+    margin-bottom: 1rem;
+    background-color: green;
+
+    img {
+      width: 100%;
+      height: 100%;
+    }
+  }
+
+  .page-header {
+    position: fixed;
+    display: block;
+    top: 0mm;
+    left: 0;
+    right: 0;
+    margin-top: 1rem;
+
+    img {
+      width: 100%;
+      height: 100%;
+    }
+  }
 }
