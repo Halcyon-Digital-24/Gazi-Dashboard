@@ -49,7 +49,7 @@
     display: flex;
     flex-direction: column;
     justify-content: flex-end;
-
+    margin-top: .5rem;
     h3 {
       font-size: 14px;
     }
@@ -67,6 +67,7 @@
     .title {
       display: flex;
       justify-content: space-between;
+      margin-bottom: 2rem;
     }
 
     .customer-details {
@@ -301,14 +302,10 @@ p+p {
   }
 
   .header-space {
-    height: 186px;
+    height: 130px;
 
   }
 
-  .footer-space {
-    height: 76px;
-
-  }
 
   .invoice-footer {
     display: none;
@@ -329,7 +326,6 @@ p+p {
     right: 0;
     display: block;
     margin-bottom: 1rem;
-    background-color: green;
 
     img {
       width: 100%;

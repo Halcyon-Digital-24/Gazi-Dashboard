@@ -1,4 +1,4 @@
-import { useEffect, useRef, useState } from "react";
+import { useEffect, useState } from "react";
 import { formatDate } from "../date-formate";
 import Column from "../table/column";
 import "./index.scss";
@@ -9,7 +9,6 @@ const Invoice = ({ order }: any) => {
   const [orderItems, setOrderItems] = useState<any[]>(
     order?.orderItems?.length > 0 ? order?.orderItems : []
   );
-  const advancePayment = order.advance_payment ?? 0;
   const [amountBeforeCoupon, setAmountBeforeCoupon] = useState<number>(0);
   useEffect(() => {
     if (order?.coupon) {
@@ -179,11 +178,7 @@ const Invoice = ({ order }: any) => {
             <td>
               <div className="invoice">
                 <div className="invoice-body">
-
-
-
                   <div className="watermark">
-
                     {
                       order?.order_form == "web" || order.order_prefix === "GC" ?
                         <>
