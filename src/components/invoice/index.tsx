@@ -110,25 +110,11 @@ const Invoice = ({ order }: any) => {
 
 
 
-
-  // const handlePrint = useReactToPrint({
-  //   content: () => componentRef.current,
-  //   onAfterPrint: () => {
-  //     setPrinting(false);
-  //   },
-  //   onBeforeGetContent: () => {
-  //     return new Promise((resolve) => {
-  //       setPrinting(true);
-  //       onBeforeGetContentResolve = resolve;
-  //     });
-  //   },
-  // });
-
-  const getDiscount = (amount: any, coupon: any, type: any) => {
+  const getDiscount = (amount: number, coupon: number, type: number) => {
+    if(!coupon || coupon==null||coupon==undefined) return 0
     let discount = 0;
-    if (type == 0) discount += amount * coupon / 100;
-    else discount += type * coupon
-
+    if (type == 0) discount = +amount * +coupon / 100;
+    else discount = +type * +coupon
     return Number(discount)
 
   }
@@ -253,9 +239,9 @@ const Invoice = ({ order }: any) => {
                         <p>
                           <span className="invoice-title"> Total Order Amount : </span>{" "}
                           {FormatPrice(
-                            totalPrice + order.delivery_fee - (order.advance_payment ?? 0) -
-                            getDiscount(amountBeforeCoupon, order?.coupon?.discount_amount, order?.coupon?.discount_type == 'percent' ? 0 : orderItems?.length) - order.custom_discount
-                          )}
+                          totalPrice + order.delivery_fee - (order.advance_payment ?? 0) -
+                          getDiscount(amountBeforeCoupon, order?.coupon?.discount_amount??0, order?.coupon?.discount_type == 'percent' ? 0 : orderItems?.length) - order.custom_discount
+                        )}
                         </p>
 
                         <p>
@@ -322,7 +308,7 @@ const Invoice = ({ order }: any) => {
                       <td className="heading-title">Discount</td>
                       <td>-
                         {FormatPrice(
-                          getDiscount(amountBeforeCoupon, order?.coupon?.discount_amount, order?.coupon?.discount_type == 'percent' ? 0 : orderItems?.length) + order.custom_discount
+                          getDiscount(amountBeforeCoupon, order?.coupon?.discount_amount??0, order?.coupon?.discount_type == 'percent' ? 0 : orderItems?.length) + +order.custom_discount
                         )}
                       </td>
                     </tr>
@@ -352,7 +338,7 @@ const Invoice = ({ order }: any) => {
                       <td className="text-bold">
                         {FormatPrice(
                           totalPrice + order.delivery_fee - (order.advance_payment ?? 0) -
-                          getDiscount(amountBeforeCoupon, order?.coupon?.discount_amount, order?.coupon?.discount_type == 'percent' ? 0 : orderItems?.length) - order.custom_discount
+                          getDiscount(amountBeforeCoupon, order?.coupon?.discount_amount??0, order?.coupon?.discount_type == 'percent' ? 0 : orderItems?.length) - order.custom_discount
                         )}
                       </td>
                     </tr>

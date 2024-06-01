@@ -15,7 +15,6 @@ import { FaTimes } from "react-icons/fa";
 
 
 const CustomInvoice = () => {
-  const { cart: cartItems } = useAppSelector((state) => state.cart);
   const navigate = useNavigate();
   const [discount, setDiscount] = useState(0);
   const [shipping, setShipping] = useState(0);
@@ -123,6 +122,7 @@ const CustomInvoice = () => {
     tempProducts = tempProducts.filter((_, i) => index != i)
     setProductArray(tempProducts)
   }
+
 
   return (
     <div>
@@ -352,9 +352,9 @@ const CustomInvoice = () => {
                       className="select"
                       {...register("payment_method")}
                       htmlFor="Choose Parent category"
-                      name="payment_status"
+                      name="payment_method"
                     >
-                      <option value="">Select Payment Method</option>
+                      {/* <option value="">Select Payment Method</option> */}
                       <option value="cod">Cash on Delivery</option>
                       <option value="online">Online Payment</option>
                     </select>
