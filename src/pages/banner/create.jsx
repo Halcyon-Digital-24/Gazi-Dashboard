@@ -86,13 +86,7 @@ const CreateBanner = () => {
             <input
               type="text"
               placeholder="URL"
-              {...register("url", {
-                required: "Url is required",
-                pattern: {
-                  value: /\S/,
-                  message: "Enter a valid url",
-                },
-              })}
+              {...register("url")}
             />
             {errors.url && (
               <p className="validation__error">{errors.url.message}</p>

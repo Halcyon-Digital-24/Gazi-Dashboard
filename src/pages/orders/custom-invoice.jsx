@@ -155,12 +155,16 @@ const CustomInvoice = () => {
                 </div>
 
                 <div className="text">
-                  <label htmlFor="name">Customer Email</label>
+                  <label htmlFor="name">Customer Email *</label>
                   <input
-                    type="text"
-                    placeholder="Email"
+                    placeholder="Enter your email"
+                    type="email"
                     {...register("email", {
-                      trim: true,
+                      required: "Email Address is required",
+                      pattern: {
+                        value: /^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,4}$/i,
+                        message: "Invalid email address",
+                      },
                     })}
                   />
                   {errors.email && (

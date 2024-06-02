@@ -107,17 +107,11 @@ const UpdateBanner = () => {
           </div>
 
           <div className="text">
-            <label htmlFor="name">URL *</label>
+            <label htmlFor="name">URL </label>
             <input
               type="text"
               placeholder="URL"
-              {...register("url", {
-                required: "Url is required",
-                pattern: {
-                  value: /\S/,
-                  message: "Enter a valid url",
-                },
-              })}
+              {...register("url")}
             />
             {errors.url && (
               <p className="validation__error">{errors.url.message}</p>
