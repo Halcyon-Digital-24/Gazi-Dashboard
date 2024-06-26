@@ -111,7 +111,7 @@ const Invoice = ({ order }: any) => {
 
 
   const getDiscount = (amount: number, coupon: number, type: number) => {
-    if(!coupon || coupon==null||coupon==undefined) return 0
+    if (!coupon || coupon == null || coupon == undefined) return 0
     let discount = 0;
     if (type == 0) discount = +amount * +coupon / 100;
     else discount = +type * +coupon
@@ -239,9 +239,9 @@ const Invoice = ({ order }: any) => {
                         <p>
                           <span className="invoice-title"> Total Order Amount : </span>{" "}
                           {FormatPrice(
-                          totalPrice + order.delivery_fee  -
-                          getDiscount(amountBeforeCoupon, order?.coupon?.discount_amount??0, order?.coupon?.discount_type == 'percent' ? 0 : orderItems?.length) - order.custom_discount
-                        )}
+                            totalPrice + order.delivery_fee -
+                            getDiscount(amountBeforeCoupon, order?.coupon?.discount_amount ?? 0, order?.coupon?.discount_type == 'percent' ? 0 : orderItems?.length) - order.custom_discount
+                          )}
                         </p>
 
                         <p>
@@ -308,7 +308,7 @@ const Invoice = ({ order }: any) => {
                       <td className="heading-title">Discount</td>
                       <td>-
                         {FormatPrice(
-                          getDiscount(amountBeforeCoupon, order?.coupon?.discount_amount??0, order?.coupon?.discount_type == 'percent' ? 0 : orderItems?.length) + +order.custom_discount
+                          getDiscount(amountBeforeCoupon, order?.coupon?.discount_amount ?? 0, order?.coupon?.discount_type == 'percent' ? 0 : orderItems?.length) + +order.custom_discount
                         )}
                       </td>
                     </tr>
@@ -338,7 +338,7 @@ const Invoice = ({ order }: any) => {
                       <td className="text-bold">
                         {FormatPrice(
                           totalPrice + order.delivery_fee - (order.advance_payment ?? 0) -
-                          getDiscount(amountBeforeCoupon, order?.coupon?.discount_amount??0, order?.coupon?.discount_type == 'percent' ? 0 : orderItems?.length) - order.custom_discount
+                          getDiscount(amountBeforeCoupon, order?.coupon?.discount_amount ?? 0, order?.coupon?.discount_type == 'percent' ? 0 : orderItems?.length) - order.custom_discount
                         )}
                       </td>
                     </tr>
@@ -365,22 +365,45 @@ const Invoice = ({ order }: any) => {
                       <Column className="col-md-12">
                         <div className="notes">
                           <h3>Notes:</h3>
-                          <p>
-                            1. All our products come with a{" "}
-                            {order.order_prefix === "GHA" ? "one-year" : "two-years"}{" "}
-                            service warranty. To claim the warranty, please present this
-                            invoice.
-                          </p>
-                          <p>
-                            2. Please ensure to check for any physical damage to the product
-                            upon receiving it. After receiving the product, no claims for
-                            physical damage will be accepted.
-                          </p>
-                          <p>
-                            3. For official installation, please inform us upon receiving
-                            the product if the customer wishes for us to install it. We will
-                            require 24 hours to complete the installation.
-                          </p>
+                          {
+                            order?.order_form == "web" || order.order_prefix === "GC" ?
+                              <>
+                                <p className=" font-gotham text-xs font-light">
+                                  1. Please ensure to check for any physical damage to the product upon
+                                  receiving it. After receiving the product, no claims for physical
+                                  damage will be accepted.
+                                </p>
+                              </> : <>
+                                {order.order_prefix === "GHA" ? (
+                                  <><p className=" font-gotham text-xs font-light">
+                                  1. All our products come with a{" "}
+                                  {order.order_prefix === "GHA" ? "one-year" : "two-years"} service
+                                  warranty. To claim the warranty, please present this invoice.
+                                </p>
+                                <p className=" font-gotham text-xs font-light">
+                                  2. Please ensure to check for any physical damage to the product upon
+                                  receiving it. After receiving the product, no claims for physical
+                                  damage will be accepted.
+                                </p>
+                                <p className=" font-gotham text-xs font-light">
+                                  3. For official installation, please inform us upon receiving the
+                                  product if the customer wishes for us to install it. We will require
+                                  24 hours to complete the installation.
+                                </p></>
+                                ) : (
+                                  <><p className=" font-gotham text-xs font-light">
+                                    1. All our products come with a{" "}
+                                    {order.order_prefix === "GHA" ? "one-year" : "two-years"} service
+                                    warranty. To claim the warranty, please present this invoice.
+                                  </p>
+                                    <p className=" font-gotham text-xs font-light">
+                                      2. Please ensure to check for any physical damage to the product upon
+                                      receiving it. After receiving the product, no claims for physical
+                                      damage will be accepted.
+                                    </p></>
+                                )}
+                              </>
+                          }
                         </div>
                       </Column>
                     </div>
@@ -416,11 +439,6 @@ const Invoice = ({ order }: any) => {
       </table>
 
     </div>
-
-
-
-
-
   );
 };
 
