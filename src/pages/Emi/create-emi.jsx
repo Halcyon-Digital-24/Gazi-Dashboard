@@ -34,7 +34,7 @@ const CreateEmi = () => {
 
   return (
     <div>
-      <CardBody header="Available Emi" to="/emi" text="Back" />
+      <CardBody header="Add Bank For EMI" to="/emi" text="Back" />
       <form onSubmit={handleSubmit(onSubmit)}>
         <div className="row">
           <Column className="col-md-12">

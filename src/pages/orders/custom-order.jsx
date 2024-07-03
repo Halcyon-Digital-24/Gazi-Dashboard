@@ -267,6 +267,7 @@ const CustomOrder = () => {
                   htmlFor="shipping"
                   placeholder="Shipping"
                   label="Shipping Price"
+                  defaultValue="0"
                   onChange={(e) => setShipping(Number(e.target.value))}
                 />
               </div>
@@ -276,6 +277,7 @@ const CustomOrder = () => {
                   htmlFor="discount"
                   placeholder="Discount Price"
                   label="Discount Price"
+                  defaultValue="0"
                   onChange={(e) => setDiscount(Number(e.target.value))}
                 />
                 <Input
@@ -283,6 +285,7 @@ const CustomOrder = () => {
                   htmlFor="advanced_payment"
                   placeholder="Advanced payment"
                   label="Advanced Price"
+                  defaultValue="0"
                   onChange={(e) => setAdvancedPayment(Number(e.target.value))}
                 />
 

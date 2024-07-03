@@ -79,7 +79,7 @@ export const allSidebarLinks = [
         slug: "/orders",
       },
       {
-        subtitle: "Custom Orders",
+        subtitle: "Custom Order",
         slug: "/orders/custom",
       },{
         subtitle: "Custom Invoice",
@@ -278,10 +278,6 @@ export const allSidebarLinks = [
       {
         subtitle: "Shipping",
         slug: "/shipping",
-      },
-      {
-        subtitle: "Manage Settings",
-        slug: "/manage-settings",
       },
     ],
   },
