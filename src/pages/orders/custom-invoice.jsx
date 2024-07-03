@@ -126,7 +126,7 @@ const CustomInvoice = () => {
   const onChangeProduct = (value, index, key) => {
     let temp = [...productArray];
     if (temp[index]) {
-      temp[index][key] = extractNumericValue(value);
+      temp[index][key] = value;
       setProductArray(temp);
     }
   };
@@ -462,7 +462,7 @@ const CustomInvoice = () => {
                             value={formatAmountForDisplay(item?.regular_price)}
                             onChange={(e) =>
                               onChangeProduct(
-                                e.target.value,
+                                extractNumericValue(e.target.value),
                                 index,
                                 "regular_price"
                               )
