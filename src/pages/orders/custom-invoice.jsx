@@ -3,7 +3,7 @@ import { Button } from "../../components/button";
 import Input from "../../components/forms/text-input";
 import Display from "../../components/display";
 import "./custom-order.scss";
-import './custom-invoice.scss'
+import "./custom-invoice.scss";
 import { useEffect, useRef, useState } from "react";
 import { useAppSelector } from "../../redux/hooks";
 import axios from "../../lib";
@@ -13,18 +13,19 @@ import { useNavigate } from "react-router-dom";
 import { useForm } from "react-hook-form";
 import { FaTimes } from "react-icons/fa";
 
-
 const CustomInvoice = () => {
   const navigate = useNavigate();
   const [discount, setDiscount] = useState(0);
   const [shipping, setShipping] = useState(0);
   const [isFocus, setIsFocus] = useState(false);
-  const [productArray, setProductArray] = useState([{
-    product_name: '',
-    product_attribute: '',
-    quantity: '1',
-    regular_price: ''
-  }])
+  const [productArray, setProductArray] = useState([
+    {
+      product_name: "",
+      product_attribute: "",
+      quantity: "1",
+      regular_price: "",
+    },
+  ]);
   const productAreaRef = useRef(null);
   const [advancedPayment, setAdvancedPayment] = useState(0);
 
@@ -58,8 +59,6 @@ const CustomInvoice = () => {
       toast.error("Please select product");
     } else {
       try {
-
-
         let temp = [...productArray];
         for (let i = 0; i < temp.length; i++) {
           temp[i].product_id = i + 1;
@@ -70,9 +69,8 @@ const CustomInvoice = () => {
           orderItem: temp,
           delivery_fee: shipping,
           advance_payment: advancedPayment,
-          custom_discount: discount
-
-        })
+          custom_discount: discount,
+        });
         toast.success(response.data.message);
         navigate("/orders");
       } catch (error) {
@@ -99,30 +97,45 @@ const CustomInvoice = () => {
   }, [isFocus]);
 
   const addNewLine = () => {
-    let temp = [...productArray]
+    let temp = [...productArray];
     temp.push({
-      product_name: '',
-      product_attribute: '',
-      quantity: '',
-      regular_price: ''
-    })
-    setProductArray(temp)
-  }
-  const onChangeProduct = (value, index, key) => {
-    let temp = [...productArray]
-    if (temp[index]) {
-      temp[index][key] = value
-      setProductArray(temp)
-    }
+      product_name: "",
+      product_attribute: "",
+      quantity: "",
+      regular_price: "",
+    });
+    setProductArray(temp);
+  };
 
-  }
+  const formatAmountForDisplay = (value) => {
+    // Remove any non-digit characters except commas
+    const cleanedValue = value.replace(/[^\d,]/g, '');
+    // Remove any commas
+    const numericValue = cleanedValue.replace(/,/g, '');
+    // Format the value with commas
+    const formattedValue = numericValue.replace(/\B(?=(\d{3})+(?!\d))/g, ',');
+    return formattedValue;
+  };
+
+  const extractNumericValue = (value) => {
+    // Remove any non-digit characters
+    const numericValue = value.replace(/[^\d]/g, '');
+    return numericValue;
+  };
+
+  const onChangeProduct = (value, index, key) => {
+    let temp = [...productArray];
+    if (temp[index]) {
+      temp[index][key] = extractNumericValue(value);
+      setProductArray(temp);
+    }
+  };
 
   const handelDelete = (index) => {
     let tempProducts = [...productArray];
-    tempProducts = tempProducts.filter((_, i) => index != i)
-    setProductArray(tempProducts)
-  }
-
+    tempProducts = tempProducts.filter((_, i) => index != i);
+    setProductArray(tempProducts);
+  };
 
   return (
     <div>
@@ -132,7 +145,6 @@ const CustomInvoice = () => {
           <form onSubmit={handleSubmit(onSubmit)}>
             <div className="row">
               <div className="col-md-5 custom-item">
-
                 <div className="text">
                   <label htmlFor="name">Customer Name *</label>
                   <input
@@ -176,7 +188,6 @@ const CustomInvoice = () => {
                   <input
                     type="text"
                     required
-
                     placeholder="Mobile"
                     {...register("mobile", {
                       trim: true,
@@ -199,7 +210,6 @@ const CustomInvoice = () => {
                     type="text"
                     placeholder="Address"
                     required
-
                     {...register("address", {
                       trim: true,
                       required: "Address is required",
@@ -241,14 +251,12 @@ const CustomInvoice = () => {
                     placeholder="Note"
                     {...register("note", {
                       trim: true,
-
                     })}
                   />
                   {errors.city && (
                     <p className="validation__error">{errors.city?.message}</p>
                   )}
                 </div>
-
               </div>
               <div className="col-md-4 custom-item">
                 <Input
@@ -317,13 +325,13 @@ const CustomInvoice = () => {
                   {errors.invoice_no && (
                     <p className="validation__error">{errors.name.message}</p>
                   )}
-                  {
-                    watch('order_prefix') == 'GPHA' ?
-                      <span className="prefix">GPHA</span>
-                      : watch('order_prefix') == 'GHA' ?
-                        <span className="prefix">GHA</span>
-                        : <span className="prefix">GC</span>
-                  }
+                  {watch("order_prefix") == "GPHA" ? (
+                    <span className="prefix">GPHA</span>
+                  ) : watch("order_prefix") == "GHA" ? (
+                    <span className="prefix">GHA</span>
+                  ) : (
+                    <span className="prefix">GC</span>
+                  )}
                 </div>
                 <>
                   <label className="label" htmlFor="select">
@@ -393,78 +401,94 @@ const CustomInvoice = () => {
                 </div>
               </div>
               <div className="col-md-9 custom-item">
-
                 <div className="product-area" ref={productAreaRef}>
-
-                  {
-                    productArray?.map((item, index) => {
-                      return (
-                        <div className="product-form w-100" key={index}>
-                          <div style={{ width: "50%", marginRight: '2%' }}>
-                            <Input
-                              required
-                              htmlFor="product_name"
-                              placeholder="Product Title"
-                              // label="Product Title"
-                              value={item?.product_name}
-                              onChange={(e) => onChangeProduct(e.target.value, index, 'product_name')}
-                              autocomplete="off"
-                            />
-                          </div>
-
-                          <div style={{ width: "24%", marginRight: '2%' }}>
-                            <Input
-                              htmlFor="product_attribute"
-                              placeholder="Attributes"
-                              // label="Product Attributes"
-                              value={item?.product_attribute}
-
-                              onChange={(e) => onChangeProduct(e.target.value, index, "product_attribute")}
-                              autocomplete="off"
-                            />
-                          </div>
-                          <div style={{ width: "10%", marginRight: '2%' }}>
-                            <Input
-                              required
-type="number"
-                              htmlFor="quantity"
-                              placeholder="Quantity"
-                              value={item?.quantity}
-                              // label="Product Quantity"
-                              onChange={(e) => onChangeProduct(e.target.value, index, "quantity")}
-                              autocomplete="off"
-                            />
-                          </div>
-                          <div style={{ width: "10%" }}>
-                            <Input
-                              required
-
-                              htmlFor="regular_price"
-                              placeholder="Price"
-                              // label="Product Price"
-                              value={item?.regular_price}
-
-                              onChange={(e) => onChangeProduct(e.target.value, index, "regular_price")}
-                              autocomplete="off"
-                            />
-                          </div>
-                          {
-                            productArray?.length > 1 ?
-                              <div className="delete-button">
-                                <button type="button" onClick={() => handelDelete(index)}><FaTimes />  </button>
-                              </div> : null
-                          }
+                  {productArray?.map((item, index) => {
+                    return (
+                      <div className="product-form w-100" key={index}>
+                        <div style={{ width: "49%", marginRight: "2%" }}>
+                          <Input
+                            required
+                            htmlFor="product_name"
+                            placeholder="Product Title"
+                            // label="Product Title"
+                            value={item?.product_name}
+                            onChange={(e) =>
+                              onChangeProduct(
+                                e.target.value,
+                                index,
+                                "product_name"
+                              )
+                            }
+                            autocomplete="off"
+                          />
                         </div>
-                      )
-                    })
-                  }
+
+                        <div style={{ width: "20%", marginRight: "2%" }}>
+                          <Input
+                            htmlFor="product_attribute"
+                            placeholder="Attributes"
+                            // label="Product Attributes"
+                            value={item?.product_attribute}
+                            onChange={(e) =>
+                              onChangeProduct(
+                                e.target.value,
+                                index,
+                                "product_attribute"
+                              )
+                            }
+                            autocomplete="off"
+                          />
+                        </div>
+                        <div style={{ width: "10%", marginRight: "2%" }}>
+                          <Input
+                            required
+                            type="number"
+                            htmlFor="quantity"
+                            placeholder="Quantity"
+                            value={item?.quantity}
+                            // label="Product Quantity"
+                            onChange={(e) =>
+                              onChangeProduct(e.target.value, index, "quantity")
+                            }
+                            autocomplete="off"
+                          />
+                        </div>
+                        <div style={{ width: "15%" }}>
+                          <Input
+                            required
+                            htmlFor="regular_price"
+                            placeholder="Price"
+                            // label="Product Price"
+                            value={formatAmountForDisplay(item?.regular_price)}
+                            onChange={(e) =>
+                              onChangeProduct(
+                                e.target.value,
+                                index,
+                                "regular_price"
+                              )
+                            }
+                            autocomplete="off"
+                          />
+                        </div>
+                        {productArray?.length > 1 ? (
+                          <div className="delete-button">
+                            <button
+                              type="button"
+                              onClick={() => handelDelete(index)}
+                            >
+                              <FaTimes />{" "}
+                            </button>
+                          </div>
+                        ) : null}
+                      </div>
+                    );
+                  })}
 
                   <div className="create-button">
-                    <Button type="button" onClick={addNewLine}>Add Line</Button>
-
+                    <Button type="button" onClick={addNewLine}>
+                      Add Line
+                    </Button>
                   </div>
-
-
                 </div>
               </div>
             </div>
