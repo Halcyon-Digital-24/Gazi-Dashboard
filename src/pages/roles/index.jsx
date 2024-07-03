@@ -20,6 +20,7 @@ const Roles = () => {
   const dispatch = useAppDispatch();
   const { roles, totalCount, isDelete, message, errorMessage, isError } =
     useAppSelector(selectRole);
+    console.log(roles);
   const [pageNumber, setPageNumber] = useState(1);
 
   const handlePageChange = (selectedItem) => {

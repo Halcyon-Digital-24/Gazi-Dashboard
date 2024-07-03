@@ -22,7 +22,7 @@ const CustomInvoice = () => {
   const [productArray, setProductArray] = useState([{
     product_name: '',
     product_attribute: '',
-    quantity: '',
+    quantity: '1',
     regular_price: ''
   }])
   const productAreaRef = useRef(null);
@@ -257,6 +257,7 @@ const CustomInvoice = () => {
                   htmlFor="shipping"
                   placeholder="Delivery Charges"
                   label="Delivery Charges"
+                  defaultValue="0"
                   onChange={(e) => setShipping(Number(e.target.value))}
                 />
                 <Input
@@ -265,6 +266,7 @@ const CustomInvoice = () => {
                   htmlFor="discount"
                   placeholder="Discount Price"
                   label="Discount Price"
+                  defaultValue="0"
                   onChange={(e) => setDiscount(Number(e.target.value))}
                 />
                 <Input
@@ -273,6 +275,7 @@ const CustomInvoice = () => {
                   htmlFor="advanced_payment"
                   placeholder="Advanced payment"
                   label="Advanced Price"
+                  defaultValue="0"
                   onChange={(e) => setAdvancedPayment(Number(e.target.value))}
                 />
 
@@ -423,7 +426,7 @@ const CustomInvoice = () => {
                           <div style={{ width: "10%", marginRight: '2%' }}>
                             <Input
                               required
-
+type="number"
                               htmlFor="quantity"
                               placeholder="Quantity"
                               value={item?.quantity}
