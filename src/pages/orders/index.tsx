@@ -87,7 +87,15 @@ const AllOrders: React.FC = () => {
     };
   }, [isDelete, dispatch]);
 
-  const flattenOrderItems = (orderItems) => {
+  interface OrderItem {
+    product_name: string;
+    product_attribute: string;
+    quantity: number;
+    regular_price: number;
+    discount_price: number;
+  }
+  
+  const flattenOrderItems = (orderItems: OrderItem[]): string => {
     const lines = orderItems.map(item => {
       let attributeString = '';
   
