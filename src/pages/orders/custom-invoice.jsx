@@ -1,6 +1,7 @@
 import CardBody from "../../components/card-body";
 import { Button } from "../../components/button";
 import Input from "../../components/forms/text-input";
+import Select from "../../components/select";
 import Display from "../../components/display";
 import "./custom-order.scss";
 import "./custom-invoice.scss";
@@ -15,7 +16,6 @@ import { FaTimes } from "react-icons/fa";
 
 const CustomInvoice = () => {
   const navigate = useNavigate();
-  const [discount, setDiscount] = useState(0);
   const [shipping, setShipping] = useState(0);
   const [isFocus, setIsFocus] = useState(false);
   const [productArray, setProductArray] = useState([
@@ -28,6 +28,10 @@ const CustomInvoice = () => {
   ]);
   const productAreaRef = useRef(null);
   const [advancedPayment, setAdvancedPayment] = useState(0);
+  const [discountType, setDiscountType] = useState("");
+  const [discount, setDiscount] = useState(0);
+  const [discountAmount, setDiscountAmount] = useState(0);
+  console.log(discountType);
 
   const {
     register,
@@ -69,7 +73,7 @@ const CustomInvoice = () => {
           orderItem: temp,
           delivery_fee: shipping,
           advance_payment: advancedPayment,
-          custom_discount: discount,
+          custom_discount: discountAmount,
         });
         toast.success(response.data.message);
         navigate("/orders");
@@ -109,17 +113,17 @@ const CustomInvoice = () => {
 
   const formatAmountForDisplay = (value) => {
     // Remove any non-digit characters except commas
-    const cleanedValue = value.replace(/[^\d,]/g, '');
+    const cleanedValue = value.replace(/[^\d,]/g, "");
     // Remove any commas
-    const numericValue = cleanedValue.replace(/,/g, '');
+    const numericValue = cleanedValue.replace(/,/g, "");
     // Format the value with commas
-    const formattedValue = numericValue.replace(/\B(?=(\d{3})+(?!\d))/g, ',');
+    const formattedValue = numericValue.replace(/\B(?=(\d{3})+(?!\d))/g, ",");
     return formattedValue;
   };
 
   const extractNumericValue = (value) => {
     // Remove any non-digit characters
-    const numericValue = value.replace(/[^\d]/g, '');
+    const numericValue = value.replace(/[^\d]/g, "");
     return numericValue;
   };
 
@@ -136,6 +140,14 @@ const CustomInvoice = () => {
     tempProducts = tempProducts.filter((_, i) => index != i);
     setProductArray(tempProducts);
   };
+
+  useEffect(() => {
+    if (discountType === "flat") {
+      setDiscountAmount(discount);
+    } else if (discountType === "percent") {
+      setDiscountAmount((final_price * discount) / 100);
+    }
+  }, [discountType, discount]);
 
   return (
     <div>
@@ -268,15 +280,25 @@ const CustomInvoice = () => {
                   defaultValue="0"
                   onChange={(e) => setShipping(Number(e.target.value))}
                 />
-                <Input
-                  type="number"
-                  required
-                  htmlFor="discount"
-                  placeholder="Discount Price"
-                  label="Discount Price"
-                  defaultValue="0"
-                  onChange={(e) => setDiscount(Number(e.target.value))}
-                />
+                <div className="invoice-discount-area">
+                  <div style={{ width: "60%", marginRight: "2%" }}>
+                    <Input
+                      placeholder="Discount Price"
+                      defaultValue="0"
+                      label="Discount Price"
+                      htmlFor="discount-price"
+                      onChange={(e) => setDiscount(Number(e.target.value))}
+                    />
+                  </div>
+
+                  <div style={{ width: "38%" }}>
+                    <Select onChange={(e) => setDiscountType(e.target.value)}>
+                      <option value="flat">Flat</option>
+                      <option value="percent">Percent</option>
+                    </Select>
+                  </div>
+                </div>
+
                 <Input
                   required
                   type="number"
@@ -388,14 +410,23 @@ const CustomInvoice = () => {
                     <div className="col-md-9 left">Product Total Price</div>
                     <div className="col-md-3 right">{final_price}</div>
                     <div className="col-md-9 left">Shipping</div>
-                    <div className="col-md-3 right">{shipping}</div>
+                    <div className="col-md-3 right">+{shipping}</div>
                     <div className="col-md-9 left">Discount</div>
-                    <div className="col-md-3 right">{discount}</div>
-                    <div className="col-md-9 left">Advanced</div>
-                    <div className="col-md-3 right">{advancedPayment}</div>
+                    <div className="col-md-3 right">-{discountAmount}</div>
+                    <div className="col-md-9 left text-bold">Total Amount</div>
+                    <div className="col-md-3 right text-bold">
+                      {final_price +
+                        shipping -
+                        discountAmount}
+                    </div>
+                        <div className="col-md-9 left">Advanced</div>
+                        <div className="col-md-3 right">-{advancedPayment}</div>
                     <div className="col-md-9 left text-bold">Due Amount</div>
                     <div className="col-md-3 right text-bold">
-                      {final_price + shipping - discount - advancedPayment}
+                      {final_price +
+                        shipping -
+                        discountAmount -
+                        advancedPayment}
                     </div>
                   </div>
                 </div>

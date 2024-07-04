@@ -22,9 +22,11 @@ export interface IOrder {
   city: string;
   thana: string;
   payment_method: string;
+  payment_status: string;
   delivery_method: string;
   delivery_fee: number;
-  coupon_code: null | string;
+  advance_payment:number;
+  transaction_id: string;
   discount: number;
   orderItems: OrderItem[];
   final_price: number;
@@ -35,6 +37,8 @@ export interface IOrder {
   order_prefix: string;
   total_item: number;
   custom_discount: number;
+  note: string;
+  coupon_code: null | string;
   coupon: any;
   invoice_no?:any;
 }
