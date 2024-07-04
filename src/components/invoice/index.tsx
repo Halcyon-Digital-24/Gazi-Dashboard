@@ -293,7 +293,7 @@ const Invoice = ({ order }: any) => {
                           </td>
                           <td style={{ width: '7%' }}> {product.quantity}</td>
                           <td style={{ width: '22%' }}> {FormatPrice(product.regular_price)}</td>
-                          <td style={{ width: '12%' }}>{product.regular_price * product.quantity}</td>
+                          <td style={{ width: '12%' }}>{FormatPrice(product.regular_price * product.quantity)}</td>
                         </tr>
                       ))}
 
@@ -317,7 +317,7 @@ const Invoice = ({ order }: any) => {
                       <td className="span-item" colSpan={4}></td>
                       <td className="heading-title">After Discount</td>
                       <td>
-                        {(Number(totalPrice) + Number(order.delivery_fee)) - Number(order.custom_discount)}
+                        {FormatPrice((Number(totalPrice) + Number(order.delivery_fee)) - Number(order.custom_discount))}
                       </td>
                     </tr>
 
