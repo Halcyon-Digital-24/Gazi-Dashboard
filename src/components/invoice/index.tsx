@@ -305,13 +305,30 @@ const Invoice = ({ order }: any) => {
 
                     <tr>
                       <td className="span-item" colSpan={4}></td>
-                      <td className="heading-title">Discount</td>
-                      <td>-
-                        {FormatPrice(
-                          getDiscount(amountBeforeCoupon, order?.coupon?.discount_amount ?? 0, order?.coupon?.discount_type == 'percent' ? 0 : orderItems?.length) + +order.custom_discount
+                      <td className="heading-title">
+                        {(() => {
+                          const discountAmount = getDiscount(
+                            amountBeforeCoupon,
+                            order?.coupon?.discount_amount ?? 0,
+                            order?.coupon?.discount_type == 'percent' ? 0 : orderItems?.length
+                          ) + +order.custom_discount;
+
+                          const discountPercentage = ((discountAmount / amountBeforeCoupon) * 100).toFixed(1);
+
+                          return `${discountPercentage}% Discount`;
+                        })()}
+                      </td>
+                      <td>
+                        - {FormatPrice(
+                          getDiscount(
+                            amountBeforeCoupon,
+                            order?.coupon?.discount_amount ?? 0,
+                            order?.coupon?.discount_type == 'percent' ? 0 : orderItems?.length
+                          ) + +order.custom_discount
                         )}
                       </td>
                     </tr>
+
 
                     <tr>
                       <td className="span-item" colSpan={4}></td>
@@ -330,7 +347,10 @@ const Invoice = ({ order }: any) => {
                     <tr>
                       <td className="span-item" colSpan={4}></td>
                       <td className="heading-title">Advance</td>
-                      <td>-{FormatPrice(order.advance_payment ?? 0)}</td>
+                      <td>
+                        {order.advance_payment ? "-" : ""}{" "}
+                        {FormatPrice(order.advance_payment ?? 0)}
+                      </td>
                     </tr>
                     <tr>
                       <td className="span-item" colSpan={4}></td>
@@ -376,20 +396,20 @@ const Invoice = ({ order }: any) => {
                               </> : <>
                                 {order.order_prefix === "GHA" ? (
                                   <><p className=" font-gotham text-xs font-light">
-                                  1. All our products come with a{" "}
-                                  {order.order_prefix === "GHA" ? "one-year" : "two-years"} service
-                                  warranty. To claim the warranty, please present this invoice.
-                                </p>
-                                <p className=" font-gotham text-xs font-light">
-                                  2. Please ensure to check for any physical damage to the product upon
-                                  receiving it. After receiving the product, no claims for physical
-                                  damage will be accepted.
-                                </p>
-                                <p className=" font-gotham text-xs font-light">
-                                  3. For official installation, please inform us upon receiving the
-                                  product if the customer wishes for us to install it. We will require
-                                  24 hours to complete the installation.
-                                </p></>
+                                    1. All our products come with a{" "}
+                                    {order.order_prefix === "GHA" ? "one-year" : "two-years"} service
+                                    warranty. To claim the warranty, please present this invoice.
+                                  </p>
+                                    <p className=" font-gotham text-xs font-light">
+                                      2. Please ensure to check for any physical damage to the product upon
+                                      receiving it. After receiving the product, no claims for physical
+                                      damage will be accepted.
+                                    </p>
+                                    <p className=" font-gotham text-xs font-light">
+                                      3. For official installation, please inform us upon receiving the
+                                      product if the customer wishes for us to install it. We will require
+                                      24 hours to complete the installation.
+                                    </p></>
                                 ) : (
                                   <><p className=" font-gotham text-xs font-light">
                                     1. All our products come with a{" "}

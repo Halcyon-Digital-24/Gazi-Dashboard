@@ -97,30 +97,10 @@ const AllOrders: React.FC = () => {
   
   const flattenOrderItems = (orderItems: OrderItem[]): string => {
     const lines = orderItems.map(item => {
-      let attributeString = '';
-  
-      // Parse product_attribute string to an array of objects
-      let attributes = [];
-      try {
-        attributes = JSON.parse(item.product_attribute);
-      } catch (error) {
-        console.error('Error parsing product_attribute:', error);
-      }
-  
-      if (Array.isArray(attributes) && attributes.length > 0) {
-        // Extract attribute_name from each object in the array
-        const attributeNames = attributes.map(attr => attr.attribute_name);
-        attributeString = attributeNames.join(', ');
-      } else if (typeof attributes === 'object' && attributes.attribute_name) {
-        attributeString = attributes.attribute_name;
-      } else if (typeof item.product_attribute === 'string') {
-        attributeString = item.product_attribute;
-      }
-  
       // Create a CSV line with field names prefixed
       const csvLine = [
         `P_Name: ${item.product_name}`,
-        `Attribute: ${attributeString}`,
+        `Attribute: ${item.product_attribute}`,
         `Qnt: ${item.quantity}`,
         `RP: ${item.regular_price}`,
         `DP: ${item.discount_price}`
@@ -139,7 +119,7 @@ const AllOrders: React.FC = () => {
     const total_product_price = order.orderItems.reduce((total, item) => total + item.regular_price, 0);
     const total_amount = total_product_price + order.delivery_fee - order.custom_discount;
     const due_amount = total_amount - order.advance_payment;
-    console.log(order.orderItems.length);
+    // console.log(order.orderItems.length);
     
     return {
       OrderId: order.id,
@@ -173,7 +153,7 @@ const AllOrders: React.FC = () => {
     };
   });
   
-  console.log(orderForCsv);
+
 
   const now = new Date();
   const formattedDate = now.toLocaleString('en-US', {

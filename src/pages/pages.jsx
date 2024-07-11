@@ -23,6 +23,10 @@ import CouponPage from "./coupon";
 import CreateCoupon from "./coupon/create";
 import UpdateCoupon from "./coupon/update";
 
+import CampaignPage from "./Campaign";
+import CreateCampaign from "./Campaign/create";
+import UpdateCampaign from "./Campaign/update";
+
 import Shipping from "./shipping";
 import CreateShipping from "./shipping/create";
 import UpdateShipping from "./shipping/update";
@@ -92,6 +96,8 @@ export {
   Categories,
   CommonPages,
   CouponPage,
+  CampaignPage,
+  CreateCampaign,
   CreateAttributes,
   CreateBanner,
   CreateBlog,
@@ -148,6 +154,7 @@ export {
   UpdateShipping,
   UpdateSlider,
   UpdateVideo,
+  UpdateCampaign,
   VideosPage,
   Warranty,
   WarrantyDetails,

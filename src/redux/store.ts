@@ -20,6 +20,7 @@ import reviewReducer from "./review/reviewSlice";
 import cartReducer from "./cart/cartSlice";
 import locationReducer from "./location/locationSlice";
 import couponReducer from "./coupon/couponSlice";
+import campaignReducer from "./campaign/campaignSlice";
 import refundReducer from "./refund/refundSlice";
 import supportReducer from "./support/supportSlice";
 import commentReducer from "./comments/commentSlice";
@@ -49,6 +50,7 @@ const store = configureStore({
     cart: cartReducer,
     location: locationReducer,
     coupon: couponReducer,
+    campaign: campaignReducer,
     refund: refundReducer,
     support: supportReducer,
     comment: commentReducer,
