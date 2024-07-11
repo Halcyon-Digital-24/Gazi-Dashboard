@@ -10,6 +10,8 @@ import {
   Categories,
   CommonPages,
   CouponPage,
+  CampaignPage,
+  CreateCampaign,
   CreateAttributes,
   CreateBanner,
   CreateBlog,
@@ -66,6 +68,7 @@ import {
   UpdateShipping,
   UpdateSlider,
   UpdateVideo,
+  UpdateCampaign,
   VideosPage,
   Warranty,
   WarrantyDetails,
@@ -75,7 +78,8 @@ import {
   UpdateRole,
   UpdateProfile,
   SettingPage,
-  HtmlGenerator
+  HtmlGenerator,
+
 } from "./pages";
 import CustomInvoice from "./orders/custom-invoice";
 
@@ -117,6 +121,9 @@ const routes = [
   { path: "/coupons", element: <CouponPage /> },
   { path: "/coupons/create", element: <CreateCoupon /> },
   { path: "/coupons/edit/:slug", element: <UpdateCoupon /> },
+  { path: "/campaign", element: <CampaignPage /> },
+  { path: "/campaign/create", element: <CreateCampaign /> },
+  { path: "/campaign/edit/:slug", element: <UpdateCampaign /> },
   { path: "/banner", element: <BannerPage /> },
   { path: "/banner/edit/:slug", element: <UpdateBanner /> },
   { path: "/banner/create", element: <CreateBanner /> },

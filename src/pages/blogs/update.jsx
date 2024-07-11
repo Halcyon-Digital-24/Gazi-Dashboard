@@ -74,7 +74,7 @@ const UpdateBlog = () => {
 
   return (
     <div>
-      <CardBody header="Create Blog" to="/blogs" text="back" />
+      <CardBody header="Update Blog" to="/blogs" text="back" />
       <Display>
         <form onSubmit={handleSubmit(onSubmit)}>
           <div className="row">

@@ -189,6 +189,10 @@ export const allSidebarLinks = [
         subtitle: "Coupons",
         slug: "/coupons",
       },
+      {
+        subtitle: "Campaign",
+        slug: "/campaign",
+      },
     ],
   },
 

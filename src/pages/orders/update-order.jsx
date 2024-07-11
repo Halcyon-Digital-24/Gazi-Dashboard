@@ -4,7 +4,8 @@ import Input from "../../components/forms/text-input";
 import Display from "../../components/display";
 import "./custom-order.scss";
 import { useEffect, useRef, useState } from "react";
-import { getProducts, reset } from "../../redux/products/product-slice";import {
+import { getProducts, reset } from "../../redux/products/product-slice";
+import {
   addToCart,
   clearCart,
   decrementQuantity,
@@ -41,7 +42,6 @@ const UpdateOrder = () => {
   const [totalPrice, setTotalPrice] = useState(0);
   const [selectedAttributes, setSelectedAttributes] = useState([]);
 
-
   const { name, email, mobile, address, city, orderItems, delivery_fee } =
     order;
 
@@ -76,11 +76,13 @@ const UpdateOrder = () => {
       try {
         const response = await axios.get(`${API_URL}/orders/${slug}`);
         const data = await response.data.data;
+        console.log(data);
         setValue("name", data.name);
         setValue("email", data.email);
         setValue("mobile", data.mobile);
         setValue("address", data.address);
         setValue("city", data.city);
+        setValue("note", data.note);
         setValue("payment_status", data.payment_status);
         setValue("order_prefix", data.order_prefix);
         setValue("advance_payment", data.advance_payment);
@@ -203,7 +205,6 @@ const UpdateOrder = () => {
   }, [customDiscount]);
 
   const handleChangeAttribute = (product) => {
-
     if (product.default_quantity <= 0) {
       return toast.error("Stock out");
     }
@@ -215,15 +216,13 @@ const UpdateOrder = () => {
       toast.error("Please Select Variant");
       return;
     }
-    if (
-      product.availability === 1 &&
-      product.default_quantity > 0
-    ) {
+    if (product.availability === 1 && product.default_quantity > 0) {
       dispatch(
         addToCart({
           product_id: product?.id,
           price:
-            (Number(product.discount_price) !== 0 || Number(product.discount_price) != undefined)
+            Number(product.discount_price) !== 0 ||
+            Number(product.discount_price) != undefined
               ? Number(product.discount_price)
               : Number(product.regular_price),
           title: product.title,
@@ -235,8 +234,7 @@ const UpdateOrder = () => {
     } else {
       toast.error("Product  not in stock");
     }
-  }
-
+  };
 
   return (
     <div>
@@ -345,7 +343,7 @@ const UpdateOrder = () => {
                         />
                         {errors.advance_payment && (
                           <p className="validation__error">
-                            {errors.city.message}
+                            {errors.advance_payment.message}
                           </p>
                         )}
                       </div>
@@ -434,6 +432,20 @@ const UpdateOrder = () => {
                           </p>
                         )}
                       </div>
+                      <div className="text">
+                        <label htmlFor="Note">Note</label>
+                        <input
+                          type="text"
+                          {...register("note", {
+                            required: "note is required",
+                          })}
+                        />
+                        {errors.note && (
+                          <p className="validation__error">
+                            {errors.note.message}
+                          </p>
+                        )}
+                      </div>
                     </div>
                     {/* <div className="order-details right">
                       <div className="product-area" ref={productAreaRef}>
@@ -478,47 +490,51 @@ const UpdateOrder = () => {
                               return (
                                 <li key={i}>
                                   <div
-                                    className={`wrapper ${product.availability === 1 &&
-                                        product.default_quantity > 0 &&
-                                        product.is_visible !== 0
+                                    className={`wrapper ${
+                                      product.availability === 1 &&
+                                      product.default_quantity > 0 &&
+                                      product.is_visible !== 0
                                         ? "instock"
                                         : "stockout"
-                                      }`}
-                                    onClick={() => handleChangeAttribute(product)}
+                                    }`}
+                                    onClick={() =>
+                                      handleChangeAttribute(product)
+                                    }
                                   >
                                     <span>{product.title}</span>
                                     {cartItems.some(
                                       (p) => p.product_id === product.id
                                     ) && (
-                                        <span>
-                                          <FaCheck />
-                                        </span>
-                                      )}
+                                      <span>
+                                        <FaCheck />
+                                      </span>
+                                    )}
                                   </div>
 
                                   {product["product-attributes"] &&
-                                    product["product-attributes"].length > 0 && (
+                                    product["product-attributes"].length >
+                                      0 && (
                                       <div className="variant py-2">
                                         <>
                                           {(() => {
                                             let uniqueAttributes = {}; // Initialize uniqueAttributes as an object
 
-                                            product["product-attributes"]?.forEach(
-                                              (attr) => {
-                                                if (
-                                                  !uniqueAttributes[
+                                            product[
+                                              "product-attributes"
+                                            ]?.forEach((attr) => {
+                                              if (
+                                                !uniqueAttributes[
                                                   attr.attribute_key
-                                                  ]
-                                                ) {
-                                                  uniqueAttributes[
-                                                    attr.attribute_key
-                                                  ] = [];
-                                                }
+                                                ]
+                                              ) {
                                                 uniqueAttributes[
                                                   attr.attribute_key
-                                                ].push(attr.attribute_value);
+                                                ] = [];
                                               }
-                                            );
+                                              uniqueAttributes[
+                                                attr.attribute_key
+                                              ].push(attr.attribute_value);
+                                            });
 
                                             return Object.keys(
                                               uniqueAttributes
@@ -527,28 +543,30 @@ const UpdateOrder = () => {
                                                 <div className="attribute-wrapper">
                                                   {uniqueAttributes[key].map(
                                                     (value, j) => {
-                                                      const findAttribute = product[
-                                                        "product-attributes"
-                                                      ]?.find(
-                                                        (att) =>
-                                                          att.attribute_key ===
-                                                          key &&
-                                                          att.attribute_value ===
-                                                          value
-                                                      );
+                                                      const findAttribute =
+                                                        product[
+                                                          "product-attributes"
+                                                        ]?.find(
+                                                          (att) =>
+                                                            att.attribute_key ===
+                                                              key &&
+                                                            att.attribute_value ===
+                                                              value
+                                                        );
 
                                                       return (
                                                         <>
                                                           <div
                                                             key={j}
-                                                            className={`attribute-item ${selectedAttributes.find(
-                                                              (item) =>
-                                                                item.attribute_id ===
-                                                                findAttribute?.id
-                                                            )
+                                                            className={`attribute-item ${
+                                                              selectedAttributes.find(
+                                                                (item) =>
+                                                                  item.attribute_id ===
+                                                                  findAttribute?.id
+                                                              )
                                                                 ? "selected"
                                                                 : ""
-                                                              }`}
+                                                            }`}
                                                             onClick={() => {
                                                               handleAttributeClick(
                                                                 findAttribute
@@ -586,12 +604,16 @@ const UpdateOrder = () => {
                             <div className="qnty">
                               <FiPlus
                                 className="plus"
-                                onClick={() => dispatch(incrementQuantity(cart))}
+                                onClick={() =>
+                                  dispatch(incrementQuantity(cart))
+                                }
                               />
                               <p>{cart.quantity}</p>
                               <LuMinus
                                 className="minus"
-                                onClick={() => dispatch(decrementQuantity(cart))}
+                                onClick={() =>
+                                  dispatch(decrementQuantity(cart))
+                                }
                               />
                             </div>
                           </div>
@@ -656,15 +678,25 @@ const UpdateOrder = () => {
                     </tr>
 
                     <tr>
-                      <td className="span-item" colSpan={3}></td>
-                      <td className="heading-title">Discount</td>
-                      <td>-
-                        {FormatPrice(
+                      {(() => {
+                        const discountAmount =
                           amountBeforeCoupon -
                           totalPrice +
-                          order.custom_discount
-                        )}
-                      </td>
+                          order.custom_discount;
+                        const discountPercentage = (
+                          (discountAmount / amountBeforeCoupon) *
+                          100
+                        ).toFixed(1);
+                        return (
+                          <>
+                            <td className="span-item" colSpan={3}></td>
+                            <td className="heading-title">
+                              {discountPercentage}% Discount
+                            </td>
+                            <td>- {FormatPrice(discountAmount)}</td>
+                          </>
+                        );
+                      })()}
                     </tr>
 
                     <tr>
@@ -682,7 +714,10 @@ const UpdateOrder = () => {
                     <tr>
                       <td className="span-item" colSpan={3}></td>
                       <td className="heading-title">Advance</td>
-                      <td>- {FormatPrice(order.advance_payment ?? 0)}</td>
+                      <td>
+                        {order.advance_payment ? "-" : ""}{" "}
+                        {FormatPrice(order.advance_payment ?? 0)}
+                      </td>
                     </tr>
                     <tr>
                       <td className="span-item" colSpan={3}></td>
@@ -690,9 +725,9 @@ const UpdateOrder = () => {
                       <td>
                         {FormatPrice(
                           totalPrice +
-                          order.delivery_fee -
-                          order.custom_discount -
-                          order.advance_payment ?? 0
+                            order.delivery_fee -
+                            order.custom_discount -
+                            order.advance_payment ?? 0
                         )}
                       </td>
                     </tr>
