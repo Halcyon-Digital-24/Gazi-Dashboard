@@ -683,15 +683,18 @@ const UpdateOrder = () => {
                           amountBeforeCoupon -
                           totalPrice +
                           order.custom_discount;
-                        const discountPercentage = (
-                          (discountAmount / amountBeforeCoupon) *
-                          100
-                        ).toFixed(1);
+                        const discountPercentage =
+                          (discountAmount / amountBeforeCoupon) * 100;
+                        const displayDiscountPercentage =
+                          discountPercentage % 1 === 0
+                            ? discountPercentage
+                            : discountPercentage.toFixed(1);
+
                         return (
                           <>
                             <td className="span-item" colSpan={3}></td>
                             <td className="heading-title">
-                              {discountPercentage}% Discount
+                              {displayDiscountPercentage}% Discount
                             </td>
                             <td>- {FormatPrice(discountAmount)}</td>
                           </>

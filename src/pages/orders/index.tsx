@@ -190,7 +190,7 @@ const AllOrders: React.FC = () => {
           handleDisplayItem={handleDisplayItem}
           onSearch={handleOnSearch}
           leftElements={
-            <div className="action">
+            <div className="action pointer">
               <Overflow title="Bulk Action">
                 <div onClick={handleMultiDelete}>Delete Selection</div>
               </Overflow>

@@ -311,11 +311,12 @@ const Invoice = ({ order }: any) => {
                             amountBeforeCoupon,
                             order?.coupon?.discount_amount ?? 0,
                             order?.coupon?.discount_type == 'percent' ? 0 : orderItems?.length
-                          ) + +order.custom_discount;
+                          ) + order.custom_discount;
 
-                          const discountPercentage = ((discountAmount / amountBeforeCoupon) * 100).toFixed(1);
+                          const discountPercentage = (discountAmount / amountBeforeCoupon) * 100;
+                          const displayDiscountPercentage = discountPercentage % 1 === 0 ? discountPercentage : discountPercentage.toFixed(1);
 
-                          return `${discountPercentage}% Discount`;
+                          return `${displayDiscountPercentage}% Discount`;
                         })()}
                       </td>
                       <td>

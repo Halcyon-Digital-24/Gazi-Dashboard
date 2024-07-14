@@ -15,9 +15,11 @@ import {
   deleteBanner,
   getAddBanner,
   updateAddBanner,
+  reset
 } from "../../redux/add-banner/addBannerSlice";
 import { useAppDispatch, useAppSelector } from "../../redux/hooks";
 import "./index.scss";
+import { toast } from "react-toastify";
 
 const BannerPage = () => {
   const dispatch = useAppDispatch();
@@ -60,6 +62,17 @@ const BannerPage = () => {
   useEffect(() => {
     dispatch(getAddBanner({ page: pageNumber, not_slider: true }));
   }, [dispatch, isDelete, isUpdate, pageNumber]);
+  useEffect(() => {
+    if (isUpdate) {
+      toast.success(`Banner status updated successfully`);
+    }
+    if (isDelete) {
+      toast.success('Banner deleted successfully');
+    }
+    return () => {
+      dispatch(reset());
+    };
+  }, [isUpdate, isDelete, dispatch]); 
 
   return (
     <div>
