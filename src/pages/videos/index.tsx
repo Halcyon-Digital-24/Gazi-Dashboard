@@ -15,14 +15,16 @@ import {
   deleteVideo,
   getVideos,
   updateVideo,
+  reset
 } from "../../redux/videos/videoSlice";
+import { toast } from "react-toastify";
 
 const VideosPage: React.FC = () => {
   const [displayItem, setDisplayItem] = useState(25);
   const [pageNumber, setPageNumber] = useState<number>(1);
   const dispatch = useAppDispatch();
 
-  const { totalCount, videos } = useAppSelector((state) => state.videos);
+  const { totalCount, videos , isUpdate, isDelete, message} = useAppSelector((state) => state.videos);
 
   const totalPage = Math.ceil(totalCount / displayItem);
 
@@ -54,6 +56,19 @@ const VideosPage: React.FC = () => {
     window.scrollTo(0, 0);
   }, [dispatch, pageNumber, displayItem]);
 
+  useEffect(() => {
+    if (isUpdate) {
+      toast.success(`Video is updated successfully`);
+    }
+    if (isDelete) {
+      toast.success(`Video is deleted successfully`);
+    }
+
+    return () => {
+      dispatch(reset());
+    };
+  }, [isUpdate, dispatch, message, isDelete]);
+  
   return (
     <div>
       <CardBody header="Videos" to="/videos/create" />

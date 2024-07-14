@@ -16,6 +16,7 @@ import {
   updateFaq,
 } from "../../redux/faqs/faqSlice";
 import { useAppDispatch, useAppSelector } from "../../redux/hooks";
+import { toast } from "react-toastify";
 
 const FaqPage: React.FC = () => {
   const { faqs, isUpdate, totalCount, isDelete } = useAppSelector(
@@ -37,14 +38,17 @@ const FaqPage: React.FC = () => {
     };
   }, [dispatch, isDelete, isUpdate, pageNumber]);
 
-  /* useEffect(() => {
+   useEffect(() => {
     if (isUpdate) {
       toast.success(`Faq status updated successfully`);
     }
     if (isDelete) {
       toast.success('Faq delete successfully');
     }
-  }, [isUpdate, isDelete]); */
+    return () => {
+      dispatch(reset());
+    };
+  }, [isUpdate, isDelete, dispatch]); 
 
   const handleStatusChange = (faq: IFaq) => {
     dispatch(updateFaq({ id: faq.id, is_visible: !faq.is_visible }));

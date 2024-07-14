@@ -117,7 +117,7 @@ const StockOutProducts: React.FC = () => {
               <Column className="col-md-2">
                 <CustomIconArea>
                   <ViewButton href="/products" />
-                  <EditButton editUrl={`/products/edit/1`} />
+                  <EditButton editUrl={`/products/edit/${product.id}`} />
                   <DeleteButton onClick={() => console.log("first")} />
                 </CustomIconArea>
               </Column>

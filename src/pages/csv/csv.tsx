@@ -96,7 +96,15 @@ const Csv: React.FC = () => {
           4. After uploading products you need to edit them and set product's
           images and choices.
         </p>
-        <Button>Download Demo</Button>
+        <div className="">
+          <a
+            href={`data:text/csv;charset=utf-8,${escape(csvFile)}`}
+            download="products.csv"
+            className="download d-block"
+          >
+            <Button>Download Demo</Button>
+          </a>
+        </div>
       </Display>
       <Display>
         <form onSubmit={handleSubmit}>
