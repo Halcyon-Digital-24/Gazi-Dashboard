@@ -158,11 +158,11 @@ const SingleItem: FC<IProps> = ({
           {(Number(totalPrice) + Number(order.delivery_fee)) - Number(order.custom_discount)}
         </Column>
         <Column className="col-md-2">{order.name}</Column>
-        <Column className="col-md-1">{order.mobile}</Column>
+        <Column className="col-md-2">{order.mobile}</Column>
         <Column className="col-md-1 product-iem">
           {order.orderItems?.length}
         </Column>
-        <Column className="col-md-2">
+        <Column className="col-md-1">
           <Select
             onChange={(e: ChangeEvent<HTMLSelectElement>) =>
               handleStatusChange(order.id, e)

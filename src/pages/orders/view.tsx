@@ -20,6 +20,8 @@ const OrderView: React.FC = () => {
     };
     getOrderData();
   }, [slug]);
+  console.log(order);
+  
 
   return (
     <div>

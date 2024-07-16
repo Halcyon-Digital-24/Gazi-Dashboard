@@ -202,12 +202,11 @@ const CustomInvoice = () => {
                     required
                     placeholder="Mobile"
                     {...register("mobile", {
-                      trim: true,
                       required: "Mobile Number is required",
                       pattern: {
-                        value: /^01[3-9]\d{8}$/,
+                        value: /^01[3-9]\d{8}(,\s*01[3-9]\d{8})?$/, // Updated pattern to allow optional comma-separated second number
                         message:
-                          "Enter a valid mobile number starting with '01'",
+                          "Enter a valid mobile number or two valid mobile numbers separated by commas",
                       },
                     })}
                   />
@@ -410,17 +409,24 @@ const CustomInvoice = () => {
                     <div className="col-md-9 left">Product Total Price</div>
                     <div className="col-md-3 right">{final_price}</div>
                     <div className="col-md-9 left">Shipping</div>
-                    <div className="col-md-3 right">{shipping<0? "+": ""}{shipping}</div>
+                    <div className="col-md-3 right">
+                      {shipping < 0 ? "+" : ""}
+                      {shipping}
+                    </div>
                     <div className="col-md-9 left">Discount</div>
-                    <div className="col-md-3 right">{discountAmount>0? "-": ""}{discountAmount}</div>
+                    <div className="col-md-3 right">
+                      {discountAmount > 0 ? "-" : ""}
+                      {discountAmount}
+                    </div>
                     <div className="col-md-9 left text-bold">Total Amount</div>
                     <div className="col-md-3 right text-bold">
-                      {final_price +
-                        shipping -
-                        discountAmount}
+                      {final_price + shipping - discountAmount}
                     </div>
-                        <div className="col-md-9 left">Advanced</div>
-                        <div className="col-md-3 right">{advancedPayment>0? "-": ""}{advancedPayment}</div>
+                    <div className="col-md-9 left">Advanced</div>
+                    <div className="col-md-3 right">
+                      {advancedPayment > 0 ? "-" : ""}
+                      {advancedPayment}
+                    </div>
                     <div className="col-md-9 left text-bold">Due Amount</div>
                     <div className="col-md-3 right text-bold">
                       {final_price +

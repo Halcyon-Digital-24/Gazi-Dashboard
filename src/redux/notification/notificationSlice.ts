@@ -4,9 +4,9 @@ import {
   INotificationResponse,
 } from '../../interfaces/notification';
 import { RootState } from '../store';
-import faqService from './notificationService';
+import notificationsService from './notificationService';
 
-interface IBlogResponse {
+interface INotiResponse {
   notifications: INotification[];
   totalCount: number;
   isError: boolean;
@@ -19,7 +19,7 @@ interface IBlogResponse {
   errorMessage: string | unknown;
 }
 
-const initialState: IBlogResponse = {
+const initialState: INotiResponse = {
   notifications: [],
   totalCount: 0,
   isError: false,
@@ -37,7 +37,7 @@ export const createNotification = createAsyncThunk(
   'notification/create',
   async (data: INotification, thunkAPI) => {
     try {
-      return await faqService.createNotification(data);
+      return await notificationsService.createNotification(data);
     } catch (error) {
       const message =
         error instanceof Error ? error.message : 'An error occurred';
@@ -50,7 +50,21 @@ export const getNotification = createAsyncThunk(
   'notification/getAll',
   async (filter: { [key: string]: number | string }, thunkAPI) => {
     try {
-      return await faqService.getNotification(filter);
+      return await notificationsService.getNotification(filter);
+    } catch (error) {
+      const message =
+        error instanceof Error ? error.message : 'An error occurred';
+      return thunkAPI.rejectWithValue(message);
+    }
+  }
+);
+
+// Delete notification
+export const deleteNotification = createAsyncThunk(
+  'notification/delete',
+  async (id: number | string, thunkAPI) => {
+    try {
+      return await notificationsService.deleteNotification(id);
     } catch (error) {
       const message =
         error instanceof Error ? error.message : 'An error occurred';
@@ -97,10 +111,23 @@ export const notificationSlice = createSlice({
         state.isLoading = false;
         state.isError = true;
         state.message = action.payload;
+      })
+      /* TODO: GET FAQ DATA SET */
+      .addCase(deleteNotification.pending, (state) => {
+        state.isDelete = false;
+      })
+      .addCase(deleteNotification.fulfilled, (state) => {
+        state.isLoading = false;
+        state.isDelete = true;
+      })
+      .addCase(deleteNotification.rejected, (state, action) => {
+        state.isLoading = false;
+        state.isError = true;
+        state.message = action.payload;
       });
   },
 });
 
 export const { reset } = notificationSlice.actions;
-export const selectCount = (state: RootState) => state.faqs;
+export const selectCount = (state: RootState) => state.notification;
 export default notificationSlice.reducer;

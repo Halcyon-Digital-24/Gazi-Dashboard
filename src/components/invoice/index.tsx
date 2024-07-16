@@ -307,11 +307,18 @@ const Invoice = ({ order }: any) => {
                       <td className="span-item" colSpan={4}></td>
                       <td className="heading-title">
                         {(() => {
-                          const discountAmount = getDiscount(
+                          let discountAmount = getDiscount(
                             amountBeforeCoupon,
                             order?.coupon?.discount_amount ?? 0,
                             order?.coupon?.discount_type == 'percent' ? 0 : orderItems?.length
                           ) + order.custom_discount;
+
+                          // Check if discountAmount is 0 or null
+                          if (discountAmount === 0 || discountAmount === null) {
+                            discountAmount = orderItems?.reduce((totalDiscount, item) => {
+                              return totalDiscount + item.discount_price;
+                            }, 0);
+                          }
 
                           const discountPercentage = (discountAmount / amountBeforeCoupon) * 100;
                           const displayDiscountPercentage = discountPercentage % 1 === 0 ? discountPercentage : discountPercentage.toFixed(1);
@@ -321,14 +328,26 @@ const Invoice = ({ order }: any) => {
                       </td>
                       <td>
                         - {FormatPrice(
-                          getDiscount(
-                            amountBeforeCoupon,
-                            order?.coupon?.discount_amount ?? 0,
-                            order?.coupon?.discount_type == 'percent' ? 0 : orderItems?.length
-                          ) + +order.custom_discount
+                          (() => {
+                            let discountAmount = getDiscount(
+                              amountBeforeCoupon,
+                              order?.coupon?.discount_amount ?? 0,
+                              order?.coupon?.discount_type == 'percent' ? 0 : orderItems?.length
+                            ) + +order.custom_discount;
+
+                            // Check if discountAmount is 0 or null
+                            if (discountAmount === 0 || discountAmount === null) {
+                              discountAmount = orderItems?.reduce((totalDiscount, item) => {
+                                return totalDiscount + item.discount_price;
+                              }, 0);
+                            }
+
+                            return discountAmount;
+                          })()
                         )}
                       </td>
                     </tr>
+
 
 
                     <tr>

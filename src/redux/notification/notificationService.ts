@@ -44,10 +44,15 @@ const getNotification = async (filter: {
   const { data } = await axios.get(url);
   return data;
 };
+const deleteNotification = async (id: number | string) => {
+  const { data } = await axios.delete(`/notifications?ids=[${id}]`);
+  return data.data;
+};
 
 const NotificationService = {
   createNotification,
   getNotification,
+  deleteNotification,
 };
 
 export default NotificationService;

@@ -1,0 +1,26 @@
+@import '../../styles/index.scss';
+
+.file {
+  margin-bottom: 15px;
+  label {
+    display: block;
+    color: $secondary-color;
+  }
+  input {
+    width: 100%;
+    margin-top: 10px;
+    padding: 10px;
+    border: 1px solid $secondary-color;
+    font-size: 14px;
+    font-family: $primary-font;
+    box-sizing: border-box;
+    background: $white-color;
+    // border-radius: 4px;
+
+    &:focus,
+    &:focus-visible {
+      border: 1px solid $primary-color;
+      outline: none;
+    }
+  }
+}
