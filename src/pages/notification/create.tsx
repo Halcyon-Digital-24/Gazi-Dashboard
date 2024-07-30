@@ -3,10 +3,7 @@ import Input from '../../components/forms/text-input';
 import TextArea from '../../components/forms/textarea';
 import { Button } from '../../components/button';
 import { useAppDispatch, useAppSelector } from '../../redux/hooks';
-import {
-  createNotification,
-  reset,
-} from '../../redux/notification/notificationSlice';
+import { createNotification, reset } from '../../redux/notification/notificationSlice';
 import { toast } from 'react-toastify';
 import { useNavigate } from 'react-router-dom';
 import Display from '../../components/display';
@@ -19,22 +16,22 @@ const CreateNotification = () => {
   const { isCreate, isError } = useAppSelector((state) => state.notification);
   const [title, setTitle] = useState('');
   const [details, setDetails] = useState('');
-  const [image, setImage] = useState<File | null>(null); // State for image file
+  const [image, setImage] = useState<File | null>(null);
 
   const handleSubmit = async (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault();
 
-    // Ensure image is selected
     if (!image) {
       toast.error('Please select an image');
       return;
     }
-    const data ={
-      title,
-      details,
-      image,
-    }
-    dispatch(createNotification(data));
+
+    const formData = new FormData();
+    formData.append('title', title);
+    formData.append('details', details);
+    formData.append('image', image);
+
+    dispatch(createNotification(formData));
   };
 
   useEffect(() => {
@@ -50,14 +47,12 @@ const CreateNotification = () => {
     };
   }, [isCreate, isError, navigate, dispatch]);
 
-  // Function to handle image selection
   const handleImageChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files?.[0];
     if (file) {
       setImage(file);
     }
   };
-  
 
   return (
     <div>
@@ -73,9 +68,8 @@ const CreateNotification = () => {
             placeholder="Details"
             onChange={(e) => setDetails(e.target.value)}
           />
-          {/* Input for image upload */}
           <div className='file'>
-          <input type="file" accept="image/*" onChange={handleImageChange} />
+            <input type="file" accept="image/*" onChange={handleImageChange} />
           </div>
           <Button type="submit">Push</Button>
         </form>

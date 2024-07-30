@@ -10,13 +10,16 @@ export interface ICreateResponse {
   data: INotification[];
 }
 
-const createNotification = async (
-  faqData: INotification
+export const createNotification = async (
+  notificationData: FormData
 ): Promise<Partial<ICreateResponse>> => {
-  const { data } = await axios.post(`/notifications`, faqData);
+  const { data } = await axios.post(`/notifications`, notificationData, {
+    headers: {
+      'Content-Type': 'multipart/form-data',
+    },
+  });
   return data;
 };
-
 const getNotification = async (filter: {
   [key: string]: string | number | boolean;
 }): Promise<INotificationResponse> => {

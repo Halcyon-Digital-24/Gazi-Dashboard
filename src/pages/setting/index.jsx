@@ -19,7 +19,7 @@ const SettingPage = () => {
   const onSubmit = async (data) => {
     try {
       const response = await axios.post("/colors", data);
-      console.log(response);
+      // console.log(response);
     } catch (error) {
       toast.error(error.response.data.message);
     }

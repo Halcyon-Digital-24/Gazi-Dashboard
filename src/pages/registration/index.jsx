@@ -1,7 +1,7 @@
 import "./index.scss";
 
 function Registration() {
-  reiturn(
+  return(
     <div className="Registration">
       <h1>Registration</h1>
     </div>

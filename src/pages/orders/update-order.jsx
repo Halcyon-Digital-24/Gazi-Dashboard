@@ -24,6 +24,8 @@ import Column from "../../components/table/column";
 import { useForm } from "react-hook-form";
 import FormatPrice from "../../utills/formatePrice";
 import { FaCheck } from "react-icons/fa";
+import { useDebounce } from "../../utills/debounce";
+
 
 const UpdateOrder = () => {
   const { slug } = useParams();
@@ -63,6 +65,18 @@ const UpdateOrder = () => {
     }
   };
 
+  const [searchQuery, setSearchQuery] = useState('');
+  const debouncedSearchQuery = useDebounce(searchQuery, 500); // 500ms debounce delay
+
+
+  useEffect(() => {
+    if (debouncedSearchQuery !== undefined) {
+      // Your search request logic here
+      // console.log('Search query:', debouncedSearchQuery);
+      setSearch(debouncedSearchQuery)
+    }
+  }, [debouncedSearchQuery]);
+
   useEffect(() => {
     dispatch(getProducts({ search: search, page: 1, limit: 100 }));
 
@@ -76,7 +90,7 @@ const UpdateOrder = () => {
       try {
         const response = await axios.get(`${API_URL}/orders/${slug}`);
         const data = await response.data.data;
-        console.log(data);
+        // console.log(data);
         setValue("name", data.name);
         setValue("email", data.email);
         setValue("mobile", data.mobile);
@@ -478,7 +492,7 @@ const UpdateOrder = () => {
                         htmlFor="search"
                         placeholder="Search Product"
                         label="Search Product"
-                        onChange={(e) => setSearch(e.target.value)}
+                        onChange={(e) => setSearchQuery(e.target.value)}
                         // onBlur={() => setIsFocus(false)}
                         autocomplete="off"
                         onFocus={() => setIsFocus(true)}

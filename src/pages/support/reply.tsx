@@ -35,9 +35,9 @@ const Replay = () => {
       const response = await axios.post(`/supports`, {
         details: text,
         user_id: user?.user?.id,
-        parent_text_id:
-          messages.length > 0 ? messages[messages.length - 1].id : slug,
+        parent_text_id: slug,
         user_name: user?.user.name,
+        text_type: "replay"
       });
       if (response.status === 201) {
         toast.success(response.data.message);

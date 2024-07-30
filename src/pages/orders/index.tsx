@@ -12,6 +12,7 @@ import { deleteOrder, getOrders, reset } from "../../redux/order/orderSlice";
 import { toast } from "react-toastify";
 import { DateRangePicker } from "rsuite";
 import { formatDateForURL } from "../../utills/formateDate";
+import { useDebounce } from "../../utills/debounce";
 
 const AllOrders: React.FC = () => {
   const dispatch = useAppDispatch();
@@ -35,11 +36,22 @@ const AllOrders: React.FC = () => {
     setDisplayItem(Number(e.target.value));
   };
 
-  const handleOnSearch = (
-    e: ChangeEvent<HTMLInputElement | HTMLTextAreaElement>
-  ) => {
-    setOnSearch(e.target.value);
+  
+  const [searchQuery, setSearchQuery] = useState<string>('');
+  const debouncedSearchQuery = useDebounce(searchQuery, 500); // 500ms debounce delay
+
+  const handleOnSearch = (e: ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
+    setSearchQuery(e.target.value);
   };
+
+  useEffect(() => {
+    if (debouncedSearchQuery !== undefined) {
+      // Your search request logic here
+      // console.log('Search query:', debouncedSearchQuery);
+      setOnSearch(debouncedSearchQuery)
+    }
+  }, [debouncedSearchQuery]);
+
   const handleAllSelectedOrders = (e: ChangeEvent<HTMLInputElement>) => {
     const productIds = orders.map((order) => Number(order.id));
     if (e.target.checked) {

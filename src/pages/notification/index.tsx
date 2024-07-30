@@ -69,7 +69,7 @@ const Notification = () => {
             <img
                 src={`${API_ROOT}/images/notification/${n.image}`}
                 alt="brand"
-                style={{ width: "50%", height: "auto" }}
+                style={{ width: "100%", height: "auto" }}
               />
             </Column>
             <Column className="col-md-2">{n.title}</Column>

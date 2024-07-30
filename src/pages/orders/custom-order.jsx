@@ -22,6 +22,7 @@ import { LuMinus } from "react-icons/lu";
 import { RxCross2 } from "react-icons/rx";
 import { useNavigate } from "react-router-dom";
 import { useForm } from "react-hook-form";
+import { useDebounce } from "../../utills/debounce";
 
 const CustomOrder = () => {
   const { products } = useAppSelector((state) => state.product);
@@ -136,6 +137,17 @@ const CustomOrder = () => {
       }
     }
   };
+
+  const [searchQuery, setSearchQuery] = useState('');
+  const debouncedSearchQuery = useDebounce(searchQuery, 500); // 500ms debounce delay
+
+  useEffect(() => {
+    if (debouncedSearchQuery !== undefined) {
+      // Your search request logic here
+      // console.log('Search query:', debouncedSearchQuery);
+      setSearch(debouncedSearchQuery)
+    }
+  }, [debouncedSearchQuery]);
 
   useEffect(() => {
     dispatch(getFrontendProducts({ search: search, page: 1, limit: 50 }));
@@ -366,7 +378,7 @@ const CustomOrder = () => {
                     htmlFor="search"
                     placeholder="Search Product"
                     label="Search Product"
-                    onChange={(e) => setSearch(e.target.value)}
+                    onChange={(e) => setSearchQuery(e.target.value)}
                     // onBlur={() => setIsFocus(false)}
                     autocomplete="off"
                     onFocus={() => setIsFocus(true)}

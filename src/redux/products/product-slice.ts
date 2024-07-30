@@ -74,7 +74,7 @@ export const updateProduct = createAsyncThunk(
       productData,
     }: {
       id: number | string;
-      productData: FormData | { [key: string]: string | number | boolean };
+      productData: FormData | { [key: string]: string | number | boolean | null};
     },
     thunkAPI
   ) => {

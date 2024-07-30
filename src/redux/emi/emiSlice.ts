@@ -47,9 +47,9 @@ export const createEmi = createAsyncThunk(
 // Get Emi's
 export const getEmis = createAsyncThunk(
   "emi/getAllProducts",
-  async ({ page, limit }: { [key: string]: number }, thunkAPI) => {
+  async (filter: { [key: string]: number | string }, thunkAPI) => {
     try {
-      return await emiService.getEmis({ page, limit });
+      return await emiService.getEmis( filter );
     } catch (error) {
       if (axios.isAxiosError(error)) {
         const message = error.response?.data.message || "An error occurred";

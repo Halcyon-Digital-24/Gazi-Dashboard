@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { ChangeEvent, useEffect, useState } from "react";
 import { toast } from "react-toastify";
 import DeleteButton from "../../components/button/delete";
 import CustomIconArea from "../../components/custom-icon-area";
@@ -15,14 +15,18 @@ import {
   updateRefund,
 } from "../../redux/refund/refundSlice";
 import "./index.scss";
+import Filter from "../../components/filter";
+import { useDebounce } from "../../utills/debounce";
 
 const Refund = () => {
   const dispatch = useAppDispatch();
   const { refunds, isUpdate, totalCount, isDelete } = useAppSelector(
     (state) => state.refund
   );
+  const [displayItem, setDisplayItem] = useState(25);
+  const [onSearch, setOnSearch] = useState("");
   const [pageNumber, setPageNumber] = useState<number>(1);
-  const totalPage = Math.ceil(totalCount / 10);
+  const totalPage = Math.ceil(totalCount / displayItem);
   const updateStatus = (id: number, status: string) => {
     dispatch(updateRefund({ refund_status: status, id }));
   };
@@ -30,12 +34,36 @@ const Refund = () => {
     setPageNumber(selectedItem.selected + 1);
   };
 
+  const handleDisplayItem = (e: ChangeEvent<HTMLSelectElement>) => {
+    setDisplayItem(Number(e.target.value));
+  };
+
+
+  const [searchQuery, setSearchQuery] = useState<string>('');
+  const debouncedSearchQuery = useDebounce(searchQuery, 500); // 500ms debounce delay
+
+  const handleOnSearch = (e: ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
+    setSearchQuery(e.target.value);
+  };
+
   useEffect(() => {
-    dispatch(getRefund({ page: pageNumber }));
+    if (debouncedSearchQuery !== undefined) {
+      // Your search request logic here
+      // console.log('Search query:', debouncedSearchQuery);
+      setOnSearch(debouncedSearchQuery)
+    }
+  }, [debouncedSearchQuery]);
+
+  useEffect(() => {
+    dispatch(getRefund({
+      search: onSearch,
+      page: pageNumber,
+      limit: displayItem,
+    }));
     return () => {
       dispatch(reset());
     };
-  }, [dispatch, isUpdate, pageNumber, isDelete]);
+  }, [dispatch, isUpdate, pageNumber, isDelete, displayItem, onSearch]);
   useEffect(() => {
     if (isUpdate) {
       toast.success("Refund updated successfully");
@@ -48,6 +76,16 @@ const Refund = () => {
   return (
     <div className="refund">
       <Display>
+
+        <div className="row filter-action">
+          <div className="title">
+            <h3>Refund</h3>
+          </div>
+        </div>
+
+      </Display>
+      <Display>
+        <Filter handleDisplayItem={handleDisplayItem} onSearch={handleOnSearch} isFilter />
         <Row className="row text-bold">
           <Column className="col-md-1">Order No</Column>
           <Column className="col-md-2">Product</Column>

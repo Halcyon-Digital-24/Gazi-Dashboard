@@ -35,7 +35,7 @@ const initialState: INotiResponse = {
 // Create new Blog
 export const createNotification = createAsyncThunk(
   'notification/create',
-  async (data: INotification, thunkAPI) => {
+  async (data: FormData, thunkAPI) => {
     try {
       return await notificationsService.createNotification(data);
     } catch (error) {
@@ -45,6 +45,7 @@ export const createNotification = createAsyncThunk(
     }
   }
 );
+
 
 export const getNotification = createAsyncThunk(
   'notification/getAll',

@@ -23,6 +23,8 @@ export interface IProduct {
   meta_description?: string;
   updated_at?: string;
   created_at?: string;
+  camping_name?: string;
+  camping_id?: number;
 }
 export type IGalleryPhoto = {
   id: number;

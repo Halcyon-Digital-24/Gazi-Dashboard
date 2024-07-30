@@ -18,6 +18,7 @@ import {
   updateProduct,
 } from "../../redux/products/product-slice";
 import Loader from "../../components/loader";
+import { useDebounce } from "../../utills/debounce";
 
 const StockOutProducts: React.FC = () => {
   const dispatch = useAppDispatch();
@@ -26,7 +27,7 @@ const StockOutProducts: React.FC = () => {
   );
   const [displayItem, setDisplayItem] = useState(25);
   const [pageNumber, setPageNumber] = useState<number>(1);
-
+  const [onSearch, setOnSearch] = useState("");
   const totalPage = Math.ceil(totalCount / displayItem);
 
   const handlePageChange = (selectedItem: { selected: number }) => {
@@ -37,6 +38,22 @@ const StockOutProducts: React.FC = () => {
     setDisplayItem(Number(e.target.value));
   };
 
+
+  const [searchQuery, setSearchQuery] = useState<string>('');
+  const debouncedSearchQuery = useDebounce(searchQuery, 500); // 500ms debounce delay
+
+  const handleOnSearch = (e: ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
+    setSearchQuery(e.target.value);
+  };
+
+  useEffect(() => {
+    if (debouncedSearchQuery !== undefined) {
+      // Your search request logic here
+      // console.log('Search query:', debouncedSearchQuery);
+      setOnSearch(debouncedSearchQuery)
+    }
+  }, [debouncedSearchQuery]);
+
   const handleKeyPoint = (
     id: number,
     updateData: { [key: string]: string | number | boolean }
@@ -46,18 +63,19 @@ const StockOutProducts: React.FC = () => {
 
   useEffect(() => {
     dispatch(
-      getProducts({ page: pageNumber, limit: displayItem, availability: 2 })
+      getProducts({ page: pageNumber, limit: displayItem, availability: 2, search: onSearch, })
     );
     return () => {
       dispatch(reset());
     };
-  }, [dispatch, pageNumber, displayItem, isUpdate]);
+  }, [dispatch, pageNumber, displayItem, isUpdate, onSearch,]);
 
   return (
     <div>
       <CardBody header="Stock Out Products" to="/categories/create" />
       <Display>
-        <Filter handleDisplayItem={handleDisplayItem} />
+        <Filter handleDisplayItem={handleDisplayItem} onSearch={handleOnSearch}
+          isFilter />
         <Row className="row text-bold">
           <Column className="col-md-1">#</Column>
           <Column className="col-md-1">Images</Column>
