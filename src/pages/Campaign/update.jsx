@@ -7,12 +7,13 @@ import { useForm, Controller } from "react-hook-form";
 import "./index.scss";
 import { Button } from "../../components/button";
 import { useAppDispatch, useAppSelector } from "../../redux/hooks";
-import { getProducts } from "../../redux/products/product-slice";
+import { getFrontendProducts } from "../../redux/products/product-slice";
 import { useNavigate, useParams } from "react-router-dom";
 import { toast } from "react-toastify";
 import axios from "../../lib";
 import { API_ROOT, API_URL } from "../../constants";
 import { updateCampaign, reset } from "../../redux/campaign/campaignSlice";
+import { useDebounce } from "../../utills/debounce";
 
 const UpdateCampaign = () => {
   const {
@@ -33,58 +34,8 @@ const UpdateCampaign = () => {
   const areaRef = useRef(null);
   const [isFocus, setIsFocus] = useState(false);
 
-  const addProduct = (id) => {
-    if (!campaignProduct.includes(id)) {
-      setCampaignProduct((prevCampaignProduct) => [...prevCampaignProduct, id]);
-    } else {
-      setCampaignProduct((prevCampaignProduct) =>
-        prevCampaignProduct.filter((campaignProductId) => campaignProductId !== id)
-      );
-    }
-  };
-
-  const removeProduct = (id) => {
-    setCampaignProduct((prevCampaignProduct) =>
-      prevCampaignProduct.filter((campaignProductId) => campaignProductId !== id)
-    );
-  };
-
-  const onSubmit = (data) => {
-    const formData = new FormData();
-    formData.append("name", data.name);
-    formData.append("start_date", data.start_date);
-    formData.append("end_date", data.end_date);
-   
-    if (campaignProduct.length > 0) {
-      const camProucts= `[${campaignProduct.join(',')}]`;
-      formData.append("product_id", camProucts);
-    } else {
-      toast.error("Please Select Product");
-      return;
-    }
-
-    if (data.image && data.image.length > 0) {
-      formData.append("image", data.image[0]);
-    } else {
-      formData.append("previous_image", previousImage);
-    }
-
-
-    dispatch(updateCampaign({ slug, campaigndata: formData }));
-  };
-
   useEffect(() => {
-    if (isUpdate) {
-      toast.success(`${message}`);
-      navigate("/campaign");
-    }
-    return () => {
-      dispatch(reset());
-    };
-  }, [isUpdate, navigate, dispatch, message]);
-
-  useEffect(() => {
-    dispatch(getProducts({ page: 1, limit: 1000, search: search }));
+    dispatch(getFrontendProducts({ search: search, page: 1, limit: 100 }));
 
     return () => {
       dispatch(reset());
@@ -106,8 +57,11 @@ const UpdateCampaign = () => {
           "end_date",
           new Date(data.end_date).toISOString().split("T")[0]
         );
-        const productIdsArray = data.product_id.split(",").map(Number);
-        setCampaignProduct(productIdsArray);
+        const productIdsArray = JSON.parse(data.product_id);
+
+        const productIds = productIdsArray.map(Number);
+        setCampaignProduct(productIds);
+        // console.log(data.product_id);
         setPreviousImage(data.image);
       } catch (error) {
         console.error("Error fetching campaign data:", error);
@@ -116,6 +70,69 @@ const UpdateCampaign = () => {
 
     fetchData();
   }, [slug, setValue]);
+
+  const addProduct = (id) => {
+    if (!campaignProduct.includes(id)) {
+      setCampaignProduct((prevCampaignProduct) => [...prevCampaignProduct, id]);
+    } else {
+      setCampaignProduct((prevCampaignProduct) =>
+        prevCampaignProduct.filter(
+          (campaignProductId) => campaignProductId !== id
+        )
+      );
+    }
+  };
+
+  const removeProduct = (id) => {
+    setCampaignProduct((prevCampaignProduct) =>
+      prevCampaignProduct.filter(
+        (campaignProductId) => campaignProductId !== id
+      )
+    );
+  };
+
+  const onSubmit = (data) => {
+    const formData = new FormData();
+    formData.append("name", data.name);
+    formData.append("start_date", data.start_date);
+    formData.append("end_date", data.end_date);
+
+    if (campaignProduct.length > 0) {
+      const camProucts = `[${campaignProduct.join(",")}]`;
+      formData.append("product_id", camProucts);
+    } else {
+      toast.error("Please Select Product");
+      return;
+    }
+
+    if (data.image && data.image.length > 0) {
+      formData.append("image", data.image[0]);
+    } else {
+      formData.append("previous_image", previousImage);
+    }
+
+    dispatch(updateCampaign({ slug, campaigndata: formData }));
+  };
+
+  useEffect(() => {
+    if (isUpdate) {
+      toast.success(`${message}`);
+      navigate("/campaign");
+    }
+    return () => {
+      dispatch(reset());
+    };
+  }, [isUpdate, navigate, dispatch, message]);
+
+  const [searchQuery, setSearchQuery] = useState("");
+  const debouncedSearchQuery = useDebounce(searchQuery, 500); // 500ms debounce delay
+  useEffect(() => {
+    if (debouncedSearchQuery !== undefined) {
+      // Your search request logic here
+      // console.log('Search query:', debouncedSearchQuery);
+      setSearch(debouncedSearchQuery);
+    }
+  }, [debouncedSearchQuery]);
 
   useEffect(() => {
     const handleClickOutside = (event) => {
@@ -232,7 +249,7 @@ const UpdateCampaign = () => {
               placeholder="Search products"
               label="Search Products"
               htmlFor="select-product"
-              onChange={(e) => setSearch(e.target.value)}
+              onChange={(e) => setSearchQuery(e.target.value)}
               onFocus={() => setIsFocus(true)}
             />
             {isFocus && (

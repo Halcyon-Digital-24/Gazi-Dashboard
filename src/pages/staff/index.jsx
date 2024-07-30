@@ -14,16 +14,39 @@ import {
 } from "../../redux/staff/staffSlice";
 import { useAppDispatch, useAppSelector } from "../../redux/hooks";
 import { useEffect, useState } from "react";
+import Filter from "../../components/filter";
 import { toast } from "react-toastify";
+import { useDebounce } from "../../utills/debounce";
 
 const Staff = () => {
   const dispatch = useAppDispatch();
   const { staffs, totalCount, isDelete, message } = useAppSelector(selectStaff);
+  const [displayItem, setDisplayItem] = useState(25);
   const [pageNumber, setPageNumber] = useState(1);
-  const totalPage = Math.ceil(totalCount / 10);
+  const [onSearch, setOnSearch] = useState("");
+  const totalPage = Math.ceil(totalCount / displayItem);
 
   const handlePageChange = (selectedItem) => {
     setPageNumber(selectedItem.selected + 1);
+  };
+
+  const [searchQuery, setSearchQuery] = useState('');
+  const debouncedSearchQuery = useDebounce(searchQuery, 500); // 500ms debounce delay
+
+  const handleOnSearch = (e) => {
+    setSearchQuery(e.target.value);
+  };
+
+  useEffect(() => {
+    if (debouncedSearchQuery !== undefined) {
+      // Your search request logic here
+      // console.log('Search query:', debouncedSearchQuery);
+      setOnSearch(debouncedSearchQuery)
+    }
+  }, [debouncedSearchQuery]);
+
+  const handleDisplayItem = (e) => {
+    setDisplayItem(Number(e.target.value));
   };
 
   const handleDelete = (id) => {
@@ -34,17 +57,20 @@ const Staff = () => {
     if (isDelete) {
       toast.success(`${message}`);
     }
-    dispatch(getStaff({ page: pageNumber, limit: 10 }));
+    dispatch(getStaff({ search: onSearch,
+      page: pageNumber,
+      limit: displayItem, }));
     return () => {
       dispatch(reset());
     };
-  }, [dispatch, pageNumber, isDelete]);
+  }, [dispatch, pageNumber, isDelete,message, onSearch, displayItem]);
 
   return (
     <div>
       <CardBody to="/staffs/create" header="Staff List" />
 
       <Display>
+      <Filter handleDisplayItem={handleDisplayItem} onSearch={handleOnSearch} isFilter />
         <Row className="row">
           <Column className="col-md-3">Name</Column>
           <Column className="col-md-3">Email</Column>

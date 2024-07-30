@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { ChangeEvent, useEffect, useState } from "react";
 import EditButton from "../../components/button/edit";
 import CardBody from "../../components/card-body";
 import CustomIconArea from "../../components/custom-icon-area";
@@ -10,6 +10,8 @@ import { deleteEmi, getEmis, reset } from "../../redux/emi/emiSlice";
 import { useAppDispatch, useAppSelector } from "../../redux/hooks";
 import DeleteButton from "../../components/button/delete";
 import { toast } from "react-toastify";
+import Filter from "../../components/filter";
+import { useDebounce } from "../../utills/debounce";
 
 const EmiPage = () => {
   const dispatch = useAppDispatch();
@@ -17,6 +19,8 @@ const EmiPage = () => {
     (state) => state.emi
   );
   const [pageNumber, setPageNumber] = useState<number>(1);
+  const [onSearch, setOnSearch] = useState("");
+  const [displayItem, setDisplayItem] = useState(25);
   const handleDelete = (id: number) => {
     dispatch(deleteEmi(id));
   };
@@ -24,26 +28,48 @@ const EmiPage = () => {
   const handlePageChange = (selectedItem: { selected: number }) => {
     setPageNumber(selectedItem.selected + 1);
   };
-  const totalPage = Math.ceil(totalCount / 10);
+
+
+  const [searchQuery, setSearchQuery] = useState<string>('');
+  const debouncedSearchQuery = useDebounce(searchQuery, 500); // 500ms debounce delay
+
+  const handleOnSearch = (e: ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
+    setSearchQuery(e.target.value);
+  };
+
+  useEffect(() => {
+    if (debouncedSearchQuery !== undefined) {
+      // Your search request logic here
+      // console.log('Search query:', debouncedSearchQuery);
+      setOnSearch(debouncedSearchQuery)
+    }
+  }, [debouncedSearchQuery]);
+
+  const handleDisplayItem = (e: ChangeEvent<HTMLSelectElement>) => {
+    setDisplayItem(Number(e.target.value));
+  };
+
+  const totalPage = Math.ceil(totalCount / displayItem);
 
   useEffect(() => {
     if (isDelete) {
       toast.success(`${message}`);
     }
-  }, [isDelete]);
+  }, [isDelete, message]);
 
   useEffect(() => {
-    dispatch(getEmis({ page: pageNumber, limit: 10 }));
+    dispatch(getEmis({ page: pageNumber, limit: displayItem ,   bank_name: onSearch,}));
 
     return () => {
       dispatch(reset());
     };
-  }, [dispatch, pageNumber, isDelete]);
+  }, [dispatch, pageNumber, isDelete, onSearch, displayItem]);
 
   return (
     <div>
       <CardBody header="Available Emi" to="/emi/create"></CardBody>
       <Display>
+      <Filter handleDisplayItem={handleDisplayItem}  onSearch={handleOnSearch} isFilter />
         <Row className="row text-bold">
           <Column className="col-md-3">Bank Name</Column>
           <Column className="col-md-1">Three months</Column>

@@ -10,13 +10,16 @@ export interface ICreateResponse {
   data: INotification[];
 }
 
-const createNotification = async (
-  faqData: INotification
+export const createNotification = async (
+  notificationData: FormData
 ): Promise<Partial<ICreateResponse>> => {
-  const { data } = await axios.post(`/notifications`, faqData);
+  const { data } = await axios.post(`/notifications`, notificationData, {
+    headers: {
+      'Content-Type': 'multipart/form-data',
+    },
+  });
   return data;
 };
-
 const getNotification = async (filter: {
   [key: string]: string | number | boolean;
 }): Promise<INotificationResponse> => {
@@ -44,10 +47,15 @@ const getNotification = async (filter: {
   const { data } = await axios.get(url);
   return data;
 };
+const deleteNotification = async (id: number | string) => {
+  const { data } = await axios.delete(`/notifications?ids=[${id}]`);
+  return data.data;
+};
 
 const NotificationService = {
   createNotification,
   getNotification,
+  deleteNotification,
 };
 
 export default NotificationService;

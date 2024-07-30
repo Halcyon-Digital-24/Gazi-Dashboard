@@ -20,6 +20,7 @@ import {
   updateCategory,
 } from "../../redux/category/categorySlice";
 import { useAppDispatch, useAppSelector } from "../../redux/hooks";
+import { useDebounce } from "../../utills/debounce";
 
 const Categories: React.FC = () => {
   const dispatch = useAppDispatch();
@@ -59,13 +60,24 @@ const Categories: React.FC = () => {
     setDisplayItem(Number(e.target.value));
   };
 
-  const onSearch = (e: ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
-    setSearch(e.target.value);
+  const [searchQuery, setSearchQuery] = useState<string>('');
+  const debouncedSearchQuery = useDebounce(searchQuery, 500); // 500ms debounce delay
+
+  const handleOnSearch = (e: ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
+    setSearchQuery(e.target.value);
   };
 
   useEffect(() => {
+    if (debouncedSearchQuery !== undefined) {
+      // Your search request logic here
+      // console.log('Search query:', debouncedSearchQuery);
+      setSearch(debouncedSearchQuery)
+    }
+  }, [debouncedSearchQuery]);
+
+  useEffect(() => {
     dispatch(
-      getCategories({ page: pageNumber, limit: displayItem, title: search })
+      getCategories({ page: pageNumber, limit: displayItem, search: search })
     );
   }, [
     dispatch,
@@ -88,7 +100,7 @@ const Categories: React.FC = () => {
     return () => {
       dispatch(reset());
     };
-  }, [dispatch, isDelete, errorMessage]);
+  }, [dispatch, isDelete, errorMessage, message]);
 
   return (
     <div>
@@ -96,7 +108,7 @@ const Categories: React.FC = () => {
       <Display>
         <Filter
           handleDisplayItem={handleDisplayItem}
-          onSearch={onSearch}
+          onSearch={handleOnSearch}
           isFilter
         />
         <Row className="row text-bold">

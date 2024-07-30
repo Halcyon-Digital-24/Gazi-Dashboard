@@ -8,9 +8,11 @@ import "./index.scss";
 import { Button } from "../../components/button";
 import { useAppDispatch, useAppSelector } from "../../redux/hooks";
 import { createCampaign, reset } from "../../redux/campaign/campaignSlice";
-import { getProducts } from "../../redux/products/product-slice";
+import { getFrontendProducts, updateProduct } from "../../redux/products/product-slice";
 import { useNavigate } from "react-router-dom";
 import { toast } from "react-toastify";
+import Select from "../../components/select";
+import { useDebounce } from "../../utills/debounce";
 
 const CreateCampaign = () => {
   const {
@@ -27,14 +29,12 @@ const CreateCampaign = () => {
   const [search, setSearch] = useState("");
   const areaRef = useRef(null);
   const [isFocus, setIsFocus] = useState(false);
+  const [discountType, setDiscountType] = useState("percent");
+  const [discount, setDiscount] = useState(0);
 
   const addProduct = (id) => {
     if (!campaignProduct.includes(id)) {
       setCampaignProduct((prevCampaign) => [...prevCampaign, id]);
-    } else {
-      setCampaignProduct((prevCampaign) =>
-        prevCampaign.filter((campaignId) => campaignId !== id)
-      );
     }
   };
 
@@ -44,7 +44,14 @@ const CreateCampaign = () => {
     );
   };
 
-  const onProductSubmit = (data) => {
+  const calculateDiscountPrice = (regularPrice) => {
+    if (discountType === "percent") {
+      return regularPrice - (regularPrice * discount) / 100;
+    }
+    return regularPrice - discount;
+  };
+
+  const onProductSubmit = async (data) => {
     const formData = new FormData();
     formData.append("name", data.name);
     formData.append("slug", data.slug);
@@ -52,19 +59,43 @@ const CreateCampaign = () => {
     formData.append("end_date", data.end_date);
 
     if (campaignProduct.length > 0) {
-      const camProucts= `[${campaignProduct.join(',')}]`;
-      formData.append("product_id", camProucts);
+        const camProucts = `[${campaignProduct.join(",")}]`;
+        formData.append("product_id", camProucts);
     } else {
-      toast.error("Please Select Product");
-      return;
+        toast.error("Please Select Product");
+        return;
     }
-    
+
     formData.append("image", data.image);
 
-    console.log([...formData.entries()]); // Logging FormData entries for debugging
+    // console.log([...formData.entries()]); // Logging FormData entries for debugging
 
-    dispatch(createCampaign(formData));
-  };
+    try {
+        const response = await dispatch(createCampaign(formData));
+        const campaignId = response.payload.data.id; // Adjust based on how your response structure looks
+
+        // console.log(response);
+        campaignProduct.forEach(async (id) => {
+            const product = products.find((product) => product.id === id);
+            if (product) {
+                const discountPrice = calculateDiscountPrice(product.regular_price);
+                const updatedProductData = new FormData();
+
+                updatedProductData.append("discount_price", discountPrice);
+                updatedProductData.append("camping_name", data.name);
+                updatedProductData.append("camping_id", campaignId); // Use the obtained campaign ID
+                // Append other product fields if needed
+                
+                await dispatch(updateProduct({id: product.id, productData: updatedProductData}));
+            }
+        });
+
+    } catch (error) {
+        console.error("Error creating campaign:", error);
+        toast.error("Error creating campaign. Please try again.");
+    }
+};
+
 
   useEffect(() => {
     if (isCreate) {
@@ -76,8 +107,20 @@ const CreateCampaign = () => {
     };
   }, [isCreate, navigate, dispatch, message]);
 
+  const [searchQuery, setSearchQuery] = useState('');
+  const debouncedSearchQuery = useDebounce(searchQuery, 500); // 500ms debounce delay
+
+
   useEffect(() => {
-    dispatch(getProducts({ page: 1, limit: 100, search: search }));
+    if (debouncedSearchQuery !== undefined) {
+      // Your search request logic here
+      // console.log('Search query:', debouncedSearchQuery);
+      setSearch(debouncedSearchQuery)
+    }
+  }, [debouncedSearchQuery]);
+
+  useEffect(() => {
+    dispatch(getFrontendProducts({ search: search, page: 1, limit: 100 }));
 
     return () => {
       dispatch(reset());
@@ -100,7 +143,7 @@ const CreateCampaign = () => {
 
   return (
     <div className="campaign">
-      <CardBody header="Create Campaign" to="/campaign" />
+      <CardBody header="Create Campaign" to="/campaign" text="Back" />
       <Display>
         <form onSubmit={handleSubmit(onProductSubmit)}>
           <div className="text">
@@ -189,6 +232,23 @@ const CreateCampaign = () => {
               <p className="validation__error">{errors.end_date.message}</p>
             )}
           </div>
+          <div className="invoice-discount-area">
+            <div style={{ width: "60%", marginRight: "2%" }}>
+              <Input
+                placeholder="Discount Value"
+                defaultValue="0"
+                label="Discount Value"
+                htmlFor="discount-value"
+                onChange={(e) => setDiscount(Number(e.target.value))}
+              />
+            </div>
+            <div style={{ width: "38%" }}>
+              <Select onChange={(e) => setDiscountType(e.target.value)}>
+                <option value="flat">Flat</option>
+                <option value="percent">Percent</option>
+              </Select>
+            </div>
+          </div>
           <div className="selected-products">
             {campaignProduct.map((id) => {
               const product = products.find((product) => product.id === id);
@@ -211,19 +271,19 @@ const CreateCampaign = () => {
               placeholder="Search products"
               label="Search Products"
               htmlFor="select-product"
-              onChange={(e) => setSearch(e.target.value)}
+              onChange={(e) => setSearchQuery(e.target.value)}
               onFocus={() => setIsFocus(true)}
             />
             {isFocus && (
               <div className="select-area">
                 <ul className="product-list">
-                  {products.map((product, index) => (
+                  {products.map((product) => (
                     <li
                       className="item"
-                      key={index}
+                      key={product.id}
                       onClick={() => addProduct(product.id)}
                     >
-                      <span> {product.title}</span>
+                      <span>{product.title}</span>
                       {campaignProduct.includes(product.id) && (
                         <span>
                           <FaCheck />

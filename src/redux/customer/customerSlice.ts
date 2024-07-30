@@ -101,7 +101,7 @@ export const customerSlice = createSlice({
       .addCase(deleteCustomer.fulfilled, (state, action) => {
         state.isLoading = false;
         state.isDelete = true;
-        console.log(action.payload);
+        // console.log(action.payload);
         state.message = action.payload.message;
       })
       .addCase(deleteCustomer.rejected, (state, action) => {

@@ -19,7 +19,7 @@ const UpdateVariant = ({ addVariants, handleRemoveAddVariant }) => {
       const { data } = await axios.delete(
         `${API_URL}/product-attributes/?ids=[${id}]`
       );
-      console.log(data);
+      // console.log(data);
       toast.success(data.message);
       setIsLoading(false);
     } catch (error) {

@@ -17,12 +17,14 @@ import {
 import { useAppDispatch, useAppSelector } from "../../redux/hooks";
 import { DateRangePicker } from "rsuite";
 import { formatDateForURL } from "../../utills/formateDate";
+import { useDebounce } from "../../utills/debounce";
 
 const Customers: React.FC = () => {
   const dispatch = useAppDispatch();
   const [pageNumber, setPageNumber] = useState<number>(1);
   const [displayItem, setDisplayItem] = useState(25);
   const [orderDate, setOrderDate] = useState<[Date, Date] | null>(null);
+  const [onSearch, setOnSearch] = useState("");
   const { customers, isError, isDelete, message, totalCount } = useAppSelector(
     (state) => state.customer
   );
@@ -41,6 +43,22 @@ const Customers: React.FC = () => {
     dispatch(deleteCustomer([id]));
   };
 
+
+  const [searchQuery, setSearchQuery] = useState<string>('');
+  const debouncedSearchQuery = useDebounce(searchQuery, 500); // 500ms debounce delay
+
+  const handleOnSearch = (e: ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
+    setSearchQuery(e.target.value);
+  };
+
+  useEffect(() => {
+    if (debouncedSearchQuery !== undefined) {
+      // Your search request logic here
+      // console.log('Search query:', debouncedSearchQuery);
+      setOnSearch(debouncedSearchQuery)
+    }
+  }, [debouncedSearchQuery]);
+
   useEffect(() => {
     if (isDelete) {
       toast.success(`${message}`);
@@ -48,13 +66,14 @@ const Customers: React.FC = () => {
     return () => {
       dispatch(reset());
     };
-  }, [isDelete, isError]);
+  }, [isDelete, isError, dispatch, message]);
 
   useEffect(() => {
     dispatch(
       getCustomers({
         page: pageNumber,
         limit: displayItem,
+        search: onSearch,
         start_date: orderDate ? formatDateForURL(orderDate[0]) : "",
         end_date: orderDate ? formatDateForURL(orderDate[1]) : "",
       })
@@ -62,11 +81,16 @@ const Customers: React.FC = () => {
     return () => {
       dispatch(reset());
     };
-  }, [dispatch, pageNumber, displayItem, isDelete, orderDate]);
+  }, [dispatch, pageNumber, displayItem, isDelete, orderDate, onSearch]);
 
   return (
     <div>
       <Display>
+      <div className="row filter-action">
+          <div className="title">
+            <h3>Customers</h3>
+          </div>
+        </div>
         <div className="date-area">
           <DateRangePicker
             className={`date-area`}
@@ -79,7 +103,7 @@ const Customers: React.FC = () => {
             <BsDownload />
           </CSVLink>
         </div>
-        <Filter handleDisplayItem={handleDisplayItem} />
+        <Filter handleDisplayItem={handleDisplayItem} onSearch={handleOnSearch} isFilter/>
         <Row className="row text-bold">
           <Column className="col-md-3">Name</Column>
           <Column className="col-md-3">Email</Column>

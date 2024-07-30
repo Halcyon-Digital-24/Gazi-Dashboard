@@ -21,6 +21,8 @@ import {
   updateProduct,
 } from "../../redux/products/product-slice";
 import "./index.scss";
+import { useDebounce } from "../../utills/debounce";
+
 
 const AllProducts: React.FC = () => {
   const [selectedProducts, setSelectedProducts] = useState<number[]>([]);
@@ -34,11 +36,20 @@ const AllProducts: React.FC = () => {
     useAppSelector((state) => state.product);
   const totalPage = Math.ceil(totalCount / displayItem);
 
-  const handleOnSearch = (
-    e: ChangeEvent<HTMLInputElement | HTMLTextAreaElement>
-  ) => {
-    setOnSearch(e.target.value);
+  const [searchQuery, setSearchQuery] = useState<string>('');
+  const debouncedSearchQuery = useDebounce(searchQuery, 500); // 500ms debounce delay
+
+  const handleOnSearch = (e: ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
+    setSearchQuery(e.target.value);
   };
+
+  useEffect(() => {
+    if (debouncedSearchQuery !== undefined) {
+      // Your search request logic here
+      // console.log('Search query:', debouncedSearchQuery);
+      setOnSearch(debouncedSearchQuery)
+    }
+  }, [debouncedSearchQuery]);
 
   useEffect(() => {
     if (isDelete) {

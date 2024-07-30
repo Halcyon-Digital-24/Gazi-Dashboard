@@ -3,14 +3,12 @@ import Input from '../../components/forms/text-input';
 import TextArea from '../../components/forms/textarea';
 import { Button } from '../../components/button';
 import { useAppDispatch, useAppSelector } from '../../redux/hooks';
-import {
-  createNotification,
-  reset,
-} from '../../redux/notification/notificationSlice';
+import { createNotification, reset } from '../../redux/notification/notificationSlice';
 import { toast } from 'react-toastify';
 import { useNavigate } from 'react-router-dom';
 import Display from '../../components/display';
 import CardBody from '../../components/card-body';
+import './index.scss';
 
 const CreateNotification = () => {
   const dispatch = useAppDispatch();
@@ -18,17 +16,27 @@ const CreateNotification = () => {
   const { isCreate, isError } = useAppSelector((state) => state.notification);
   const [title, setTitle] = useState('');
   const [details, setDetails] = useState('');
-  console.log(isError);
+  const [image, setImage] = useState<File | null>(null);
 
-  const handleSubmit = (e: FormEvent<HTMLFormElement>) => {
+  const handleSubmit = async (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault();
 
-    dispatch(createNotification({ title, details }));
+    if (!image) {
+      toast.error('Please select an image');
+      return;
+    }
+
+    const formData = new FormData();
+    formData.append('title', title);
+    formData.append('details', details);
+    formData.append('image', image);
+
+    dispatch(createNotification(formData));
   };
 
   useEffect(() => {
     if (isCreate) {
-      toast.success('Notification push successfully');
+      toast.success('Notification pushed successfully');
       navigate('/notification');
     }
     if (isError) {
@@ -38,6 +46,13 @@ const CreateNotification = () => {
       dispatch(reset());
     };
   }, [isCreate, isError, navigate, dispatch]);
+
+  const handleImageChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const file = e.target.files?.[0];
+    if (file) {
+      setImage(file);
+    }
+  };
 
   return (
     <div>
@@ -53,6 +68,9 @@ const CreateNotification = () => {
             placeholder="Details"
             onChange={(e) => setDetails(e.target.value)}
           />
+          <div className='file'>
+            <input type="file" accept="image/*" onChange={handleImageChange} />
+          </div>
           <Button type="submit">Push</Button>
         </form>
       </Display>

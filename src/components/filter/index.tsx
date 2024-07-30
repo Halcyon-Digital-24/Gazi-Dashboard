@@ -40,7 +40,7 @@ const Filter: React.FC<propsType> = ({
               <label>Search </label>
               <input
                 type="search"
-                placeholder=""
+                placeholder="Search here"
                 aria-controls="admin-table"
                 onChange={onSearch}
               />

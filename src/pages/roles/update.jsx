@@ -19,7 +19,7 @@ const UpdateRole = () => {
     formState: { errors },
   } = useForm();
   const { slug } = useParams();
-  console.log(slug);
+  // console.log(slug);
   const navigate = useNavigate();
   const dispatch = useAppDispatch();
   const { isUpdate, error, isError, message } = useAppSelector(selectRole);

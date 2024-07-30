@@ -40,7 +40,7 @@ const GalleryImages: FC<IProps> = ({ slug }) => {
       axios
         .post(`${API_URL}/product-photos`, formData)
         .then((response) => {
-          console.log("API call successful", response.data);
+          // console.log("API call successful", response.data);
         })
         .catch((error) => {
           console.error("API call failed", error);
