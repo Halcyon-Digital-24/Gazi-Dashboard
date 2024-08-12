@@ -65,118 +65,8 @@ const UpdateProduct: React.FC = () => {
   const [variants, setVariants] = useState<any[]>([]);
   const [exitingVariants, setExitingVariants] = useState<any[]>([]);
   const [addVariants, setAddVariants] = useState<any[]>([]);
-  /*  useEffect(() => {
-    const fetchData = async () => {
-      try {
-        const response = await axios.get<IAttributeResponse>(
-          `${API_URL}/attributes`
-        );
-        if (response?.status === 200) {
-          let tempAttributes: any[] = response?.data?.data?.rows;
-          tempAttributes =
-            tempAttributes?.length > 0
-              ? tempAttributes?.map((item) => {
-                  return { ...item, selectedValues: [] };
-                })
-              : [];
-          try {
-            const response2 = await axios.get(
-              `${API_URL}/product-attributes/attributes/${slug}`
-            );
-            if (response2?.status === 200) {
-              let selectedAttributeList = response2?.data?.data?.rows;
-              if (selectedAttributeList?.length > 0) {
-                // setPreviousSelectedAttributes(selectedAttributeList);
-                setIsVariant(true);
-                if (tempAttributes?.length > 0) {
-                  tempAttributes?.map((item) => {
-                    let matchFound = false;
-                    let valuesFound: any = "";
-                    selectedAttributeList = selectedAttributeList?.filter(
-                      (row: any) => {
-                        if (item?.name === row?.attribute_key) {
-                          matchFound = true;
-                          valuesFound = row?.attribute_value;
-                          return false;
-                        } else {
-                          return true;
-                        }
-                      }
-                    );
-                    if (matchFound) {
-                      setSelectedAttributes((prevState) => {
-                        if (Array.isArray(valuesFound)) {
-                          valuesFound = valuesFound.join(",");
-                        }
-                        valuesFound =
-                          valuesFound.indexOf(",") > -1
-                            ? valuesFound.split(",")
-                            : [valuesFound];
-                        let itemValue: any[] =
-                          item?.value?.indexOf(",") > -1
-                            ? item?.value?.split(",")
-                            : [item?.value];
-                        itemValue = itemValue?.filter((val) => {
-                          if (valuesFound.find((itm: any) => itm === val)) {
-                            return false;
-                          } else {
-                            return true;
-                          }
-                        });
-                        if (prevState?.length == 0) {
-                          return [
-                            {
-                              ...item,
-                              value: itemValue.join(","),
-                              selectedValues: valuesFound,
-                            },
-                          ];
-                        } else {
-                          if (
-                            prevState.find((attr) => attr?.name === item?.name)
-                          ) {
-                            return [...prevState];
-                          } else {
-                            return [
-                              ...prevState,
-                              {
-                                ...item,
-                                value: itemValue.join(","),
-                                selectedValues: valuesFound,
-                              },
-                            ];
-                          }
-                        }
-                      });
-                    } else {
-                      setAttributes((prevState) => {
-                        if (prevState?.length == 0) {
-                          return [item];
-                        } else {
-                          if (
-                            prevState.find((attr) => attr?.name === item?.name)
-                          ) {
-                            return [...prevState];
-                          } else {
-                            return [...prevState, item];
-                          }
-                        }
-                      });
-                    }
-                  });
-                }
-              }
-            }
-          } catch (error2) {
-            setAttributes(tempAttributes);
-          }
-        }
-      } catch (error) {
-        console.error("Failed to fetch data", error);
-      }
-    };
-    fetchData();
-  }, []); */
+  const [variantError, setVariantError] = useState<string | null>(null);
+
 
   useEffect(() => {
     const fetchData = async () => {
@@ -223,7 +113,7 @@ const UpdateProduct: React.FC = () => {
   };
 
   const handleRemoveAddVariant = (att: any) => {
-    console.log("variant",att)
+    console.log("variant", att)
     setAddVariants(
       addVariants.filter((v) => v.attribute_value !== att.attribute_value)
     );
@@ -232,90 +122,6 @@ const UpdateProduct: React.FC = () => {
       exitingVariants.filter((v) => v.attribute_value !== att.attribute_value)
     );
   };
-  /*  const handleAddAttribute = (
-    attribute: string,
-    attributeValue: string | null = null
-  ) => {
-    if (attributeValue) {
-      setSelectedAttributes((prevState) =>
-        prevState.map((item) => {
-          if (item.name === attribute) {
-            let tempAttrVals: string[] =
-              item.value.indexOf(",") > -1
-                ? item.value.split(",")
-                : [item.value];
-            let tempFilteredAttrVals: string[] = tempAttrVals.filter(
-              (val) => val !== attributeValue
-            );
-            let tempFilteredValsString: string = "";
-            if (tempFilteredAttrVals?.length > 1) {
-              tempFilteredAttrVals?.map((val, i) => {
-                if (tempFilteredAttrVals.length == i + 1) {
-                  tempFilteredValsString += `${val}`;
-                } else {
-                  tempFilteredValsString += `${val},`;
-                }
-              });
-            } else {
-              tempFilteredValsString = tempFilteredAttrVals[0];
-            }
-            item.value =
-              tempFilteredValsString === undefined
-                ? ""
-                : tempFilteredValsString;
-            item.selectedValues.push(attributeValue);
-          }
-          return item;
-        })
-      );
-    } else {
-      if (attribute !== "") {
-        let tempObj = {};
-        attributes.map((item) => {
-          if (item?.name === attribute) {
-            tempObj = item;
-          }
-        });
-        setAttributes((prevState) =>
-          prevState?.filter((item) => item.name !== attribute)
-        );
-        setSelectedAttributes((prevState) => [tempObj, ...prevState]);
-      }
-    }
-  }; */
-
-  /* const handleRemoveAttribute = (
-    attribute: string,
-    attributeValue: string | null = null
-  ) => {
-    if (attributeValue) {
-      setSelectedAttributes((prevState) =>
-        prevState.map((item) => {
-          if (item.name === attribute) {
-            item.value =
-              item.value === ""
-                ? attributeValue
-                : `${item.value},${attributeValue}`;
-            item.selectedValues = item.selectedValues.filter(
-              (val: string) => val !== attributeValue
-            );
-          }
-          return item;
-        })
-      );
-    } else {
-      let tempObj = {};
-      selectedAttributes.map((item) => {
-        if (item?.name === attribute) {
-          tempObj = item;
-        }
-      });
-      setSelectedAttributes((prevState) =>
-        prevState?.filter((item) => item.name !== attribute)
-      );
-      setAttributes((prevState) => [tempObj, ...prevState]);
-    }
-  }; */
 
   const handleImageChange = (e: ChangeEvent<HTMLInputElement>) => {
     if (e.target.files) {
@@ -323,6 +129,28 @@ const UpdateProduct: React.FC = () => {
       setUpdateImage(file);
     }
   };
+
+  const validateVariantQuantities = (): boolean => {
+    // Initialize an object to keep track of sums for each variant type
+    const variantSums: { [key: string]: number } = {};
+
+    // Loop through all added variants and sum the quantities for each type (e.g., Color, Size)
+    addVariants.forEach((variant) => {
+        if (!variantSums[variant.attribute_key]) {
+            variantSums[variant.attribute_key] = 0;
+        }
+        variantSums[variant.attribute_key] += variant.attribute_quantity;
+    });
+
+    // Check that each variant type's total equals the main quantity
+    for (const variantType in variantSums) {
+        if (variantSums[variantType] !== quantity) {
+            return false;
+        }
+    }
+
+    return true;
+};
 
   const handleProductSubmit = (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault();
@@ -356,8 +184,18 @@ const UpdateProduct: React.FC = () => {
     formData.append("is_sale", isSale.toString());
     formData.append("is_feature", isFeature.toString());
     formData.append("is_new", isNew.toString());
+
+    // Validate variant quantities before submitting
+    if (isVariant && !validateVariantQuantities()) {
+      setVariantError("Total variant quantities must match the main quantity.");
+      toast.error("Total variant quantities must match the main quantity.");
+      return;
+    } else {
+      setVariantError(null);
+    }
+
     if (isVariant) {
-      let tempSelAttri: any[] = [];
+      const tempSelAttri: any[] = [];
       selectedAttributes?.map((item) => {
         if (item?.selectedValues?.length > 0) {
           tempSelAttri.push({
@@ -446,6 +284,18 @@ const UpdateProduct: React.FC = () => {
       );
     }
   }, [discountType, discountSelectedAmount]);
+
+  useEffect(() => {
+    if (isVariant) {
+        const isValid = validateVariantQuantities();
+        if (!isValid) {
+            setVariantError("The sum of each variant type's quantities must equal the main quantity.");
+        } else {
+            setVariantError(null);
+        }
+    }
+}, [addVariants, quantity]);
+
 
   return (
     <div className="create-product">
@@ -539,17 +389,7 @@ const UpdateProduct: React.FC = () => {
                           </option>
                         ))}
                     </select>
-                    {/* <div className="attribute-selected">
-                      {selectedAttributes?.length > 0 &&
-                        selectedAttributes?.map((item, i) => (
-                          <AttributeSingle
-                            key={i}
-                            data={item}
-                            handleAddAttribute={handleAddAttribute}
-                            handleRemoveAttribute={handleRemoveAttribute}
-                          />
-                        ))}
-                    </div> */}
+
                     <div className="varian-table">
                       <UpdateVariant
                         addVariants={addVariants}
@@ -586,11 +426,13 @@ const UpdateProduct: React.FC = () => {
           <div className="col-md-4">
             <div className="right-body">
               <Display>
-                <Button className="save-btn" type="submit">
+                <Button className="save-btn" type="submit" disabled={variantError !== null}>
                   Save & Update
                 </Button>
               </Display>
-
+              {variantError && (
+                <div className="text-center text-red-600 mt-2">{variantError}</div>
+              )}
               <Display>
                 <Input
                   placeholder="Regular Price"

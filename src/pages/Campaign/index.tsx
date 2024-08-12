@@ -74,7 +74,7 @@ const CampaignPage: React.FC = () => {
         // console.log('Updating product:', product);
         const updatedProductData = {
           ...product,
-          discount_price: 0,
+          discount_price: product.regular_price,
           camping_name: null,
           camping_id: null,
         };

@@ -1,4 +1,4 @@
-import { useEffect, useRef, useState } from "react";
+import { useEffect, useRef, useState, useMemo } from "react";
 import { FaCheck, FaTimes } from "react-icons/fa";
 import CardBody from "../../components/card-body";
 import Display from "../../components/display";
@@ -8,7 +8,10 @@ import "./index.scss";
 import { Button } from "../../components/button";
 import { useAppDispatch, useAppSelector } from "../../redux/hooks";
 import { createCampaign, reset } from "../../redux/campaign/campaignSlice";
-import { getFrontendProducts, updateProduct } from "../../redux/products/product-slice";
+import {
+  getFrontendProducts,
+  updateProduct,
+} from "../../redux/products/product-slice";
 import { useNavigate } from "react-router-dom";
 import { toast } from "react-toastify";
 import Select from "../../components/select";
@@ -24,31 +27,53 @@ const CreateCampaign = () => {
   const dispatch = useAppDispatch();
   const navigate = useNavigate();
   const { isCreate, message } = useAppSelector((state) => state.campaign);
-  const [campaignProduct, setCampaignProduct] = useState([]);
   const { products } = useAppSelector((state) => state.product);
+  const [campaignProduct, setCampaignProduct] = useState([]);
   const [search, setSearch] = useState("");
   const areaRef = useRef(null);
   const [isFocus, setIsFocus] = useState(false);
   const [discountType, setDiscountType] = useState("percent");
   const [discount, setDiscount] = useState(0);
+  const [discounts, setDiscounts] = useState({});
+  const [discountTypes, setDiscountTypes] = useState({});
 
   const addProduct = (id) => {
-    if (!campaignProduct.includes(id)) {
-      setCampaignProduct((prevCampaign) => [...prevCampaign, id]);
+    if (!campaignProduct.some((product) => product.id === id)) {
+      const selectedProduct = products.find((product) => product.id === id);
+      setCampaignProduct((prevCampaign) => [...prevCampaign, selectedProduct]);
+      setDiscounts((prevDiscounts) => ({ ...prevDiscounts, [id]: "" }));
+      setDiscountTypes((prevDiscountTypes) => ({
+        ...prevDiscountTypes,
+        [id]: "percent",
+      }));
     }
   };
 
   const removeProduct = (id) => {
     setCampaignProduct((prevCampaign) =>
-      prevCampaign.filter((campaignId) => campaignId !== id)
+      prevCampaign.filter((product) => product.id !== id)
     );
+    setDiscounts((prevDiscounts) => {
+      const { [id]: removed, ...rest } = prevDiscounts;
+      return rest;
+    });
+    setDiscountTypes((prevDiscountTypes) => {
+      const { [id]: removed, ...rest } = prevDiscountTypes;
+      return rest;
+    });
   };
 
-  const calculateDiscountPrice = (regularPrice) => {
-    if (discountType === "percent") {
-      return regularPrice - (regularPrice * discount) / 100;
+  const calculateDiscountPrice = (regularPrice, productId) => {
+    const individualDiscount =
+      discounts[productId] !== "" ? discounts[productId] : discount;
+    const individualDiscountType =
+      discountTypes[productId] !== "percent"
+        ? discountTypes[productId]
+        : discountType;
+    if (individualDiscountType === "percent") {
+      return regularPrice - (regularPrice * individualDiscount) / 100;
     }
-    return regularPrice - discount;
+    return regularPrice - individualDiscount;
   };
 
   const onProductSubmit = async (data) => {
@@ -59,43 +84,42 @@ const CreateCampaign = () => {
     formData.append("end_date", data.end_date);
 
     if (campaignProduct.length > 0) {
-        const camProucts = `[${campaignProduct.join(",")}]`;
-        formData.append("product_id", camProucts);
+      const camProucts = `[${campaignProduct
+        .map((product) => product.id)
+        .join(",")}]`;
+      formData.append("product_id", camProucts);
     } else {
-        toast.error("Please Select Product");
-        return;
+      toast.error("Please Select Product");
+      return;
     }
 
     formData.append("image", data.image);
 
-    // console.log([...formData.entries()]); // Logging FormData entries for debugging
-
     try {
-        const response = await dispatch(createCampaign(formData));
-        const campaignId = response.payload.data.id; // Adjust based on how your response structure looks
+      const response = await dispatch(createCampaign(formData));
+      const campaignId = response.payload.data.id; // Adjust based on how your response structure looks
 
-        // console.log(response);
-        campaignProduct.forEach(async (id) => {
-            const product = products.find((product) => product.id === id);
-            if (product) {
-                const discountPrice = calculateDiscountPrice(product.regular_price);
-                const updatedProductData = new FormData();
+      campaignProduct.forEach(async (product) => {
+        const discountPrice = calculateDiscountPrice(
+          product.regular_price,
+          product.id
+        );
+        const updatedProductData = new FormData();
 
-                updatedProductData.append("discount_price", discountPrice);
-                updatedProductData.append("camping_name", data.name);
-                updatedProductData.append("camping_id", campaignId); // Use the obtained campaign ID
-                // Append other product fields if needed
-                
-                await dispatch(updateProduct({id: product.id, productData: updatedProductData}));
-            }
-        });
+        updatedProductData.append("discount_price", discountPrice);
+        updatedProductData.append("camping_name", data.name);
+        updatedProductData.append("camping_id", campaignId); // Use the obtained campaign ID
+        // Append other product fields if needed
 
+        await dispatch(
+          updateProduct({ id: product.id, productData: updatedProductData })
+        );
+      });
     } catch (error) {
-        console.error("Error creating campaign:", error);
-        toast.error("Error creating campaign. Please try again.");
+      console.error("Error creating campaign:", error);
+      toast.error("Error creating campaign. Please try again.");
     }
-};
-
+  };
 
   useEffect(() => {
     if (isCreate) {
@@ -107,20 +131,17 @@ const CreateCampaign = () => {
     };
   }, [isCreate, navigate, dispatch, message]);
 
-  const [searchQuery, setSearchQuery] = useState('');
+  const [searchQuery, setSearchQuery] = useState("");
   const debouncedSearchQuery = useDebounce(searchQuery, 500); // 500ms debounce delay
-
 
   useEffect(() => {
     if (debouncedSearchQuery !== undefined) {
-      // Your search request logic here
-      // console.log('Search query:', debouncedSearchQuery);
-      setSearch(debouncedSearchQuery)
+      setSearch(debouncedSearchQuery);
     }
   }, [debouncedSearchQuery]);
 
   useEffect(() => {
-    dispatch(getFrontendProducts({ search: search, page: 1, limit: 100 }));
+    dispatch(getFrontendProducts({ search, page: 1, limit: 100 }));
 
     return () => {
       dispatch(reset());
@@ -140,6 +161,13 @@ const CreateCampaign = () => {
       document.removeEventListener("mousedown", handleClickOutside);
     };
   }, [isFocus]);
+
+  const filteredProducts = useMemo(() => {
+    if (!search) return products;
+    return products.filter((product) =>
+      product.title.toLowerCase().includes(search.toLowerCase())
+    );
+  }, [products, search]);
 
   return (
     <div className="campaign">
@@ -161,7 +189,7 @@ const CreateCampaign = () => {
             )}
           </div>
           <div className="text">
-            <label htmlFor="name">Slug *</label>
+            <label htmlFor="slug">Slug *</label>
             <input
               type="text"
               placeholder="Campaign Slug"
@@ -199,7 +227,7 @@ const CreateCampaign = () => {
             <p className="validation__error">{errors.image.message}</p>
           )}
           <div className="text">
-            <label htmlFor="">Start Date</label>
+            <label htmlFor="start_date">Start Date</label>
             <input
               type="date"
               {...register("start_date", {
@@ -211,13 +239,11 @@ const CreateCampaign = () => {
               })}
             />
             {errors.start_date && (
-              <p className="validation__error">
-                {errors.start_date.message}
-              </p>
+              <p className="validation__error">{errors.start_date.message}</p>
             )}
           </div>
           <div className="text">
-            <label htmlFor="">Expire Date</label>
+            <label htmlFor="end_date">Expire Date</label>
             <input
               type="date"
               {...register("end_date", {
@@ -250,22 +276,53 @@ const CreateCampaign = () => {
             </div>
           </div>
           <div className="selected-products">
-            {campaignProduct.map((id) => {
-              const product = products.find((product) => product.id === id);
-              return (
-                <div className="selected-product" key={id}>
-                  <span>{product?.title}</span>
-                  <button
-                    type="button"
-                    className="remove-button"
-                    onClick={() => removeProduct(id)}
-                  >
-                    <FaTimes />
-                  </button>
+            {campaignProduct.map((product) => (
+              <div className="selected-product" key={product.id}>
+                <div style={{ width: "50%", marginRight: "2%" }}>
+                <span>{product.title}</span>
                 </div>
-              );
-            })}
+                <div className="invoice-discount-area" style={{ width: "45%" , marginRight: "3%"}}>
+                  <div style={{ width: "60%", marginRight: "2%" }}>
+                    <Input
+                      type="number"
+                      placeholder="Discount Value"
+                      className="discount-input"
+                      value={discounts[product.id] || ""}
+                      onChange={(e) =>
+                        setDiscounts((prevDiscounts) => ({
+                          ...prevDiscounts,
+                          [product.id]: Number(e.target.value),
+                        }))
+                      }
+                    />
+                  </div>
+                  <div style={{ width: "38%" }}>
+                    <Select
+                      className="discount-select"
+                      value={discountTypes[product.id] || "percent"}
+                      onChange={(e) =>
+                        setDiscountTypes((prevDiscountTypes) => ({
+                          ...prevDiscountTypes,
+                          [product.id]: e.target.value,
+                        }))
+                      }
+                    >
+                      <option value="flat">Flat</option>
+                      <option value="percent">Percent</option>
+                    </Select>
+                  </div>
+                </div>
+                <button
+                  type="button"
+                  className="remove-button"
+                  onClick={() => removeProduct(product.id)}
+                >
+                  <FaTimes />
+                </button>
+              </div>
+            ))}
           </div>
+
           <div className="select-product" ref={areaRef}>
             <Input
               placeholder="Search products"
@@ -277,14 +334,14 @@ const CreateCampaign = () => {
             {isFocus && (
               <div className="select-area">
                 <ul className="product-list">
-                  {products.map((product) => (
+                  {filteredProducts.map((product) => (
                     <li
                       className="item"
                       key={product.id}
                       onClick={() => addProduct(product.id)}
                     >
                       <span>{product.title}</span>
-                      {campaignProduct.includes(product.id) && (
+                      {campaignProduct.some((p) => p.id === product.id) && (
                         <span>
                           <FaCheck />
                         </span>
