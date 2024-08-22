@@ -22,6 +22,7 @@ import {
 } from "../../redux/products/product-slice";
 import "./index.scss";
 import { useDebounce } from "../../utills/debounce";
+import ViewButton from "../../components/button/view";
 
 
 const AllProducts: React.FC = () => {
@@ -223,6 +224,7 @@ const AllProducts: React.FC = () => {
                 </Column>
                 <Column className="col-md-2">
                   <CustomIconArea>
+                    <ViewButton target="_blank" href={`https://gcart.com.bd/product/${product.slug}`} />
                     <EditButton editUrl={`/products/edit/${product.id}`} />
                     <DeleteButton
                       onClick={() =>

@@ -65,7 +65,7 @@ const UpdateProduct: React.FC = () => {
   const [variants, setVariants] = useState<any[]>([]);
   const [exitingVariants, setExitingVariants] = useState<any[]>([]);
   const [addVariants, setAddVariants] = useState<any[]>([]);
-  const [variantError, setVariantError] = useState<string | null>(null);
+  
 
 
   useEffect(() => {
@@ -130,27 +130,7 @@ const UpdateProduct: React.FC = () => {
     }
   };
 
-  const validateVariantQuantities = (): boolean => {
-    // Initialize an object to keep track of sums for each variant type
-    const variantSums: { [key: string]: number } = {};
 
-    // Loop through all added variants and sum the quantities for each type (e.g., Color, Size)
-    addVariants.forEach((variant) => {
-        if (!variantSums[variant.attribute_key]) {
-            variantSums[variant.attribute_key] = 0;
-        }
-        variantSums[variant.attribute_key] += variant.attribute_quantity;
-    });
-
-    // Check that each variant type's total equals the main quantity
-    for (const variantType in variantSums) {
-        if (variantSums[variantType] !== quantity) {
-            return false;
-        }
-    }
-
-    return true;
-};
 
   const handleProductSubmit = (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault();
@@ -179,20 +159,13 @@ const UpdateProduct: React.FC = () => {
     formData.append("meta_title", metaTitle);
     formData.append("meta_description", metaDescription);
     formData.append("sort_description", sortDesc);
-    formData.append("is_homepage", "1");
+    formData.append("is_homepage", "0");
 
     formData.append("is_sale", isSale.toString());
     formData.append("is_feature", isFeature.toString());
     formData.append("is_new", isNew.toString());
 
-    // Validate variant quantities before submitting
-    if (isVariant && !validateVariantQuantities()) {
-      setVariantError("Total variant quantities must match the main quantity.");
-      toast.error("Total variant quantities must match the main quantity.");
-      return;
-    } else {
-      setVariantError(null);
-    }
+
 
     if (isVariant) {
       const tempSelAttri: any[] = [];
@@ -285,16 +258,7 @@ const UpdateProduct: React.FC = () => {
     }
   }, [discountType, discountSelectedAmount]);
 
-  useEffect(() => {
-    if (isVariant) {
-        const isValid = validateVariantQuantities();
-        if (!isValid) {
-            setVariantError("The sum of each variant type's quantities must equal the main quantity.");
-        } else {
-            setVariantError(null);
-        }
-    }
-}, [addVariants, quantity]);
+
 
 
   return (
@@ -426,13 +390,10 @@ const UpdateProduct: React.FC = () => {
           <div className="col-md-4">
             <div className="right-body">
               <Display>
-                <Button className="save-btn" type="submit" disabled={variantError !== null}>
+                <Button className="save-btn" type="submit">
                   Save & Update
                 </Button>
               </Display>
-              {variantError && (
-                <div className="text-center text-red-600 mt-2">{variantError}</div>
-              )}
               <Display>
                 <Input
                   placeholder="Regular Price"
