@@ -159,7 +159,7 @@ const UpdateProduct: React.FC = () => {
     formData.append("meta_title", metaTitle);
     formData.append("meta_description", metaDescription);
     formData.append("sort_description", sortDesc);
-    formData.append("is_homepage", "1");
+    formData.append("is_homepage", "0");
 
     formData.append("is_sale", isSale.toString());
     formData.append("is_feature", isFeature.toString());
