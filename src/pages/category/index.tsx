@@ -28,15 +28,18 @@ const Categories: React.FC = () => {
     categories,
     isUpdate,
     isSuccess,
-    message,
     isDelete,
+    message,
     errorMessage,
     totalCount,
     isLoading,
   } = useAppSelector((state) => state.category);
+
   const [displayItem, setDisplayItem] = useState<number>(10);
   const [pageNumber, setPageNumber] = useState<number>(1);
-  const [search, setSearch] = useState<string>("");
+  const [searchQuery, setSearchQuery] = useState<string>('');
+  const debouncedSearchQuery = useDebounce(searchQuery, 500); // 500ms debounce delay
+
   const totalPage = Math.ceil(totalCount / displayItem);
 
   const handleVisibility = (category: ICategory) => {
@@ -60,35 +63,35 @@ const Categories: React.FC = () => {
     setDisplayItem(Number(e.target.value));
   };
 
-  const [searchQuery, setSearchQuery] = useState<string>('');
-  const debouncedSearchQuery = useDebounce(searchQuery, 500); // 500ms debounce delay
-
   const handleOnSearch = (e: ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
     setSearchQuery(e.target.value);
   };
 
-  useEffect(() => {
-    if (debouncedSearchQuery !== undefined) {
-      // Your search request logic here
-      // console.log('Search query:', debouncedSearchQuery);
-      setSearch(debouncedSearchQuery)
-    }
-  }, [debouncedSearchQuery]);
-
+  // Fetch data whenever the page, display item count, or search query changes
   useEffect(() => {
     dispatch(
-      getCategories({ page: pageNumber, limit: displayItem, search: search })
+      getCategories({
+        page: pageNumber,
+        limit: displayItem,
+        search: debouncedSearchQuery,
+      })
     );
-  }, [
-    dispatch,
-    isUpdate,
-    isDelete,
-    pageNumber,
-    search,
-    isSuccess,
-    displayItem,
-  ]);
+  }, [dispatch, pageNumber, displayItem, debouncedSearchQuery]);
 
+  // Handle updates and deletions
+  useEffect(() => {
+    if (isUpdate || isDelete) {
+      dispatch(
+        getCategories({
+          page: pageNumber,
+          limit: displayItem,
+          search: debouncedSearchQuery,
+        })
+      );
+    }
+  }, [dispatch, isUpdate, isDelete, isSuccess, pageNumber, displayItem, debouncedSearchQuery]);
+
+  // Display toast notifications for delete success or errors
   useEffect(() => {
     if (isDelete) {
       toast.success(`${message}`);
@@ -154,7 +157,7 @@ const Categories: React.FC = () => {
         )}
 
         <Pagination
-          pageCount={pageNumber}
+          pageCount={totalPage}
           handlePageClick={handlePageChange}
           totalPage={totalPage}
         />
