@@ -7,7 +7,7 @@ const TextEditor = ({editroText="", onChangeFunction}:any)  => {
     const editorRef:any = useRef(null);
     return (
         <Editor
-            apiKey='12l6rx5d02ejwm35p4cz41adg8kx6rhrhj1ye0ep9r1ghvv8'
+            apiKey='avs3nh8kbz12qohe6xhkjiuw9u0safetix75kluo813u73j1'
             onInit={(_, editor) => editorRef.current = editor}
             value={editroText}
             onEditorChange={onChangeFunction}

@@ -21,18 +21,16 @@ const CreateNotification = () => {
   const handleSubmit = async (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault();
 
-    if (!image) {
-      toast.error('Please select an image');
-      return;
-    }
-
     const formData = new FormData();
     formData.append('title', title);
     formData.append('details', details);
-    formData.append('image', image);
+    
+    if (image) { 
+        formData.append('image', image);
+    }
 
     dispatch(createNotification(formData));
-  };
+};
 
   useEffect(() => {
     if (isCreate) {

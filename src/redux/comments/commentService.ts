@@ -1,4 +1,5 @@
-import { ICommentResponse } from "../../interfaces/comment";
+import { API_URL } from "../../constants";
+import { IComment, ICommentResponse } from "../../interfaces/comment";
 import axios from "../../lib";
 
 const getComment = async (filter: {
@@ -19,6 +20,14 @@ const getComment = async (filter: {
   const { data } = await axios.get(url);
   return data;
 };
+
+// const updateReview = async (reviewData: Partial<IComment>) => {
+//   const { data } = await axios.patch(
+//     `${API_URL}/comment/${reviewData.id}`,
+//     reviewData
+//   );
+//   return data;
+// };
 
 const commentService = {
   getComment,

@@ -29,7 +29,7 @@ const initialState: ICommentResponse = {
 };
 
 export const getComments = createAsyncThunk(
-  'category/getAll',
+  'comment/getAll',
   async (
     filter: {
       [key: string]: string | number;
@@ -45,6 +45,16 @@ export const getComments = createAsyncThunk(
     }
   }
 );
+// export const updateComment = createAsyncThunk(
+//   "comment/update",
+//   async (data: Partial<IComment>, thunkAPI) => {
+//     try {
+//       return await commentService.updateComment(data);
+//     } catch (error) {
+//       return thunkAPI.rejectWithValue(error);
+//     }
+//   }
+// );
 
 export const categorySlice = createSlice({
   name: 'comment',
