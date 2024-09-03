@@ -21,16 +21,17 @@ const getComment = async (filter: {
   return data;
 };
 
-// const updateReview = async (reviewData: Partial<IComment>) => {
-//   const { data } = await axios.patch(
-//     `${API_URL}/comment/${reviewData.id}`,
-//     reviewData
-//   );
-//   return data;
-// };
+const updateComment = async (updateComment: Partial<IComment>) => {
+  const { data } = await axios.patch(
+    `${API_URL}/blog/comments/${updateComment.id}`,
+    updateComment
+  );
+  return data;
+};
 
 const commentService = {
   getComment,
+  updateComment
 };
 
 export default commentService;

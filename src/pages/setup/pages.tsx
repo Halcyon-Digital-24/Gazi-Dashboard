@@ -10,6 +10,7 @@ import Row from "../../components/table/row";
 import { useAppDispatch, useAppSelector } from "../../redux/hooks";
 import { deletePages, getPages, reset } from "../../redux/pages/pageSlice";
 import { toast } from "react-toastify";
+import ViewButton from "../../components/button/view";
 
 const CommonPages: React.FC = () => {
   const dispatch = useAppDispatch();
@@ -58,6 +59,7 @@ const CommonPages: React.FC = () => {
             <Column className="col-md-3">{page.slug}</Column>
             <Column className="col-md-3">
               <CustomIconArea>
+              <ViewButton target="_blank" href={`https://gcart.com.bd/${page.slug}`} />
                 <EditButton editUrl={`/setup/pages/edit/${page.id}`} />
                 <DeleteButton
                   onClick={() => handlePageDelete(page.id as number)}
