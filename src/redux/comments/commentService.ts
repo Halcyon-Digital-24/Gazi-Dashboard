@@ -1,4 +1,5 @@
-import { ICommentResponse } from "../../interfaces/comment";
+import { API_URL } from "../../constants";
+import { IComment, ICommentResponse } from "../../interfaces/comment";
 import axios from "../../lib";
 
 const getComment = async (filter: {
@@ -20,8 +21,17 @@ const getComment = async (filter: {
   return data;
 };
 
+const updateComment = async (updateComment: Partial<IComment>) => {
+  const { data } = await axios.patch(
+    `${API_URL}/blog/comments/${updateComment.id}`,
+    updateComment
+  );
+  return data;
+};
+
 const commentService = {
   getComment,
+  updateComment
 };
 
 export default commentService;

@@ -1,8 +1,10 @@
 export type IComment = {
-  id?: number;
+  id: number;
+  blog_id: number | null;
   name: string;
   email: string;
   comment: string;
+  is_visible:boolean;
   updated_at?: string;
   created_at?: string;
 };

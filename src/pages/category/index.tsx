@@ -21,6 +21,7 @@ import {
 } from "../../redux/category/categorySlice";
 import { useAppDispatch, useAppSelector } from "../../redux/hooks";
 import { useDebounce } from "../../utills/debounce";
+import './index.scss'
 
 const Categories: React.FC = () => {
   const dispatch = useAppDispatch();
@@ -55,6 +56,20 @@ const Categories: React.FC = () => {
     dispatch(deleteCategory(id));
   };
 
+  const handleDeleteImage = (category: any) => {
+    // Dispatch the updateCategory action with image set to an empty string
+    const categoryData ={
+      image: '',
+    }
+    dispatch(
+      updateCategory({
+        slug:category.id,
+        categoryData: categoryData, 
+      })
+    );
+  };
+   
+  
   const handlePageChange = (selectedItem: { selected: number }) => {
     setPageNumber(selectedItem.selected + 1);
   };
@@ -128,10 +143,15 @@ const Categories: React.FC = () => {
             <Row className="row" key={index}>
               <Column className="col-md-3">
                 {category.image ? (
-                  <img
-                    src={`${API_ROOT}/images/category/${category.image}`}
-                    alt="brand"
-                  />
+                  <div className="remove-image-div">
+                    <img
+                      src={`${API_ROOT}/images/category/${category.image}`}
+                      alt="brand"
+                    />
+                    <div className="remove-image-icon" onClick={() => handleDeleteImage(category as any)}>
+                      X
+                    </div>
+                  </div>
                 ) : (
                   "—"
                 )}

@@ -13,6 +13,7 @@ interface ICommentResponse {
   isLoading: boolean;
   message: string | unknown;
   errorMessage: string | unknown;
+  error: { [key: string]: string };
 }
 
 const initialState: ICommentResponse = {
@@ -26,10 +27,11 @@ const initialState: ICommentResponse = {
   isLoading: false,
   message: '',
   errorMessage: '',
+  error: {},
 };
 
 export const getComments = createAsyncThunk(
-  'category/getAll',
+  'comment/getAll',
   async (
     filter: {
       [key: string]: string | number;
@@ -42,6 +44,16 @@ export const getComments = createAsyncThunk(
       const message =
         error instanceof Error ? error.message : 'An error occurred';
       return thunkAPI.rejectWithValue(message);
+    }
+  }
+);
+export const updateComment = createAsyncThunk(
+  "comment/update",
+  async (data: Partial<IComment>, thunkAPI) => {
+    try {
+      return await commentService.updateComment(data);
+    } catch (error) {
+      return thunkAPI.rejectWithValue(error);
     }
   }
 );
@@ -69,6 +81,22 @@ export const categorySlice = createSlice({
         state.isLoading = false;
         state.isError = true;
         state.message = action.payload;
+      })
+       /* TODO: UPDATE FAQ DATA SET */
+       .addCase(updateComment.pending, (state) => {
+        state.isLoading = true;
+        state.isUpdate = false;
+      })
+      .addCase(updateComment.fulfilled, (state, action) => {
+        state.isLoading = false;
+        state.isUpdate = true;
+        state.message = action.payload.message;
+      })
+      .addCase(updateComment.rejected, (state, action: any) => {
+        state.isLoading = false;
+        state.isError = true;
+        state.errorMessage = action?.payload?.response?.data?.message;
+        state.error = action?.payload?.response?.data?.errors;
       });
   },
 });

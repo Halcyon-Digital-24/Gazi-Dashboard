@@ -4,7 +4,7 @@ export type ICategory = {
   slug: string;
   parent_category?: string;
   is_feature: boolean;
-  image?: File | null;
+  image?: File | null | string;
   meta_title?: string;
   meta_description?: string;
   meta_image?: File | null;
