@@ -55,34 +55,42 @@ const CampaignPage: React.FC = () => {
   };
 
   const handleDeleteCampaign = async (id: number) => {
-    const campaign = campaigns.find(campaign => campaign.id === id);
-    if (!campaign) return;
-
-    // console.log('Campaign found:', campaign);
-
+    // Find the campaign by ID
+    const campaign = campaigns.find((campaign) => campaign.id === id);
+  
+    // Check if the campaign exists
+    if (!campaign) {
+      toast.error(`Campaign with ID ${id} not found.`);
+      return;
+    }
+  
+    // Parse product IDs (handle case where product_id might be a string)
     const productIds: number[] = typeof campaign.product_id === 'string'
       ? JSON.parse(campaign.product_id)
       : campaign.product_id;
-
-    // console.log('Product IDs:', productIds);
-
   
-
+    // Update each product associated with the campaign
     productIds.forEach((productId: number) => {
-      const product = products.find(product => product.id === productId);
+      const product = products.find((product) => product.id === productId);
+  
+      // Check if the product exists before updating
       if (product && product.id !== undefined) {
-        // console.log('Updating product:', product);
         const updatedProductData = {
           ...product,
           discount_price: product.regular_price,
           camping_name: null,
           camping_id: null,
         };
+  
+        // Dispatch actions to update the product and delete the campaign
         dispatch(updateProduct({ id: product.id, productData: updatedProductData }));
-        dispatch(deleteCampaign(id));
       }
     });
+  
+    // Dispatch action to delete the campaign after updating products
+    dispatch(deleteCampaign(id));
   };
+  
 
   useEffect(() => {
     if (isDelete) {
@@ -172,7 +180,7 @@ const CampaignPage: React.FC = () => {
             <Column className="col-md-2">
               <CustomIconArea>
                 <EditButton editUrl={`/campaign/edit/${campaign.id}`} />
-                <DeleteButton onClick={() => handleDeleteCampaign(campaign.id)} />
+                <DeleteButton onClick={() => handleDeleteCampaign(campaign.id as number)} />
               </CustomIconArea>
             </Column>
           </Row>
