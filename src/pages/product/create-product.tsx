@@ -76,16 +76,7 @@ const CreateProduct: React.FC = () => {
             return
           }
         }
-        // productAttributes?.map((pa: any) => {
-        //   if (pa.attribute_key == item?.name.replace(" ", "_") && pa.attribute_value == value) {
-        //     existingAttributes.push({ ...pa })
-        //     flag = true
-        //     return
-        //   }
-
-        //   console.log(',,item', item, pa)
-
-        // })
+    
         if (!flag)
           existingAttributes.push({
             attribute_key: item?.name.replace(" ", "_"),
@@ -95,7 +86,6 @@ const CreateProduct: React.FC = () => {
           });
       });
     });
-    // setProductAttribuets( JSON.parse(JSON.stringify(existingAttributes)));
   }, [selectedAttributes]);
   useEffect(() => {
     const fetchData = async () => {
@@ -125,39 +115,6 @@ const CreateProduct: React.FC = () => {
   ) => {
 
 
-    // if (attributeValue) {
-    //   setSelectedAttributes((prevState) =>
-    //     prevState.map((item) => {
-    //       if (item.name === attribute) {
-    //         const tempAttrVals: string[] =
-    //           item.value.indexOf(",") > -1
-    //             ? item.value.split(",")
-    //             : [item.value];
-    //         const tempFilteredAttrVals: string[] = tempAttrVals.filter(
-    //           (val) => val !== attributeValue
-    //         );
-    //         let tempFilteredValsString = "";
-    //         if (tempFilteredAttrVals?.length > 1) {
-    //           tempFilteredAttrVals?.map((val, i) => {
-    //             if (tempFilteredAttrVals.length == i + 1) {
-    //               tempFilteredValsString += `${val}`;
-    //             } else {
-    //               tempFilteredValsString += `${val},`;
-    //             }
-    //           });
-    //         } else {
-    //           tempFilteredValsString = tempFilteredAttrVals[0];
-    //         }
-    //         item.value =
-    //           tempFilteredValsString === undefined
-    //             ? ""
-    //             : tempFilteredValsString;
-    //         item.selectedValues.push(attributeValue);
-    //       }
-    //       return item;
-    //     })
-    //   );
-    // } else {
     if (attribute !== "") {
       let tempObj = {};
       attributes.map((item) => {
@@ -175,7 +132,7 @@ const CreateProduct: React.FC = () => {
   };
 
   const formateData = (data: any) => {
-    let tempData: any[] = []
+    const tempData: any[] = []
     data?.value?.split(',').map((value: any) => {
       tempData.push({
         attribute_key: data?.name.replace(" ", "_"),
@@ -188,17 +145,6 @@ const CreateProduct: React.FC = () => {
     return tempData
   }
 
-  /* const handleRemoveProductAttribute = (attribute_key, attribute_value) => {
-    const filterAttribute = selectedAttributes.filter(
-      (att) =>
-        !(
-          att.attribute_key === attribute_key &&
-          att.attribute_value === attribute_value
-        )
-    );
-
-    setSelectedAttributes(filterAttribute);
-  }; */
 
   const handleRemoveAttribute = (
     index: number
@@ -330,22 +276,12 @@ const CreateProduct: React.FC = () => {
       formData.append("meta_description", metaDescription);
     }
     formData.append("sort_description", sortDesc);
-    formData.append("is_homepage", "1");
+    formData.append("is_homepage", "0");
     formData.append("is_sale", isSale.toString());
     formData.append("is_feature", isFeature.toString());
     formData.append("is_new", isNew.toString());
     if (isVariant) {
-      /*  const tempSelAttri: any[] = [];
-      selectedAttributes?.length > 0 &&
-        selectedAttributes?.map((item) => {
-          if (item?.selectedValues?.length > 0) {
-            tempSelAttri.push({
-              name: item.name,
-              value: item?.selectedValues,
-            });
-          }
-        });
-      formData.append("attributes", JSON.stringify(tempSelAttri)); */
+
       productAttributes.map((att: any) => {
         Object.entries(att).map(([key, value]) => {
           formData.append(key, value as string | Blob);
@@ -435,7 +371,7 @@ const CreateProduct: React.FC = () => {
                   <div className="product-image">
                     <img
                       src={URL.createObjectURL(image)}
-                      alt="gazi home appliance"
+                      alt="gazi gcart"
                     />
                   </div>
                 )}
