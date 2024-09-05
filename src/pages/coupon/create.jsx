@@ -12,6 +12,7 @@ import { createCoupon, reset } from "../../redux/coupon/couponSlice";
 import { getProducts } from "../../redux/products/product-slice";
 import { useNavigate } from "react-router-dom";
 import { toast } from "react-toastify";
+import { useDebounce } from "../../utills/debounce";
 
 const CreateCoupon = () => {
   const {
@@ -61,6 +62,16 @@ const CreateCoupon = () => {
       dispatch(reset());
     };
   }, [isCreate, navigate, dispatch, message]);
+
+  
+  const [searchQuery, setSearchQuery] = useState("");
+  const debouncedSearchQuery = useDebounce(searchQuery, 500); // 500ms debounce delay
+
+  useEffect(() => {
+    if (debouncedSearchQuery !== undefined) {
+      setSearch(debouncedSearchQuery);
+    }
+  }, [debouncedSearchQuery]);
 
   useEffect(() => {
     dispatch(getProducts({ page: 1, limit: 100, search: search }));
@@ -202,7 +213,7 @@ const CreateCoupon = () => {
                 placeholder="Search products"
                 label="Search Products"
                 htmlFor="t-coupon"
-                onChange={(e) => setSearch(e.target.value)}
+                onChange={(e) => setSearchQuery(e.target.value)}
                 onFocus={() => setIsFocus(true)}
               />
               {isFocus && (

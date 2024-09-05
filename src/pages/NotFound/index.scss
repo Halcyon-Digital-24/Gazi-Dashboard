@@ -1,0 +1,35 @@
+.content{
+    text-align: center;
+}
+// Define some variables for easier customization
+$primary-color: #3498db;
+$hover-color: #2980b9;
+$border-radius: 5px;
+$padding: 10px 20px;
+$text-color: #fff;
+$font-size: 16px;
+
+.button-back-home {
+  margin-top: 10px;
+  background-color: $primary-color;
+  color: $text-color;
+  border: none;
+  border-radius: $border-radius;
+  padding: $padding;
+  font-size: $font-size;
+  cursor: pointer;
+  transition: background-color 0.3s ease, transform 0.2s ease;
+
+  &:hover {
+    background-color: $hover-color;
+    transform: scale(1.05);
+  }
+
+  &:focus {
+    outline: none;
+  }
+
+  &:active {
+    background-color: darken($primary-color, 10%);
+  }
+}
