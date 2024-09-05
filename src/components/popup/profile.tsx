@@ -15,13 +15,22 @@ const ProfilePopup: React.FC<PopupProps> = ({ closePopup }) => {
   const navigate = useNavigate();
   const popupRef = useRef<HTMLDivElement>(null);
 
+  // Retrieve user from localStorage
+  const localStorageUser = localStorage.getItem("user");
+  const parsedUser = localStorageUser ? JSON.parse(localStorageUser) : null;
+  const permissions = parsedUser?.permissions || [];
+  console.log(permissions);
+  
+
   const handleLogOut = () => {
     localStorage.removeItem("user");
     window.location.reload();
   };
+
   const handleProfile = () => {
     navigate(`/admin/profile/${user?.user.id}`);
   };
+
   useEffect(() => {
     const handleClickOutside = (event: MouseEvent) => {
       if (
@@ -47,12 +56,17 @@ const ProfilePopup: React.FC<PopupProps> = ({ closePopup }) => {
             <CgProfile className="icon" />
             <p>Profile</p>
           </li>
-          <Link to={"/setup/home-page"}>
-            <li className="item">
-              <CiSettings className="icon" />
-              <p>Settings</p>
-            </li>
-          </Link>
+          
+          {/* Conditionally render settings based on permissions */}
+          {permissions.includes("setting") && (
+            <Link to={"/setup/home-page"}>
+              <li className="item">
+                <CiSettings className="icon" />
+                <p>Settings</p>
+              </li>
+            </Link>
+          )}
+
           <li className="item" onClick={handleLogOut}>
             <IoIosLogOut className="icon" />
             <p>Logout</p>

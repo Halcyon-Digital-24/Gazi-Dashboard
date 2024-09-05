@@ -64,6 +64,7 @@ const GalleryImages: FC<IProps> = ({ slug }) => {
       try {
         const response = await axios.get(`${API_URL}/products/${slug}`);
         const { productPhoto } = response.data;
+        console.log(productPhoto);
         setGalleryImages(productPhoto?.rows);
         setOrderNumber(productPhoto?.rows?.length + 1);
       } catch (error) {
@@ -72,6 +73,8 @@ const GalleryImages: FC<IProps> = ({ slug }) => {
     };
     fetchProductData();
   }, [slug, isLoading]);
+
+console.log(galleryImages);
 
   return (
     <Display>
