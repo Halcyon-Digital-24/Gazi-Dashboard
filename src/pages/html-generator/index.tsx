@@ -13,19 +13,19 @@ const HtmlGenerator = () => {
 
     const handleChange = (editedData: any) => {
         setData(editedData)
-        let view: any = document.getElementById('view-html')
+        const view: any = document.getElementById('view-html')
         if (view && isShow) view.innerHTML = data
     }
 
     const previewData = () => {
         setIsShow(!isShow)
-        let view: any = document.getElementById('view-html')
+        const view: any = document.getElementById('view-html')
         if (view && isShow) view.innerHTML = data
     }
 
     return (
         <section>
-            <CardBody header="HTML-Generator" to="" isHide />
+            <CardBody header="HTML-Generator" to="/" text="back" />
             <Display>
                 <div className=" p-3">
                     <DescriptionInput value={data} setValue={handleChange} />

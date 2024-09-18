@@ -10,6 +10,7 @@ import { useAppDispatch, useAppSelector } from "../../redux/hooks";
 import { deleteQueries, getQueries, reset } from "../../redux/query/querySlice";
 import { DateRangePicker } from "rsuite";
 import { formatDateForURL } from "../../utills/formateDate";
+import CardBody from "../../components/card-body";
 
 const Queries = () => {
   const dispatch = useAppDispatch();
@@ -47,6 +48,7 @@ const Queries = () => {
 
   return (
     <div>
+      <CardBody header="Contact Us and Product Queries" to="/" text="back"/>
       <Display>
         <div className="date-area">
           <DateRangePicker

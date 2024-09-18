@@ -37,7 +37,7 @@ const TicketPage = () => {
 
   return (
     <div>
-      <CardBody header="Support Massages" to="#" />
+      <CardBody header="Support Massages" to="/" text="back"/>
       <Display>
         <div className="date-area">
           <DateRangePicker

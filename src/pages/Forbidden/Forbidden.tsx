@@ -7,7 +7,7 @@ import './index.scss'
 const Forbidden: React.FC = () => {
     return (
         <div>
-            <CardBody header="Forbidden - 403" to="/" />
+            <CardBody header="Forbidden - 403" to="/" text="back"/>
             <div className='content'>
                 <h1>403 - Forbidden</h1>
                 <p>You do not have permission to view this page.</p>

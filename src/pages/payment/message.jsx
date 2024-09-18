@@ -44,7 +44,7 @@ const PaymentMessage = () => {
 
   return (
     <div>
-      <CardBody header="Payment Message" to="#" />
+      <CardBody header="Payment Message" to="/" text="back" />
       <Display>
         <form onSubmit={handleSubmit(onSubmit)}>
           <div className="textarea">
