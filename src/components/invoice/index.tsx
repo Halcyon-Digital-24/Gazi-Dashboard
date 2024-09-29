@@ -122,7 +122,7 @@ const Invoice = ({ order }: any) => {
     <div>
       <div className="page-header" style={{ textAlign: "center" }}>
         {
-          order?.order_form == "web" || order.order_prefix === "GC" ?
+           order?.order_prefix === "GCW" ?
             <>
               <img src="/assets/invoice/web-header.png" alt="invoice" />
             </> : <>
@@ -137,7 +137,7 @@ const Invoice = ({ order }: any) => {
 
       <div className="page-footer">
         {
-          order?.order_form == "web" || order.order_prefix === "GC" ?
+           order?.order_prefix === "GCW" ?
             <>
               <img src="/assets/invoice/web-footer.jpg" alt="invoice" />
             </> : <>
@@ -166,7 +166,7 @@ const Invoice = ({ order }: any) => {
                 <div className="invoice-body">
                   <div className="watermark">
                     {
-                      order?.order_form == "web" || order.order_prefix === "GC" ?
+                       order?.order_prefix === "GCW" ?
                         <>
                           <img src="/assets/invoice/gcart.png" alt="invoice" />
                         </> : <>
@@ -192,7 +192,7 @@ const Invoice = ({ order }: any) => {
                   <div className="invoice-header">
                     <div className="title">
                       {
-                        order?.order_form == "web" || order.order_prefix === "GC" ?
+                         order?.order_prefix === "GCW" ?
                           <>
                             <img src="/assets/invoice/web-header.png" alt="invoice" />
                           </> : <>
@@ -204,7 +204,7 @@ const Invoice = ({ order }: any) => {
                           </>
                       }
                     </div>
-                    <h4 className={`${order?.order_form == "web" || order.order_prefix === "GC" ? "customer-details color-danger" : "customer-details"}`}>Customer Details</h4>
+                    <h4 className={`${ order.order_prefix === "GCW" ? "customer-details color-danger" : "customer-details"}`}>Customer Details</h4>
                     <div className="details">
                       <div className="left">
                         <p>
@@ -452,7 +452,7 @@ const Invoice = ({ order }: any) => {
                 <div className="invoice-footer">
                   <div className="title">
                     {
-                      order?.order_form == "web" || order.order_prefix === "GC" ?
+                       order?.order_prefix === "GCW" ?
                         <>
                           <img src="/assets/invoice/web-footer.jpg" alt="invoice" />
                         </> : <>
