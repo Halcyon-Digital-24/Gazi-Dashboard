@@ -122,7 +122,7 @@ const Invoice = ({ order }: any) => {
     <div>
       <div className="page-header" style={{ textAlign: "center" }}>
         {
-           order?.order_prefix === "GCW" ?
+          order?.order_prefix === "GCW" ?
             <>
               <img src="/assets/invoice/web-header.png" alt="invoice" />
             </> : <>
@@ -137,7 +137,7 @@ const Invoice = ({ order }: any) => {
 
       <div className="page-footer">
         {
-           order?.order_prefix === "GCW" ?
+          order?.order_prefix === "GCW" ?
             <>
               <img src="/assets/invoice/web-footer.jpg" alt="invoice" />
             </> : <>
@@ -166,7 +166,7 @@ const Invoice = ({ order }: any) => {
                 <div className="invoice-body">
                   <div className="watermark">
                     {
-                       order?.order_prefix === "GCW" ?
+                      order?.order_prefix === "GCW" ?
                         <>
                           <img src="/assets/invoice/gcart.png" alt="invoice" />
                         </> : <>
@@ -192,7 +192,7 @@ const Invoice = ({ order }: any) => {
                   <div className="invoice-header">
                     <div className="title">
                       {
-                         order?.order_prefix === "GCW" ?
+                        order?.order_prefix === "GCW" ?
                           <>
                             <img src="/assets/invoice/web-header.png" alt="invoice" />
                           </> : <>
@@ -204,7 +204,7 @@ const Invoice = ({ order }: any) => {
                           </>
                       }
                     </div>
-                    <h4 className={`${ order.order_prefix === "GCW" ? "customer-details color-danger" : "customer-details"}`}>Customer Details</h4>
+                    <h4 className={`${order.order_prefix === "GCW" ? "customer-details color-danger" : "customer-details"}`}>Customer Details</h4>
                     <div className="details">
                       <div className="left">
                         <p>
@@ -307,42 +307,88 @@ const Invoice = ({ order }: any) => {
                       <td className="span-item" colSpan={4}></td>
                       <td className="heading-title">
                         {(() => {
-                          let discountAmount = getDiscount(
-                            amountBeforeCoupon,
-                            order?.coupon?.discount_amount ?? 0,
-                            order?.coupon?.discount_type == 'percent' ? 0 : orderItems?.length
-                          ) + order.custom_discount;
+                          // Ensure orderItems is an array or default to an empty array
+                          const items = Array.isArray(orderItems) ? orderItems : [];
 
-                          // Check if discountAmount is 0 or null
-                          if (discountAmount === 0 || discountAmount === null) {
-                            discountAmount = orderItems?.reduce((totalDiscount, item) => {
-                              return totalDiscount + item.discount_price;
-                            }, 0);
+                          // 1. Check for Custom Discount
+                          const customDiscount = order?.custom_discount || 0;
+
+                          if (customDiscount > 0) {
+                            if (items.length === 1) {
+                              const singleItem = items[0];
+                              const discountPercentage = (((singleItem.regular_price - customDiscount) / singleItem.regular_price) * 100) - 100;
+                              // console.log((((singleItem.regular_price - customDiscount) / singleItem.regular_price) * 100)-100);
+                              return `${Math.round(discountPercentage)}% Discount`;
+
+                            }
+                            return "Discount";
                           }
 
-                          const discountPercentage = (discountAmount / amountBeforeCoupon) * 100;
-                          const displayDiscountPercentage = discountPercentage % 1 === 0 ? discountPercentage : discountPercentage.toFixed(1);
+                          // 2. Check for Coupon Discount
+                          const couponDiscount = getDiscount(
+                            amountBeforeCoupon,
+                            order?.coupon?.discount_amount ?? 0,
+                            order?.coupon?.discount_type === "percent" ? 0 : items.length
+                          );
 
-                          return `${displayDiscountPercentage}% Discount`;
+                          if (couponDiscount > 0) {
+                            if (items.length === 1) {
+                              const discountPercentage = (((amountBeforeCoupon - couponDiscount) / amountBeforeCoupon) * 100) - 100;
+                              return `${Math.round(discountPercentage)}% Discount`;
+                            }
+                            return "Discount";
+                          }
+
+                          // 3. Check for Predefined Discount (Discount Price)
+                          const predefinedDiscounts = items.filter((item) => item.discount_price && item.discount_price < item.regular_price);
+
+                          if (predefinedDiscounts.length > 0) {
+                            if (items.length === 1) {
+                              const singleItem = predefinedDiscounts[0];
+                              const discountPercentage = (((singleItem.regular_price - singleItem.discount_price) / singleItem.regular_price) * 100);
+                              return `${Math.round(discountPercentage)}% Discount`;
+                            }
+                            return "Discount";
+                          }
+
+                          // If no discounts are applied
+                          return "Discount";
                         })()}
                       </td>
                       <td>
                         - {FormatPrice(
                           (() => {
-                            let discountAmount = getDiscount(
-                              amountBeforeCoupon,
-                              order?.coupon?.discount_amount ?? 0,
-                              order?.coupon?.discount_type == 'percent' ? 0 : orderItems?.length
-                            ) + +order.custom_discount;
+                            // Ensure orderItems is an array or default to an empty array
+                            const items = Array.isArray(orderItems) ? orderItems : [];
 
-                            // Check if discountAmount is 0 or null
-                            if (discountAmount === 0 || discountAmount === null) {
-                              discountAmount = orderItems?.reduce((totalDiscount, item) => {
-                                return totalDiscount + item.discount_price;
-                              }, 0);
+                            // 1. Check for Custom Discount
+                            const customDiscount = order?.custom_discount || 0;
+
+                            if (customDiscount > 0) {
+                              return customDiscount;
                             }
 
-                            return discountAmount;
+                            // 2. Check for Coupon Discount
+                            const couponDiscount = getDiscount(
+                              amountBeforeCoupon,
+                              order?.coupon?.discount_amount ?? 0,
+                              order?.coupon?.discount_type === "percent" ? 0 : items.length
+                            );
+
+                            if (couponDiscount > 0) {
+                              return couponDiscount;
+                            }
+
+                            // 3. Check for Predefined Discount (Discount Price)
+                            const predefinedDiscountAmount = items.reduce((total, item) => {
+                              if (item.discount_price && item.discount_price < item.regular_price) {
+                                const discountAmountPerItem = (item.regular_price - item.discount_price) * item.quantity;
+                                return total + discountAmountPerItem;
+                              }
+                              return total;
+                            }, 0);
+
+                            return predefinedDiscountAmount;
                           })()
                         )}
                       </td>
@@ -350,11 +396,16 @@ const Invoice = ({ order }: any) => {
 
 
 
+
+
                     <tr>
                       <td className="span-item" colSpan={4}></td>
                       <td className="heading-title">After Discount</td>
                       <td>
-                        {FormatPrice((Number(totalPrice) + Number(order.delivery_fee)) - Number(order.custom_discount))}
+                      {FormatPrice(
+                            totalPrice  -
+                            getDiscount(amountBeforeCoupon, order?.coupon?.discount_amount ?? 0, order?.coupon?.discount_type == 'percent' ? 0 : orderItems?.length) - order.custom_discount
+                          )}
                       </td>
                     </tr>
 
@@ -362,6 +413,17 @@ const Invoice = ({ order }: any) => {
                       <td className="span-item" colSpan={4}></td>
                       <td className="heading-title">Delivery Charge</td>
                       <td>{FormatPrice(order.delivery_fee)}</td>
+                    </tr>
+
+                    <tr>
+                      <td className="span-item" colSpan={4}></td>
+                      <td className="text-bold">Total Amount</td>
+                      <td className="text-bold">
+                        {FormatPrice(
+                          totalPrice + order.delivery_fee -
+                          getDiscount(amountBeforeCoupon, order?.coupon?.discount_amount ?? 0, order?.coupon?.discount_type == 'percent' ? 0 : orderItems?.length) - order.custom_discount
+                        )}
+                      </td>
                     </tr>
 
                     <tr>
@@ -452,7 +514,7 @@ const Invoice = ({ order }: any) => {
                 <div className="invoice-footer">
                   <div className="title">
                     {
-                       order?.order_prefix === "GCW" ?
+                      order?.order_prefix === "GCW" ?
                         <>
                           <img src="/assets/invoice/web-footer.jpg" alt="invoice" />
                         </> : <>

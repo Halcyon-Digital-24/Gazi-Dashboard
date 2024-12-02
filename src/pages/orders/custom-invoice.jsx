@@ -277,7 +277,7 @@ const CustomInvoice = () => {
                   placeholder="Delivery Charges"
                   label="Delivery Charges"
                   defaultValue="0"
-                  onChange={(e) => setShipping(Number(e.target.value))}
+                  onChange={(e) => setShipping(Number(Math.round(e.target.value)))}
                 />
                 <div className="invoice-discount-area">
                   <div style={{ width: "60%", marginRight: "2%" }}>
@@ -286,7 +286,7 @@ const CustomInvoice = () => {
                       defaultValue="0"
                       label="Discount Price"
                       htmlFor="discount-price"
-                      onChange={(e) => setDiscount(Number(e.target.value))}
+                      onChange={(e) => setDiscount(Number(Math.round(e.target.value)))}
                     />
                   </div>
 
@@ -305,7 +305,7 @@ const CustomInvoice = () => {
                   placeholder="Advanced payment"
                   label="Advanced Price"
                   defaultValue="0"
-                  onChange={(e) => setAdvancedPayment(Number(e.target.value))}
+                  onChange={(e) => setAdvancedPayment(Number(Math.round(e.target.value)))}
                 />
 
                 <>
@@ -407,32 +407,32 @@ const CustomInvoice = () => {
                 <div className="summery">
                   <div className="row">
                     <div className="col-md-9 left">Product Total Price</div>
-                    <div className="col-md-3 right">{final_price}</div>
+                    <div className="col-md-3 right">{Math.round(final_price)}</div>
                     <div className="col-md-9 left">Shipping</div>
                     <div className="col-md-3 right">
                       {shipping < 0 ? "+" : ""}
-                      {shipping}
+                      {Math.round(shipping)}
                     </div>
                     <div className="col-md-9 left">Discount</div>
                     <div className="col-md-3 right">
                       {discountAmount > 0 ? "-" : ""}
-                      {discountAmount}
+                      {Math.round(discountAmount)}
                     </div>
                     <div className="col-md-9 left text-bold">Total Amount</div>
                     <div className="col-md-3 right text-bold">
-                      {final_price + shipping - discountAmount}
+                      {Math.round(final_price + shipping - discountAmount)}
                     </div>
                     <div className="col-md-9 left">Advanced</div>
                     <div className="col-md-3 right">
                       {advancedPayment > 0 ? "-" : ""}
-                      {advancedPayment}
+                      {Math.round(advancedPayment)}
                     </div>
                     <div className="col-md-9 left text-bold">Due Amount</div>
                     <div className="col-md-3 right text-bold">
-                      {final_price +
+                      {Math.round(final_price +
                         shipping -
                         discountAmount -
-                        advancedPayment}
+                        advancedPayment)}
                     </div>
                   </div>
                 </div>
