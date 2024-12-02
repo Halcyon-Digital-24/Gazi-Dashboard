@@ -316,10 +316,13 @@ const Invoice = ({ order }: any) => {
                           if (customDiscount > 0) {
                             if (items.length === 1) {
                               const singleItem = items[0];
-                              const discountPercentage = (((singleItem.regular_price - customDiscount) / singleItem.regular_price) * 100) - 100;
-                              // console.log((((singleItem.regular_price - customDiscount) / singleItem.regular_price) * 100)-100);
-                              return `${Math.round(discountPercentage)}% Discount`;
+                              const discountPercentage = (customDiscount / singleItem.regular_price) * 100;
 
+                              // Format percentage (toFixed(1) only for floating numbers)
+                              const formattedPercentage =
+                                discountPercentage % 1 === 0 ? Math.round(discountPercentage) : discountPercentage.toFixed(1);
+
+                              return `${formattedPercentage}% Discount`;
                             }
                             return "Discount";
                           }
@@ -333,8 +336,13 @@ const Invoice = ({ order }: any) => {
 
                           if (couponDiscount > 0) {
                             if (items.length === 1) {
-                              const discountPercentage = (((amountBeforeCoupon - couponDiscount) / amountBeforeCoupon) * 100) - 100;
-                              return `${Math.round(discountPercentage)}% Discount`;
+                              const discountPercentage = (couponDiscount / amountBeforeCoupon) * 100;
+
+                              // Format percentage (toFixed(1) only for floating numbers)
+                              const formattedPercentage =
+                                discountPercentage % 1 === 0 ? Math.round(discountPercentage) : discountPercentage.toFixed(1);
+
+                              return `${formattedPercentage}% Discount`;
                             }
                             return "Discount";
                           }
@@ -345,8 +353,14 @@ const Invoice = ({ order }: any) => {
                           if (predefinedDiscounts.length > 0) {
                             if (items.length === 1) {
                               const singleItem = predefinedDiscounts[0];
-                              const discountPercentage = (((singleItem.regular_price - singleItem.discount_price) / singleItem.regular_price) * 100);
-                              return `${Math.round(discountPercentage)}% Discount`;
+                              const discountPercentage =
+                                ((singleItem.regular_price - singleItem.discount_price) / singleItem.regular_price) * 100;
+
+                              // Format percentage (toFixed(1) only for floating numbers)
+                              const formattedPercentage =
+                                discountPercentage % 1 === 0 ? Math.round(discountPercentage) : discountPercentage.toFixed(1);
+
+                              return `${formattedPercentage}% Discount`;
                             }
                             return "Discount";
                           }
@@ -354,6 +368,7 @@ const Invoice = ({ order }: any) => {
                           // If no discounts are applied
                           return "Discount";
                         })()}
+
                       </td>
                       <td>
                         - {FormatPrice(
@@ -402,10 +417,10 @@ const Invoice = ({ order }: any) => {
                       <td className="span-item" colSpan={4}></td>
                       <td className="heading-title">After Discount</td>
                       <td>
-                      {FormatPrice(
-                            totalPrice  -
-                            getDiscount(amountBeforeCoupon, order?.coupon?.discount_amount ?? 0, order?.coupon?.discount_type == 'percent' ? 0 : orderItems?.length) - order.custom_discount
-                          )}
+                        {FormatPrice(
+                          totalPrice -
+                          getDiscount(amountBeforeCoupon, order?.coupon?.discount_amount ?? 0, order?.coupon?.discount_type == 'percent' ? 0 : orderItems?.length) - order.custom_discount
+                        )}
                       </td>
                     </tr>
 
