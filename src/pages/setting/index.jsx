@@ -54,11 +54,7 @@ const SettingPage = () => {
   return (
     <div>
       <CardBody
-        header="Basic Settings
-"
-        text="Back"
-        isHide
-      />
+        header="Basic Settings"text="Back" to="/" />
       <Display>
         <form onSubmit={handleSubmit(onSubmit)}>
           <div className="row">

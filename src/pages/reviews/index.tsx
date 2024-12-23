@@ -55,7 +55,7 @@ const Reviews: React.FC = () => {
 
   return (
     <div>
-      <CardBody header="Reviews" to="/products/reviews#" isHide />
+      <CardBody header="Reviews" to="/products" text="back" />
       <Display>
         <Filter handleDisplayItem={handleDisplayItem} />
         <Row className="row text-bold">

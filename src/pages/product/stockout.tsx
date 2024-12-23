@@ -72,7 +72,7 @@ const StockOutProducts: React.FC = () => {
 
   return (
     <div>
-      <CardBody header="Stock Out Products" to="/categories/create" />
+      <CardBody header="Stock Out Products" to="/products" text="back"/>
       <Display>
         <Filter handleDisplayItem={handleDisplayItem} onSearch={handleOnSearch}
           isFilter />

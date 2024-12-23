@@ -34,7 +34,7 @@ const Subscriber = () => {
 
   return (
     <div>
-      <CardBody header="Subscriber" to="#" />
+      <CardBody header="Subscriber" to="/" text="back" />
       <Display>
         <Row className="row text-bold">
           <Column className="col-md-11">Email</Column>

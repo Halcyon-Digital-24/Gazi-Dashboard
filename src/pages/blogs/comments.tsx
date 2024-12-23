@@ -48,7 +48,7 @@ const BlogComment = () => {
 
   return (
     <div>
-      <CardBody header="Blog Comments" to="#" isHide />
+      <CardBody header="Blog Comments" to="/" text="back" />
       <Display>
         <Filter handleDisplayItem={handleDisplayItem} />
         <Row className="row text-bold">

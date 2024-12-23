@@ -60,7 +60,7 @@ const Profile = () => {
 
   return (
     <div>
-      <CardBody header="Admin Profile" to="#" />
+      <CardBody header="My Profile" text="back" to="/"/>
 
       <Display>
         <form onSubmit={handleSubmit(onSubmit)}>

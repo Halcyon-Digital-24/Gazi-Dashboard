@@ -7,7 +7,7 @@ import "./index.scss"
 const NotFound: React.FC = () => {
     return (
         <div>
-            <CardBody header="Eror - 404" to="/" />
+            <CardBody header="Eror - 404" to="/" text='back' />
             <div className='content'>
                 <img src="/assets/images/not-found.png" alt="" />
                 <h1>404 Not Found</h1>
