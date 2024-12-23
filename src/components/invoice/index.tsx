@@ -10,6 +10,7 @@ const Invoice = ({ order }: any) => {
     order?.orderItems?.length > 0 ? order?.orderItems : []
   );
   const [amountBeforeCoupon, setAmountBeforeCoupon] = useState<number>(0);
+
   useEffect(() => {
     if (order?.coupon) {
       if (order?.coupon?.discount_type === "flat") {
@@ -41,6 +42,25 @@ const Invoice = ({ order }: any) => {
           });
         }
         setOrderItems(tempDisCart);
+
+      
+        if (order?.coupon) {
+          let finalPrice = 0;
+          tempDisCart?.map((item: any) => {
+            if (order?.coupon?.product_id){
+              finalPrice += item?.discount_price * item?.quantity;
+            }else{
+              finalPrice += item?.regular_price * item?.quantity;
+            }
+          });
+          if(!order?.coupon?.product_id){
+            finalPrice = finalPrice - order?.coupon?.discount_amount
+          }
+          console.log("final - ",finalPrice);
+          setTotalPrice(finalPrice);
+        } 
+        console.log(tempDisCart);
+        
       } else {
         let tempDisCart = order?.orderItems;
         if (order?.coupon?.product_id) {
@@ -72,6 +92,26 @@ const Invoice = ({ order }: any) => {
           });
         }
         setOrderItems(tempDisCart);
+
+        if (order?.coupon) {
+          let finalPrice = 0;
+          tempDisCart?.map((item: any) => {
+            if (order?.coupon?.product_id) {
+              finalPrice += item?.discount_price * item?.quantity;
+            } else {
+              finalPrice += item?.regular_price * item?.quantity;
+            }
+          });
+        
+          if (!order?.coupon?.product_id) {
+            finalPrice = finalPrice - (finalPrice * (order?.coupon?.discount_amount / 100));
+          }
+          console.log("final - ", finalPrice);
+          setTotalPrice(finalPrice);
+        }
+        
+        console.log(tempDisCart);
+        
       }
     }
   }, [order]);
@@ -85,22 +125,15 @@ const Invoice = ({ order }: any) => {
       });
 
       setAmountBeforeCoupon(totalRegularPrice);
-
-      if (order?.coupon) {
-        let finalPrice = 0;
-        orderItems?.map((item: any) => {
-          finalPrice += item?.regular_price * item?.quantity;
-        });
-        setTotalPrice(finalPrice);
-      } else {
-        let finalPrice = 0;
-        orderItems?.map((item: any) => {
-          finalPrice += (item?.discount_price
-            ? item?.discount_price
-            : item?.regular_price) * item?.quantity;
-        });
-        setTotalPrice(finalPrice);
-      }
+    }
+    if(!order.coupon){
+      let finalPrice = 0;
+      orderItems?.map((item: any) => {
+        finalPrice += (item?.discount_price
+          ? item?.discount_price
+          : item?.regular_price) * item?.quantity;
+      });
+      setTotalPrice(finalPrice);
     }
   }, [order, orderItems]);
 
@@ -239,9 +272,11 @@ const Invoice = ({ order }: any) => {
                         <p>
                           <span className="invoice-title"> Total Order Amount : </span>{" "}
                           {FormatPrice(
+                            totalPrice + order.delivery_fee - order.custom_discount)}
+                          {/* {FormatPrice(
                             totalPrice + order.delivery_fee -
                             getDiscount(amountBeforeCoupon, order?.coupon?.discount_amount ?? 0, order?.coupon?.discount_type == 'percent' ? 0 : orderItems?.length) - order.custom_discount
-                          )}
+                          )} */}
                         </p>
 
                         <p>
@@ -316,7 +351,8 @@ const Invoice = ({ order }: any) => {
                           if (customDiscount > 0) {
                             if (items.length === 1) {
                               const singleItem = items[0];
-                              const discountPercentage = (customDiscount / singleItem.regular_price) * 100;
+                              const totalRegularPrice = singleItem.regular_price * singleItem.quantity;
+                              const discountPercentage = (customDiscount / totalRegularPrice) * 100;
 
                               // Format percentage (toFixed(1) only for floating numbers)
                               const formattedPercentage =
@@ -336,7 +372,9 @@ const Invoice = ({ order }: any) => {
 
                           if (couponDiscount > 0) {
                             if (items.length === 1) {
-                              const discountPercentage = (couponDiscount / amountBeforeCoupon) * 100;
+                              const singleItem = items[0];
+                              const totalRegularPrice = singleItem.regular_price * singleItem.quantity;
+                              const discountPercentage = (couponDiscount / totalRegularPrice) * 100;
 
                               // Format percentage (toFixed(1) only for floating numbers)
                               const formattedPercentage =
@@ -353,8 +391,10 @@ const Invoice = ({ order }: any) => {
                           if (predefinedDiscounts.length > 0) {
                             if (items.length === 1) {
                               const singleItem = predefinedDiscounts[0];
+                              const totalRegularPrice = singleItem.regular_price * singleItem.quantity;
+                              const totalDiscountPrice = singleItem.discount_price * singleItem.quantity;
                               const discountPercentage =
-                                ((singleItem.regular_price - singleItem.discount_price) / singleItem.regular_price) * 100;
+                                ((totalRegularPrice - totalDiscountPrice) / totalRegularPrice) * 100;
 
                               // Format percentage (toFixed(1) only for floating numbers)
                               const formattedPercentage =
@@ -368,6 +408,7 @@ const Invoice = ({ order }: any) => {
                           // If no discounts are applied
                           return "Discount";
                         })()}
+
 
                       </td>
                       <td>
@@ -384,11 +425,7 @@ const Invoice = ({ order }: any) => {
                             }
 
                             // 2. Check for Coupon Discount
-                            const couponDiscount = getDiscount(
-                              amountBeforeCoupon,
-                              order?.coupon?.discount_amount ?? 0,
-                              order?.coupon?.discount_type === "percent" ? 0 : items.length
-                            );
+                            const couponDiscount = amountBeforeCoupon- totalPrice
 
                             if (couponDiscount > 0) {
                               return couponDiscount;
@@ -418,9 +455,12 @@ const Invoice = ({ order }: any) => {
                       <td className="heading-title">After Discount</td>
                       <td>
                         {FormatPrice(
+                          totalPrice  - order.custom_discount
+                        )}
+                        {/* {FormatPrice(
                           totalPrice -
                           getDiscount(amountBeforeCoupon, order?.coupon?.discount_amount ?? 0, order?.coupon?.discount_type == 'percent' ? 0 : orderItems?.length) - order.custom_discount
-                        )}
+                        )} */}
                       </td>
                     </tr>
 
@@ -434,9 +474,12 @@ const Invoice = ({ order }: any) => {
                       <td className="span-item" colSpan={4}></td>
                       <td className="text-bold">Total Amount</td>
                       <td className="text-bold">
-                        {FormatPrice(
+                        {/* {FormatPrice(
                           totalPrice + order.delivery_fee -
                           getDiscount(amountBeforeCoupon, order?.coupon?.discount_amount ?? 0, order?.coupon?.discount_type == 'percent' ? 0 : orderItems?.length) - order.custom_discount
+                        )} */}
+                        {FormatPrice(
+                          totalPrice + order.delivery_fee  - order.custom_discount
                         )}
                       </td>
                     </tr>
@@ -454,9 +497,12 @@ const Invoice = ({ order }: any) => {
                       <td className="text-bold">Due Amount</td>
                       <td className="text-bold">
                         {FormatPrice(
+                          totalPrice + order.delivery_fee - (order.advance_payment ?? 0) - order.custom_discount
+                        )}
+                        {/* {FormatPrice(
                           totalPrice + order.delivery_fee - (order.advance_payment ?? 0) -
                           getDiscount(amountBeforeCoupon, order?.coupon?.discount_amount ?? 0, order?.coupon?.discount_type == 'percent' ? 0 : orderItems?.length) - order.custom_discount
-                        )}
+                        )} */}
                       </td>
                     </tr>
                     <div className="payment-status">

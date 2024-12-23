@@ -11,6 +11,7 @@ import Select from "../select";
 import Column from "../table/column";
 import Row from "../table/row";
 import "./index.scss";
+import FormatPrice from "../../utills/formatePrice";
 
 type IProps = {
   order: IOrder;
@@ -70,6 +71,25 @@ const SingleItem: FC<IProps> = ({
           });
         }
         setOrderItems(tempDisCart);
+
+      
+        if (order?.coupon) {
+          let finalPrice = 0;
+          tempDisCart?.map((item: any) => {
+            if (order?.coupon?.product_id){
+              finalPrice += item?.discount_price * item?.quantity;
+            }else{
+              finalPrice += item?.regular_price * item?.quantity;
+            }
+          });
+          if(!order?.coupon?.product_id){
+            finalPrice = finalPrice - order?.coupon?.discount_amount
+          }
+          console.log("final - ",finalPrice);
+          setTotalPrice(finalPrice);
+        } 
+        console.log(tempDisCart);
+        
       } else {
         let tempDisCart = order?.orderItems;
         if (order?.coupon?.product_id) {
@@ -101,6 +121,25 @@ const SingleItem: FC<IProps> = ({
           });
         }
         setOrderItems(tempDisCart);
+
+        if (order?.coupon) {
+          let finalPrice = 0;
+          tempDisCart?.map((item: any) => {
+            if (order?.coupon?.product_id) {
+              finalPrice += item?.discount_price * item?.quantity;
+            } else {
+              finalPrice += item?.regular_price * item?.quantity;
+            }
+          });
+        
+          if (!order?.coupon?.product_id) {
+            finalPrice = finalPrice - (finalPrice * (order?.coupon?.discount_amount / 100));
+          }
+          console.log("final - ", finalPrice);
+          setTotalPrice(finalPrice);
+        }
+        console.log(tempDisCart);
+        
       }
     }
   }, [order]);
@@ -114,24 +153,18 @@ const SingleItem: FC<IProps> = ({
       });
 
       setAmountBeforeCoupon(totalRegularPrice);
-
-      if (order?.coupon) {
-        let finalPrice = 0;
-        orderItems?.map((item: any) => {
-          finalPrice += item?.discount_price * item?.quantity;
-        });
-        setTotalPrice(finalPrice);
-      } else {
-        let finalPrice = 0;
-        orderItems?.map((item: any) => {
-          finalPrice +=(item?.discount_price
-            ? item?.discount_price
-            : item?.regular_price )* item?.quantity;
-        });
-        setTotalPrice(finalPrice);
-      }
+    }
+    if(!order.coupon){
+      let finalPrice = 0;
+      orderItems?.map((item: any) => {
+        finalPrice += (item?.discount_price
+          ? item?.discount_price
+          : item?.regular_price) * item?.quantity;
+      });
+      setTotalPrice(finalPrice);
     }
   }, [order, orderItems]);
+
   return (
     <>
       <Row className="row">
@@ -155,7 +188,7 @@ const SingleItem: FC<IProps> = ({
           {order.order_prefix} - {order?.invoice_no || order.id}
         </Column>
         <Column className="col-md-1">
-          {(Number(totalPrice) + Number(order.delivery_fee)) - Number(order.custom_discount)}
+          ৳ {FormatPrice((Number(totalPrice) + Number(order.delivery_fee)) - Number(order.custom_discount))} 
         </Column>
         <Column className="col-md-2">{order.name}</Column>
         <Column className="col-md-2">{order.mobile}</Column>
