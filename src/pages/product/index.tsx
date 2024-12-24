@@ -128,6 +128,17 @@ const AllProducts: React.FC = () => {
     };
   }, [isUpdate, dispatch, message]);
 
+  useEffect(() => {
+    const totalPages = Math.ceil(totalCount / Number(displayItem));
+    if (pageNumber > totalPages) {
+      setPageNumber(1); 
+    }
+    return () => {
+      dispatch(reset());
+    };
+  }, [ dispatch, totalCount, displayItem, pageNumber]);
+
+
   return (
     <div>
       <CardBody header="Product" to="/products/create" />

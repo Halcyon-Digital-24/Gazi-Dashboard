@@ -85,10 +85,10 @@ const SingleItem: FC<IProps> = ({
           if(!order?.coupon?.product_id){
             finalPrice = finalPrice - order?.coupon?.discount_amount
           }
-          console.log("final - ",finalPrice);
+          // console.log("final - ",finalPrice);
           setTotalPrice(finalPrice);
         } 
-        console.log(tempDisCart);
+        // console.log(tempDisCart);
         
       } else {
         let tempDisCart = order?.orderItems;
@@ -135,10 +135,10 @@ const SingleItem: FC<IProps> = ({
           if (!order?.coupon?.product_id) {
             finalPrice = finalPrice - (finalPrice * (order?.coupon?.discount_amount / 100));
           }
-          console.log("final - ", finalPrice);
+          // console.log("final - ", finalPrice);
           setTotalPrice(finalPrice);
         }
-        console.log(tempDisCart);
+        // console.log(tempDisCart);
         
       }
     }
