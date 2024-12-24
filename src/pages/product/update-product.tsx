@@ -55,6 +55,7 @@ const UpdateProduct: React.FC = () => {
   const [isSale, setIsSale] = useState<0 | 1>(0);
   const [isFeature, setIsFeature] = useState<0 | 1>(0);
   const [isNew, setIsNew] = useState<0 | 1>(0);
+  const [isHomePage, setIsHomePage] = useState<any[]>([]);
   const [sortDesc, setSortDesc] = useState("");
   const [policy, setPolicy] = useState("");
   const [availability, setAvailability] = useState<number>(0);
@@ -159,8 +160,7 @@ const UpdateProduct: React.FC = () => {
     formData.append("meta_title", metaTitle);
     formData.append("meta_description", metaDescription);
     formData.append("sort_description", sortDesc);
-    formData.append("is_homepage", "0");
-
+    formData.append("is_homepage", isHomePage.toString());
     formData.append("is_sale", isSale.toString());
     formData.append("is_feature", isFeature.toString());
     formData.append("is_new", isNew.toString());
@@ -224,6 +224,7 @@ const UpdateProduct: React.FC = () => {
         setVideoUrl(product.video_url);
         setMetaTitle(product.meta_title);
         setMetaDescription(product.meta_description);
+        setIsHomePage(product.is_homepage)
         setIsSale(product.is_sale);
         setIsFeature(product.is_feature);
         setIsNew(product.is_new);
