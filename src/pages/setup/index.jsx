@@ -13,7 +13,7 @@ import Row from "../../components/table/row";
 import { API_ROOT, API_URL } from "../../constants";
 import axios from "../../lib";
 import { useForm, Controller } from "react-hook-form";
-import CustomScript from "./Script";
+import CustomScript from "./script";
 import DynamicImage from "./Images";
 import {
   getCategories,
