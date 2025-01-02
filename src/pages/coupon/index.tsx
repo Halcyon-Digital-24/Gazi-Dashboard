@@ -10,10 +10,11 @@ import Column from "../../components/table/column";
 import Row from "../../components/table/row";
 import { deleteCoupon, getCoupon, reset } from "../../redux/coupon/couponSlice";
 import { useAppDispatch, useAppSelector } from "../../redux/hooks";
+import Loader from "../../components/loader";
 
 const CouponPage: React.FC = () => {
   const dispatch = useAppDispatch();
-  const { coupons, isDelete, totalCount } = useAppSelector(
+  const { coupons, isDelete, totalCount, isLoading } = useAppSelector(
     (state) => state.coupon
   );
   const [pageNumber, setPageNumber] = useState<number>(1);
@@ -51,22 +52,29 @@ const CouponPage: React.FC = () => {
           <Column className="col-md-2">Stock</Column>
           <Column className="col-md-2">Action</Column>
         </Row>
-        {coupons.map((coupon, index) => (
-          <Row className="row" key={index}>
-            <Column className="col-md-1">{coupon.id}</Column>
-            <Column className="col-md-2">{coupon.code}</Column>
-            <Column className="col-md-1">{coupon.total_coupons}</Column>
-            <Column className="col-md-2">{coupon.discount_type}</Column>
-            <Column className="col-md-2">{coupon.discount_amount}</Column>
-            <Column className="col-md-2">{coupon.total_coupons}</Column>
-            <Column className="col-md-2">
-              <CustomIconArea>
-                <EditButton editUrl={`/coupons/edit/${coupon.id}`} />
-                <DeleteButton onClick={() => handleDeleteCoupon(coupon.id)} />
-              </CustomIconArea>
-            </Column>
-          </Row>
-        ))}
+        {isLoading ? (
+          <Loader />
+        ) : (
+          <>
+            {coupons.map((coupon, index) => (
+              <Row className="row" key={index}>
+                <Column className="col-md-1">{coupon.id}</Column>
+                <Column className="col-md-2">{coupon.code}</Column>
+                <Column className="col-md-1">{coupon.total_coupons}</Column>
+                <Column className="col-md-2">{coupon.discount_type}</Column>
+                <Column className="col-md-2">{coupon.discount_amount}</Column>
+                <Column className="col-md-2">{coupon.total_coupons}</Column>
+                <Column className="col-md-2">
+                  <CustomIconArea>
+                    <EditButton editUrl={`/coupons/edit/${coupon.id}`} />
+                    <DeleteButton onClick={() => handleDeleteCoupon(coupon.id)} />
+                  </CustomIconArea>
+                </Column>
+              </Row>
+            ))}
+          </>
+        )}
+
         <Pagination
           pageCount={pageNumber}
           handlePageClick={handlePageChange}

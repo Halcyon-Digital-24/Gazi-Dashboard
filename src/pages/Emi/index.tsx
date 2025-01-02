@@ -12,10 +12,11 @@ import DeleteButton from "../../components/button/delete";
 import { toast } from "react-toastify";
 import Filter from "../../components/filter";
 import { useDebounce } from "../../utills/debounce";
+import Loader from "../../components/loader";
 
 const EmiPage = () => {
   const dispatch = useAppDispatch();
-  const { emis, totalCount, isDelete, message } = useAppSelector(
+  const { emis, totalCount, isDelete, message, isLoading } = useAppSelector(
     (state) => state.emi
   );
   const [pageNumber, setPageNumber] = useState<number>(1);
@@ -58,7 +59,7 @@ const EmiPage = () => {
   }, [isDelete, message]);
 
   useEffect(() => {
-    dispatch(getEmis({ page: pageNumber, limit: displayItem ,   bank_name: onSearch,}));
+    dispatch(getEmis({ page: pageNumber, limit: displayItem, bank_name: onSearch, }));
 
     return () => {
       dispatch(reset());
@@ -69,7 +70,7 @@ const EmiPage = () => {
     <div>
       <CardBody header="Available Emi" to="/emi/create"></CardBody>
       <Display>
-      <Filter handleDisplayItem={handleDisplayItem}  onSearch={handleOnSearch} isFilter />
+        <Filter handleDisplayItem={handleDisplayItem} onSearch={handleOnSearch} isFilter />
         <Row className="row text-bold">
           <Column className="col-md-3">Bank Name</Column>
           <Column className="col-md-1">Three months</Column>
@@ -82,25 +83,32 @@ const EmiPage = () => {
           <Column className="col-md-1">Thirty_six Months</Column>
           <Column className="col-md-1">Action</Column>
         </Row>
-        {emis.map((emi, index) => (
-          <Row className="row" key={index}>
-            <Column className="col-md-3">{emi.bank_name}</Column>
-            <Column className="col-md-1">{emi.three_months}</Column>
-            <Column className="col-md-1">{emi.six_months}</Column>
-            <Column className="col-md-1">{emi.nine_months}</Column>
-            <Column className="col-md-1">{emi.twelve_months}</Column>
-            <Column className="col-md-1">{emi.eighteen_months}</Column>
-            <Column className="col-md-1">{emi.twenty_four_months}</Column>
-            <Column className="col-md-1">{emi.thirty_months}</Column>
-            <Column className="col-md-1">{emi.thirty_six_months}</Column>
-            <Column className="col-md-1">
-              <CustomIconArea>
-                <EditButton editUrl={`/emi/edit/${emi.id}`} />
-                <DeleteButton onClick={() => handleDelete(Number(emi?.id))} />
-              </CustomIconArea>
-            </Column>
-          </Row>
-        ))}
+        {isLoading ? (
+          <Loader />
+        ) : (
+          <>
+            {emis.map((emi, index) => (
+              <Row className="row" key={index}>
+                <Column className="col-md-3">{emi.bank_name}</Column>
+                <Column className="col-md-1">{emi.three_months}</Column>
+                <Column className="col-md-1">{emi.six_months}</Column>
+                <Column className="col-md-1">{emi.nine_months}</Column>
+                <Column className="col-md-1">{emi.twelve_months}</Column>
+                <Column className="col-md-1">{emi.eighteen_months}</Column>
+                <Column className="col-md-1">{emi.twenty_four_months}</Column>
+                <Column className="col-md-1">{emi.thirty_months}</Column>
+                <Column className="col-md-1">{emi.thirty_six_months}</Column>
+                <Column className="col-md-1">
+                  <CustomIconArea>
+                    <EditButton editUrl={`/emi/edit/${emi.id}`} />
+                    <DeleteButton onClick={() => handleDelete(Number(emi?.id))} />
+                  </CustomIconArea>
+                </Column>
+              </Row>
+            ))}
+          </>
+        )}
+
         <Pagination
           pageCount={pageNumber}
           handlePageClick={handlePageChange}

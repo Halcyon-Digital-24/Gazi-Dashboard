@@ -11,10 +11,11 @@ import { deleteQueries, getQueries, reset } from "../../redux/query/querySlice";
 import { DateRangePicker } from "rsuite";
 import { formatDateForURL } from "../../utills/formateDate";
 import CardBody from "../../components/card-body";
+import Loader from "../../components/loader";
 
 const Queries = () => {
   const dispatch = useAppDispatch();
-  const { queries, isDelete, totalCount } = useAppSelector(
+  const { queries, isDelete, totalCount, isLoading } = useAppSelector(
     (state) => state.query
   );
   const [pageNumber, setPageNumber] = useState<number>(1);
@@ -48,7 +49,7 @@ const Queries = () => {
 
   return (
     <div>
-      <CardBody header="Contact Us and Product Queries" to="/" text="back"/>
+      <CardBody header="Contact Us and Product Queries" to="/" text="back" />
       <Display>
         <div className="date-area">
           <DateRangePicker
@@ -65,23 +66,29 @@ const Queries = () => {
           <Column className="col-md-3">Question</Column>
           <Column className="col-md-2">Options</Column>
         </Row>
+        {isLoading ? (
+          <Loader />
+        ) : (
+          <>
+            {queries.map((query, index) => (
+              <Row className="row" key={index}>
+                <Column className="col-md-1">{query.id}</Column>
+                <Column className="col-md-2">
+                  {new Date(query.created_at).toISOString().slice(0, 10)}
+                </Column>
+                <Column className="col-md-2">{query.product_name}</Column>
+                <Column className="col-md-2">{query.mobile}</Column>
+                <Column className="col-md-3">{query.question}</Column>
+                <Column className="col-md-2">
+                  <CustomIconArea>
+                    <DeleteButton onClick={() => handleDelete(Number(query.id))} />
+                  </CustomIconArea>
+                </Column>
+              </Row>
+            ))}
+          </>
+        )}
 
-        {queries.map((query, index) => (
-          <Row className="row" key={index}>
-            <Column className="col-md-1">{query.id}</Column>
-            <Column className="col-md-2">
-              {new Date(query.created_at).toISOString().slice(0, 10)}
-            </Column>
-            <Column className="col-md-2">{query.product_name}</Column>
-            <Column className="col-md-2">{query.mobile}</Column>
-            <Column className="col-md-3">{query.question}</Column>
-            <Column className="col-md-2">
-              <CustomIconArea>
-                <DeleteButton onClick={() => handleDelete(Number(query.id))} />
-              </CustomIconArea>
-            </Column>
-          </Row>
-        ))}
         <Pagination
           pageCount={pageNumber}
           handlePageClick={handlePageChange}

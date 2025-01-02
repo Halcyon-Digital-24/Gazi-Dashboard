@@ -17,10 +17,12 @@ import { useEffect, useState } from "react";
 import Filter from "../../components/filter";
 import { toast } from "react-toastify";
 import { useDebounce } from "../../utills/debounce";
+import Loader from "../../components/loader";
 
 const Staff = () => {
   const dispatch = useAppDispatch();
-  const { staffs, totalCount, isDelete, message } = useAppSelector(selectStaff);
+  const { staffs, totalCount, isDelete, message, isLoading } =
+    useAppSelector(selectStaff);
   const [displayItem, setDisplayItem] = useState(25);
   const [pageNumber, setPageNumber] = useState(1);
   const [onSearch, setOnSearch] = useState("");
@@ -30,7 +32,7 @@ const Staff = () => {
     setPageNumber(selectedItem.selected + 1);
   };
 
-  const [searchQuery, setSearchQuery] = useState('');
+  const [searchQuery, setSearchQuery] = useState("");
   const debouncedSearchQuery = useDebounce(searchQuery, 500); // 500ms debounce delay
 
   const handleOnSearch = (e) => {
@@ -41,7 +43,7 @@ const Staff = () => {
     if (debouncedSearchQuery !== undefined) {
       // Your search request logic here
       // console.log('Search query:', debouncedSearchQuery);
-      setOnSearch(debouncedSearchQuery)
+      setOnSearch(debouncedSearchQuery);
     }
   }, [debouncedSearchQuery]);
 
@@ -57,39 +59,50 @@ const Staff = () => {
     if (isDelete) {
       toast.success(`${message}`);
     }
-    dispatch(getStaff({ search: onSearch,
-      page: pageNumber,
-      limit: displayItem, }));
+    dispatch(
+      getStaff({ search: onSearch, page: pageNumber, limit: displayItem })
+    );
     return () => {
       dispatch(reset());
     };
-  }, [dispatch, pageNumber, isDelete,message, onSearch, displayItem]);
+  }, [dispatch, pageNumber, isDelete, message, onSearch, displayItem]);
 
   return (
     <div>
       <CardBody to="/staffs/create" header="Staff List" />
 
       <Display>
-      <Filter handleDisplayItem={handleDisplayItem} onSearch={handleOnSearch} isFilter />
+        <Filter
+          handleDisplayItem={handleDisplayItem}
+          onSearch={handleOnSearch}
+          isFilter
+        />
         <Row className="row">
           <Column className="col-md-3">Name</Column>
           <Column className="col-md-3">Email</Column>
           <Column className="col-md-3">Role</Column>
           <Column className="col-md-3">Actions</Column>
         </Row>
-        {staffs.map((staff, index) => (
-          <Row className="row" key={index}>
-            <Column className="col-md-3">{staff.name}</Column>
-            <Column className="col-md-3">{staff.email}</Column>
-            <Column className="col-md-3">{staff.access_id}</Column>
-            <Column className="col-md-3">
-              <CustomIconArea>
-                <EditButton editUrl={`/staffs/edit/${staff.id}`} />
-                <DeleteButton onClick={() => handleDelete(staff.id)} />
-              </CustomIconArea>
-            </Column>
-          </Row>
-        ))}
+        {isLoading ? (
+          <Loader />
+        ) : (
+          <>
+            {staffs.map((staff, index) => (
+              <Row className="row" key={index}>
+                <Column className="col-md-3">{staff.name}</Column>
+                <Column className="col-md-3">{staff.email}</Column>
+                <Column className="col-md-3">{staff.access_id}</Column>
+                <Column className="col-md-3">
+                  <CustomIconArea>
+                    <EditButton editUrl={`/staffs/edit/${staff.id}`} />
+                    <DeleteButton onClick={() => handleDelete(staff.id)} />
+                  </CustomIconArea>
+                </Column>
+              </Row>
+            ))}
+          </>
+        )}
+
         <Pagination
           pageCount={pageNumber}
           handlePageClick={handlePageChange}

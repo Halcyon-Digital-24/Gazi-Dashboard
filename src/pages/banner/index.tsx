@@ -20,10 +20,11 @@ import {
 import { useAppDispatch, useAppSelector } from "../../redux/hooks";
 import "./index.scss";
 import { toast } from "react-toastify";
+import Loader from "../../components/loader";
 
 const BannerPage = () => {
   const dispatch = useAppDispatch();
-  const { isDelete, isUpdate } = useAppSelector((state) => state.banner);
+  const { isDelete, isUpdate, isLoading } = useAppSelector((state) => state.banner);
   const [addBanner, setAddBanner] = useState<IAdBanner[]>([]);
   const [pageNumber, setPageNumber] = useState<number>(1);
   const [count, setCount] = useState(0);
@@ -72,7 +73,7 @@ const BannerPage = () => {
     return () => {
       dispatch(reset());
     };
-  }, [isUpdate, isDelete, dispatch]); 
+  }, [isUpdate, isDelete, dispatch]);
 
   return (
     <div>
@@ -85,32 +86,40 @@ const BannerPage = () => {
           <Column className="col-md-1">Status</Column>
           <Column className="col-md-2">Action</Column>
         </Row>
-        {addBanner?.map((banner, index) => (
-          <Row key={index} className="row banner">
-            <Column className="col-md-3">
-              <img
-                src={`${API_ROOT}/images/banner/${banner.image}`}
-                alt="banner"
-              />
-            </Column>
-            <Column className="col-md-4">{banner.url}</Column>
-            <Column className="col-md-2">{banner.group_by}</Column>
-            <Column className="col-md-1">
-              <ToggleButton
-                onClick={() => handleVisibility(banner)}
-                isChecked={banner.is_visible}
-              />
-            </Column>
-            <Column className="col-md-2">
-              <CustomIconArea>
-                <EditButton editUrl={`/banner/edit/${banner.id}`} />
-                <DeleteButton
-                  onClick={() => handleDelete(banner.id as number)}
-                />
-              </CustomIconArea>
-            </Column>
-          </Row>
-        ))}
+
+        {isLoading ? (
+          <Loader />
+        ) : (
+          <>
+            {addBanner?.map((banner, index) => (
+              <Row key={index} className="row banner">
+                <Column className="col-md-3">
+                  <img
+                    src={`${API_ROOT}/images/banner/${banner.image}`}
+                    alt="banner"
+                  />
+                </Column>
+                <Column className="col-md-4">{banner.url}</Column>
+                <Column className="col-md-2">{banner.group_by}</Column>
+                <Column className="col-md-1">
+                  <ToggleButton
+                    onClick={() => handleVisibility(banner)}
+                    isChecked={banner.is_visible}
+                  />
+                </Column>
+                <Column className="col-md-2">
+                  <CustomIconArea>
+                    <EditButton editUrl={`/banner/edit/${banner.id}`} />
+                    <DeleteButton
+                      onClick={() => handleDelete(banner.id as number)}
+                    />
+                  </CustomIconArea>
+                </Column>
+              </Row>
+            ))}
+          </>
+        )}
+
         <Pagination
           pageCount={pageNumber}
           handlePageClick={handlePageChange}

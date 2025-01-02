@@ -7,12 +7,14 @@ import Column from "../table/column";
 import Row from "../table/row";
 import "./index.scss";
 import SingleItem from "./singleItem";
+import Loader from "../loader";
 
 interface IProps {
   orders: IOrder[];
   handleAllSelectedOrders?: (e: ChangeEvent<HTMLInputElement>) => void;
   handleSelectedOrder?: (orderId: number) => void;
   selectedOrders?: number[];
+  isLoading?: boolean;
 }
 
 const OrderTable = ({
@@ -20,6 +22,7 @@ const OrderTable = ({
   handleAllSelectedOrders,
   handleSelectedOrder,
   selectedOrders,
+  isLoading
 }: IProps) => {
   const dispatch = useAppDispatch();
   const { isUpdate, message } = useAppSelector((state) => state.order);
@@ -87,6 +90,9 @@ const OrderTable = ({
           <Column className="col-md-2">Options</Column>
         </Row>
       </>
+      {isLoading ? (
+          <Loader />
+        ) : (
       <>
         {orders.map((order, index) => (
           <SingleItem
@@ -100,6 +106,7 @@ const OrderTable = ({
           />
         ))}
       </>
+      )}
     </div>
   );
 };

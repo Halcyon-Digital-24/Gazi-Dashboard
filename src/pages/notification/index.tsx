@@ -13,10 +13,11 @@ import {
 import DeleteButton from "../../components/button/delete";
 import { API_ROOT } from "../../constants";
 import { toast } from "react-toastify";
+import Loader from "../../components/loader";
 
 const Notification = () => {
   const dispatch = useAppDispatch();
-  const { notifications, totalCount, isDelete } = useAppSelector((state) => state.notification);
+  const { notifications, totalCount, isDelete, isLoading } = useAppSelector((state) => state.notification);
   const [pageNumber, setPageNumber] = useState<number>(1);
   const totalPage = Math.ceil(totalCount / 10);
 
@@ -31,7 +32,7 @@ const Notification = () => {
     };
   }, [dispatch, pageNumber, isDelete]);
 
-  const handleNotificationDelete = (id:any) => {
+  const handleNotificationDelete = (id: any) => {
     dispatch(deleteNotification(id));
   };
 
@@ -62,21 +63,28 @@ const Notification = () => {
           <Column className="col-md-5">Details</Column>
           <Column className="col-md-2">Action</Column>
         </Row>
-        {notifications.map((n, index) => (
-          <Row className="row" key={index}>
-            <Column className="col-md-1">{n.id}</Column>
-            <Column className="col-md-2">
-            <img
-                src={`${API_ROOT}/images/notification/${n.image}`}
-                alt="brand"
-                style={{ width: "100%", height: "auto" }}
-              />
-            </Column>
-            <Column className="col-md-2">{n.title}</Column>
-            <Column className="col-md-5">{n.details}</Column>
-            <Column className="col-md-2"> <DeleteButton onClick={() => handleNotificationDelete(n.id)} /></Column>
-          </Row>
-        ))}
+        {isLoading ? (
+          <Loader />
+        ) : (
+          <>
+            {notifications.map((n, index) => (
+              <Row className="row" key={index}>
+                <Column className="col-md-1">{n.id}</Column>
+                <Column className="col-md-2">
+                  <img
+                    src={`${API_ROOT}/images/notification/${n.image}`}
+                    alt="brand"
+                    style={{ width: "100%", height: "auto" }}
+                  />
+                </Column>
+                <Column className="col-md-2">{n.title}</Column>
+                <Column className="col-md-5">{n.details}</Column>
+                <Column className="col-md-2"> <DeleteButton onClick={() => handleNotificationDelete(n.id)} /></Column>
+              </Row>
+            ))}
+          </>
+        )}
+
         <Pagination
           pageCount={pageNumber}
           handlePageClick={handlePageChange}

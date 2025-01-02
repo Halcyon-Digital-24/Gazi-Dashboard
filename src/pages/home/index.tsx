@@ -5,12 +5,13 @@ import { API_URL } from "../../constants";
 import axios from "../../lib";
 import { Link } from "react-router-dom";
 import TextEditor from "../../components/forms/text-editor";
+import Loader from "../../components/loader";
 
 
 
 const HomePage: React.FC = () => {
   const [data, setData] = useState<any>({});
-  const [loading, setLoading] = useState(true);
+  const [isLoading, setIsLoading] = useState(true);
   const [editorData, setEditorData] = useState<any>('')
 
 
@@ -20,18 +21,18 @@ const HomePage: React.FC = () => {
         const response = await axios.get(`${API_URL}/dashboards`);
 
         setData(response.data);
-        setLoading(false);
+        setIsLoading(false);
       } catch (error) {
         console.error("Error fetching data:", error);
-        setLoading(false);
+        setIsLoading(false);
       }
     };
 
     fetchData();
   }, []);
 
-  if (loading) {
-    return <p>Loading...</p>;
+  if (isLoading) {
+    return <Loader/>;
   }
 
   const items = [

@@ -18,6 +18,7 @@ import {
 } from "../../redux/blogs/blogSlice";
 import { useAppDispatch, useAppSelector } from "../../redux/hooks";
 import { toast } from "react-toastify";
+import Loader from "../../components/loader";
 
 const Blogs: React.FC = () => {
   const [displayItem, setDisplayItem] = useState(25);
@@ -31,6 +32,7 @@ const Blogs: React.FC = () => {
     errorMessage,
     isError,
     message,
+    isLoading,
   } = useAppSelector((state) => state.blogs);
 
   const totalPage = Math.ceil(totalCount / displayItem);
@@ -87,41 +89,46 @@ const Blogs: React.FC = () => {
           <Column className="col-md-1">Status</Column>
           <Column className="col-md-1">Options</Column>
         </Row>
-        <>
-          {blogs.map((blog, index) => (
-            <Row className="row" key={index}>
-              {/*  <Column className="col-md-1">
+        {isLoading ? (
+          <Loader />
+        ) : (
+          <>
+            {blogs.map((blog, index) => (
+              <Row className="row" key={index}>
+                {/*  <Column className="col-md-1">
                 <input
                   type="checkbox"
                   onClick={() => handleSelectedBlog(blog.id)}
                 />
               </Column> */}
-              <Column className="col-md-1">{blog.id}</Column>
-              <Column className="col-md-2">{blog.title}</Column>
-              <Column className="col-md-6">
-                <div
-                  dangerouslySetInnerHTML={{
-                    __html: blog.description?.substring(0, 100) ?? "",
-                  }}
-                ></div>
-              </Column>
-              <Column className="col-md-1">
-                <ToggleButton
-                  isChecked={blog.is_visible}
-                  onClick={() => handleStatusChange(blog)}
-                />
-              </Column>
-              <Column className="col-md-2">
-                <CustomIconArea>
-                  <EditButton editUrl={`/blogs/edit/${blog.id}`} />
-                  <DeleteButton
-                    onClick={() => handleDeleteBlog(blog.id as number)}
+                <Column className="col-md-1">{blog.id}</Column>
+                <Column className="col-md-2">{blog.title}</Column>
+                <Column className="col-md-6">
+                  <div
+                    dangerouslySetInnerHTML={{
+                      __html: blog.description?.substring(0, 100) ?? "",
+                    }}
+                  ></div>
+                </Column>
+                <Column className="col-md-1">
+                  <ToggleButton
+                    isChecked={blog.is_visible}
+                    onClick={() => handleStatusChange(blog)}
                   />
-                </CustomIconArea>
-              </Column>
-            </Row>
-          ))}
-        </>
+                </Column>
+                <Column className="col-md-2">
+                  <CustomIconArea>
+                    <EditButton editUrl={`/blogs/edit/${blog.id}`} />
+                    <DeleteButton
+                      onClick={() => handleDeleteBlog(blog.id as number)}
+                    />
+                  </CustomIconArea>
+                </Column>
+              </Row>
+            ))}
+          </>
+        )}
+
         <Pagination
           pageCount={pageNumber}
           handlePageClick={handlePageChange}

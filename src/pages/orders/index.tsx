@@ -21,10 +21,10 @@ const AllOrders: React.FC = () => {
   const [orderStatus, setOrderStatus] = useState("");
   const [onSearch, setOnSearch] = useState("");
   const [orderDate, setOrderDate] = useState<[Date, Date] | null>(null);
-  const { orders, isDelete, totalCount } = useAppSelector(
+  const { orders, isDelete, totalCount, isLoading } = useAppSelector(
     (state) => state.order
   );
-  
+
   const [displayItem, setDisplayItem] = useState(25);
   const totalPage = Math.ceil(totalCount / displayItem);
 
@@ -36,7 +36,7 @@ const AllOrders: React.FC = () => {
     setDisplayItem(Number(e.target.value));
   };
 
-  
+
   const [searchQuery, setSearchQuery] = useState<string>('');
   const debouncedSearchQuery = useDebounce(searchQuery, 500); // 500ms debounce delay
 
@@ -106,7 +106,7 @@ const AllOrders: React.FC = () => {
     regular_price: number;
     discount_price: number;
   }
-  
+
   const flattenOrderItems = (orderItems: OrderItem[]): string => {
     const lines = orderItems.map(item => {
       // Create a CSV line with field names prefixed
@@ -117,22 +117,22 @@ const AllOrders: React.FC = () => {
         `RP: ${item.regular_price}`,
         `DP: ${item.discount_price}`
       ].join(', ');
-  
+
       return csvLine;
     });
-  
+
     // Join all lines with new line character
     return lines.join('\n');
   };
-  
-  
+
+
   // order data for csv 
   const orderForCsv = orders.map(order => {
     const total_product_price = order.orderItems.reduce((total, item) => total + item.regular_price, 0);
     const total_amount = total_product_price + order.delivery_fee - order.custom_discount;
     const due_amount = total_amount - order.advance_payment;
     // console.log(order.orderItems.length);
-    
+
     return {
       OrderId: order.id,
       User_id: order.user_id,
@@ -144,7 +144,7 @@ const AllOrders: React.FC = () => {
       Thana: order.thana,
       Number_of_product: order.orderItems.length,
       ProductDetails: flattenOrderItems(order.orderItems),  // need to convert 
-      Delivery_fee:order.delivery_fee,
+      Delivery_fee: order.delivery_fee,
       Custom_discount: order.custom_discount,
       Advance_payment: order.advance_payment,
       Total_product_price: total_product_price,
@@ -154,7 +154,7 @@ const AllOrders: React.FC = () => {
       Payment_status: order.payment_status,
       Transaction_id: order.transaction_id,
       Note: order.note,
-      Order_prefix:order.order_prefix,
+      Order_prefix: order.order_prefix,
       Invoice_no: order.invoice_no,
       Order_form: order.order_form,
       Order_status: order.order_status,
@@ -164,7 +164,7 @@ const AllOrders: React.FC = () => {
       UpdatedAt: order.updated_at,
     };
   });
-  
+
 
 
   const now = new Date();
@@ -175,7 +175,7 @@ const AllOrders: React.FC = () => {
     timeZone: 'Asia/Dhaka',
   });
 
-  
+
   return (
     <div>
       <Display>
@@ -235,6 +235,7 @@ const AllOrders: React.FC = () => {
           handleAllSelectedOrders={handleAllSelectedOrders}
           handleSelectedOrder={handleSelectedOrder}
           selectedOrders={selectedOrders}
+          isLoading={isLoading}
         />
         <Pagination
           pageCount={pageNumber}

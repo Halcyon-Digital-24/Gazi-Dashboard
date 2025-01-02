@@ -18,10 +18,11 @@ import { DateRangePicker } from "rsuite";
 import { formatDateForURL } from "../../utills/formateDate";
 import { useDebounce } from "../../utills/debounce";
 import { updateProduct } from "../../redux/products/product-slice"; // Import the updateProduct action
+import Loader from "../../components/loader";
 
 const CampaignPage: React.FC = () => {
   const dispatch = useAppDispatch();
-  const { campaigns, isDelete, totalCount, isUpdate } = useAppSelector(
+  const { campaigns, isDelete, totalCount, isUpdate, isLoading } = useAppSelector(
     (state) => state.campaign
   );
   const { products } = useAppSelector((state) => state.product); // Add this line to get the products state
@@ -57,22 +58,22 @@ const CampaignPage: React.FC = () => {
   const handleDeleteCampaign = async (id: number) => {
     // Find the campaign by ID
     const campaign = campaigns.find((campaign) => campaign.id === id);
-  
+
     // Check if the campaign exists
     if (!campaign) {
       toast.error(`Campaign with ID ${id} not found.`);
       return;
     }
-  
+
     // Parse product IDs (handle case where product_id might be a string)
     const productIds: number[] = typeof campaign.product_id === 'string'
       ? JSON.parse(campaign.product_id)
       : campaign.product_id;
-  
+
     // Update each product associated with the campaign
     productIds.forEach((productId: number) => {
-      const product = products.find((product) => product.id === productId);
-  
+      const product = products.find((product:any) => product.id === productId);
+
       // Check if the product exists before updating
       if (product && product.id !== undefined) {
         const updatedProductData = {
@@ -81,16 +82,16 @@ const CampaignPage: React.FC = () => {
           camping_name: null,
           camping_id: null,
         };
-  
+
         // Dispatch actions to update the product and delete the campaign
         dispatch(updateProduct({ id: product.id, productData: updatedProductData }));
       }
     });
-  
+
     // Dispatch action to delete the campaign after updating products
     dispatch(deleteCampaign(id));
   };
-  
+
 
   useEffect(() => {
     if (isDelete) {
@@ -157,34 +158,41 @@ const CampaignPage: React.FC = () => {
           <Column className="col-md-1">Status</Column>
           <Column className="col-md-2">Action</Column>
         </Row>
-        {campaigns?.map((campaign, index) => (
-          <Row className="row" key={index}>
-            <Column className="col-md-1">{index + 1}</Column>
-            <Column className="col-md-2">
-              <img
-                src={`${API_ROOT}/images/camping/${campaign.image}`}
-                alt="brand"
-                style={{ width: "100%", height: "auto" }}
-              />
-            </Column>
-            <Column className="col-md-2">{campaign.name}</Column>
-            <Column className="col-md-1">{formatDate(campaign.start_date)}</Column>
-            <Column className="col-md-2">{formatDate(campaign.end_date)}</Column>
-            <Column className="col-md-1">{getProductCount(campaign.product_id)}</Column>
-            <Column className="col-md-1">
-              <ToggleButton
-                onClick={() => handleVisibility(campaign)}
-                isChecked={campaign.is_visible}
-              />
-            </Column>
-            <Column className="col-md-2">
-              <CustomIconArea>
-                <EditButton editUrl={`/campaign/edit/${campaign.id}`} />
-                <DeleteButton onClick={() => handleDeleteCampaign(campaign.id as number)} />
-              </CustomIconArea>
-            </Column>
-          </Row>
-        ))}
+        {isLoading ? (
+          <Loader />
+        ) : (
+          <>
+            {campaigns?.map((campaign, index) => (
+              <Row className="row" key={index}>
+                <Column className="col-md-1">{index + 1}</Column>
+                <Column className="col-md-2">
+                  <img
+                    src={`${API_ROOT}/images/camping/${campaign.image}`}
+                    alt="brand"
+                    style={{ width: "100%", height: "auto" }}
+                  />
+                </Column>
+                <Column className="col-md-2">{campaign.name}</Column>
+                <Column className="col-md-1">{formatDate(campaign.start_date)}</Column>
+                <Column className="col-md-2">{formatDate(campaign.end_date)}</Column>
+                <Column className="col-md-1">{getProductCount(campaign.product_id)}</Column>
+                <Column className="col-md-1">
+                  <ToggleButton
+                    onClick={() => handleVisibility(campaign)}
+                    isChecked={campaign.is_visible}
+                  />
+                </Column>
+                <Column className="col-md-2">
+                  <CustomIconArea>
+                    <EditButton editUrl={`/campaign/edit/${campaign.id}`} />
+                    <DeleteButton onClick={() => handleDeleteCampaign(campaign.id as number)} />
+                  </CustomIconArea>
+                </Column>
+              </Row>
+            ))}
+          </>
+        )}
+
         <Pagination
           pageCount={pageNumber}
           handlePageClick={handlePageChange}
