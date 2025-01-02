@@ -83,6 +83,7 @@ const SetupPage = () => {
       const response = await axios.delete(`/caches`);
       toast.success(response.data.message);
     } catch (error) {
+      toast.error("Error resetting cache, Try again later.");
       console.error("Error deleting item:", error);
     }
   };

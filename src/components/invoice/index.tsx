@@ -246,7 +246,7 @@ const Invoice = ({ order }: any) => {
                         </p>
                         <p>
                           {" "}
-                          <span className="invoice-title">Name: </span> {order.name}
+                          <span className="invoice-title capitalize">Name: </span> {order.name}
                         </p>
                         <p>
                           <span className="invoice-title">Email: </span> {order.email}
@@ -257,7 +257,7 @@ const Invoice = ({ order }: any) => {
                         </p>
                         <p>
                           <span className="invoice-title"> Address: </span> {order.address}{" "}
-                          {order.city ? `, ${order.city}` : ""}{" "}
+                          {order.city ? `, ${order.city}` : ""}{" "} {order.thana ? `, ${order.thana}` : ""}{" "}
                         </p>
                       </div>
                       <div className="order-details right">
