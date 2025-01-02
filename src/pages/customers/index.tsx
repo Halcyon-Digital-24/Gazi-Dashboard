@@ -18,6 +18,7 @@ import { useAppDispatch, useAppSelector } from "../../redux/hooks";
 import { DateRangePicker } from "rsuite";
 import { formatDateForURL } from "../../utills/formateDate";
 import { useDebounce } from "../../utills/debounce";
+import Loader from "../../components/loader";
 
 const Customers: React.FC = () => {
   const dispatch = useAppDispatch();
@@ -25,7 +26,7 @@ const Customers: React.FC = () => {
   const [displayItem, setDisplayItem] = useState(25);
   const [orderDate, setOrderDate] = useState<[Date, Date] | null>(null);
   const [onSearch, setOnSearch] = useState("");
-  const { customers, isError, isDelete, message, totalCount } = useAppSelector(
+  const { customers, isError, isDelete, message, totalCount, isLoading } = useAppSelector(
     (state) => state.customer
   );
 
@@ -110,6 +111,10 @@ const Customers: React.FC = () => {
           <Column className="col-md-3">Phone</Column>
           <Column className="col-md-3">Actions</Column>
         </Row>
+        {isLoading ? (
+          <Loader />
+        ) : (
+        <>
         {customers.map((customer, index) => (
           <Row className="row" key={index}>
             <Column className="col-md-3">{customer.name}</Column>
@@ -124,6 +129,9 @@ const Customers: React.FC = () => {
             </Column>
           </Row>
         ))}
+        </>
+        )}
+        
         <Pagination
           pageCount={pageNumber}
           handlePageClick={handlePageChange}

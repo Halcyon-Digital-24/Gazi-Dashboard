@@ -17,9 +17,10 @@ import {
 } from "../../redux/faqs/faqSlice";
 import { useAppDispatch, useAppSelector } from "../../redux/hooks";
 import { toast } from "react-toastify";
+import Loader from "../../components/loader";
 
 const FaqPage: React.FC = () => {
-  const { faqs, isUpdate, totalCount, isDelete } = useAppSelector(
+  const { faqs, isUpdate, totalCount, isDelete, isLoading } = useAppSelector(
     (state) => state.faqs
   );
   const [pageNumber, setPageNumber] = useState<number>(1);
@@ -69,7 +70,11 @@ const FaqPage: React.FC = () => {
           <Column className="col-md-1">Status</Column>
           <Column className="col-md-1">Actions</Column>
         </Row>
-        {faqs?.map((faq, index) => (
+        {isLoading ? (
+          <Loader />
+        ) : (
+          <>
+          {faqs?.map((faq, index) => (
           <Row className="row" key={index}>
             <Column className="col-md-1">{faq.id}</Column>
             <Column className="col-md-4">{faq.question}</Column>
@@ -90,6 +95,9 @@ const FaqPage: React.FC = () => {
             </Column>
           </Row>
         ))}
+          </>
+        )}
+        
         <Pagination
           pageCount={pageNumber}
           handlePageClick={handlePageChange}

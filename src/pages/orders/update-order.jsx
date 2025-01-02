@@ -7,7 +7,6 @@ import { useEffect, useRef, useState } from "react";
 import { getProducts, reset } from "../../redux/products/product-slice";
 import {
   addToCart,
-  clearCart,
   decrementQuantity,
   incrementQuantity,
   removeFromCart,
@@ -20,7 +19,6 @@ import { FiPlus } from "react-icons/fi";
 import { LuMinus } from "react-icons/lu";
 import { RxCross2 } from "react-icons/rx";
 import { useNavigate, useParams } from "react-router-dom";
-import Column from "../../components/table/column";
 import { useForm } from "react-hook-form";
 import FormatPrice from "../../utills/formatePrice";
 import { FaCheck } from "react-icons/fa";
@@ -654,17 +652,17 @@ const UpdateOrder = () => {
                     </tr>
                     {orderItems?.map((product, index) => (
                       <tr key={index} className="order-item">
-                        <td>
+                        <td className="cross-tr">
                           <RxCross2
                             className="cross"
                             title="Delete"
                             onClick={() => handleRemoveOrderItem(product)}
                           />
-                          {index + 1}
+                         {" "} {index + 1}
                         </td>
                         <td>{product.product_name}</td>
                         <td>
-                          <div className="qnty">
+                          <div className="qnty ">
                             <FiPlus
                               className="plus"
                               onClick={() => handleIncrementOrderItem(product)}

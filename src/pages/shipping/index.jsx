@@ -12,14 +12,14 @@ import { toast } from "react-toastify";
 import EditButton from "../../components/button/edit";
 import CardBody from "../../components/card-body";
 import { getLocations, reset } from "../../redux/location/locationSlice";
+import Loader from "../../components/loader";
 
 const Shipping = () => {
   const dispatch = useAppDispatch();
   const [pageNumber, setPageNumber] = useState(1);
   const [displayItem, setDisplayItem] = useState(25);
-  const { locations, isError, isDelete, message, totalCount } = useAppSelector(
-    (state) => state.location
-  );
+  const { locations, isError, isDelete, message, totalCount, isLoading } =
+    useAppSelector((state) => state.location);
 
   const totalPage = Math.ceil(totalCount / displayItem);
 
@@ -68,18 +68,27 @@ const Shipping = () => {
           <Column className="col-md-4">Price</Column>
           <Column className="col-md-4">Actions</Column>
         </Row>
-        {locations?.map((location, index) => (
-          <Row className="row" key={index}>
-            <Column className="col-md-4">{location.location}</Column>
-            <Column className="col-md-4">{location.price}</Column>
-            <Column className="col-md-4">
-              <CustomIconArea>
-                <EditButton editUrl={`/shipping/edit/${location.id}`} />
-                <DeleteButton onClick={() => handleDeleteVideo(location.id)} />
-              </CustomIconArea>
-            </Column>
-          </Row>
-        ))}
+        {isLoading ? (
+          <Loader />
+        ) : (
+          <>
+            {locations?.map((location, index) => (
+              <Row className="row" key={index}>
+                <Column className="col-md-4">{location.location}</Column>
+                <Column className="col-md-4">{location.price}</Column>
+                <Column className="col-md-4">
+                  <CustomIconArea>
+                    <EditButton editUrl={`/shipping/edit/${location.id}`} />
+                    <DeleteButton
+                      onClick={() => handleDeleteVideo(location.id)}
+                    />
+                  </CustomIconArea>
+                </Column>
+              </Row>
+            ))}
+          </>
+        )}
+
         <Pagination
           pageCount={pageNumber}
           handlePageClick={handlePageChange}

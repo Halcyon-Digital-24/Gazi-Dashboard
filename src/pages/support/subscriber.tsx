@@ -11,11 +11,12 @@ import {
   deleteSubscriber,
   getSubscribers,
 } from "../../redux/subscribe/subscribeSlice";
+import Loader from "../../components/loader";
 
 const Subscriber = () => {
   const [pageNumber, setPageNumber] = useState<number>(1);
   const dispatch = useAppDispatch();
-  const { subscribers, isDelete, totalCount } = useAppSelector(
+  const { subscribers, isDelete, totalCount, isLoading } = useAppSelector(
     (state) => state.subscribers
   );
 
@@ -40,7 +41,11 @@ const Subscriber = () => {
           <Column className="col-md-11">Email</Column>
           <Column className="col-md-1">Actions</Column>
         </Row>
-        {subscribers.map((subscribe, index) => (
+        {isLoading ? (
+          <Loader />
+        ) : (
+          <>
+          {subscribers.map((subscribe, index) => (
           <Row key={index} className="row">
             <Column className="col-md-11">{subscribe.email}</Column>
             <Column className="col-md-1">
@@ -52,6 +57,9 @@ const Subscriber = () => {
             </Column>
           </Row>
         ))}
+          </>
+        )}
+        
         <Pagination
           pageCount={pageNumber}
           handlePageClick={handlePageChange}

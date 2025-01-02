@@ -15,10 +15,11 @@ import {
   getKeypoints,
   reset,
 } from "../../redux/service/keypointSlice";
+import Loader from "../../components/loader";
 
 const Services = () => {
   const dispatch = useAppDispatch();
-  const { services, isDelete, totalCount } = useAppSelector(
+  const { services, isDelete, totalCount, isLoading } = useAppSelector(
     (state) => state.services
   );
   const [pageNumber, setPageNumber] = useState<number>(1);
@@ -50,29 +51,37 @@ const Services = () => {
           <Column className="col-md-2">Position</Column>
           <Column className="col-md-2">Options</Column>
         </Row>
-        {services.map((service, index) => (
-          <Row className="row" key={index}>
-            <Column className="col-md-2">
-              <img
-                src={`${API_ROOT}/images/key-point/${service.image}`}
-                alt="service"
-              />
-            </Column>
-            <Column className="col-md-2">{service.url}</Column>
-            <Column className="col-md-2">{service.title}</Column>
-            <Column className="col-md-2">{service.subtitle}</Column>
-            <Column className="col-md-2">{service.group_by}</Column>
 
-            <Column className="col-md-2">
-              <CustomIconArea>
-                <EditButton editUrl={`/setup/services/edit/${service.id}`} />
-                <DeleteButton
-                  onClick={() => handleDelete(Number(service.id))}
-                />
-              </CustomIconArea>
-            </Column>
-          </Row>
-        ))}
+        {isLoading ? (
+          <Loader />
+        ) : (
+          <>
+            {services.map((service, index) => (
+              <Row className="row" key={index}>
+                <Column className="col-md-2">
+                  <img
+                    src={`${API_ROOT}/images/key-point/${service.image}`}
+                    alt="service"
+                  />
+                </Column>
+                <Column className="col-md-2">{service.url}</Column>
+                <Column className="col-md-2">{service.title}</Column>
+                <Column className="col-md-2">{service.subtitle}</Column>
+                <Column className="col-md-2">{service.group_by}</Column>
+
+                <Column className="col-md-2">
+                  <CustomIconArea>
+                    <EditButton editUrl={`/setup/services/edit/${service.id}`} />
+                    <DeleteButton
+                      onClick={() => handleDelete(Number(service.id))}
+                    />
+                  </CustomIconArea>
+                </Column>
+              </Row>
+            ))}
+          </>
+        )}
+
         <Pagination
           pageCount={pageNumber}
           handlePageClick={handlePageChange}

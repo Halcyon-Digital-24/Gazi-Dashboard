@@ -11,10 +11,11 @@ import { useAppDispatch, useAppSelector } from "../../redux/hooks";
 import { deletePages, getPages, reset } from "../../redux/pages/pageSlice";
 import { toast } from "react-toastify";
 import ViewButton from "../../components/button/view";
+import Loader from "../../components/loader";
 
 const CommonPages: React.FC = () => {
   const dispatch = useAppDispatch();
-  const { pages, isDelete, totalCount, isError, errorMessage, message } =
+  const { pages, isDelete, totalCount, isError, errorMessage, message, isLoading } =
     useAppSelector((state) => state.pages);
   const [pageNumber, setPageNumber] = useState<number>(1);
 
@@ -52,22 +53,29 @@ const CommonPages: React.FC = () => {
           <Column className="col-md-3">Slug</Column>
           <Column className="col-md-3">Action</Column>
         </Row>
-        {pages.map((page, index) => (
-          <Row key={index} className="row">
-            <Column className="col-md-3">{index + 1}</Column>
-            <Column className="col-md-3">{page.title}</Column>
-            <Column className="col-md-3">{page.slug}</Column>
-            <Column className="col-md-3">
-              <CustomIconArea>
-              <ViewButton target="_blank" href={`https://gcart.com.bd/${page.slug}`} />
-                <EditButton editUrl={`/setup/pages/edit/${page.id}`} />
-                <DeleteButton
-                  onClick={() => handlePageDelete(page.id as number)}
-                />
-              </CustomIconArea>
-            </Column>
-          </Row>
-        ))}
+        {isLoading ? (
+          <Loader />
+        ) : (
+          <>
+            {pages.map((page, index) => (
+              <Row key={index} className="row">
+                <Column className="col-md-3">{index + 1}</Column>
+                <Column className="col-md-3">{page.title}</Column>
+                <Column className="col-md-3">{page.slug}</Column>
+                <Column className="col-md-3">
+                  <CustomIconArea>
+                    <ViewButton target="_blank" href={`https://gcart.com.bd/${page.slug}`} />
+                    <EditButton editUrl={`/setup/pages/edit/${page.id}`} />
+                    <DeleteButton
+                      onClick={() => handlePageDelete(page.id as number)}
+                    />
+                  </CustomIconArea>
+                </Column>
+              </Row>
+            ))}
+          </>
+        )}
+
         <Pagination
           pageCount={pageNumber}
           handlePageClick={handlePageChange}

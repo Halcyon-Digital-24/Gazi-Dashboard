@@ -15,12 +15,20 @@ import {
   reset,
   deleteRole,
 } from "../../redux/roles/roleSlice";
+import Loader from "../../components/loader";
 
 const Roles = () => {
   const dispatch = useAppDispatch();
-  const { roles, totalCount, isDelete, message, errorMessage, isError } =
-    useAppSelector(selectRole);
-    // console.log(roles);
+  const {
+    roles,
+    totalCount,
+    isDelete,
+    message,
+    errorMessage,
+    isError,
+    isLoading,
+  } = useAppSelector(selectRole);
+  // console.log(roles);
   const [pageNumber, setPageNumber] = useState(1);
 
   const handlePageChange = (selectedItem) => {
@@ -60,17 +68,24 @@ const Roles = () => {
           <Column className="col-md-8">Name </Column>
           <Column className="col-md-4">Options</Column>
         </Row>
-        {roles.map((role, i) => (
-          <Row key={i} className="row">
-            <Column className="col-md-8">{role.name} </Column>
-            <Column className="col-md-4">
-              <CustomIconArea>
-                <EditButton editUrl={`/roles/edit/${role.id}`} />
-                <DeleteButton onClick={() => handleDeleteRole(role.id)} />
-              </CustomIconArea>
-            </Column>
-          </Row>
-        ))}
+
+        {isLoading ? (
+          <Loader />
+        ) : (
+          <>
+            {roles.map((role, i) => (
+              <Row key={i} className="row">
+                <Column className="col-md-8">{role.name} </Column>
+                <Column className="col-md-4">
+                  <CustomIconArea>
+                    <EditButton editUrl={`/roles/edit/${role.id}`} />
+                    <DeleteButton onClick={() => handleDeleteRole(role.id)} />
+                  </CustomIconArea>
+                </Column>
+              </Row>
+            ))}
+          </>
+        )}
 
         <Pagination
           pageCount={pageNumber}

@@ -6,10 +6,10 @@ import Row from "../../components/table/row";
 import { getComments, reset, updateComment } from "../../redux/comments/commentSlice";
 import { useAppDispatch, useAppSelector } from "../../redux/hooks";
 import ToggleButton from "rsuite/Toggle";
-import { Loader } from "rsuite";
 import Filter from "../../components/filter";
 import { toast } from "react-toastify";
 import Pagination from "../../components/pagination";
+import Loader from "../../components/loader";
 
 const BlogComment = () => {
   const { comments, totalCount, isLoading, isError, errorMessage, isUpdate, message } = useAppSelector((state) => state.comment);

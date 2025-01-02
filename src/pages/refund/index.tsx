@@ -17,19 +17,22 @@ import {
 import "./index.scss";
 import Filter from "../../components/filter";
 import { useDebounce } from "../../utills/debounce";
+import Loader from "../../components/loader";
 
 const Refund = () => {
   const dispatch = useAppDispatch();
-  const { refunds, isUpdate, totalCount, isDelete } = useAppSelector(
+  const { refunds, isUpdate, totalCount, isDelete, isLoading } = useAppSelector(
     (state) => state.refund
   );
   const [displayItem, setDisplayItem] = useState(25);
   const [onSearch, setOnSearch] = useState("");
   const [pageNumber, setPageNumber] = useState<number>(1);
   const totalPage = Math.ceil(totalCount / displayItem);
+
   const updateStatus = (id: number, status: string) => {
     dispatch(updateRefund({ refund_status: status, id }));
   };
+  
   const handlePageChange = (selectedItem: { selected: number }) => {
     setPageNumber(selectedItem.selected + 1);
   };
@@ -95,7 +98,11 @@ const Refund = () => {
           <Column className="col-md-2">Options</Column>
         </Row>
         {/* TODO:  */}
-        {refunds.map((refund, index) => (
+        {isLoading ? (
+          <Loader />
+        ) : (
+          <>
+          {refunds.map((refund, index) => (
           <Row className="row" key={index}>
             <Column className="col-md-1">{refund.order_id}</Column>
             <Column className="col-md-2">{refund.product_name}</Column>
@@ -132,6 +139,9 @@ const Refund = () => {
             </Column>
           </Row>
         ))}
+          </>
+        )}
+        
         <Pagination
           pageCount={pageNumber}
           handlePageClick={handlePageChange}
