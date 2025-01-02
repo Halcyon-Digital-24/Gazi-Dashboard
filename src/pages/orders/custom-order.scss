@@ -91,6 +91,7 @@
 }
 .qnty {
   display: flex;
+  justify-content: center;
   padding: 0 6px;
   p {
     user-select: none;
@@ -109,6 +110,9 @@
 
 .cross {
   cursor: pointer;
+  color: red;
+  width: 15px;
+  height: 15px;
 }
 .price {
   padding: 0 10px;
