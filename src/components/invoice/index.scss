@@ -98,10 +98,12 @@
 
         p {
           margin-bottom: 5px;
-          text-transform: capitalize;
         }
       }
-
+      
+      .capitalize{
+        text-transform: capitalize;
+      }
       .right {
         background: $decenary-color;
         width: 37%;
