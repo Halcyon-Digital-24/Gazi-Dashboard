@@ -61,31 +61,33 @@ const Attributes = () => {
     <div>
       <CardBody header="Attributes" to="/attributes/create" />
       <Display>
-        <Row className="row text-bold">
-          <Column className="col-md-5">Attributes</Column>
-          <Column className="col-md-5">Attributes Value</Column>
-          <Column className="col-md-2">Actions</Column>
-        </Row>
-        {isLoading ? (
-          <>
-            <Loader />
-          </>
-        ) : (
-          attributes.map((attribute, index) => (
-            <Row className="row" key={index}>
-              <Column className="col-md-5">{attribute.name}</Column>
-              <Column className="col-md-5">{attribute.value}</Column>
-              <Column className="col-md-2">
-                <CustomIconArea>
-                  <EditButton editUrl={`/attributes/edit/${attribute.id}`} />
-                  <DeleteButton
-                    onClick={() => handleDeleteAttribute(attribute.id)}
-                  />
-                </CustomIconArea>
-              </Column>
-            </Row>
-          ))
-        )}
+        <div className="table">
+          <Row className="row-table text-bold">
+            <Column className="col-md-5">Attributes</Column>
+            <Column className="col-md-5">Attributes Value</Column>
+            <Column className="col-md-2">Actions</Column>
+          </Row>
+          {isLoading ? (
+            <>
+              <Loader />
+            </>
+          ) : (
+            attributes.map((attribute, index) => (
+              <Row className="row-table" key={index}>
+                <Column className="col-md-5">{attribute.name}</Column>
+                <Column className="col-md-5">{attribute.value}</Column>
+                <Column className="col-md-2">
+                  <CustomIconArea>
+                    <EditButton editUrl={`/attributes/edit/${attribute.id}`} />
+                    <DeleteButton
+                      onClick={() => handleDeleteAttribute(attribute.id)}
+                    />
+                  </CustomIconArea>
+                </Column>
+              </Row>
+            ))
+          )}
+        </div>
         <Pagination
           pageCount={pageNumber}
           handlePageClick={handlePageChange}

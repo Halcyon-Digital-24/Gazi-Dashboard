@@ -1,45 +1,37 @@
-@import './../../styles/index.scss';
+@import "../../styles/_colors.scss";
+body {
+  padding-top: 60px; /* Adjust according to the height of the header */
+}
 
 .header {
-  padding: 10px;
-  position: relative;
+  position: fixed; /* Makes the header fixed */
+  top: 0; /* Positions it at the top of the viewport */
+  left: 0;
+  padding: 10px 20px; /* Adds some padding */
+  width: 98%; /* Makes the header span the full width */
+  z-index: 999; /* Ensures the header stays above other elements *//* Optional: Ensure the background is visible */
+  background: #fff;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
 
   .header-main {
     display: flex;
     justify-content: end;
     align-items: center;
 
-    .notification {
-      position: relative;
-      padding: 5px;
-      cursor: pointer;
-
-      .notification-icon {
-        margin: 0 15px;
-      }
-
-      .items {
-        position: absolute;
-        top: 0;
-        right: 0;
-        transform: translate(-50%, -50%);
-        border: 1px solid $secondary-color;
-        border-radius: 50%;
-        width: 15px;
-        height: 15px;
-        display: flex;
-        justify-content: center;
-        align-items: center;
-        font-size: 12px;
-      }
-    }
-
     .avatar {
       width: 40px;
       height: 40px;
       border-radius: 100%;
-      margin-left: 15px;
       object-fit: cover;
     }
   }
+}
+@media screen and (max-width: 576px) {
+  .header {
+    width: 95%; 
+    padding: 5px 10px; 
+  }
+  
 }

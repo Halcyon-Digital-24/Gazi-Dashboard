@@ -14,8 +14,8 @@ const Filter: React.FC<propsType> = ({
   isFilter = false,
 }) => {
   return (
-    <div className="row">
-      <div className="col-md-6">
+    <div className="row filter">
+      <div className="col-md-6 col-sm-12">
         <div className="dataTables_length" id="admin-table_length">
           <label className="filter-item">
             Show
@@ -34,12 +34,11 @@ const Filter: React.FC<propsType> = ({
           </label>
         </div>
       </div>
-      <div className="col-md-6">
+      <div className="col-md-6 col-sm-12">
         <div className="row left-element">
           {leftElements}
           {isFilter && (
             <div id="admin-table_filter" className="filter-search">
-              <label>Search </label>
               <input
                 type="search"
                 placeholder="Search here"

@@ -15,9 +15,6 @@ function Header({
   const [isPopupOpen, setIsPopupOpen] = useState(false);
   const [isProfile, setIsProfile] = useState(false);
 
-  /*  const handleButtonClick = () => {
-    setIsPopupOpen(true);
-  }; */
   const handleProfileClick = () => {
     setIsProfile(!isProfile);
   };
@@ -33,16 +30,8 @@ function Header({
           <Icon iconName="left-double-arrow.svg" />
         </button>
       )}
-
+      <div></div>
       <div className=" header-main">
-        {/* <div
-          id="notification"
-          className="notification"
-          onClick={handleButtonClick}
-        >
-          <BsBell className="notification-icon" />
-          <div className="items">1</div>
-        </div> */}
         {isPopupOpen && <Popup closePopup={handleClosePopup} />}
         <img
           onClick={handleProfileClick}

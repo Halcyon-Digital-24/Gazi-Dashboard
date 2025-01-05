@@ -76,23 +76,24 @@ const StockOutProducts: React.FC = () => {
       <Display>
         <Filter handleDisplayItem={handleDisplayItem} onSearch={handleOnSearch}
           isFilter />
-        <Row className="row text-bold">
-          <Column className="col-md-1">#</Column>
-          <Column className="col-md-1">Images</Column>
-          <Column className="col-md-3">Name</Column>
-          <Column className="col-md-1">Stock</Column>
-          <Column className="col-md-1">Regular Price</Column>
-          <Column className="col-md-1">Discount Price</Column>
-          <Column className="col-md-1">Status</Column>
-          <Column className="col-md-1">Show Home Page</Column>
+       <div className="table">
+       <Row className="row-table text-bold">
+          <Column className="col-md-1 col-sm-12">#</Column>
+          <Column className="col-md-1 col-sm-12">Images</Column>
+          <Column className="col-md-3 col-sm-12">Name</Column>
+          <Column className="col-md-1 col-sm-12">Stock</Column>
+          <Column className="col-md-1 col-sm-12">Regular Price</Column>
+          <Column className="col-md-1 col-sm-12">Discount Price</Column>
+          <Column className="col-md-1 col-sm-12">Status</Column>
+          <Column className="col-md-1 col-sm-12">Show Home Page</Column>
           <Column className="col-md-2">Action</Column>
         </Row>
         {isLoading ? (
           <Loader />
         ) : (
           products.map((product, index) => (
-            <Row key={index} className="row">
-              <Column className="col-md-1">
+            <Row key={index} className="row-table">
+              <Column className="col-md-1 col-sm-12">
                 {product.id}
                 {/* <input
                   checked={selectedProducts.includes(product.id as number)}
@@ -102,17 +103,17 @@ const StockOutProducts: React.FC = () => {
                   id=""
                 /> */}
               </Column>
-              <Column className="col-md-1">
+              <Column className="col-md-1 col-sm-12">
                 <img
                   src={`${API_ROOT}/images/product/${product.image}`}
                   alt="brand"
                 />
               </Column>
-              <Column className="col-md-3">{product.title}</Column>
-              <Column className="col-md-1">{product.default_quantity}</Column>
-              <Column className="col-md-1">৳ {product.regular_price}</Column>
-              <Column className="col-md-1">৳ {product.discount_price}</Column>
-              <Column className="col-md-1">
+              <Column className="col-md-3 col-sm-12">{product.title}</Column>
+              <Column className="col-md-1 col-sm-12">{product.default_quantity}</Column>
+              <Column className="col-md-1 col-sm-12">৳ {product.regular_price}</Column>
+              <Column className="col-md-1 col-sm-12">৳ {product.discount_price}</Column>
+              <Column className="col-md-1 col-sm-12">
                 <ToggleButton
                   onClick={() =>
                     handleKeyPoint(product.id as number, {
@@ -122,7 +123,7 @@ const StockOutProducts: React.FC = () => {
                   isChecked={product.is_visible == 1}
                 />
               </Column>
-              <Column className="col-md-1">
+              <Column className="col-md-1 col-sm-12">
                 <ToggleButton
                   onClick={() =>
                     handleKeyPoint(product.id as number, {
@@ -142,6 +143,7 @@ const StockOutProducts: React.FC = () => {
             </Row>
           ))
         )}
+       </div>
         <Pagination
           pageCount={pageNumber}
           handlePageClick={handlePageChange}

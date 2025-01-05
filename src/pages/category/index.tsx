@@ -58,18 +58,18 @@ const Categories: React.FC = () => {
 
   const handleDeleteImage = (category: any) => {
     // Dispatch the updateCategory action with image set to an empty string
-    const categoryData ={
+    const categoryData = {
       image: '',
     }
     dispatch(
       updateCategory({
-        slug:category.id,
-        categoryData: categoryData, 
+        slug: category.id,
+        categoryData: categoryData,
       })
     );
   };
-   
-  
+
+
   const handlePageChange = (selectedItem: { selected: number }) => {
     setPageNumber(selectedItem.selected + 1);
   };
@@ -129,52 +129,57 @@ const Categories: React.FC = () => {
           onSearch={handleOnSearch}
           isFilter
         />
-        <Row className="row text-bold">
-          <Column className="col-md-3">Banner</Column>
-          <Column className="col-md-3">Name</Column>
-          <Column className="col-md-2"> Category Position</Column>
-          <Column className="col-md-2">Featured</Column>
-          <Column className="col-md-1">Options</Column>
-        </Row>
-        {isLoading ? (
-          <Loader />
-        ) : (
-          categories.map((category, index) => (
-            <Row className="row" key={index}>
-              <Column className="col-md-3">
-                {category.image ? (
-                  <div className="remove-image-div">
-                    <img
-                      src={`${API_ROOT}/images/category/${category.image}`}
-                      alt="brand"
+        <div className="table">
+          <Row className="text-bold row-table">
+            <Column className="col-md-3 col-sm-3">Banner</Column>
+            <Column className="col-md-3 col-sm-3">Name</Column>
+            <Column className="col-md-2 col-sm-2">Category Position</Column>
+            <Column className="col-md-2 col-sm-2">Featured</Column>
+            <Column className="col-md-1 col-sm-1">Options</Column>
+          </Row>
+          {isLoading ? (
+            <Loader />
+          ) : (
+            <div className="">
+              {categories.map((category, index) => (
+                <Row className="row-table" key={index}>
+                  <Column className="col-md-3 col-sm-6">
+                    {category.image ? (
+                      <div className="remove-image-div">
+                        <img
+                          className="category-image"
+                          src={`${API_ROOT}/images/category/${category.image}`}
+                          alt="brand"
+                        />
+                        <div className="remove-image-icon" onClick={() => handleDeleteImage(category as any)}>
+                          X
+                        </div>
+                      </div>
+                    ) : (
+                      "—"
+                    )}
+                  </Column>
+                  <Column className="col-md-3 col-sm-6 ">{category.title}</Column>
+                  <Column className="col-md-2 col-sm-6">{category.parent_category}</Column>
+                  <Column className="col-md-2 col-sm-6">
+                    <ToggleButton
+                      onClick={() => handleVisibility(category)}
+                      isChecked={category.is_feature}
                     />
-                    <div className="remove-image-icon" onClick={() => handleDeleteImage(category as any)}>
-                      X
-                    </div>
-                  </div>
-                ) : (
-                  "—"
-                )}
-              </Column>
-              <Column className="col-md-3">{category.title}</Column>
-              <Column className="col-md-2">{category.parent_category}</Column>
-              <Column className="col-md-2">
-                <ToggleButton
-                  onClick={() => handleVisibility(category)}
-                  isChecked={category.is_feature}
-                />
-              </Column>
-              <Column className="col-md-1">
-                <CustomIconArea>
-                  <EditButton editUrl={`/categories/edit/${category.id}`} />
-                  <DeleteButton
-                    onClick={() => handleDeleteCategory(category.id as number)}
-                  />
-                </CustomIconArea>
-              </Column>
-            </Row>
-          ))
-        )}
+                  </Column>
+                  <Column className="col-md-1 col-sm-1">
+                    <CustomIconArea>
+                      <EditButton editUrl={`/categories/edit/${category.id}`} />
+                      <DeleteButton
+                        onClick={() => handleDeleteCategory(category.id as number)}
+                      />
+                    </CustomIconArea>
+                  </Column>
+                </Row>
+              ))}
+            </div>
+          )}
+        </div>
 
         <Pagination
           pageCount={totalPage}

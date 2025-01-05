@@ -34,3 +34,9 @@
   color: #9a9a9a;
   margin-bottom: 5px;
 }
+
+@media (max-width: 769px) {
+  .main-area {
+    padding: 5px;
+  }
+}

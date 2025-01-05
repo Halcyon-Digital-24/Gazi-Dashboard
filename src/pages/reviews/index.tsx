@@ -58,7 +58,8 @@ const Reviews: React.FC = () => {
       <CardBody header="Reviews" to="/products" text="back" />
       <Display>
         <Filter handleDisplayItem={handleDisplayItem} />
-        <Row className="row text-bold">
+        <div className="table">
+        <Row className="row-table text-bold">
           <Column className="col-md-1">#</Column>
           <Column className="col-md-2">Name</Column>
           <Column className="col-md-4">Products</Column>
@@ -70,7 +71,7 @@ const Reviews: React.FC = () => {
           <Loader />
         ) : (
           reviews.map((review, index) => (
-            <Row className="row" key={index}>
+            <Row className="row-table" key={index}>
               <Column className="col-md-1">{index + 1}</Column>
               <Column className="col-md-2">{review.name}</Column>
               <Column className="col-md-4">{review.product_name}</Column>
@@ -87,6 +88,7 @@ const Reviews: React.FC = () => {
             </Row>
           ))
         )}
+        </div>
         <Pagination
           pageCount={pageNumber}
           handlePageClick={handlePageChange}

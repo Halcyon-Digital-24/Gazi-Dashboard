@@ -1,10 +1,14 @@
 @import './../../styles/index.scss';
 
+.filter{
+  display: flex;
+  flex-wrap: wrap;
+}
 .filter-item {
   color: $secondary-color;
   font-size: 14px;
   select {
-    width: 80px;
+    width: 60px;
     padding: 2px 4px;
     margin: 0 5px;
     border: 1px solid $secondary-color;
@@ -33,5 +37,12 @@
       border: 1px solid $secondary-color;
       outline: none;
     }
+  }
+}
+
+@media (max-width: 576px) {
+  .left-element {
+
+    gap: 10px;
   }
 }

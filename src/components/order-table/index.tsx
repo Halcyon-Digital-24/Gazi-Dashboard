@@ -62,9 +62,10 @@ const OrderTable = ({
 
   return (
     <div className="order-table">
+      <div className="table">
       <>
-        <Row className="row text-bold">
-          <Column className="col-md-1">
+        <Row className="row-table text-bold">
+          <Column className="col-md-1 col-sm-2">
             <form>
               <input
                 type="checkbox"
@@ -107,6 +108,7 @@ const OrderTable = ({
         ))}
       </>
       )}
+      </div>
     </div>
   );
 };

@@ -169,7 +169,12 @@ $grid-columns: 12;
 
 /* Define column sizes for sm screens */
 
-@media (min-width: 576px) {
+@media (max-width: 576px) {
+  .mobile-row {
+    display: flex;
+    flex-wrap: wrap;
+    flex-direction: column;
+  }
   .col-sm-1 {
     flex-basis: 8.33%;
     max-width: 8.33%;

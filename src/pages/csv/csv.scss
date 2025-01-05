@@ -1,6 +1,6 @@
 .csv-area {
   width: 700px;
-  margin: 0 auto;
+  margin:  auto;
 
   h6 {
     font-size: 18px;
@@ -20,4 +20,18 @@
       cursor: pointer;
     }
   }
+}
+@media screen and (max-width: 576px) {
+  .csv-area {
+    width: 100%;
+    padding: 0 10px;
+
+    h6 {
+      font-size: 16px;
+    }
+    p {
+      font-size: 12px;
+    }
+  }
+  
 }

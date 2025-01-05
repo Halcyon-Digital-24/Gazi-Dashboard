@@ -181,7 +181,7 @@ const CustomOrder = () => {
         <div>
           <form onSubmit={handleSubmit(onSubmit)}>
             <div className="row">
-              <div className="col-md-5 custom-item">
+              <div className="col-md-5 col-sm-12 custom-item">
                 <div className="text">
                   <label htmlFor="name">Customer Name *</label>
                   <input
@@ -283,7 +283,7 @@ const CustomOrder = () => {
                   onChange={(e) => setShipping(Number(e.target.value))}
                 />
               </div>
-              <div className="col-md-4 custom-item">
+              <div className="col-md-4 col-sm-12 custom-item">
                 <Input
                   type="number"
                   htmlFor="discount"
@@ -551,7 +551,7 @@ const CustomOrder = () => {
                   ))}
                 </div>
               </div>
-              <div className="col-md-3 custom-item">
+              <div className="col-md-3 col-sm-12 custom-item">
                 <div className="summery">
                   <div className="row">
                     <div className="col-md-9 left">Product Total Price</div>

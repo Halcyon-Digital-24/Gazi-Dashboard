@@ -87,7 +87,7 @@ const Customers: React.FC = () => {
   return (
     <div>
       <Display>
-      <div className="row filter-action">
+        <div className="row filter-action">
           <div className="title">
             <h3>Customers</h3>
           </div>
@@ -104,34 +104,36 @@ const Customers: React.FC = () => {
             <BsDownload />
           </CSVLink>
         </div>
-        <Filter handleDisplayItem={handleDisplayItem} onSearch={handleOnSearch} isFilter/>
-        <Row className="row text-bold">
-          <Column className="col-md-3">Name</Column>
-          <Column className="col-md-3">Email</Column>
-          <Column className="col-md-3">Phone</Column>
-          <Column className="col-md-3">Actions</Column>
-        </Row>
-        {isLoading ? (
-          <Loader />
-        ) : (
-        <>
-        {customers.map((customer, index) => (
-          <Row className="row" key={index}>
-            <Column className="col-md-3">{customer.name}</Column>
-            <Column className="col-md-3">{customer.email}</Column>
-            <Column className="col-md-3">{customer.mobile}</Column>
-            <Column className="col-md-3">
-              <CustomIconArea>
-                <DeleteButton
-                  onClick={() => handleCustomerDelete(customer.id as number)}
-                />
-              </CustomIconArea>
-            </Column>
+        <Filter handleDisplayItem={handleDisplayItem} onSearch={handleOnSearch} isFilter />
+        <div className="table">
+          <Row className="row-table text-bold">
+            <Column className="col-md-3">Name</Column>
+            <Column className="col-md-3">Email</Column>
+            <Column className="col-md-3">Phone</Column>
+            <Column className="col-md-3">Actions</Column>
           </Row>
-        ))}
-        </>
-        )}
-        
+          {isLoading ? (
+            <Loader />
+          ) : (
+            <>
+              {customers.map((customer, index) => (
+                <Row className="row-table" key={index}>
+                  <Column className="col-md-3">{customer.name}</Column>
+                  <Column className="col-md-3">{customer.email}</Column>
+                  <Column className="col-md-3">{customer.mobile}</Column>
+                  <Column className="col-md-3">
+                    <CustomIconArea>
+                      <DeleteButton
+                        onClick={() => handleCustomerDelete(customer.id as number)}
+                      />
+                    </CustomIconArea>
+                  </Column>
+                </Row>
+              ))}
+            </>
+          )}
+        </div>
+
         <Pagination
           pageCount={pageNumber}
           handlePageClick={handlePageChange}
