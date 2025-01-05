@@ -82,52 +82,54 @@ const Blogs: React.FC = () => {
       <CardBody header="All Blogs" to="/blogs/create" />
       <Display>
         <Filter handleDisplayItem={handleDisplayItem} />
-        <Row className="row text-bold">
-          <Column className="col-md-1">SI No.</Column>
-          <Column className="col-md-2">Title</Column>
-          <Column className="col-md-6">Sort Description</Column>
-          <Column className="col-md-1">Status</Column>
-          <Column className="col-md-1">Options</Column>
-        </Row>
-        {isLoading ? (
-          <Loader />
-        ) : (
-          <>
-            {blogs.map((blog, index) => (
-              <Row className="row" key={index}>
-                {/*  <Column className="col-md-1">
+        <div className="table">
+          <Row className="row-table text-bold">
+            <Column className="col-md-1">SI No.</Column>
+            <Column className="col-md-2">Title</Column>
+            <Column className="col-md-6">Sort Description</Column>
+            <Column className="col-md-1">Status</Column>
+            <Column className="col-md-2">Options</Column>
+          </Row>
+          {isLoading ? (
+            <Loader />
+          ) : (
+            <>
+              {blogs.map((blog, index) => (
+                <Row className="row-table" key={index}>
+                  {/*  <Column className="col-md-1">
                 <input
                   type="checkbox"
                   onClick={() => handleSelectedBlog(blog.id)}
                 />
               </Column> */}
-                <Column className="col-md-1">{blog.id}</Column>
-                <Column className="col-md-2">{blog.title}</Column>
-                <Column className="col-md-6">
-                  <div
-                    dangerouslySetInnerHTML={{
-                      __html: blog.description?.substring(0, 100) ?? "",
-                    }}
-                  ></div>
-                </Column>
-                <Column className="col-md-1">
-                  <ToggleButton
-                    isChecked={blog.is_visible}
-                    onClick={() => handleStatusChange(blog)}
-                  />
-                </Column>
-                <Column className="col-md-2">
-                  <CustomIconArea>
-                    <EditButton editUrl={`/blogs/edit/${blog.id}`} />
-                    <DeleteButton
-                      onClick={() => handleDeleteBlog(blog.id as number)}
+                  <Column className="col-md-1">{blog.id}</Column>
+                  <Column className="col-md-2">{blog.title}</Column>
+                  <Column className="col-md-6">
+                    <div
+                      dangerouslySetInnerHTML={{
+                        __html: blog.description?.substring(0, 100) ?? "",
+                      }}
+                    ></div>
+                  </Column>
+                  <Column className="col-md-1">
+                    <ToggleButton
+                      isChecked={blog.is_visible}
+                      onClick={() => handleStatusChange(blog)}
                     />
-                  </CustomIconArea>
-                </Column>
-              </Row>
-            ))}
-          </>
-        )}
+                  </Column>
+                  <Column className="col-md-2">
+                    <CustomIconArea>
+                      <EditButton editUrl={`/blogs/edit/${blog.id}`} />
+                      <DeleteButton
+                        onClick={() => handleDeleteBlog(blog.id as number)}
+                      />
+                    </CustomIconArea>
+                  </Column>
+                </Row>
+              ))}
+            </>
+          )}
+        </div>
 
         <Pagination
           pageCount={pageNumber}

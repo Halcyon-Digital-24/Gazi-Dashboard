@@ -167,8 +167,8 @@ const SingleItem: FC<IProps> = ({
 
   return (
     <>
-      <Row className="row">
-        <Column className="col-md-1">
+      <Row className="row-table">
+        <Column className="col-md-1 col-sm-2">
           <input
             type="checkbox"
             name="select"

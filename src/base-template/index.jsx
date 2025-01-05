@@ -16,7 +16,7 @@ function BaseTemplate() {
           <div className={isOpen ? "col-md-2" : "sidebar-none"}>
             <SideBar
               handleClose={() => {
-                setIsOpen(!isOpen);
+                setIsOpen(false);
               }}
             />
           </div>
@@ -25,7 +25,7 @@ function BaseTemplate() {
             <Header
               isOpen={isOpen}
               handleOpen={() => {
-                setIsOpen(!isOpen);
+                setIsOpen(true);
               }}
             />
             <main className="main-area">

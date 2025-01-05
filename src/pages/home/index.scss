@@ -41,3 +41,21 @@
   padding: 5px;
   box-sizing: border-box;
 }
+.grid-class {
+  flex-basis: 25%;
+  max-width: 25%;
+}
+// for mobile view
+@media (max-width: 769px) {
+  .chart-card {
+    margin-right: 0;
+    margin-left: 0;
+    padding: 0;
+    margin-bottom: 0;
+    margin: 3px;
+  }
+  .grid-class{
+    flex-basis: 50%;
+    max-width: 50%;
+  }
+}

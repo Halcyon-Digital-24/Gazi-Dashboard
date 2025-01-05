@@ -333,7 +333,7 @@ const CreateProduct: React.FC = () => {
       <CardBody header="Create Product" to="/products" text="back" />
       <form onSubmit={handleProductSubmit}>
         <div className="row">
-          <div className="col-md-8">
+          <div className="col-md-8 col-sm-12">
             <div className="left-body">
               <Display>
                 <Input
@@ -564,7 +564,7 @@ const CreateProduct: React.FC = () => {
               </Display>
             </div>
           </div>
-          <div className="col-md-4">
+          <div className="col-md-4 col-sm-12">
             <div className="right-body">
               <Display>
                 <Button className="save-btn" type="submit">

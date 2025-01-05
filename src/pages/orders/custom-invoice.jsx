@@ -156,7 +156,7 @@ const CustomInvoice = () => {
         <div>
           <form onSubmit={handleSubmit(onSubmit)}>
             <div className="row">
-              <div className="col-md-5 custom-item">
+              <div className="col-md-5 col-sm-12 custom-item">
                 <div className="text">
                   <label htmlFor="name">Customer Name *</label>
                   <input
@@ -269,7 +269,7 @@ const CustomInvoice = () => {
                   )}
                 </div>
               </div>
-              <div className="col-md-4 custom-item">
+              <div className="col-md-4 col-sm-12 custom-item">
                 <Input
                   type="number"
                   required
@@ -403,7 +403,7 @@ const CustomInvoice = () => {
                 </>
               </div>
 
-              <div className="col-md-3 custom-item">
+              <div className="col-md-3 col-sm-12 custom-item">
                 <div className="summery">
                   <div className="row">
                     <div className="col-md-9 left">Product Total Price</div>
@@ -437,12 +437,12 @@ const CustomInvoice = () => {
                   </div>
                 </div>
               </div>
-              <div className="col-md-9 custom-item">
+              <div className="col-md-9 col-sm-12 ">
                 <div className="product-area" ref={productAreaRef}>
                   {productArray?.map((item, index) => {
                     return (
                       <div className="product-form w-100" key={index}>
-                        <div style={{ width: "49%", marginRight: "2%" }}>
+                        <div style={{ width: "45%", marginRight: "2%" }}>
                           <Input
                             required
                             htmlFor="product_name"
@@ -490,7 +490,7 @@ const CustomInvoice = () => {
                             autocomplete="off"
                           />
                         </div>
-                        <div style={{ width: "15%" }}>
+                        <div style={{ width: "19%" }}>
                           <Input
                             required
                             htmlFor="regular_price"

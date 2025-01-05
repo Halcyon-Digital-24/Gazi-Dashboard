@@ -169,23 +169,24 @@ const AllProducts: React.FC = () => {
           }
           isFilter
         />
-        <Row className="row text-bold">
-          <Column className="col-md-1">
+        <div className="table">
+          <Row className="row-table text-bold">
+          <Column className="col-md-1 col-sm-1">
             <input
               id="select-all"
               type="checkbox"
               onChange={(e) => handleAllSelectedProducts(e)}
               name=""
             />
-            {/* <label htmlFor="select-all">Select</label> */}
+
           </Column>
-          <Column className="col-md-1">Images</Column>
+          <Column className="col-md-1 col-sm-1 ">Images</Column>
           <Column className="col-md-3">Name</Column>
-          <Column className="col-md-1">Stock</Column>
-          <Column className="col-md-1">Regular Price</Column>
-          <Column className="col-md-1">Discount Price</Column>
-          <Column className="col-md-1">Status</Column>
-          <Column className="col-md-1">Show Home Page</Column>
+          <Column className="col-md-1 col-sm-1">Stock</Column>
+          <Column className="col-md-1 col-sm-1">Regular Price</Column>
+          <Column className="col-md-1 col-sm-1">Discount Price</Column>
+          <Column className="col-md-1 col-sm-1">Status</Column>
+          <Column className="col-md-1 col-sm-1">Show Home Page</Column>
           <Column className="col-md-2">Action</Column>
         </Row>
         {isLoading ? (
@@ -193,8 +194,8 @@ const AllProducts: React.FC = () => {
         ) : (
           <>
             {products.map((product, index) => (
-              <Row key={index} className="row">
-                <Column className="col-md-1">
+              <Row key={index} className="row-table">
+                <Column className="col-md-1 col-sm-1">
                   <input
                     checked={selectedProducts.includes(product.id as number)}
                     onClick={() => handleSelectedProducts(product.id as number)}
@@ -203,17 +204,17 @@ const AllProducts: React.FC = () => {
                     id=""
                   />
                 </Column>
-                <Column className="col-md-1">
+                <Column className="col-md-1 col-sm-1">
                   <img
                     src={`${API_ROOT}/images/product/${product.image}`}
                     alt="brand"
                   />
                 </Column>
                 <Column className="col-md-3">{product.title}</Column>
-                <Column className="col-md-1">{product.default_quantity}</Column>
-                <Column className="col-md-1">৳ {product.regular_price}</Column>
-                <Column className="col-md-1">৳ {product.discount_price}</Column>
-                <Column className="col-md-1">
+                <Column className="col-md-1 col-sm-1">{product.default_quantity}</Column>
+                <Column className="col-md-1 col-sm-1">৳ {product.regular_price}</Column>
+                <Column className="col-md-1 col-sm-1">৳ {product.discount_price}</Column>
+                <Column className="col-md-1 col-sm-1">
                   <ToggleButton
                     onClick={() =>
                       handleKeyPoint(product.id as number, {
@@ -223,7 +224,7 @@ const AllProducts: React.FC = () => {
                     isChecked={Boolean(product.is_visible)}
                   />
                 </Column>
-                <Column className="col-md-1">
+                <Column className="col-md-1 col-sm-1">
                   <ToggleButton
                     onClick={() =>
                       handleKeyPoint(product.id as number, {
@@ -248,6 +249,7 @@ const AllProducts: React.FC = () => {
             ))}
           </>
         )}
+        </div>
         <Pagination
           pageCount={pageNumber}
           handlePageClick={handlePageChange}

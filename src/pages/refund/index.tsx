@@ -32,7 +32,7 @@ const Refund = () => {
   const updateStatus = (id: number, status: string) => {
     dispatch(updateRefund({ refund_status: status, id }));
   };
-  
+
   const handlePageChange = (selectedItem: { selected: number }) => {
     setPageNumber(selectedItem.selected + 1);
   };
@@ -89,59 +89,61 @@ const Refund = () => {
       </Display>
       <Display>
         <Filter handleDisplayItem={handleDisplayItem} onSearch={handleOnSearch} isFilter />
-        <Row className="row text-bold">
-          <Column className="col-md-1">Order No</Column>
-          <Column className="col-md-2">Product</Column>
-          <Column className="col-md-1">Price</Column>
-          <Column className="col-md-4">Message</Column>
-          <Column className="col-md-2">Refund Status</Column>
-          <Column className="col-md-2">Options</Column>
-        </Row>
-        {/* TODO:  */}
-        {isLoading ? (
-          <Loader />
-        ) : (
-          <>
-          {refunds.map((refund, index) => (
-          <Row className="row" key={index}>
-            <Column className="col-md-1">{refund.order_id}</Column>
-            <Column className="col-md-2">{refund.product_name}</Column>
-            <Column className="col-md-1">{refund.product_price}</Column>
-            <Column className="col-md-4">{refund.message}</Column>
-            <Column className="col-md-2">
-              <Select onChange={(e) => updateStatus(refund.id, e.target.value)}>
-                <option
-                  value="pending"
-                  selected={refund.refund_status === "pending"}
-                >
-                  Pending
-                </option>
-                <option
-                  value="approved"
-                  selected={refund.refund_status === "approved"}
-                >
-                  Approved
-                </option>
-                <option
-                  value="cancel"
-                  selected={refund.refund_status === "cancel"}
-                >
-                  Cancel
-                </option>
-              </Select>
-            </Column>
-            <Column className="col-md-2">
-              <CustomIconArea>
-                <DeleteButton
-                  onClick={() => dispatch(deleteRefund(refund.id))}
-                />
-              </CustomIconArea>
-            </Column>
+        <div className="table">
+          <Row className="row-table text-bold">
+            <Column className="col-md-1">Order No</Column>
+            <Column className="col-md-2">Product</Column>
+            <Column className="col-md-1">Price</Column>
+            <Column className="col-md-5">Message</Column>
+            <Column className="col-md-2">Refund Status</Column>
+            <Column className="col-md-1">Options</Column>
           </Row>
-        ))}
-          </>
-        )}
-        
+          {/* TODO:  */}
+          {isLoading ? (
+            <Loader />
+          ) : (
+            <>
+              {refunds.map((refund, index) => (
+                <Row className="row-table" key={index}>
+                  <Column className="col-md-1">{refund.order_id}</Column>
+                  <Column className="col-md-2">{refund.product_name}</Column>
+                  <Column className="col-md-1">{refund.product_price}</Column>
+                  <Column className="col-md-5 col-sm-4">{refund.message}</Column>
+                  <Column className="col-md-2 col-sm-3">
+                    <Select onChange={(e) => updateStatus(refund.id, e.target.value)}>
+                      <option
+                        value="pending"
+                        selected={refund.refund_status === "pending"}
+                      >
+                        Pending
+                      </option>
+                      <option
+                        value="approved"
+                        selected={refund.refund_status === "approved"}
+                      >
+                        Approved
+                      </option>
+                      <option
+                        value="cancel"
+                        selected={refund.refund_status === "cancel"}
+                      >
+                        Cancel
+                      </option>
+                    </Select>
+                  </Column>
+                  <Column className="col-md-1">
+                    <CustomIconArea>
+                      <DeleteButton
+                        onClick={() => dispatch(deleteRefund(refund.id))}
+                      />
+                    </CustomIconArea>
+                  </Column>
+                </Row>
+              ))}
+            </>
+          )}
+        </div>
+
         <Pagination
           pageCount={pageNumber}
           handlePageClick={handlePageChange}

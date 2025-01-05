@@ -151,7 +151,7 @@ const HomePage: React.FC = () => {
     <div className="">
       <div className="row">
         {filteredItems.map((item, index) => (
-          <div className="col-md-3" key={index}>
+          <div className="grid-class" key={index}>
             <Link to={item.to}>
               <div className="chart-card">
                 <div className={"img "+item.role_identity?.includes('html-generator')?'img-lg':''}>

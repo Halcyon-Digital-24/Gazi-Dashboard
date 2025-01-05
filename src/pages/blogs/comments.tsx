@@ -51,31 +51,33 @@ const BlogComment = () => {
       <CardBody header="Blog Comments" to="/" text="back" />
       <Display>
         <Filter handleDisplayItem={handleDisplayItem} />
-        <Row className="row text-bold">
-          <Column className="col-md-2">Name</Column>
-          <Column className="col-md-2">Email</Column>
-          <Column className="col-md-7">Comments</Column>
-          <Column className="col-md-1">Published</Column>
-        </Row>
-        {isLoading ? (
-          <Loader />
-        ) : (
-          comments.map((comment, index) => (
-            <Row className="row" key={index}>
-              <Column className="col-md-2">{comment.name}</Column>
-              <Column className="col-md-2">{comment.email}</Column>
-              <Column className="col-md-7">{comment.comment}</Column>
-              <Column className="col-md-1">
-                <ToggleButton
-                  checked={comment.is_visible}
-                  onChange={() =>
-                    handleUpdateComment(!comment.is_visible, comment.id)
-                  }
-                />
-              </Column>
-            </Row>
-          ))
-        )}
+        <div className="table">
+          <Row className="row-table text-bold">
+            <Column className="col-md-2">Name</Column>
+            <Column className="col-md-2">Email</Column>
+            <Column className="col-md-6">Comments</Column>
+            <Column className="col-md-2">Published</Column>
+          </Row>
+          {isLoading ? (
+            <Loader />
+          ) : (
+            comments.map((comment, index) => (
+              <Row className="row-table" key={index}>
+                <Column className="col-md-2">{comment.name}</Column>
+                <Column className="col-md-2">{comment.email}</Column>
+                <Column className="col-md-6">{comment.comment}</Column>
+                <Column className="col-md-2">
+                  <ToggleButton
+                    checked={comment.is_visible}
+                    onChange={() =>
+                      handleUpdateComment(!comment.is_visible, comment.id)
+                    }
+                  />
+                </Column>
+              </Row>
+            ))
+          )}
+        </div>
         <Pagination
           pageCount={pageNumber}
           handlePageClick={handlePageChange}

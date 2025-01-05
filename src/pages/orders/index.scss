@@ -19,3 +19,13 @@
     cursor: pointer;
   }
 }
+@media screen and (max-width: 576px) {
+  .date-area {
+    width: 100%;
+    display: block;
+    .text {
+      width: 100%;
+    }
+  }
+  
+}

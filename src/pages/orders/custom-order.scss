@@ -129,3 +129,16 @@
     margin-top: 10px;
   }
 }
+
+@media screen and (max-width: 576px) {
+  .order-item {
+    .title {
+      border-right: none;
+      padding-right: 0;
+    }
+  }
+  .custom-item {
+    padding: 0 10px;
+  }
+  
+}

@@ -64,7 +64,7 @@ const UpdateCategory = () => {
         // Set state values based on the fetched data
         setValue("title", data.title);
         setValue("slug", data.slug);
-        setValue("parent_category", data.parent_category);
+        setValue("parent_category", data?.parent_category);
         setValue("image", data.image);
         setValue("meta_title", data.meta_title);
         setValue("meta_description", data.meta_description);
@@ -88,7 +88,7 @@ const UpdateCategory = () => {
       <Display>
         <form onSubmit={handleSubmit(onSubmit)}>
           <div className="row">
-            <Column className="col-md-8">
+            <Column className="col-md-8 col-sm-12">
               <div className="text">
                 <label htmlFor="name">Title *</label>
                 <input
@@ -193,7 +193,7 @@ const UpdateCategory = () => {
                 onChange={handleImageChange}
               /> */}
             </Column>
-            <Column className="col-md-4">
+            <Column className="col-md-4 col-sm-12">
               <div className="text">
                 <label htmlFor="meta_title">Meta Title</label>
                 <input

@@ -59,7 +59,7 @@ const CreateCategory = () => {
       <Display>
         <form onSubmit={handleSubmit(onSubmit)}>
           <div className="row">
-            <Column className="col-md-8">
+            <Column className="col-md-8 col-sm-12">
               <div className="text">
                 <label htmlFor="name">Title *</label>
                 <input
@@ -162,7 +162,7 @@ const CreateCategory = () => {
                 <p className="validation__error">{errors.image.message}</p>
               )}
             </Column>
-            <Column className="col-md-4">
+            <Column className="col-md-4 col-sm-12">
               <div className="text">
                 <label htmlFor="meta_title">Meta Title</label>
                 <input

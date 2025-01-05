@@ -1,0 +1,27 @@
+.table {
+    overflow-x: auto; /* Allows horizontal scrolling */
+    display: flex;
+    flex-direction: column;
+    position: relative; /* Ensures the border stays with the element */
+  }
+  
+  .row-table {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 2px;
+    flex-wrap: nowrap;
+
+  }
+  
+  @media (max-width: 576px) {
+    .table {
+      overflow-x: auto; /* Allows smoother scrolling */
+    }
+  
+    .row-table {
+      min-width: 800px; /* Ensure proper width for the table rows */
+
+    }
+  }
+  

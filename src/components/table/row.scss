@@ -1,12 +1,19 @@
-@import '../../styles/index.scss';
+@import "../../styles/index.scss";
 
 .table-row {
   text-align: left;
   font-size: 14px;
   box-shadow: 0px 0px 10px -3px rgba(0, 0, 0, 0.19);
   background: #fff;
-  display: inline-block;
+  display: block;
   margin-bottom: 15px;
   margin-top: 15px;
   width: 100%;
+}
+
+@media screen and (max-width: 576px) {
+  .table-row {
+    margin-bottom: 5px;
+    margin-top: 5px;
+  }
 }
