@@ -75,40 +75,42 @@ const VideosPage: React.FC = () => {
       <CardBody header="Videos" to="/videos/create" />
       <Display>
         <Filter handleDisplayItem={handleDisplayItem} />
-        <Row className="row text-bold">
-          <Column className="col-md-1">SI No.</Column>
-          <Column className="col-md-4">Title</Column>
-          <Column className="col-md-4">Link</Column>
-          <Column className="col-md-1">Status</Column>
-          <Column className="col-md-2">Options</Column>
-        </Row>
-        {isLoading ? (
-          <Loader />
-        ) : (
-          <>
-            {videos.map((video: IVideo) => (
-              <Row key={video.id} className="row">
-                <Column className="col-md-1">{video.id}</Column>
-                <Column className="col-md-4">{video.title}</Column>
-                <Column className="col-md-4">{video.url}</Column>
-                <Column className="col-md-1">
-                  <ToggleButton
-                    isChecked={video.is_visible}
-                    onClick={() => handleStatusChange(video)}
-                  />
-                </Column>
-                <Column className="col-md-2">
-                  <CustomIconArea>
-                    <EditButton editUrl={`/videos/edit/${video.id}`} />
-                    <DeleteButton
-                      onClick={() => handleDeleteVideo(video.id as number)}
+        <div className="table">
+          <Row className="row-table sm-table-width text-bold">
+            <Column className="col-md-1 col-sm-1">SI No.</Column>
+            <Column className="col-md-4 col-sm-3">Title</Column>
+            <Column className="col-md-4 col-sm-5">Link</Column>
+            <Column className="col-md-1 col-sm-1">Status</Column>
+            <Column className="col-md-2 col-sm-2">Options</Column>
+          </Row>
+          {isLoading ? (
+            <Loader />
+          ) : (
+            <>
+              {videos.map((video: IVideo) => (
+                <Row key={video.id} className="row-table sm-table-width">
+                  <Column className="col-md-1 col-sm-1">{video.id}</Column>
+                  <Column className="col-md-4 col-sm-3">{video.title}</Column>
+                  <Column className="col-md-4 col-sm-5">{video.url}</Column>
+                  <Column className="col-md-1 col-sm-1">
+                    <ToggleButton
+                      isChecked={video.is_visible}
+                      onClick={() => handleStatusChange(video)}
                     />
-                  </CustomIconArea>
-                </Column>
-              </Row>
-            ))}
-          </>
-        )}
+                  </Column>
+                  <Column className="col-md-2 col-sm-2">
+                    <CustomIconArea>
+                      <EditButton editUrl={`/videos/edit/${video.id}`} />
+                      <DeleteButton
+                        onClick={() => handleDeleteVideo(video.id as number)}
+                      />
+                    </CustomIconArea>
+                  </Column>
+                </Row>
+              ))}
+            </>
+          )}
+        </div>
 
         <Pagination
           pageCount={pageNumber}

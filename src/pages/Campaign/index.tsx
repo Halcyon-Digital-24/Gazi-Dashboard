@@ -72,7 +72,7 @@ const CampaignPage: React.FC = () => {
 
     // Update each product associated with the campaign
     productIds.forEach((productId: number) => {
-      const product = products.find((product:any) => product.id === productId);
+      const product = products.find((product: any) => product.id === productId);
 
       // Check if the product exists before updating
       if (product && product.id !== undefined) {
@@ -148,50 +148,52 @@ const CampaignPage: React.FC = () => {
         <Filter handleDisplayItem={handleDisplayItem} onSearch={handleOnSearch} isFilter />
       </Display>
       <Display>
-        <Row className="row text-bold">
-          <Column className="col-md-1">#</Column>
-          <Column className="col-md-2">Banner</Column>
-          <Column className="col-md-2">Campaign Name</Column>
-          <Column className="col-md-1">Start Date</Column>
-          <Column className="col-md-2">Expire Date</Column>
-          <Column className="col-md-1">No. of Product</Column>
-          <Column className="col-md-1">Status</Column>
-          <Column className="col-md-2">Action</Column>
-        </Row>
-        {isLoading ? (
-          <Loader />
-        ) : (
-          <>
-            {campaigns?.map((campaign, index) => (
-              <Row className="row" key={index}>
-                <Column className="col-md-1">{index + 1}</Column>
-                <Column className="col-md-2">
-                  <img
-                    src={`${API_ROOT}/images/camping/${campaign.image}`}
-                    alt="brand"
-                    style={{ width: "100%", height: "auto" }}
-                  />
-                </Column>
-                <Column className="col-md-2">{campaign.name}</Column>
-                <Column className="col-md-1">{formatDate(campaign.start_date)}</Column>
-                <Column className="col-md-2">{formatDate(campaign.end_date)}</Column>
-                <Column className="col-md-1">{getProductCount(campaign.product_id)}</Column>
-                <Column className="col-md-1">
-                  <ToggleButton
-                    onClick={() => handleVisibility(campaign)}
-                    isChecked={campaign.is_visible}
-                  />
-                </Column>
-                <Column className="col-md-2">
-                  <CustomIconArea>
-                    <EditButton editUrl={`/campaign/edit/${campaign.id}`} />
-                    <DeleteButton onClick={() => handleDeleteCampaign(campaign.id as number)} />
-                  </CustomIconArea>
-                </Column>
-              </Row>
-            ))}
-          </>
-        )}
+        <div className="table">
+          <Row className="row-table sm-table-width text-bold">
+            <Column className="col-md-1 col-sm-1">#</Column>
+            <Column className="col-md-2 col-sm-2">Banner</Column>
+            <Column className="col-md-2 col-sm-2">Campaign Name</Column>
+            <Column className="col-md-1 col-sm-1">Start Date</Column>
+            <Column className="col-md-2 col-sm-1">Expire Date</Column>
+            <Column className="col-md-1 col-sm-1">No. of Product</Column>
+            <Column className="col-md-1 col-sm-1">Status</Column>
+            <Column className="col-md-2 col-sm-2">Action</Column>
+          </Row>
+          {isLoading ? (
+            <Loader />
+          ) : (
+            <>
+              {campaigns?.map((campaign, index) => (
+                <Row className="row-table sm-table-width" key={index}>
+                  <Column className="col-md-1 col-sm-1">{index + 1}</Column>
+                  <Column className="col-md-2 col-sm-2">
+                    <img
+                      src={`${API_ROOT}/images/camping/${campaign.image}`}
+                      alt="brand"
+                      style={{ width: "100%", height: "auto" }}
+                    />
+                  </Column>
+                  <Column className="col-md-2 col-sm-2">{campaign.name}</Column>
+                  <Column className="col-md-1 col-sm-1">{formatDate(campaign.start_date)}</Column>
+                  <Column className="col-md-2 col-sm-2">{formatDate(campaign.end_date)}</Column>
+                  <Column className="col-md-1 col-sm-1">{getProductCount(campaign.product_id)}</Column>
+                  <Column className="col-md-1 col-sm-1">
+                    <ToggleButton
+                      onClick={() => handleVisibility(campaign)}
+                      isChecked={campaign.is_visible}
+                    />
+                  </Column>
+                  <Column className="col-md-2 col-sm-2">
+                    <CustomIconArea>
+                      <EditButton editUrl={`/campaign/edit/${campaign.id}`} />
+                      <DeleteButton onClick={() => handleDeleteCampaign(campaign.id as number)} />
+                    </CustomIconArea>
+                  </Column>
+                </Row>
+              ))}
+            </>
+          )}
+        </div>
 
         <Pagination
           pageCount={pageNumber}

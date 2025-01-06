@@ -37,29 +37,32 @@ const Subscriber = () => {
     <div>
       <CardBody header="Subscriber" to="/" text="back" />
       <Display>
-        <Row className="row text-bold">
-          <Column className="col-md-11">Email</Column>
-          <Column className="col-md-1">Actions</Column>
-        </Row>
-        {isLoading ? (
-          <Loader />
-        ) : (
-          <>
-          {subscribers.map((subscribe, index) => (
-          <Row key={index} className="row">
-            <Column className="col-md-11">{subscribe.email}</Column>
-            <Column className="col-md-1">
-              <CustomIconArea>
-                <DeleteButton
-                  onClick={() => handleSubscriber(subscribe.id as number)}
-                />
-              </CustomIconArea>
-            </Column>
+        <div className="table">
+
+          <Row className="row-table xs-table-width text-bold">
+            <Column className="col-md-10">Email</Column>
+            <Column className="col-md-2">Actions</Column>
           </Row>
-        ))}
-          </>
-        )}
-        
+          {isLoading ? (
+            <Loader />
+          ) : (
+            <>
+              {subscribers.map((subscribe, index) => (
+                <Row key={index} className="row-table xs-table-width">
+                  <Column className="col-md-10">{subscribe.email}</Column>
+                  <Column className="col-md-2">
+                    <CustomIconArea>
+                      <DeleteButton
+                        onClick={() => handleSubscriber(subscribe.id as number)}
+                      />
+                    </CustomIconArea>
+                  </Column>
+                </Row>
+              ))}
+            </>
+          )}
+        </div>
+
         <Pagination
           pageCount={pageNumber}
           handlePageClick={handlePageChange}

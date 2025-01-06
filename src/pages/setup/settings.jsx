@@ -85,12 +85,12 @@ const Settings = () => {
           <div className="footer">
             <form onSubmit={handleSubmit(onSubmit)}>
               <Row className="row">
-                <Column className="col-md-12 button">
+                <Column className="col-md-12 col-sm-12 button">
                   <Button type="submit">Update</Button>
                 </Column>
               </Row>
               <Row className="row">
-                <Column className="col-md-6">
+                <Column className="col-md-6 col-sm-12">
                   <Display>
                     <div className="text">
                       <label htmlFor="name">Footer info</label>
@@ -196,7 +196,7 @@ const Settings = () => {
                     </div>
                   </Display>
                 </Column>
-                <Column className="col-md-6">
+                <Column className="col-md-6 col-sm-12">
                   <Display>
                     <div className="text">
                       <label htmlFor="name">Play store Link</label>
@@ -343,7 +343,7 @@ const Settings = () => {
               </Row>
             </form>
             <Row className="row">
-              <Column className="col-md-6">
+              <Column className="col-md-6 col-sm-12">
                 <Display>
                   <h4>Services Menus</h4>
                   {menus
@@ -376,7 +376,7 @@ const Settings = () => {
                   <Button onClick={() => setIsHelp(true)}>Add New</Button>
                 </Display>
               </Column>
-              <Column className="col-md-6">
+              <Column className="col-md-6 col-sm-12">
                 <Display>
                   <h4>Appliance Menus</h4>
                   {menus

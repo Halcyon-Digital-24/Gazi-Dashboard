@@ -5,6 +5,7 @@ import CardBody from "../../components/card-body";
 import Display from "../../components/display";
 import { useForm } from "react-hook-form";
 import axios from "../../lib";
+import "./index.scss";
 
 const CreateFaq = () => {
   const navigate = useNavigate();
@@ -30,8 +31,8 @@ const CreateFaq = () => {
     <div>
       <CardBody header="Create Faq" to="/faqs" text="back" />
       <Display>
-        <form onSubmit={handleSubmit(onSubmit)}>
-          <div className="text">
+        <form onSubmit={handleSubmit(onSubmit)} className="form">
+          <div className="text ">
             <label htmlFor="Question">Question*</label>
             <input
               type="text"
@@ -54,7 +55,7 @@ const CreateFaq = () => {
 
             <textarea
               name="answer"
-              style={{ width: "100%" }}
+              className="text__area"
               placeholder="Answer here..."
               {...register("answer", {
                 required: "answer is required",

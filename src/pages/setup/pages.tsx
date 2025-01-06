@@ -47,34 +47,37 @@ const CommonPages: React.FC = () => {
     <div>
       <CardBody header="Add More Pages" to="/setup/pages/create" />
       <Display>
-        <Row className="row text-bold">
-          <Column className="col-md-3">#</Column>
-          <Column className="col-md-3">Page Name</Column>
-          <Column className="col-md-3">Slug</Column>
-          <Column className="col-md-3">Action</Column>
-        </Row>
-        {isLoading ? (
-          <Loader />
-        ) : (
-          <>
-            {pages.map((page, index) => (
-              <Row key={index} className="row">
-                <Column className="col-md-3">{index + 1}</Column>
-                <Column className="col-md-3">{page.title}</Column>
-                <Column className="col-md-3">{page.slug}</Column>
-                <Column className="col-md-3">
-                  <CustomIconArea>
-                    <ViewButton target="_blank" href={`https://gcart.com.bd/${page.slug}`} />
-                    <EditButton editUrl={`/setup/pages/edit/${page.id}`} />
-                    <DeleteButton
-                      onClick={() => handlePageDelete(page.id as number)}
-                    />
-                  </CustomIconArea>
-                </Column>
-              </Row>
-            ))}
-          </>
-        )}
+        <div className="table">
+
+          <Row className="row-table xs-table-width text-bold">
+            <Column className="col-md-3">#</Column>
+            <Column className="col-md-3">Page Name</Column>
+            <Column className="col-md-3">Slug</Column>
+            <Column className="col-md-3">Action</Column>
+          </Row>
+          {isLoading ? (
+            <Loader />
+          ) : (
+            <>
+              {pages.map((page, index) => (
+                <Row key={index} className="row-table xs-table-width">
+                  <Column className="col-md-3">{index + 1}</Column>
+                  <Column className="col-md-3">{page.title}</Column>
+                  <Column className="col-md-3">{page.slug}</Column>
+                  <Column className="col-md-3">
+                    <CustomIconArea>
+                      <ViewButton target="_blank" href={`https://gcart.com.bd/${page.slug}`} />
+                      <EditButton editUrl={`/setup/pages/edit/${page.id}`} />
+                      <DeleteButton
+                        onClick={() => handlePageDelete(page.id as number)}
+                      />
+                    </CustomIconArea>
+                  </Column>
+                </Row>
+              ))}
+            </>
+          )}
+        </div>
 
         <Pagination
           pageCount={pageNumber}

@@ -57,8 +57,8 @@ const SettingPage = () => {
         header="Basic Settings"text="Back" to="/" />
       <Display>
         <form onSubmit={handleSubmit(onSubmit)}>
-          <div className="row">
-            <Column className="col-md-6">
+          <div className="row"> 
+            <Column className="col-md-6 col-sm-12">
               <div className="color-input">
                 <label htmlFor="name">Primary Color</label>
                 <input
@@ -216,7 +216,7 @@ const SettingPage = () => {
                 )}
               </div>
             </Column>
-            <Column className="col-md-6">
+            <Column className="col-md-6 col-sm-12">
               <div className="color-input">
                 <label htmlFor="name">Border Color</label>
                 <input

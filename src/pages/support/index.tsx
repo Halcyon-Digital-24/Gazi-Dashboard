@@ -21,7 +21,7 @@ const TicketPage = () => {
   const { supports, totalCount, isLoading } = useAppSelector((state) => state.support);
   const [displayItem, setDisplayItem] = useState(25);
 
-  const totalPage = Math.ceil(totalCount /displayItem );
+  const totalPage = Math.ceil(totalCount / displayItem);
 
   const handlePageChange = (selectedItem: { selected: number }) => {
     setPageNumber(selectedItem.selected + 1);
@@ -53,36 +53,38 @@ const TicketPage = () => {
             onChange={(dateRange) => setOrderDate(dateRange)}
           />
         </div>
-        <Filter handleDisplayItem={handleDisplayItem}   />
-        <Row className="row text-bold">
-          <Column className="col-md-2">Ticket ID</Column>
-          <Column className="col-md-3">Subject</Column>
-          <Column className="col-md-3">Message</Column>
-          <Column className="col-md-2">Last reply</Column>
-          <Column className="col-md-1">Options</Column>
-        </Row>
-        {isLoading ? (
-          <Loader />
-        ) : (
-          <>
-            {supports?.map((support, index) => (
-              <Row className="row" key={index}>
-                <Column className="col-md-2">{support.id}</Column>
+        <Filter handleDisplayItem={handleDisplayItem} />
+        <div className="table">
+          <Row className="row-table sm-table-width text-bold">
+            <Column className="col-md-1">Ticket ID</Column>
+            <Column className="col-md-3">Subject</Column>
+            <Column className="col-md-4">Message</Column>
+            <Column className="col-md-2">Last reply</Column>
+            <Column className="col-md-1">Options</Column>
+          </Row>
+          {isLoading ? (
+            <Loader />
+          ) : (
+            <>
+              {supports?.map((support, index) => (
+                <Row className="row-table sm-table-width" key={index}>
+                  <Column className="col-md-1">{support.id}</Column>
 
-                <Column className="col-md-3">{support.subject}</Column>
-                <Column className="col-md-3">{support.details}</Column>
-                <Column className="col-md-2">
-                  {formatDate(support.created_at)}
-                </Column>
-                <Column className="col-md-1">
-                  <CustomIconArea>
-                    <ViewButton href={`/support/${support.id}`} />
-                  </CustomIconArea>
-                </Column>
-              </Row>
-            ))}
-          </>
-        )}
+                  <Column className="col-md-3">{support.subject}</Column>
+                  <Column className="col-md-4">{support.details}</Column>
+                  <Column className="col-md-2">
+                    {formatDate(support.created_at)}
+                  </Column>
+                  <Column className="col-md-1">
+                    <CustomIconArea>
+                      <ViewButton href={`/support/${support.id}`} />
+                    </CustomIconArea>
+                  </Column>
+                </Row>
+              ))}
+            </>
+          )}
+        </div>
 
 
         <Pagination

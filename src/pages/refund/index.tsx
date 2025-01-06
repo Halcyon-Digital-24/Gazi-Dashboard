@@ -90,7 +90,7 @@ const Refund = () => {
       <Display>
         <Filter handleDisplayItem={handleDisplayItem} onSearch={handleOnSearch} isFilter />
         <div className="table">
-          <Row className="row-table text-bold">
+          <Row className="row-table sm-table-width text-bold">
             <Column className="col-md-1">Order No</Column>
             <Column className="col-md-2">Product</Column>
             <Column className="col-md-1">Price</Column>
@@ -104,7 +104,7 @@ const Refund = () => {
           ) : (
             <>
               {refunds.map((refund, index) => (
-                <Row className="row-table" key={index}>
+                <Row className="row-table sm-table-width" key={index}>
                   <Column className="col-md-1">{refund.order_id}</Column>
                   <Column className="col-md-2">{refund.product_name}</Column>
                   <Column className="col-md-1">{refund.product_price}</Column>

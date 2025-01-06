@@ -10,3 +10,12 @@
 .ql-picker.ql-size .ql-picker-item::before {
   content: attr(data-value) !important;
 }
+
+@media screen and (max-width: 576px) {
+  .ql-container {
+    .ql-editor {
+      min-height: 500px;
+    }
+  }
+  
+}

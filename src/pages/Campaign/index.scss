@@ -1,4 +1,4 @@
-@import '../../styles/index.scss';
+@import "../../styles/index.scss";
 
 .campaign {
   .date-area {
@@ -52,22 +52,22 @@
   padding: 10px;
   margin-bottom: 10px;
   transition: background-color 0.3s;
-  
+
   &:hover {
     background-color: #f0f8ff;
   }
-  
+
   .product-info {
     display: flex;
     align-items: center;
     flex: 1;
-    
+
     .product-title {
       font-size: 16px;
       font-weight: 500;
       margin-right: 15px;
     }
-    
+
     .discount-input,
     .discount-select {
       margin-left: 10px;
@@ -75,16 +75,16 @@
       border: 1px solid #ddd;
       border-radius: 3px;
     }
-    
+
     .discount-input {
       width: 120px;
     }
-    
+
     .discount-select {
       width: 80px;
     }
   }
-  
+
   .remove-button {
     background: none;
     border: none;
@@ -92,9 +92,18 @@
     cursor: pointer;
     font-size: 20px;
     transition: color 0.3s;
-    
+
     &:hover {
       color: #ff3b3b;
     }
+  }
+}
+
+@media screen and (max-width: 576px) {
+  .selected-product {
+    padding: 5px;
+  }
+  .selected-products {
+    padding: 0;
   }
 }

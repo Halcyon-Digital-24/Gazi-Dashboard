@@ -25,7 +25,7 @@ export interface IOrder {
   payment_status: string;
   delivery_method: string;
   delivery_fee: number;
-  advance_payment:number;
+  advance_payment: number;
   transaction_id: string;
   discount: number;
   orderItems: OrderItem[];
@@ -40,7 +40,7 @@ export interface IOrder {
   note: string;
   coupon_code: null | string;
   coupon: any;
-  invoice_no?:any;
+  invoice_no?: any;
 }
 
 export type ISingleOrder = {
@@ -57,6 +57,6 @@ export type ISingleOrder = {
 };
 
 export interface IOrderResponse {
-  massage: string;
+  message: string;
   data: { count: number; rows: IOrder[] };
 }

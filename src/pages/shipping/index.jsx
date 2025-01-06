@@ -63,31 +63,33 @@ const Shipping = () => {
       <CardBody header="Shipping" to="/shipping/create" />
       <Display>
         <Filter handleDisplayItem={handleDisplayItem} />
-        <Row className="row text-bold">
-          <Column className="col-md-4">Location</Column>
-          <Column className="col-md-4">Price</Column>
-          <Column className="col-md-4">Actions</Column>
-        </Row>
-        {isLoading ? (
-          <Loader />
-        ) : (
-          <>
-            {locations?.map((location, index) => (
-              <Row className="row" key={index}>
-                <Column className="col-md-4">{location.location}</Column>
-                <Column className="col-md-4">{location.price}</Column>
-                <Column className="col-md-4">
-                  <CustomIconArea>
-                    <EditButton editUrl={`/shipping/edit/${location.id}`} />
-                    <DeleteButton
-                      onClick={() => handleDeleteVideo(location.id)}
-                    />
-                  </CustomIconArea>
-                </Column>
-              </Row>
-            ))}
-          </>
-        )}
+        <div className="table">
+          <Row className="row-table xs-table-width text-bold">
+            <Column className="col-md-4">Location</Column>
+            <Column className="col-md-4">Price</Column>
+            <Column className="col-md-4">Actions</Column>
+          </Row>
+          {isLoading ? (
+            <Loader />
+          ) : (
+            <>
+              {locations?.map((location, index) => (
+                <Row className="row-table xs-table-width" key={index}>
+                  <Column className="col-md-4">{location.location}</Column>
+                  <Column className="col-md-4">{location.price}</Column>
+                  <Column className="col-md-4">
+                    <CustomIconArea>
+                      <EditButton editUrl={`/shipping/edit/${location.id}`} />
+                      <DeleteButton
+                        onClick={() => handleDeleteVideo(location.id)}
+                      />
+                    </CustomIconArea>
+                  </Column>
+                </Row>
+              ))}
+            </>
+          )}
+        </div>
 
         <Pagination
           pageCount={pageNumber}

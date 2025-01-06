@@ -59,25 +59,25 @@ const Reviews: React.FC = () => {
       <Display>
         <Filter handleDisplayItem={handleDisplayItem} />
         <div className="table">
-        <Row className="row-table text-bold">
-          <Column className="col-md-1">#</Column>
-          <Column className="col-md-2">Name</Column>
-          <Column className="col-md-4">Products</Column>
-          <Column className="col-md-3">Review</Column>
-          <Column className="col-md-1">Rating</Column>
-          <Column className="col-md-1">Published</Column>
+        <Row className="row-table sm-table-width text-bold">
+          <Column className="col-md-1 col-sm-1">#</Column>
+          <Column className="col-md-2 col-sm-2">Name</Column>
+          <Column className="col-md-3 col-sm-3">Products</Column>
+          <Column className="col-md-4 col-sm-4">Review</Column>
+          <Column className="col-md-1 col-sm-1">Rating</Column>
+          <Column className="col-md-1 col-sm-1">Published</Column>
         </Row>
         {isLoading ? (
           <Loader />
         ) : (
           reviews.map((review, index) => (
-            <Row className="row-table" key={index}>
-              <Column className="col-md-1">{index + 1}</Column>
-              <Column className="col-md-2">{review.name}</Column>
-              <Column className="col-md-4">{review.product_name}</Column>
-              <Column className="col-md-3">{review.comment}</Column>
-              <Column className="col-md-1">{review.rating}</Column>
-              <Column className="col-md-1">
+            <Row className="row-table sm-table-width" key={index}>
+              <Column className="col-md-1 col-sm-1">{index + 1}</Column>
+              <Column className="col-md-2 col-sm-2">{review.name}</Column>
+              <Column className="col-md-3 col-sm-3">{review.product_name}</Column>
+              <Column className="col-md-4 col-sm-4">{review.comment}</Column>
+              <Column className="col-md-1 col-sm-1">{review.rating}</Column>
+              <Column className="col-md-1 col-sm-1">
                 <ToggleButton
                   isChecked={review.is_visible}
                   onClick={() =>

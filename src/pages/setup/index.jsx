@@ -41,7 +41,7 @@ const SetupPage = () => {
     (state) => state.banner
   );
   const [addBanner, setAddBanner] = useState([]);
-  const { categories , isLoading} = useAppSelector((state) => state.category);
+  const { categories, isLoading } = useAppSelector((state) => state.category);
   const { isUpdate, isSuccess: settingSuccess } = useAppSelector(
     (state) => state.settings
   );
@@ -161,7 +161,7 @@ const SetupPage = () => {
       ) : (
         <>
           <div className="row">
-            <Column className="col-md-6">
+            <Column className="col-md-6 col-sm-12">
               <form onSubmit={handleSubmit(onSubmit)}>
                 <Display>
                   <div className="text">
@@ -409,7 +409,7 @@ const SetupPage = () => {
               </form>
               <DynamicImage />
             </Column>
-            <Column className="col-md-6">
+            <Column className="col-md-6 col-sm-12">
               <Display>
                 <form onSubmit={handleSubmit(onSubmit)}>
                   <div className="text">
@@ -454,48 +454,53 @@ const SetupPage = () => {
                   </div>
                 </form>
               </Display>
-              <Display>
+              <Display className="">
                 <CardBody
                   header="Create New Banner"
                   to="/setup/sliders/create"
                 />
-                <Row className="row">
-                  <Column className="col-md-4">Image</Column>
-                  <Column className="col-md-4">Link</Column>
-                  <Column className="col-md-2">Status</Column>
-                  <Column className="col-md-2">Action</Column>
-                </Row>
-                <>
-                  {addBanner?.map((banner, index) => (
-                    <Row key={index} className="row banner">
-                      <Column className="col-md-4">
-                        <img
-                          src={`${API_ROOT}/images/banner/${banner.image}`}
-                          alt="banner"
-                        />
-                      </Column>
-                      <Column className="col-md-4">
-                        <p>{banner.url}</p>
-                      </Column>
-                      <Column className="col-md-2">
-                        <ToggleButton
-                          onClick={() => handleVisibility(banner)}
-                          isChecked={banner.is_visible}
-                        />
-                      </Column>
-                      <Column className="col-md-2">
-                        <CustomIconArea>
-                          <EditButton
-                            editUrl={`/setup/sliders/edit/${banner.id}`}
+                <div className="table">
+                  <Row className="row-table xs-table-width">
+                    <Column className="col-md-4 col-sm-3">Image</Column>
+                    <Column className="col-md-4 col-sm-5">Link</Column>
+                    <Column className="col-md-2 col-sm-2">Status</Column>
+                    <Column className="col-md-2 col-sm-2">Action</Column>
+                  </Row>
+                  <>
+                    {addBanner?.map((banner, index) => (
+                      <Row
+                        key={index}
+                        className="row-table xs-table-width banner"
+                      >
+                        <Column className="col-md-4 col-sm-3">
+                          <img
+                            src={`${API_ROOT}/images/banner/${banner.image}`}
+                            alt="banner"
                           />
-                          <DeleteButton
-                            onClick={() => handleDelete(banner.id)}
+                        </Column>
+                        <Column className="col-md-4 col-sm-5">
+                          <p>{banner.url}</p>
+                        </Column>
+                        <Column className="col-md-2 col-sm-2">
+                          <ToggleButton
+                            onClick={() => handleVisibility(banner)}
+                            isChecked={banner.is_visible}
                           />
-                        </CustomIconArea>
-                      </Column>
-                    </Row>
-                  ))}
-                </>
+                        </Column>
+                        <Column className="col-md-2 col-sm-2">
+                          <CustomIconArea>
+                            <EditButton
+                              editUrl={`/setup/sliders/edit/${banner.id}`}
+                            />
+                            <DeleteButton
+                              onClick={() => handleDelete(banner.id)}
+                            />
+                          </CustomIconArea>
+                        </Column>
+                      </Row>
+                    ))}
+                  </>
+                </div>
               </Display>
               <CustomScript />
               <Display>

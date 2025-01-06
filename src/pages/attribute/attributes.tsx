@@ -63,9 +63,9 @@ const Attributes = () => {
       <Display>
         <div className="table">
           <Row className="row-table text-bold">
-            <Column className="col-md-5">Attributes</Column>
+            <Column className="col-md-3">Attributes</Column>
             <Column className="col-md-5">Attributes Value</Column>
-            <Column className="col-md-2">Actions</Column>
+            <Column className="col-md-4">Actions</Column>
           </Row>
           {isLoading ? (
             <>
@@ -74,9 +74,9 @@ const Attributes = () => {
           ) : (
             attributes.map((attribute, index) => (
               <Row className="row-table" key={index}>
-                <Column className="col-md-5">{attribute.name}</Column>
+                <Column className="col-md-3">{attribute.name}</Column>
                 <Column className="col-md-5">{attribute.value}</Column>
-                <Column className="col-md-2">
+                <Column className="col-md-4">
                   <CustomIconArea>
                     <EditButton editUrl={`/attributes/edit/${attribute.id}`} />
                     <DeleteButton

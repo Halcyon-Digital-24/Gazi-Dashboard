@@ -63,29 +63,30 @@ const FaqPage: React.FC = () => {
     <div>
       <CardBody header="FAQ" to="/faqs/create" />
       <Display>
-        <Row className="row text-bold">
-          <Column className="col-md-1">SI No.</Column>
-          <Column className="col-md-4">Questions</Column>
-          <Column className="col-md-5">Answers</Column>
-          <Column className="col-md-1">Status</Column>
-          <Column className="col-md-1">Actions</Column>
+        <div className="table">
+        <Row className="row-table sm-table-width text-bold">
+          <Column className="col-md-1 col-sm-1">SI No.</Column>
+          <Column className="col-md-4 col-sm-3">Questions</Column>
+          <Column className="col-md-5 col-sm-5">Answers</Column>
+          <Column className="col-md-1 col-sm-1">Status</Column>
+          <Column className="col-md-1 col-sm-2">Actions</Column>
         </Row>
         {isLoading ? (
           <Loader />
         ) : (
           <>
           {faqs?.map((faq, index) => (
-          <Row className="row" key={index}>
-            <Column className="col-md-1">{faq.id}</Column>
-            <Column className="col-md-4">{faq.question}</Column>
-            <Column className="col-md-5">{faq.answer}</Column>
-            <Column className="col-md-1">
+          <Row className="row-table sm-table-width" key={index}>
+            <Column className="col-md-1 col-sm-1">{faq.id}</Column>
+            <Column className="col-md-4 col-sm-3">{faq.question}</Column>
+            <Column className="col-md-5 col-sm-5">{faq.answer}</Column>
+            <Column className="col-md-1 col-sm-1">
               <ToggleButton
                 isChecked={faq.is_visible}
                 onClick={() => handleStatusChange(faq)}
               />
             </Column>
-            <Column className="col-md-1">
+            <Column className="col-md-1 col-sm-2">
               <CustomIconArea>
                 <EditButton editUrl={`/faqs/edit/${faq.id}`} />
                 <DeleteButton
@@ -97,6 +98,7 @@ const FaqPage: React.FC = () => {
         ))}
           </>
         )}
+        </div>
         
         <Pagination
           pageCount={pageNumber}

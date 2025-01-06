@@ -71,43 +71,46 @@ const EmiPage = () => {
       <CardBody header="Available Emi" to="/emi/create"></CardBody>
       <Display>
         <Filter handleDisplayItem={handleDisplayItem} onSearch={handleOnSearch} isFilter />
-        <Row className="row text-bold">
-          <Column className="col-md-3">Bank Name</Column>
-          <Column className="col-md-1">Three months</Column>
-          <Column className="col-md-1">Six Months</Column>
-          <Column className="col-md-1">Nine Months</Column>
-          <Column className="col-md-1">Twelve Months</Column>
-          <Column className="col-md-1">Eighteen Months</Column>
-          <Column className="col-md-1">Twenty_four Months</Column>
-          <Column className="col-md-1">Thirty Months</Column>
-          <Column className="col-md-1">Thirty_six Months</Column>
-          <Column className="col-md-1">Action</Column>
-        </Row>
-        {isLoading ? (
-          <Loader />
-        ) : (
-          <>
-            {emis.map((emi, index) => (
-              <Row className="row" key={index}>
-                <Column className="col-md-3">{emi.bank_name}</Column>
-                <Column className="col-md-1">{emi.three_months}</Column>
-                <Column className="col-md-1">{emi.six_months}</Column>
-                <Column className="col-md-1">{emi.nine_months}</Column>
-                <Column className="col-md-1">{emi.twelve_months}</Column>
-                <Column className="col-md-1">{emi.eighteen_months}</Column>
-                <Column className="col-md-1">{emi.twenty_four_months}</Column>
-                <Column className="col-md-1">{emi.thirty_months}</Column>
-                <Column className="col-md-1">{emi.thirty_six_months}</Column>
-                <Column className="col-md-1">
-                  <CustomIconArea>
-                    <EditButton editUrl={`/emi/edit/${emi.id}`} />
-                    <DeleteButton onClick={() => handleDelete(Number(emi?.id))} />
-                  </CustomIconArea>
-                </Column>
-              </Row>
-            ))}
-          </>
-        )}
+        <div className="table">
+
+          <Row className="row-table sm-table-width text-bold">
+            <Column className="col-md-3 col-sm-2">Bank Name</Column>
+            <Column className="col-md-1">Three months</Column>
+            <Column className="col-md-1">Six Months</Column>
+            <Column className="col-md-1">Nine Months</Column>
+            <Column className="col-md-1">Twelve Months</Column>
+            <Column className="col-md-1">Eighteen Months</Column>
+            <Column className="col-md-1 col-sm-2">Twenty_four Months</Column>
+            <Column className="col-md-1">Thirty Months</Column>
+            <Column className="col-md-1">Thirty_six Months</Column>
+            <Column className="col-md-1">Action</Column>
+          </Row>
+          {isLoading ? (
+            <Loader />
+          ) : (
+            <>
+              {emis.map((emi, index) => (
+                <Row className="row-table sm-table-width" key={index}>
+                  <Column className="col-md-3 col-sm-2">{emi.bank_name}</Column>
+                  <Column className="col-md-1">{emi.three_months}</Column>
+                  <Column className="col-md-1">{emi.six_months}</Column>
+                  <Column className="col-md-1">{emi.nine_months}</Column>
+                  <Column className="col-md-1">{emi.twelve_months}</Column>
+                  <Column className="col-md-1">{emi.eighteen_months}</Column>
+                  <Column className="col-md-1 col-sm-2">{emi.twenty_four_months}</Column>
+                  <Column className="col-md-1">{emi.thirty_months}</Column>
+                  <Column className="col-md-1">{emi.thirty_six_months}</Column>
+                  <Column className="col-md-1">
+                    <CustomIconArea>
+                      <EditButton editUrl={`/emi/edit/${emi.id}`} />
+                      <DeleteButton onClick={() => handleDelete(Number(emi?.id))} />
+                    </CustomIconArea>
+                  </Column>
+                </Row>
+              ))}
+            </>
+          )}
+        </div>
 
         <Pagination
           pageCount={pageNumber}

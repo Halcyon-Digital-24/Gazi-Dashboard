@@ -167,8 +167,8 @@ const SingleItem: FC<IProps> = ({
 
   return (
     <>
-      <Row className="row-table">
-        <Column className="col-md-1 col-sm-2">
+      <Row className="row-table sm-table-width-mid">
+        <Column className="col-md-1 col-sms-1">
           <input
             type="checkbox"
             name="select"
@@ -184,18 +184,18 @@ const SingleItem: FC<IProps> = ({
           />
           <div className="sudo">{order.id}</div>
         </Column>
-        <Column className="col-md-1">
+        <Column className="col-md-1 col-sms-1">
           {order.order_prefix} - {order?.invoice_no || order.id}
         </Column>
-        <Column className="col-md-1">
+        <Column className="col-md-1 col-sms-1">
           ৳ {FormatPrice((Number(totalPrice) + Number(order.delivery_fee)) - Number(order.custom_discount))} 
         </Column>
-        <Column className="col-md-2">{order.name}</Column>
-        <Column className="col-md-2">{order.mobile}</Column>
-        <Column className="col-md-1 product-iem">
+        <Column className="col-md-2 col-sm-2">{order.name}</Column>
+        <Column className="col-md-2 col-sm-2">{order.mobile}</Column>
+        <Column className="col-md-1 col-sms-1 product-item">
           {order.orderItems?.length}
         </Column>
-        <Column className="col-md-1">
+        <Column className="col-md-1 col-sms-1">
           <Select
             onChange={(e: ChangeEvent<HTMLSelectElement>) =>
               handleStatusChange(order.id, e)
@@ -239,8 +239,8 @@ const SingleItem: FC<IProps> = ({
             </option>
           </Select>
         </Column>
-        <Column className="col-md-1">{order.order_form}</Column>
-        <Column className="col-md-2">
+        <Column className="col-md-1 col-sms-1">{order.order_form}</Column>
+        <Column className="col-md-2 col-sm-2">
           <CustomIconArea>
             <ViewButton href={`/orders/views/${order.id}`} />
             <EditButton editUrl={`/orders/edit/${order.id}`} />

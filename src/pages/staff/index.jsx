@@ -77,31 +77,33 @@ const Staff = () => {
           onSearch={handleOnSearch}
           isFilter
         />
-        <Row className="row">
-          <Column className="col-md-3">Name</Column>
-          <Column className="col-md-3">Email</Column>
-          <Column className="col-md-3">Role</Column>
-          <Column className="col-md-3">Actions</Column>
-        </Row>
-        {isLoading ? (
-          <Loader />
-        ) : (
-          <>
-            {staffs.map((staff, index) => (
-              <Row className="row" key={index}>
-                <Column className="col-md-3">{staff.name}</Column>
-                <Column className="col-md-3">{staff.email}</Column>
-                <Column className="col-md-3">{staff.access_id}</Column>
-                <Column className="col-md-3">
-                  <CustomIconArea>
-                    <EditButton editUrl={`/staffs/edit/${staff.id}`} />
-                    <DeleteButton onClick={() => handleDelete(staff.id)} />
-                  </CustomIconArea>
-                </Column>
-              </Row>
-            ))}
-          </>
-        )}
+        <div className="table">
+          <Row className="row-table sm-table-width">
+            <Column className="col-md-3 col-sm-3">Name</Column>
+            <Column className="col-md-3 col-sm-6">Email</Column>
+            <Column className="col-md-3 col-sm-1">Role</Column>
+            <Column className="col-md-3 col-sm-2">Actions</Column>
+          </Row>
+          {isLoading ? (
+            <Loader />
+          ) : (
+            <>
+              {staffs.map((staff, index) => (
+                <Row className="row-table sm-table-width" key={index}>
+                  <Column className="col-md-3 col-sm-3">{staff.name}</Column>
+                  <Column className="col-md-3 col-sm-6">{staff.email}</Column>
+                  <Column className="col-md-3 col-sm-1">{staff.access_id}</Column>
+                  <Column className="col-md-3 col-sm-2">
+                    <CustomIconArea>
+                      <EditButton editUrl={`/staffs/edit/${staff.id}`} />
+                      <DeleteButton onClick={() => handleDelete(staff.id)} />
+                    </CustomIconArea>
+                  </Column>
+                </Row>
+              ))}
+            </>
+          )}
+        </div>
 
         <Pagination
           pageCount={pageNumber}

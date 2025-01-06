@@ -170,7 +170,7 @@ const AllProducts: React.FC = () => {
           isFilter
         />
         <div className="table">
-          <Row className="row-table text-bold">
+          <Row className="row-table sm-table-width text-bold">
           <Column className="col-md-1 col-sm-1">
             <input
               id="select-all"
@@ -194,7 +194,7 @@ const AllProducts: React.FC = () => {
         ) : (
           <>
             {products.map((product, index) => (
-              <Row key={index} className="row-table">
+              <Row key={index} className="row-table sm-table-width">
                 <Column className="col-md-1 col-sm-1">
                   <input
                     checked={selectedProducts.includes(product.id as number)}

@@ -43,37 +43,39 @@ const CouponPage: React.FC = () => {
     <div>
       <CardBody header="Coupon" to="/coupons/create" />
       <Display>
-        <Row className="row text-bold">
-          <Column className="col-md-1">#</Column>
-          <Column className="col-md-2">Code</Column>
-          <Column className="col-md-1">Total</Column>
-          <Column className="col-md-2">Type</Column>
-          <Column className="col-md-2">Price</Column>
-          <Column className="col-md-2">Stock</Column>
-          <Column className="col-md-2">Action</Column>
-        </Row>
-        {isLoading ? (
-          <Loader />
-        ) : (
-          <>
-            {coupons.map((coupon, index) => (
-              <Row className="row" key={index}>
-                <Column className="col-md-1">{coupon.id}</Column>
-                <Column className="col-md-2">{coupon.code}</Column>
-                <Column className="col-md-1">{coupon.total_coupons}</Column>
-                <Column className="col-md-2">{coupon.discount_type}</Column>
-                <Column className="col-md-2">{coupon.discount_amount}</Column>
-                <Column className="col-md-2">{coupon.total_coupons}</Column>
-                <Column className="col-md-2">
-                  <CustomIconArea>
-                    <EditButton editUrl={`/coupons/edit/${coupon.id}`} />
-                    <DeleteButton onClick={() => handleDeleteCoupon(coupon.id)} />
-                  </CustomIconArea>
-                </Column>
-              </Row>
-            ))}
-          </>
-        )}
+        <div className="table">
+          <Row className="row-table xs-table-width text-bold">
+            <Column className="col-md-1">#</Column>
+            <Column className="col-md-2">Code</Column>
+            <Column className="col-md-1">Total</Column>
+            <Column className="col-md-2">Type</Column>
+            <Column className="col-md-2">Price</Column>
+            <Column className="col-md-2">Stock</Column>
+            <Column className="col-md-2">Action</Column>
+          </Row>
+          {isLoading ? (
+            <Loader />
+          ) : (
+            <>
+              {coupons.map((coupon, index) => (
+                <Row className="row-table xs-table-width" key={index}>
+                  <Column className="col-md-1">{coupon.id}</Column>
+                  <Column className="col-md-2">{coupon.code}</Column>
+                  <Column className="col-md-1">{coupon.total_coupons}</Column>
+                  <Column className="col-md-2">{coupon.discount_type}</Column>
+                  <Column className="col-md-2">{coupon.discount_amount}</Column>
+                  <Column className="col-md-2">{coupon.total_coupons}</Column>
+                  <Column className="col-md-2">
+                    <CustomIconArea>
+                      <EditButton editUrl={`/coupons/edit/${coupon.id}`} />
+                      <DeleteButton onClick={() => handleDeleteCoupon(coupon.id)} />
+                    </CustomIconArea>
+                  </Column>
+                </Row>
+              ))}
+            </>
+          )}
+        </div>
 
         <Pagination
           pageCount={pageNumber}
