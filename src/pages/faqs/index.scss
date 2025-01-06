@@ -1,0 +1,14 @@
+.text__area{
+    height: 100px;
+    width: 100%;
+}
+.form{
+    margin: 0 5px;
+}
+
+@media screen and (max-width: 576px){
+    .text__area{
+        height: 200px;
+    }
+    
+}

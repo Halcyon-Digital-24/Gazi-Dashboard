@@ -56,34 +56,36 @@ const Notification = () => {
     <div>
       <CardBody header="Notifications" to="/notification/create" />
       <Display>
-        <Row className="row text-bold">
-          <Column className="col-md-1">Notification ID</Column>
-          <Column className="col-md-2">Image</Column>
-          <Column className="col-md-2">Title</Column>
-          <Column className="col-md-5">Details</Column>
-          <Column className="col-md-2">Action</Column>
-        </Row>
-        {isLoading ? (
-          <Loader />
-        ) : (
-          <>
-            {notifications.map((n, index) => (
-              <Row className="row" key={index}>
-                <Column className="col-md-1">{n.id}</Column>
-                <Column className="col-md-2">
-                  <img
-                    src={`${API_ROOT}/images/notification/${n.image}`}
-                    alt="brand"
-                    style={{ width: "100%", height: "auto" }}
-                  />
-                </Column>
-                <Column className="col-md-2">{n.title}</Column>
-                <Column className="col-md-5">{n.details}</Column>
-                <Column className="col-md-2"> <DeleteButton onClick={() => handleNotificationDelete(n.id)} /></Column>
-              </Row>
-            ))}
-          </>
-        )}
+        <div className="table">
+          <Row className="row-table sm-table-width text-bold">
+            <Column className="col-md-1 col-sm-2">Notification ID</Column>
+            <Column className="col-md-2 col-sm-2">Image</Column>
+            <Column className="col-md-2 col-sm-2">Title</Column>
+            <Column className="col-md-5 col-sm-5">Details</Column>
+            <Column className="col-md-2 col-sm-1">Action</Column>
+          </Row>
+          {isLoading ? (
+            <Loader />
+          ) : (
+            <>
+              {notifications.map((n, index) => (
+                <Row className="row-table sm-table-width" key={index}>
+                  <Column className="col-md-1 col-sm-2">{n.id}</Column>
+                  <Column className="col-md-2 col-sm-2">
+                    <img
+                      src={`${API_ROOT}/images/notification/${n.image}`}
+                      alt="brand"
+                      style={{ width: "100%", height: "auto" }}
+                    />
+                  </Column>
+                  <Column className="col-md-2 col-sm-2">{n.title}</Column>
+                  <Column className="col-md-5 col-sm-5">{n.details}</Column>
+                  <Column className="col-md-2 col-sm-1"> <DeleteButton onClick={() => handleNotificationDelete(n.id)} /></Column>
+                </Row>
+              ))}
+            </>
+          )}
+        </div>
 
         <Pagination
           pageCount={pageNumber}

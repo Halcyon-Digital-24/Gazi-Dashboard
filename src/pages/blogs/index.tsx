@@ -83,7 +83,7 @@ const Blogs: React.FC = () => {
       <Display>
         <Filter handleDisplayItem={handleDisplayItem} />
         <div className="table">
-          <Row className="row-table text-bold">
+          <Row className="row-table sm-table-width text-bold">
             <Column className="col-md-1">SI No.</Column>
             <Column className="col-md-2">Title</Column>
             <Column className="col-md-6">Sort Description</Column>
@@ -95,7 +95,7 @@ const Blogs: React.FC = () => {
           ) : (
             <>
               {blogs.map((blog, index) => (
-                <Row className="row-table" key={index}>
+                <Row className="row-table sm-table-width" key={index}>
                   {/*  <Column className="col-md-1">
                 <input
                   type="checkbox"

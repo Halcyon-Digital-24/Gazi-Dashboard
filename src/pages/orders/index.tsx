@@ -7,26 +7,23 @@ import { BsDownload } from "react-icons/bs";
 import { CSVLink } from "react-csv";
 import "./index.scss";
 import Overflow from "../../components/overflow";
-import { useAppDispatch, useAppSelector } from "../../redux/hooks";
-import { deleteOrder, getOrders, reset } from "../../redux/order/orderSlice";
 import { toast } from "react-toastify";
 import { DateRangePicker } from "rsuite";
 import { formatDateForURL } from "../../utills/formateDate";
 import { useDebounce } from "../../utills/debounce";
+import {
+  useGetAllOrdersQuery,
+  useDeleteOrderMutation,
+} from "../../redux/order/orderApi";
 
 const AllOrders: React.FC = () => {
-  const dispatch = useAppDispatch();
   const [pageNumber, setPageNumber] = useState<number>(1);
   const [selectedOrders, setSelectedOrders] = useState<number[]>([]);
-  const [orderStatus, setOrderStatus] = useState("");
-  const [onSearch, setOnSearch] = useState("");
+  const [orderStatus, setOrderStatus] = useState<string>("");
+  const [onSearch, setOnSearch] = useState<string>("");
   const [orderDate, setOrderDate] = useState<[Date, Date] | null>(null);
-  const { orders, isDelete, totalCount, isLoading } = useAppSelector(
-    (state) => state.order
-  );
+  const [displayItem, setDisplayItem] = useState<number>(25);
 
-  const [displayItem, setDisplayItem] = useState(25);
-  const totalPage = Math.ceil(totalCount / displayItem);
 
   const handlePageChange = (selectedItem: { selected: number }) => {
     setPageNumber(selectedItem.selected + 1);
@@ -36,146 +33,125 @@ const AllOrders: React.FC = () => {
     setDisplayItem(Number(e.target.value));
   };
 
+  const debouncedSearchQuery = useDebounce(onSearch, 500);
 
-  const [searchQuery, setSearchQuery] = useState<string>('');
-  const debouncedSearchQuery = useDebounce(searchQuery, 500); // 500ms debounce delay
+  // Fetch data using RTK Query
+  const { data, isFetching, refetch, error } = useGetAllOrdersQuery({
+    page: pageNumber,
+    limit: displayItem,
+    order_status: orderStatus,
+    search_term: debouncedSearchQuery,
+    start_date: orderDate ? formatDateForURL(orderDate[0]) : "",
+    end_date: orderDate ? formatDateForURL(orderDate[1]) : "",
+  });
 
-  const handleOnSearch = (e: ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
-    setSearchQuery(e.target.value);
-  };
+  const [deleteOrder] = useDeleteOrderMutation();
+  const totalCount = data?.data?.count || 0;
+  const totalPage = totalCount ? Math.ceil(totalCount / displayItem) : 0;
 
-  useEffect(() => {
-    if (debouncedSearchQuery !== undefined) {
-      // Your search request logic here
-      // console.log('Search query:', debouncedSearchQuery);
-      setOnSearch(debouncedSearchQuery)
-    }
-  }, [debouncedSearchQuery]);
 
   const handleAllSelectedOrders = (e: ChangeEvent<HTMLInputElement>) => {
-    const productIds = orders.map((order) => Number(order.id));
-    if (e.target.checked) {
-      setSelectedOrders(productIds);
-    } else {
-      setSelectedOrders([]);
+    if (data?.data?.rows) {
+      const productIds = data?.data?.rows?.map((order) => Number(order.id));
+      if (e.target.checked) {
+        setSelectedOrders(productIds);
+      } else {
+        setSelectedOrders([]);
+      }
     }
   };
 
   const handleSelectedOrder = (orderId: number) => {
-    const selectedOrdersSet = new Set(selectedOrders);
-
-    if (selectedOrdersSet.has(orderId)) {
-      selectedOrdersSet.delete(orderId);
-    } else {
-      selectedOrdersSet.add(orderId);
-    }
-
-    setSelectedOrders(Array.from(selectedOrdersSet));
-  };
-  const handleMultiDelete = () => {
-    dispatch(deleteOrder([...selectedOrders]));
-  };
-
-  useEffect(() => {
-    dispatch(
-      getOrders({
-        page: pageNumber,
-        limit: displayItem,
-        order_status: orderStatus,
-        search_term: onSearch,
-        start_date: orderDate ? formatDateForURL(orderDate[0]) : "",
-        end_date: orderDate ? formatDateForURL(orderDate[1]) : "",
-      })
+    setSelectedOrders((prevSelected) =>
+      prevSelected.includes(orderId)
+        ? prevSelected.filter((id) => id !== orderId)
+        : [...prevSelected, orderId]
     );
-  }, [dispatch, pageNumber, displayItem, orderStatus, onSearch, orderDate]);
-
-  useEffect(() => {
-    if (isDelete) {
-      toast.success("Order deleted successfully");
-      dispatch(getOrders({}));
-    }
-    return () => {
-      dispatch(reset());
-    };
-  }, [isDelete, dispatch]);
-
-  interface OrderItem {
-    product_name: string;
-    product_attribute: string;
-    quantity: number;
-    regular_price: number;
-    discount_price: number;
-  }
-
-  const flattenOrderItems = (orderItems: OrderItem[]): string => {
-    const lines = orderItems.map(item => {
-      // Create a CSV line with field names prefixed
-      const csvLine = [
-        `P_Name: ${item.product_name}`,
-        `Attribute: ${item.product_attribute}`,
-        `Qnt: ${item.quantity}`,
-        `RP: ${item.regular_price}`,
-        `DP: ${item.discount_price}`
-      ].join(', ');
-
-      return csvLine;
-    });
-
-    // Join all lines with new line character
-    return lines.join('\n');
   };
 
+  const handleMultiDelete = async () => {
+    if (selectedOrders.length === 0) {
+      toast.warning("No orders selected for deletion");
+      return;
+    }
+    try {
+      await deleteOrder(selectedOrders).unwrap();
+      toast.success("Selected orders deleted successfully");
+      setSelectedOrders([]);
+      refetch();
+    } catch (error) {
+      toast.error("Failed to delete selected orders");
+    }
+  };
 
-  // order data for csv 
-  const orderForCsv = orders.map(order => {
-    const total_product_price = order.orderItems.reduce((total, item) => total + item.regular_price, 0);
-    const total_amount = total_product_price + order.delivery_fee - order.custom_discount;
-    const due_amount = total_amount - order.advance_payment;
-    // console.log(order.orderItems.length);
+  const flattenOrderItems = (orderItems: any[]): string =>
+    orderItems
+      .map(
+        (item) =>
+          `P_Name: ${item.product_name}, Attribute: ${item.product_attribute}, Qnt: ${item.quantity}, RP: ${item.regular_price}, DP: ${item.discount_price}`
+      )
+      .join("\n");
 
-    return {
-      OrderId: order.id,
-      User_id: order.user_id,
-      Name: order.name,
-      Mobile: order.mobile,
-      Email: order.email,
-      Address: order.address,
-      City: order.city,
-      Thana: order.thana,
-      Number_of_product: order.orderItems.length,
-      ProductDetails: flattenOrderItems(order.orderItems),  // need to convert 
-      Delivery_fee: order.delivery_fee,
-      Custom_discount: order.custom_discount,
-      Advance_payment: order.advance_payment,
-      Total_product_price: total_product_price,
-      Total_amount: total_amount,
-      Due_amount: due_amount,
-      Payment_method: order.payment_method,
-      Payment_status: order.payment_status,
-      Transaction_id: order.transaction_id,
-      Note: order.note,
-      Order_prefix: order.order_prefix,
-      Invoice_no: order.invoice_no,
-      Order_form: order.order_form,
-      Order_status: order.order_status,
-      Delivery_method: order.delivery_method,
-      Coupon_id: order.coupon,
-      CreatedAt: order.created_at,
-      UpdatedAt: order.updated_at,
-    };
-  });
+  const orderForCsv = data?.data?.rows
+    ? data?.data?.rows?.map((order) => {
+      const totalProductPrice = order.orderItems.reduce(
+        (total: number, item: any) => total + item.regular_price,
+        0
+      );
+      const totalAmount =
+        totalProductPrice + order.delivery_fee - order.custom_discount;
+      const dueAmount = totalAmount - order.advance_payment;
 
-
+      return {
+        OrderId: order.id,
+        User_id: order.user_id,
+        Name: order.name,
+        Mobile: order.mobile,
+        Email: order.email,
+        Address: order.address,
+        City: order.city,
+        Thana: order.thana,
+        Number_of_product: order.orderItems.length,
+        ProductDetails: flattenOrderItems(order.orderItems),
+        Delivery_fee: order.delivery_fee,
+        Custom_discount: order.custom_discount,
+        Advance_payment: order.advance_payment,
+        Total_product_price: totalProductPrice,
+        Total_amount: totalAmount,
+        Due_amount: dueAmount,
+        Payment_method: order.payment_method,
+        Payment_status: order.payment_status,
+        Transaction_id: order.transaction_id,
+        Note: order.note,
+        Order_prefix: order.order_prefix,
+        Invoice_no: order.invoice_no,
+        Order_form: order.order_form,
+        Order_status: order.order_status,
+        Delivery_method: order.delivery_method,
+        Coupon_id: order.coupon,
+        CreatedAt: order.created_at,
+        UpdatedAt: order.updated_at,
+      };
+    })
+    : [];
 
   const now = new Date();
-  const formattedDate = now.toLocaleString('en-US', {
-    month: 'long',
-    day: 'numeric',
-    year: 'numeric',
-    timeZone: 'Asia/Dhaka',
+  const formattedDate = now.toLocaleString("en-US", {
+    month: "long",
+    day: "numeric",
+    year: "numeric",
+    timeZone: "Asia/Dhaka",
   });
 
-
+  // console.log(data);
+  useEffect(() => {
+    if (error) {
+      toast.error(`${error?.data?.message}`);
+    }
+  }, [error]);
+  // console.log(error);
+  
+  
   return (
     <div>
       <Display>
@@ -191,7 +167,7 @@ const AllOrders: React.FC = () => {
         </div>
         <div className="date-area">
           <DateRangePicker
-            className={`date-area`}
+            className="date-area"
             value={orderDate}
             onChange={(dateRange) => setOrderDate(dateRange)}
           />
@@ -200,43 +176,38 @@ const AllOrders: React.FC = () => {
       <Display>
         <Filter
           handleDisplayItem={handleDisplayItem}
-          onSearch={handleOnSearch}
+          onSearch={(e) => setOnSearch(e.target.value)}
           leftElements={
             <div className="action pointer">
               <Overflow title="Bulk Action">
                 <div onClick={handleMultiDelete}>Delete Selection</div>
               </Overflow>
               <Overflow title="Filter by status">
-                <div>
-                  <p onClick={() => setOrderStatus("pending")}>Pending</p>
-                </div>
-                <div>
-                  <p onClick={() => setOrderStatus("confirm")}>Confirmed</p>
-                </div>
-                <div>
-                  <p onClick={() => setOrderStatus("pickup")}>Pick Up</p>
-                </div>
-                <div>
-                  <p onClick={() => setOrderStatus("on_the_way")}>On The Way</p>
-                </div>
-                <div>
-                  <p onClick={() => setOrderStatus("delivered")}>Delivered</p>
-                </div>
-                <div>
-                  <p onClick={() => setOrderStatus("cancel")}>Cancel</p>
-                </div>
+                {["pending", "confirm", "pickup", "on_the_way", "delivered", "cancel"].map(
+                  (status) => (
+                    <div key={status}>
+                      <p onClick={() => setOrderStatus(status)}>{status}</p>
+                    </div>
+                  )
+                )}
               </Overflow>
             </div>
           }
           isFilter
         />
-        <OrderTable
-          orders={orders}
+        {
+          !error ? (
+            <OrderTable
+          orders={data?.data?.rows || []}
           handleAllSelectedOrders={handleAllSelectedOrders}
           handleSelectedOrder={handleSelectedOrder}
           selectedOrders={selectedOrders}
-          isLoading={isLoading}
+          isLoading={isFetching}
         />
+          ) : (
+            <p className="text-center font-semibold mt-20">No data found!</p>
+          )
+        }
         <Pagination
           pageCount={pageNumber}
           handlePageClick={handlePageChange}

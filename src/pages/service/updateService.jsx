@@ -72,7 +72,7 @@ const UpdateService = () => {
       <form onSubmit={handleSubmit(onSubmit)}>
         <Display>
           <div className="row">
-            <Column className="col-md-6">
+            <Column className="col-md-6 col-sm-12">
               <Display>
                 <div className="text">
                   <label htmlFor="name">Title *</label>
@@ -131,7 +131,7 @@ const UpdateService = () => {
                 </div>
               </Display>
             </Column>
-            <Column className="col-md-6">
+            <Column className="col-md-6 col-sm-12">
               <Display>
                 <label className="label" htmlFor="select">
                   Choose Icon

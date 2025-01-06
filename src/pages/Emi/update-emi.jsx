@@ -62,7 +62,7 @@ const UpdateEmi = () => {
       <CardBody header="Available Emi" to="/emi" text="Back" />
       <form onSubmit={handleSubmit(onSubmit)}>
         <div className="row">
-          <Column className="col-md-12">
+          <Column className="col-md-12 col-sm-12">
             <div className="text">
               <label htmlFor="name">Bank Name *</label>
               <input
@@ -82,7 +82,7 @@ const UpdateEmi = () => {
               )}
             </div>
           </Column>
-          <Column className="col-md-6">
+          <Column className="col-md-6 col-sm-12">
             <div className="text">
               <label htmlFor="name">Three Months Rate</label>
               <input
@@ -160,7 +160,7 @@ const UpdateEmi = () => {
               )}
             </div>
           </Column>
-          <Column className="col-md-6">
+          <Column className="col-md-6 col-sm-12">
             <div className="text">
               <label htmlFor="name">Six Months Rate</label>
               <input

@@ -10,7 +10,7 @@ import pageReducer from "./pages/pageSlice";
 import settingsReducer from "./settings/settingSlice";
 import authReducer from "./auth/authSlice";
 import emiReducer from "./emi/emiSlice";
-import orderReducer from "./order/orderSlice";
+// import orderReducer from "./order/orderSlice";
 import customerReducer from "./customer/customerSlice";
 import serviceReducer from "./service/keypointSlice";
 import menuReducer from "./menus/menuSlice";
@@ -26,6 +26,7 @@ import supportReducer from "./support/supportSlice";
 import commentReducer from "./comments/commentSlice";
 import roleReducer from "./roles/roleSlice";
 import staffReducer from "./staff/staffSlice";
+import { orderApi } from "./order/orderApi";
 // ...
 const store = configureStore({
   reducer: {
@@ -40,7 +41,8 @@ const store = configureStore({
     settings: settingsReducer,
     auth: authReducer,
     emi: emiReducer,
-    order: orderReducer,
+    // order: orderReducer,
+    [orderApi.reducerPath]: orderApi.reducer,
     customer: customerReducer,
     services: serviceReducer,
     menu: menuReducer,
@@ -57,7 +59,11 @@ const store = configureStore({
     role: roleReducer,
     staff: staffReducer,
   },
-  // devTools: false,
+  middleware: (getDefaultMiddleware) =>
+    getDefaultMiddleware().concat(
+      orderApi.middleware,
+    ),
+
 });
 export type RootState = ReturnType<typeof store.getState>;
 export type AppDispatch = typeof store.dispatch;

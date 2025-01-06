@@ -106,7 +106,7 @@ const Customers: React.FC = () => {
         </div>
         <Filter handleDisplayItem={handleDisplayItem} onSearch={handleOnSearch} isFilter />
         <div className="table">
-          <Row className="row-table text-bold">
+          <Row className="row-table sm-table-width text-bold">
             <Column className="col-md-3">Name</Column>
             <Column className="col-md-3">Email</Column>
             <Column className="col-md-3">Phone</Column>
@@ -116,21 +116,30 @@ const Customers: React.FC = () => {
             <Loader />
           ) : (
             <>
-              {customers.map((customer, index) => (
-                <Row className="row-table" key={index}>
-                  <Column className="col-md-3">{customer.name}</Column>
-                  <Column className="col-md-3">{customer.email}</Column>
-                  <Column className="col-md-3">{customer.mobile}</Column>
-                  <Column className="col-md-3">
-                    <CustomIconArea>
-                      <DeleteButton
-                        onClick={() => handleCustomerDelete(customer.id as number)}
-                      />
-                    </CustomIconArea>
-                  </Column>
-                </Row>
-              ))}
+              {customers.filter((customer) => customer.role === null).length > 0 ? (
+                customers
+                  .filter((customer) => customer.role === null)
+                  .map((customer, index) => (
+                    <Row className="row-table sm-table-width" key={index}>
+                      <Column className="col-md-3">{customer.name}</Column>
+                      <Column className="col-md-3">{customer.email}</Column>
+                      <Column className="col-md-3">{customer.mobile}</Column>
+                      <Column className="col-md-3">
+                        <CustomIconArea>
+                          <DeleteButton
+                            onClick={() => handleCustomerDelete(customer.id as number)}
+                          />
+                        </CustomIconArea>
+                      </Column>
+                    </Row>
+                  ))
+              ) : (
+                  <p className="text-center font-semibold mt-20">No data found</p>
+
+              )}
             </>
+
+
           )}
         </div>
 

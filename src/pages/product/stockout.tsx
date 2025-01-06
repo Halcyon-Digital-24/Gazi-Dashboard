@@ -77,23 +77,23 @@ const StockOutProducts: React.FC = () => {
         <Filter handleDisplayItem={handleDisplayItem} onSearch={handleOnSearch}
           isFilter />
        <div className="table">
-       <Row className="row-table text-bold">
-          <Column className="col-md-1 col-sm-12">#</Column>
-          <Column className="col-md-1 col-sm-12">Images</Column>
-          <Column className="col-md-3 col-sm-12">Name</Column>
-          <Column className="col-md-1 col-sm-12">Stock</Column>
-          <Column className="col-md-1 col-sm-12">Regular Price</Column>
-          <Column className="col-md-1 col-sm-12">Discount Price</Column>
-          <Column className="col-md-1 col-sm-12">Status</Column>
-          <Column className="col-md-1 col-sm-12">Show Home Page</Column>
-          <Column className="col-md-2">Action</Column>
+       <Row className="row-table sm-table-width text-bold">
+          <Column className="col-md-1 col-sm-1">#</Column>
+          <Column className="col-md-1 col-sm-1">Images</Column>
+          <Column className="col-md-3 col-sm-3">Name</Column>
+          <Column className="col-md-1 col-sm-1">Stock</Column>
+          <Column className="col-md-1 col-sm-1">Regular Price</Column>
+          <Column className="col-md-1 col-sm-1">Discount Price</Column>
+          <Column className="col-md-1 col-sm-1">Status</Column>
+          <Column className="col-md-1 col-sm-1">Show Home Page</Column>
+          <Column className="col-md-2 col-sm-2">Action</Column>
         </Row>
         {isLoading ? (
           <Loader />
         ) : (
           products.map((product, index) => (
-            <Row key={index} className="row-table">
-              <Column className="col-md-1 col-sm-12">
+            <Row key={index} className="row-table sm-table-width">
+              <Column className="col-md-1 col-sm-1">
                 {product.id}
                 {/* <input
                   checked={selectedProducts.includes(product.id as number)}
@@ -103,17 +103,17 @@ const StockOutProducts: React.FC = () => {
                   id=""
                 /> */}
               </Column>
-              <Column className="col-md-1 col-sm-12">
+              <Column className="col-md-1 col-sm-1">
                 <img
                   src={`${API_ROOT}/images/product/${product.image}`}
                   alt="brand"
                 />
               </Column>
-              <Column className="col-md-3 col-sm-12">{product.title}</Column>
-              <Column className="col-md-1 col-sm-12">{product.default_quantity}</Column>
-              <Column className="col-md-1 col-sm-12">৳ {product.regular_price}</Column>
-              <Column className="col-md-1 col-sm-12">৳ {product.discount_price}</Column>
-              <Column className="col-md-1 col-sm-12">
+              <Column className="col-md-3 col-sm-3">{product.title}</Column>
+              <Column className="col-md-1 col-sm-1">{product.default_quantity}</Column>
+              <Column className="col-md-1 col-sm-1">৳ {product.regular_price}</Column>
+              <Column className="col-md-1 col-sm-1">৳ {product.discount_price}</Column>
+              <Column className="col-md-1 col-sm-1">
                 <ToggleButton
                   onClick={() =>
                     handleKeyPoint(product.id as number, {
@@ -123,7 +123,7 @@ const StockOutProducts: React.FC = () => {
                   isChecked={product.is_visible == 1}
                 />
               </Column>
-              <Column className="col-md-1 col-sm-12">
+              <Column className="col-md-1 col-sm-1">
                 <ToggleButton
                   onClick={() =>
                     handleKeyPoint(product.id as number, {
@@ -133,7 +133,7 @@ const StockOutProducts: React.FC = () => {
                   isChecked={product.is_homepage}
                 />
               </Column>
-              <Column className="col-md-2">
+              <Column className="col-md-2 col-sm-2">
                 <CustomIconArea>
                   <ViewButton href="/products" />
                   <EditButton editUrl={`/products/edit/${product.id}`} />

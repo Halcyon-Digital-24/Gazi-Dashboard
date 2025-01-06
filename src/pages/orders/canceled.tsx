@@ -3,29 +3,35 @@ import Display from "../../components/display";
 import OrderTable from "../../components/order-table";
 import Pagination from "../../components/pagination";
 import Filter from "../../components/filter";
-import { useAppDispatch, useAppSelector } from "../../redux/hooks";
-import { getOrders } from "../../redux/order/orderSlice";
 import { toast } from "react-toastify";
-import { reset } from "../../redux/products/product-slice";
 import { DateRangePicker } from "rsuite";
 import { formatDateForURL } from "../../utills/formateDate";
 import { useDebounce } from "../../utills/debounce";
+import { useGetAllOrdersQuery } from "../../redux/order/orderApi";
 
 const Canceled: React.FC = () => {
-  const dispatch = useAppDispatch();
   const [displayItem, setDisplayItem] = useState(25);
   const [pageNumber, setPageNumber] = useState<number>(1);
   const [onSearch, setOnSearch] = useState("");
   const [orderDate, setOrderDate] = useState<[Date, Date] | null>(null);
-  const { orders, isDelete, totalCount } = useAppSelector(
-    (state) => state.order
-  );
+
+  // Using the getOrdersQuery from the orderApi
+  const { data: orders, isLoading, isFetching, error } = useGetAllOrdersQuery({
+    order_status: "cancel",
+    search_term: onSearch,
+    page: pageNumber,
+    limit: displayItem,
+    start_date: orderDate ? formatDateForURL(orderDate[0]) : "",
+    end_date: orderDate ? formatDateForURL(orderDate[1]) : "",
+  });
+
+  const totalCount = orders?.data.count || 0;
+
   const totalPage = Math.ceil(totalCount / displayItem);
 
   const handlePageChange = (selectedItem: { selected: number }) => {
     setPageNumber(selectedItem.selected + 1);
   };
-
 
   const [searchQuery, setSearchQuery] = useState<string>('');
   const debouncedSearchQuery = useDebounce(searchQuery, 500); // 500ms debounce delay
@@ -36,39 +42,28 @@ const Canceled: React.FC = () => {
 
   useEffect(() => {
     if (debouncedSearchQuery !== undefined) {
-      // Your search request logic here
-      // console.log('Search query:', debouncedSearchQuery);
-      setOnSearch(debouncedSearchQuery)
+      setOnSearch(debouncedSearchQuery);
     }
   }, [debouncedSearchQuery]);
 
-  useEffect(() => {
-    dispatch(getOrders({
-      order_status: "cancel",
-      search_term: onSearch,
-      page: pageNumber,
-      limit: displayItem,
-      start_date: orderDate ? formatDateForURL(orderDate[0]) : "",
-      end_date: orderDate ? formatDateForURL(orderDate[1]) : "",
-    }));
-  }, [dispatch, onSearch, orderDate, pageNumber, displayItem]);
-
-  useEffect(() => {
-    if (isDelete) {
-      toast.success("Order deleted successfully");
-      dispatch(getOrders({
-        order_status: "delivered", page: pageNumber,
-        limit: displayItem,
-      }));
-    }
-    return () => {
-      dispatch(reset());
-    };
-  }, [isDelete, dispatch, displayItem, pageNumber]);
+  // useEffect(() => {
+  //   return () => {
+  //     dispatch(reset());
+  //   };
+  // }, [dispatch]);
 
   const handleDisplayItem = (e: ChangeEvent<HTMLSelectElement>) => {
     setDisplayItem(Number(e.target.value));
+    setPageNumber(1); // Reset page to 1 when display item changes
   };
+
+  useEffect(() => {
+    if (error) {
+      toast.error(`No data found!`);
+      <p className="text-center font-semibold">No Data Found</p>
+    }
+  }, [error]);
+
   return (
     <div>
       <Display>
@@ -88,7 +83,7 @@ const Canceled: React.FC = () => {
       </Display>
       <Display>
         <Filter handleDisplayItem={handleDisplayItem} onSearch={handleOnSearch} isFilter />
-        <OrderTable orders={orders} />
+        <OrderTable orders={orders?.data?.rows || []} />
         <Pagination
           pageCount={pageNumber}
           handlePageClick={handlePageChange}

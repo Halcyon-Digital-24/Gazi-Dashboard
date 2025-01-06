@@ -41,8 +41,11 @@
 }
 
 @media (max-width: 576px) {
+  .dataTables_length{
+    margin-bottom: 10px;
+  }
   .left-element {
-
-    gap: 10px;
+    gap: 5px;
+    margin-bottom: 10px;
   }
 }

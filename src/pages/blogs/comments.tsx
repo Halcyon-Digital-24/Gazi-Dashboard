@@ -52,21 +52,21 @@ const BlogComment = () => {
       <Display>
         <Filter handleDisplayItem={handleDisplayItem} />
         <div className="table">
-          <Row className="row-table text-bold">
-            <Column className="col-md-2">Name</Column>
-            <Column className="col-md-2">Email</Column>
-            <Column className="col-md-6">Comments</Column>
-            <Column className="col-md-2">Published</Column>
+          <Row className="row-table sm-table-width text-bold">
+            <Column className="col-md-2 col-sm-2">Name</Column>
+            <Column className="col-md-2 col-sm-4">Email</Column>
+            <Column className="col-md-6 col-sm-5">Comments</Column>
+            <Column className="col-md-2 col-sm-1">Published</Column>
           </Row>
           {isLoading ? (
             <Loader />
           ) : (
             comments.map((comment, index) => (
-              <Row className="row-table" key={index}>
-                <Column className="col-md-2">{comment.name}</Column>
-                <Column className="col-md-2">{comment.email}</Column>
-                <Column className="col-md-6">{comment.comment}</Column>
-                <Column className="col-md-2">
+              <Row className="row-table sm-table-width" key={index}>
+                <Column className="col-md-2 col-sm-2">{comment.name}</Column>
+                <Column className="col-md-2 col-sm-4">{comment.email}</Column>
+                <Column className="col-md-6 col-sm-5">{comment.comment}</Column>
+                <Column className="col-md-2 col-sm-1">
                   <ToggleButton
                     checked={comment.is_visible}
                     onChange={() =>

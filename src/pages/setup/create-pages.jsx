@@ -47,7 +47,7 @@ const CreatePage = () => {
       <CardBody header="Create a new Page" to="/setup/pages" text="Back" />
       <form onSubmit={handleSubmit(onSubmit)}>
         <div className="row">
-          <Column className="col-md-8">
+          <Column className="col-md-8 col-sm-12">
             <Display>
               <div className="text">
                 <label htmlFor="name">Title *</label>
@@ -101,7 +101,7 @@ const CreatePage = () => {
               )}
             </Display>
           </Column>
-          <Column className="col-md-4">
+          <Column className="col-md-4 col-sm-12">
             <Display>
               <div className="text">
                 <label htmlFor="meta_title">Meta Title</label>

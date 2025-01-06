@@ -7,6 +7,7 @@ export interface ICustomer {
   city: string | null;
   image: string | null;
   role_id: number;
+  role: string;
   password?: string;
   created_at?: string;
   updated_at?: string;

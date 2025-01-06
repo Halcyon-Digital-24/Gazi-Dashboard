@@ -6,6 +6,7 @@ import CardBody from "../../components/card-body";
 import Display from "../../components/display";
 import axios from "../../lib";
 import { useForm } from "react-hook-form";
+import "./index.scss";
 
 const UpdateFaq= () => {
   const navigate = useNavigate();
@@ -40,7 +41,7 @@ const UpdateFaq= () => {
     <div>
       <CardBody header="Update Faq" to="/faqs" text="back" />
       <Display>
-        <form onSubmit={handleSubmit(onSubmit)}>
+        <form onSubmit={handleSubmit(onSubmit)} className="form">
 
         <div className="text">
             <label htmlFor="Question">Question*</label>
@@ -63,7 +64,7 @@ const UpdateFaq= () => {
           <div className="text">
             <label htmlFor="Question">Question*</label>
 
-          <textarea name="answer"  style={{ width: '100%' }} placeholder="Answer here..." 
+          <textarea name="answer"  className="text__area" placeholder="Answer here..." 
           
           {...register("answer", {
             required: "answer is required",

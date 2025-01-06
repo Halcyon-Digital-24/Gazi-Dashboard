@@ -130,20 +130,20 @@ const Categories: React.FC = () => {
           isFilter
         />
         <div className="table">
-          <Row className="text-bold row-table">
+          <Row className="text-bold row-table sm-table-width">
             <Column className="col-md-3 col-sm-3">Banner</Column>
             <Column className="col-md-3 col-sm-3">Name</Column>
             <Column className="col-md-2 col-sm-2">Category Position</Column>
-            <Column className="col-md-2 col-sm-2">Featured</Column>
-            <Column className="col-md-1 col-sm-1">Options</Column>
+            <Column className="col-md-2 col-sm-1">Featured</Column>
+            <Column className="col-md-1 col-sm-2">Options</Column>
           </Row>
           {isLoading ? (
             <Loader />
           ) : (
             <div className="">
               {categories.map((category, index) => (
-                <Row className="row-table" key={index}>
-                  <Column className="col-md-3 col-sm-6">
+                <Row className="row-table sm-table-width" key={index}>
+                  <Column className="col-md-3 col-sm-3">
                     {category.image ? (
                       <div className="remove-image-div">
                         <img
@@ -159,15 +159,15 @@ const Categories: React.FC = () => {
                       "—"
                     )}
                   </Column>
-                  <Column className="col-md-3 col-sm-6 ">{category.title}</Column>
-                  <Column className="col-md-2 col-sm-6">{category.parent_category}</Column>
-                  <Column className="col-md-2 col-sm-6">
+                  <Column className="col-md-3 col-sm-3">{category.title}</Column>
+                  <Column className="col-md-2 col-sm-2">{category.parent_category}</Column>
+                  <Column className="col-md-2 col-sm-1">
                     <ToggleButton
                       onClick={() => handleVisibility(category)}
                       isChecked={category.is_feature}
                     />
                   </Column>
-                  <Column className="col-md-1 col-sm-1">
+                  <Column className="col-md-1 col-sm-2">
                     <CustomIconArea>
                       <EditButton editUrl={`/categories/edit/${category.id}`} />
                       <DeleteButton
