@@ -16,7 +16,8 @@ const Delivered: React.FC = () => {
   const [orderDate, setOrderDate] = useState<[Date, Date] | null>(null);
 
   // Use the API query to fetch orders
-  const { data: orders, isLoading, isFetching , error} = useGetAllOrdersQuery({
+  // const { data: orders, isLoading, isFetching , error} = useGetAllOrdersQuery({
+  const { data: orders, error} = useGetAllOrdersQuery({
     order_status: "delivered",
     search_term: onSearch,
     page: pageNumber,

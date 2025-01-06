@@ -16,7 +16,8 @@ const Canceled: React.FC = () => {
   const [orderDate, setOrderDate] = useState<[Date, Date] | null>(null);
 
   // Using the getOrdersQuery from the orderApi
-  const { data: orders, isLoading, isFetching, error } = useGetAllOrdersQuery({
+  // const { data: orders, isLoading, isFetching, error } = useGetAllOrdersQuery({
+  const { data: orders, error } = useGetAllOrdersQuery({
     order_status: "cancel",
     search_term: onSearch,
     page: pageNumber,
