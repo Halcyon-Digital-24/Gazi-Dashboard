@@ -146,7 +146,7 @@ const AllOrders: React.FC = () => {
   // console.log(data);
   useEffect(() => {
     if (error) {
-      toast.error(`${error?.data?.message}`);
+      toast.error(`No data found!`);
     }
   }, [error]);
   // console.log(error);

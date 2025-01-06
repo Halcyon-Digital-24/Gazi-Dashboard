@@ -1,4 +1,4 @@
-import { ChangeEvent, useEffect, useState } from "react";
+import { ChangeEvent } from "react";
 import { toast } from "react-toastify";
 import { IOrder } from "../../interfaces/order";
 import Column from "../table/column";

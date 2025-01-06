@@ -20,7 +20,8 @@ const PendingOrders: React.FC = () => {
   const debouncedSearchQuery = useDebounce(searchQuery, 500); // 500ms debounce delay
 
   // Fetch pending orders using the API query hook
-  const { data: orders, isLoading, isFetching, error } = useGetAllOrdersQuery({
+  // const { data: orders, isLoading, isFetching, error } = useGetAllOrdersQuery({
+  const { data: orders, error } = useGetAllOrdersQuery({
     order_status: "pending",
     page: pageNumber,
     limit: displayItem,
