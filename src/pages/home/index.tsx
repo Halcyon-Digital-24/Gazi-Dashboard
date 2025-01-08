@@ -32,7 +32,7 @@ const HomePage: React.FC = () => {
   }, []);
 
   if (isLoading) {
-    return <Loader/>;
+    return <Loader />;
   }
 
   const items = [
@@ -120,7 +120,7 @@ const HomePage: React.FC = () => {
       value: data.prendingRefund,
       role_identity: "refund",
     },
-    
+
     {
       to: "/html-generator",
       imageSrc: "/assets/images/html.png",
@@ -135,16 +135,16 @@ const HomePage: React.FC = () => {
     localStorage.getItem("user") || ""
   ).permissions;
   const filteredItems = items.filter((item) =>
-    userPermissions?.includes(item.role_identity)||
-  item.role_identity?.includes('html-generator')
+    userPermissions?.includes(item.role_identity) ||
+    item.role_identity?.includes('html-generator')
 
   );
 
   const handleChange = (data: any) => {
     setEditorData(data)
-   const view:any =  document.getElementById('view-html')
-   if(view) view.innerHTML =data
-   
+    const view: any = document.getElementById('view-html')
+    if (view) view.innerHTML = data
+
   }
 
   return (
@@ -154,14 +154,14 @@ const HomePage: React.FC = () => {
           <div className="grid-class" key={index}>
             <Link to={item.to}>
               <div className="chart-card">
-                <div className={"img "+item.role_identity?.includes('html-generator')?'img-lg':''}>
+                <div className={"img " + item.role_identity?.includes('html-generator') ? 'img-lg' : ''}>
                   <img src={item.imageSrc} alt="cart" />
                 </div>
                 <div className="info">
                   <h5>{item.title}</h5>
                   {
-                    item?.value!=''?
-                    <h3>{item.value}</h3>:''
+                    item?.value != '' ?
+                      <h3>{item.value}</h3> : ''
                   }
                 </div>
               </div>
@@ -170,15 +170,15 @@ const HomePage: React.FC = () => {
         ))}
       </div>
 
-<div style={{display:'none'}}>
-  
-<div className="row mt5 mb-5">
-        <TextEditor onChangeFunction={handleChange} editroText={editorData} />
+      <div style={{ display: 'none' }}>
+
+        <div className="row mt5 mb-5">
+          <TextEditor onChangeFunction={handleChange} editorText={editorData} />
+        </div>
+        <div className="row mt5 mb-5">
+          <div id="view-html" ></div>
+        </div>
       </div>
-      <div className="row mt5 mb-5">
-        <div id="view-html" ></div>
-      </div>
-</div>
     </div>
   );
 };
