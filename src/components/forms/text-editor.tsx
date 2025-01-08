@@ -1,33 +1,66 @@
+import React, { useEffect, useRef } from 'react';
+import Quill from 'quill';
+import 'quill/dist/quill.snow.css';
 
-
-import {useRef} from 'react';
-import {Editor} from "@tinymce/tinymce-react";
-
-const TextEditor = ({editroText="", onChangeFunction}:any)  => {
-    const editorRef:any = useRef(null);
-    return (
-        <Editor
-            apiKey='avs3nh8kbz12qohe6xhkjiuw9u0safetix75kluo813u73j1'
-            onInit={(_, editor) => editorRef.current = editor}
-            value={editroText}
-            onEditorChange={onChangeFunction}
-            init={{
-                height: 300,
-                menubar: true,
-                plugins: [
-                    'advlist','autolink', 'lists','link','image','charmap','preview','anchor','searchreplace','visualblocks','fullscreen','insertdatetime','media','table','help','wordcount'
-                ],
-                toolbar: [
-                    'casechange blocks fontsize | undo redo | removeformat | table link image imagetools',
-                    'alignleft aligncenter alignright alignjustify | bold italic underline | forecolor backcolor | bullist numlist checklist outdent indent ',
-                    ''
-                ],
-                content_style: 'body { font-family:Helvetica,Arial,sans-serif; font-size:14px }',
-                images_upload_url: 'postAcceptor.php',
-                automatic_uploads: false
-            }}
-        />
-    )
+interface TextEditorProps {
+    editorText?: string;
+    onChangeFunction: (value: string) => void;
 }
+
+const TextEditor: React.FC<TextEditorProps> = ({ editorText = '', onChangeFunction }) => {
+    const editorRef = useRef<HTMLDivElement>(null);
+    const quillInstanceRef = useRef<Quill | null>(null);
+
+    // Toolbar options
+    const toolbarOptions = [
+        [{ size: ['small', 'normal', 'large', 'huge'] }], // Font size dropdown
+        [{ header: [1, 2, 3, 4, 5, 6, false] }], // Headers dropdown
+        [{ font: [] }], // Font family
+
+        ['bold', 'italic', 'underline', 'strike'], // toggled buttons
+        ['blockquote', 'code-block'],
+        [{ color: [] }, { background: [] }], // Font and background colors
+        ['link', 'image', 'video', 'formula'], // Links, media, and formulas
+
+        [{ header: 1 }, { header: 2 }], // Custom button values
+        [{ list: 'ordered' }, { list: 'bullet' }, { list: 'check' }], // Lists
+        [{ script: 'sub' }, { script: 'super' }], // Superscript/Subscript
+        [{ indent: '-1' }, { indent: '+1' }], // Indent/Outdent
+        [{ direction: 'rtl' }], // Text direction (RTL)
+        [{ align: [] }], // Text alignment
+
+        ['clean'], // Remove formatting button
+    ];
+
+    useEffect(() => {
+        if (editorRef.current && !quillInstanceRef.current) {
+            // Initialize Quill
+            quillInstanceRef.current = new Quill(editorRef.current, {
+                theme: 'snow',
+                modules: {
+                    toolbar: toolbarOptions,
+                },
+            });
+
+            // Set initial content
+            quillInstanceRef.current.root.innerHTML = editorText;
+
+            // Listen for content changes
+            quillInstanceRef.current.on('text-change', () => {
+                const htmlContent = quillInstanceRef.current?.root.innerHTML || '';
+                onChangeFunction(htmlContent);
+            });
+        }
+    }, [editorText, onChangeFunction]);
+
+    // Sync external changes to the editorText prop
+    useEffect(() => {
+        if (quillInstanceRef.current && quillInstanceRef.current.root.innerHTML !== editorText) {
+            quillInstanceRef.current.root.innerHTML = editorText;
+        }
+    }, [editorText]);
+
+    return <div ref={editorRef} style={{ height: '300px' }} />;
+};
 
 export default TextEditor;
